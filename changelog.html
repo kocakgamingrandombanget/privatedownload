@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Changelog - Public</title>
+    <title>System Changelog - Viewer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -45,7 +45,13 @@
                 <div class="w-10 h-10 rounded-full flex items-center justify-center text-m3-primary"><i class="fa-solid fa-clock-rotate-left text-xl"></i></div>
                 <h1 class="text-[22px] font-medium tracking-tight text-m3-onSurface">Changelog</h1>
             </div>
-            <div class="text-sm font-medium px-4 py-2 bg-m3-surfaceContainerHigh text-m3-onSurfaceVariant rounded-full">Public Version</div>
+            <div class="flex items-center gap-2">
+                <!-- Segmented Control modern pengganti dropdown -->
+                <div class="flex p-1 bg-m3-surfaceContainerHigh rounded-full border border-m3-outlineVariant/30 shadow-inner">
+                    <button onclick="setViewType('public')" id="view-btn-public" class="px-4 py-1.5 text-sm font-medium rounded-full transition-all bg-m3-secondaryContainer text-m3-onSecondaryContainer shadow-sm">Public</button>
+                    <button onclick="setViewType('pro')" id="view-btn-pro" class="px-4 py-1.5 text-sm font-medium rounded-full transition-all text-m3-onSurfaceVariant hover:text-m3-onSurface">Pro</button>
+                </div>
+            </div>
         </div>
     </header>
     <main class="max-w-4xl mx-auto px-4 sm:px-6 pt-28">
@@ -60,16 +66,27 @@
         <div id="changelog-container" class="space-y-5"></div>
     </main>
     <script>
-        const changelogs = [
-    {
-        "id": 1772456586508,
-        "version": "1.37.4",
-        "date": "2026-03-02",
-        "added": "Hybrid money model supports (/scoreboard) command\nNew feature (HP Bar for Mob)",
-        "fixed": "Store restock settings restored\nImproved store system to support new currency model",
-        "removed": ""
-    }
-]; let activeAccordionId = null; document.addEventListener('DOMContentLoaded', () => { render(); });
+        const changelogs = ${staticDataStr}; 
+        let activeAccordionId = null; 
+        let currentViewType = 'public';
+
+        document.addEventListener('DOMContentLoaded', () => { render(); });
+
+        function setViewType(type) {
+            currentViewType = type;
+            const btnPublic = document.getElementById('view-btn-public');
+            const btnPro = document.getElementById('view-btn-pro');
+            
+            if(type === 'public') {
+                btnPublic.className = "px-4 py-1.5 text-sm font-medium rounded-full transition-all bg-m3-secondaryContainer text-m3-onSecondaryContainer shadow-sm";
+                btnPro.className = "px-4 py-1.5 text-sm font-medium rounded-full transition-all text-m3-onSurfaceVariant hover:text-m3-onSurface";
+            } else {
+                btnPro.className = "px-4 py-1.5 text-sm font-medium rounded-full transition-all bg-m3-secondaryContainer text-m3-onSecondaryContainer shadow-sm";
+                btnPublic.className = "px-4 py-1.5 text-sm font-medium rounded-full transition-all text-m3-onSurfaceVariant hover:text-m3-onSurface";
+            }
+            render();
+        }
+
         function formatDate(dateStr) { return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
         function getVersionTag(versionStr) {
             const match = versionStr.match(/v?(\d+)\.(\d+)\.(\d+)/i);
@@ -83,8 +100,12 @@
         }
         function render() {
             const container = document.getElementById('changelog-container'), emptyState = document.getElementById('empty-state'), searchTerm = document.getElementById('search-input') ? document.getElementById('search-input').value.toLowerCase() : '';
+            
             container.innerHTML = '';
-            const filteredLogs = changelogs.filter(log => log.version.toLowerCase().includes(searchTerm) || (log.added && log.added.toLowerCase().includes(searchTerm)) || (log.fixed && log.fixed.toLowerCase().includes(searchTerm)) || (log.removed && log.removed.toLowerCase().includes(searchTerm)));
+            
+            let filteredLogs = changelogs.filter(log => !log.tags || log.tags.includes(currentViewType));
+            filteredLogs = filteredLogs.filter(log => log.version.toLowerCase().includes(searchTerm) || (log.added && log.added.toLowerCase().includes(searchTerm)) || (log.fixed && log.fixed.toLowerCase().includes(searchTerm)) || (log.removed && log.removed.toLowerCase().includes(searchTerm)));
+            
             if (filteredLogs.length === 0) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); } else { emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); }
             filteredLogs.sort((a, b) => new Date(b.date) - new Date(a.date));
             let activeId = activeAccordionId; if (searchTerm !== '' && filteredLogs.length > 0) activeId = 'search_mode'; else if (activeId === null && filteredLogs.length > 0) activeId = filteredLogs[0].id;
