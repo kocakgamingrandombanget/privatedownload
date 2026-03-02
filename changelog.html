@@ -50,10 +50,12 @@
         body { font-family: 'Roboto', sans-serif; background-color: var(--m3-surface-container); color: var(--m3-on-surface); line-height: 1.5; -webkit-font-smoothing: antialiased; padding-bottom: 5rem; }
         
         /* Layout Utilities */
-        .container { max-width: 56rem; margin: 0 auto; padding: 0 1rem; }
+        /* PERBAIKAN: Menggunakan padding-left/right agar tidak menimpa padding-top */
+        .container { max-width: 56rem; margin: 0 auto; padding-left: 1rem; padding-right: 1rem; }
         .hidden { display: none !important; }
         .flex { display: flex; }
-        .flex-col { flex-direction: column; }
+        /* PERBAIKAN: flex-col harus memiliki display: flex agar gap berfungsi */
+        .flex-col { display: flex; flex-direction: column; }
         .items-center { align-items: center; }
         .justify-between { justify-content: space-between; }
         .justify-center { justify-content: center; }
@@ -169,7 +171,8 @@
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
         
         @media (min-width: 640px) {
-            .container { padding: 0 1.5rem; }
+            /* PERBAIKAN: Hanya spesifik padding-left & right, mencegah overwrite padding-top */
+            .container { padding-left: 1.5rem; padding-right: 1.5rem; }
             .grid-2 { grid-template-columns: repeat(2, 1fr); }
             .sm-flex-row { flex-direction: row; }
             .sm-items-center { align-items: center; }
@@ -224,17 +227,6 @@
 
     <script>
         const changelogs = [
-    {
-        "id": 1772459610096,
-        "version": "v5.0.0-PRO",
-        "date": "2026-03-01",
-        "tags": [
-            "pro"
-        ],
-        "added": "Exclusive Pro Feature: Advanced Analytics Dashboard is now live!\nPriority support is now integrated directly into the dashboard.",
-        "fixed": "",
-        "removed": ""
-    },
     {
         "id": 1772459653834,
         "version": "1.37.4",
