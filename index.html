@@ -66,7 +66,24 @@
         .nav-links a:hover { color: var(--text-primary); }
         .discord-btn { background: rgba(88, 101, 242, 0.1); color: #fff; padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid rgba(88, 101, 242, 0.3); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
         .discord-btn:hover { background: rgba(88, 101, 242, 0.25); border-color: #5865F2; }
-        .menu-btn { display: block; font-size: 1.5rem; color: var(--text-primary); background: none; border: none; cursor: pointer; padding: 0.5rem; }
+        
+        /* Fixed Hamburger Button Precision */
+        .menu-btn { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 2.75rem; 
+            height: 2.75rem; 
+            font-size: 1.5rem; 
+            color: var(--text-primary); 
+            background: transparent; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 8px;
+            margin-right: -0.5rem; /* Aligns flush with container padding */
+            transition: background-color 0.2s ease; 
+        }
+        .menu-btn:hover, .menu-btn:active { background-color: rgba(255, 255, 255, 0.1); }
         
         @media (min-width: 768px) { 
             .nav-links a { display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 1.5rem; } 
@@ -320,7 +337,7 @@
         </div>
     </section>
 
-    <!-- FAQ & ToS -->
+    <!-- FAQ (Smooth & Direct) -->
     <section id="faq" class="section" style="border-top: 1px solid var(--border-light);">
         <div class="container">
             <h2 class="text-center">FAQ & Terms of Service</h2>
