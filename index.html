@@ -1,321 +1,436 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Soft Builder Ultimate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heraclaus | Premium Minecraft Bedrock Add-ons</title>
     
+    <!-- Modern Tech Fonts: Outfit for Headings, Inter for Body -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* * PURE VANILLA CSS - MOBILE OPTIMIZED HIGH-VALUE THEME * */
+         
+        :root {
+            --bg-base: #050505; 
+            --bg-surface: #0a0a0a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.05);
+            
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(255, 255, 255, 0.15);
+            
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            
+            --accent-primary: #8b5cf6; 
+            --accent-secondary: #3b82f6; 
+            
+            --gradient-hero: linear-gradient(135deg, #e879f9 0%, #8b5cf6 50%, #3b82f6 100%);
+            --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
 
-    <style id="generated-css"></style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+        
+        .container { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem; }
+        .flex { display: flex; } .flex-col { flex-direction: column; }
+        .items-center { align-items: center; } .justify-between { justify-content: space-between; } .justify-center { justify-content: center; }
+        .gap-2 { gap: 0.5rem; } .gap-4 { gap: 1rem; } .gap-6 { gap: 1.5rem; }
+        .w-full { width: 100%; } .text-center { text-align: center; }
+        .mb-2 { margin-bottom: 0.5rem; } .mb-4 { margin-bottom: 1rem; } .mb-8 { margin-bottom: 2rem; } .mt-4 { margin-top: 1rem; }
+        
+        h1, h2, h3, h4, .font-outfit { font-family: 'Outfit', sans-serif; }
+        h1 { font-size: clamp(2.25rem, 8vw, 4rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.15; }
+        h2 { font-size: clamp(1.75rem, 6vw, 2.5rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; }
+        h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; color: var(--text-primary); line-height: 1.3; }
+        p { color: var(--text-secondary); font-size: clamp(0.95rem, 3vw, 1.05rem); }
+        
+        .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Ambient Glow */
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.4; }
+        .blob-1 { top: -20%; left: -10%; width: 60vw; height: 60vw; background: rgba(139, 92, 246, 0.15); }
+        .blob-2 { bottom: -20%; right: -10%; width: 50vw; height: 50vw; background: rgba(59, 130, 246, 0.15); }
+
+        /* Navigation */
+        .navbar { position: fixed; top: 0; width: 100%; height: 4.5rem; z-index: 100; background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s; display: none; }
+        .nav-links a:hover { color: var(--text-primary); }
+        .discord-btn { background: rgba(88, 101, 242, 0.1); color: #fff; padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid rgba(88, 101, 242, 0.3); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
+        .discord-btn:hover { background: rgba(88, 101, 242, 0.25); border-color: #5865F2; }
+        .menu-btn { display: block; font-size: 1.5rem; color: var(--text-primary); background: none; border: none; cursor: pointer; padding: 0.5rem; }
+        
+        @media (min-width: 768px) { 
+            .nav-links a { display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 1.5rem; } 
+            .menu-btn { display: none; }
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu { 
+            position: fixed; top: 4.5rem; left: 0; width: 100%; height: calc(100vh - 4.5rem); overflow-y: auto;
+            background: var(--bg-surface); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; 
+            transform: translateY(-100%); opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+            pointer-events: none; z-index: 90; border-bottom: 1px solid var(--border-light);
+        }
+        .mobile-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        .mobile-menu a { color: var(--text-primary); text-decoration: none; font-size: 1.125rem; font-weight: 500; border-bottom: 1px solid var(--border-light); padding: 1rem 0; display: flex; align-items: center; gap: 0.75rem; }
+        .mobile-menu .discord-btn { border-bottom: none; margin-top: 1rem; padding: 1rem; font-size: 1rem; }
+
+        /* Responsive Action Groups (Buttons) */
+        .action-group { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0 1.5rem; min-height: 3rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; font-family: 'Inter', sans-serif; text-align: center; width: 100%; }
+        
+        @media (min-width: 640px) { 
+            .action-group { flex-direction: row; } 
+            .action-group.justify-center { justify-content: center; }
+            .btn { width: auto; } 
+        }
+
+        .btn-primary { background: var(--text-primary); color: var(--bg-base); }
+        .btn-primary:hover { background: #e4e4e7; transform: translateY(-2px); }
+        .btn-gradient { background: var(--gradient-admin); color: #fff; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5); filter: brightness(1.1); }
+        .btn-outline { background: rgba(255,255,255,0.03); color: var(--text-primary); border: 1px solid var(--border-highlight); }
+        .btn-outline:hover { background: rgba(255,255,255,0.08); }
+
+        /* Sections */
+        .section-hero { padding: 8rem 0 4rem 0; }
+        .section { padding: 4rem 0; }
+        @media (min-width: 768px) { .section-hero { padding: 10rem 0 5rem 0; } .section { padding: 6rem 0; } }
+
+        /* Product Container (The "Meat") */
+        .product-box { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 20px; overflow: hidden; margin-bottom: 2rem; }
+        .product-header { padding: 2rem 1.25rem; border-bottom: 1px solid var(--border-light); background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 70%); display: flex; flex-direction: column; gap: 1.5rem; }
+        .product-header-actions { display: flex; flex-direction: column; gap: 0.75rem; width: 100%; }
+        
+        .badge { display: inline-block; padding: 0.25rem 0.75rem; background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1rem; border: 1px solid rgba(139, 92, 246, 0.3); }
+        
+        /* Dense Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--border-light); }
+        .feature-cell { background: var(--bg-surface); padding: 1.5rem; }
+        .feature-cell i { font-size: 1.5rem; margin-bottom: 1rem; display: block; }
+        .feature-cell p { font-size: 0.9rem; margin-top: 0.5rem; }
+
+        @media (min-width: 768px) {
+            .product-header { padding: 3rem 2.5rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 3rem; }
+            .product-header-text { flex: 1; }
+            .product-header-actions { width: auto; min-width: 220px; }
+            .feature-grid { grid-template-columns: repeat(2, 1fr); }
+            .feature-cell { padding: 2rem; }
+        }
+        @media (min-width: 1024px) {
+            .feature-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        /* Pricing Simplified */
+        .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 1.5rem; max-width: 50rem; margin: 2rem auto 0; }
+        .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 2rem 1.5rem; display: flex; flex-direction: column; }
+        .price-card.pro { border-color: rgba(139, 92, 246, 0.5); background: linear-gradient(180deg, rgba(139, 92, 246, 0.05), transparent); }
+        .price-val { font-family: 'Outfit'; font-size: 3rem; font-weight: 700; color: #fff; line-height: 1; margin: 1rem 0; }
+        .price-val span { font-size: 1rem; color: var(--text-secondary); font-weight: 400; font-family: 'Inter'; }
+        .check-list { list-style: none; margin: 1.5rem 0; flex-grow: 1; }
+        .check-list li { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
+        .check-list i { color: #10b981; font-size: 0.8rem; margin-top: 0.3rem; flex-shrink: 0; }
+        
+        @media (min-width: 768px) { .pricing-wrap { grid-template-columns: 1fr 1fr; } .price-card { padding: 2.5rem; } }
+
+        /* Smooth FAQ */
+        .faq-wrap { max-width: 48rem; margin: 2rem auto 0; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; transition: border-color 0.3s; }
+        .faq-item.active { border-color: var(--border-highlight); background: rgba(255,255,255,0.05); }
+        .faq-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.25rem; background: none; border: none; color: var(--text-primary); font-family: 'Outfit'; font-size: 1.05rem; font-weight: 600; cursor: pointer; text-align: left; gap: 1rem; }
+        .faq-btn i { color: var(--text-muted); transition: transform 0.3s ease; flex-shrink: 0; }
+        .faq-item.active .faq-btn i { transform: rotate(180deg); color: var(--text-primary); }
+        .faq-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+        .faq-item.active .faq-content { grid-template-rows: 1fr; }
+        .faq-inner { overflow: hidden; }
+        .faq-inner p { padding: 0 1.25rem 1.25rem 1.25rem; font-size: 0.95rem; margin: 0; color: var(--text-secondary); }
+
+        @media (min-width: 768px) { .faq-btn { padding: 1.25rem 1.5rem; } .faq-inner p { padding: 0 1.5rem 1.25rem 1.5rem; } }
+
+        /* Footer */
+        footer { padding: 3rem 0; border-top: 1px solid var(--border-light); text-align: center; margin-top: 3rem; color: var(--text-muted); font-size: 0.85rem; }
+    </style>
 </head>
 <body>
-    <header class="top-bar">
-        <div class="logo-area">
-            <div class="logo-circle">
-                <span class="material-symbols-rounded">dashboard_customize</span>
-            </div>
-            <h1>Builder</h1>
-        </div>
-        <div class="header-actions">
-            <button class="icon-btn" id="pageManagerBtn" onclick="openPageSheet()" title="Kelola Halaman" style="color:var(--primary); background:var(--primary-light)">
-                <span class="material-symbols-rounded">layers</span>
-            </button>
-            <div class="divider-v"></div>
 
-            <button class="icon-btn danger-soft" id="resetBtn" title="Hapus Semua">
-                <span class="material-symbols-rounded">delete_sweep</span>
-            </button>
-            <button class="icon-btn" id="previewBtn" onclick="togglePreview(true)" title="Mode Preview">
-                <span class="material-symbols-rounded">visibility</span>
-            </button>
-            <button class="icon-btn" id="layerBtn" title="Layer">
-                <span class="material-symbols-rounded">view_list</span>
-            </button>
-            <div class="divider-v"></div>
-            <div class="menu-wrapper">
-                <button class="icon-btn" id="menuBtn" onclick="toggleMainMenu()" title="Menu">
-                    <span class="material-symbols-rounded">menu</span>
-                </button>
-                <div class="main-menu-dropdown" id="mainMenuDropdown">
-                    <input type="file" id="importInput" accept=".json,.zip" style="display: none;">
-                    <button class="menu-item" id="importBtn">
-                        <span class="material-symbols-rounded">upload_file</span> Import Project
-                    </button>
-                    <button class="menu-item" id="globalBtn">
-                        <span class="material-symbols-rounded">tune</span> Global Settings
-                    </button>
-                    <div class="menu-divider"></div>
-                    <button class="menu-item primary-text" id="exportBtn">
-                        <span class="material-symbols-rounded">folder_zip</span> Export to ZIP
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main id="editorCanvas" class="canvas">
-        <div class="empty-state" id="emptyState">
-            <div class="illustration"><span class="material-symbols-rounded">post_add</span></div>
-            <h3>Area Desain</h3>
-            <p>Klik tombol + di bawah untuk memulai</p>
-        </div>
-    </main>
-
-    <div id="toast" class="toast">Project Disimpan</div>
-
-    <div class="fab-stack">
-        <button class="mini-fab" id="undoBtn" onclick="undo()" title="Undo">
-            <span class="material-symbols-rounded">undo</span>
-        </button>
-        <button class="mini-fab" id="redoBtn" onclick="redo()" title="Redo">
-            <span class="material-symbols-rounded">redo</span>
-        </button>
-        <div style="height: 0px;"></div> 
-        <button class="fab" id="addFab">
-            <span class="material-symbols-rounded">add</span>
-        </button>
-    </div>
-    
-    <button class="exit-preview-btn" id="exitPreviewBtn" onclick="togglePreview(false)">
-        <span class="material-symbols-rounded">visibility_off</span> Keluar Preview
-    </button>
-
-    <div class="overlay" id="overlay"></div>
-
-    <div class="bottom-sheet" id="pageSheet">
-        <div class="sheet-header">
-            <div class="sheet-handle"></div>
-            <h3 class="sheet-title">Kelola Halaman</h3>
-            <button class="icon-btn close-sheet-btn" onclick="closeAllSheets()">
-                <span class="material-symbols-rounded">close</span>
-            </button>
-        </div>
-        <div class="sheet-body">
-            <div id="pageList" class="layer-list" style="margin-bottom: 16px;">
-                </div>
-            <button class="inner-add-btn" onclick="addNewPagePrompt()">
-                <span class="material-symbols-rounded">post_add</span> &nbsp; Tambah Halaman Baru
-            </button>
-        </div>
+    <div class="ambient-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
     </div>
 
-    <div class="bottom-sheet" id="addSheet">
-        <div class="sheet-header">
-            <div class="sheet-handle"></div>
-            <h3 class="sheet-title">Tambah Widget</h3>
-            <button class="icon-btn close-sheet-btn" onclick="closeAllSheets()">
-                <span class="material-symbols-rounded">close</span>
+    <!-- Nav -->
+    <nav class="navbar">
+        <div class="container flex justify-between items-center w-full">
+            <a href="#" class="font-outfit" style="font-size: 1.25rem; font-weight: 800; color: #fff; text-decoration: none;">
+                <i class="fa-solid fa-code text-gradient mr-2"></i> Heraclaus
+            </a>
+            
+            <button class="menu-btn" id="mobile-menu-btn" onclick="toggleMenu()">
+                <i class="fa-solid fa-bars"></i>
             </button>
-        </div>
-        <div class="sheet-body">
-            <div class="grid-menu">
-                <button class="grid-item" data-type="nav-menu">
-                    <div class="icon-box"><span class="material-symbols-rounded">menu</span></div>
-                    <span>Nav Menu</span>
-                </button>
-                <button class="grid-item" data-type="grid-row">
-                    <div class="icon-box"><span class="material-symbols-rounded">view_column</span></div>
-                    <span>2 Columns</span>
-                </button>
-                <button class="grid-item" data-type="container">
-                    <div class="icon-box"><span class="material-symbols-rounded">crop_free</span></div>
-                    <span>Container</span>
-                </button>
-                <button class="grid-item" data-type="icon">
-                    <div class="icon-box"><span class="material-symbols-rounded">sentiment_satisfied</span></div>
-                    <span>Icon</span>
-                </button>
-                <button class="grid-item" data-type="card">
-                    <div class="icon-box"><span class="material-symbols-rounded">call_to_action</span></div>
-                    <span>Card</span>
-                </button>
-                <button class="grid-item" data-type="heading">
-                    <div class="icon-box"><span class="material-symbols-rounded">title</span></div>
-                    <span>Heading</span>
-                </button>
-                <button class="grid-item" data-type="paragraph">
-                    <div class="icon-box"><span class="material-symbols-rounded">text_fields</span></div>
-                    <span>Text</span>
-                </button>
-                <button class="grid-item" data-type="button">
-                    <div class="icon-box"><span class="material-symbols-rounded">smart_button</span></div>
-                    <span>Button</span>
-                </button>
-                <button class="grid-item" data-type="image">
-                    <div class="icon-box"><span class="material-symbols-rounded">image</span></div>
-                    <span>Image</span>
-                </button>
-                <button class="grid-item" data-type="theme-toggle">
-                    <div class="icon-box"><span class="material-symbols-rounded">contrast</span></div>
-                    <span>Dark Mode</span>
-                </button>
-                <button class="grid-item" data-type="divider">
-                    <div class="icon-box"><span class="material-symbols-rounded">horizontal_rule</span></div>
-                    <span>Divider</span>
-                </button>
-                <button class="grid-item" data-type="spacer">
-                    <div class="icon-box"><span class="material-symbols-rounded">space_bar</span></div>
-                    <span>Spacer</span>
-                </button>
+
+            <div class="nav-links">
+                <a href="#admin-suite">Admin Suite</a>
+                <a href="#cinemato">Cinemato</a>
+                <a href="#pricing">Pricing</a>
+                <a href="changelog.html" target="_blank"><i class="fa-solid fa-clock-rotate-left"></i> Changelog</a>
+                <a href="https://discord.gg/xQStZUvukS" target="_blank" class="discord-btn ml-4"><i class="fa-brands fa-discord"></i> Discord</a>
             </div>
         </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#admin-suite" onclick="toggleMenu()"><i class="fa-solid fa-server text-muted"></i> Admin Suite</a>
+        <a href="#cinemato" onclick="toggleMenu()"><i class="fa-solid fa-film text-muted"></i> Cinemato Studio</a>
+        <a href="#pricing" onclick="toggleMenu()"><i class="fa-solid fa-tag text-muted"></i> Pricing</a>
+        <a href="#faq" onclick="toggleMenu()"><i class="fa-solid fa-circle-question text-muted"></i> FAQ & ToS</a>
+        <a href="changelog.html" target="_blank" onclick="toggleMenu()"><i class="fa-solid fa-clock-rotate-left text-muted"></i> View Changelog</a>
+        <a href="https://discord.gg/xQStZUvukS" target="_blank" class="discord-btn" onclick="toggleMenu()"><i class="fa-brands fa-discord"></i> Join Discord Server</a>
     </div>
 
-    <div class="bottom-sheet" id="editSheet">
-        <div class="sheet-header">
-            <div class="sheet-handle"></div>
-            <h3 id="editTitle" class="sheet-title">Edit Properti</h3>
-            <button class="icon-btn close-sheet-btn" onclick="closeAllSheets()">
-                <span class="material-symbols-rounded">close</span>
-            </button>
-        </div>
-        <div class="pill-tabs">
-            <button class="pill-btn active" data-tab="content">Konten</button>
-            <button class="pill-btn" data-tab="style">Style</button>
-        </div>
-        <div class="sheet-body">
-            <div id="tab-content" class="tab-pane active">
-                <div id="formContent" class="form-stack"></div>
+    <!-- Hero -->
+    <section class="section-hero text-center">
+        <div class="container flex flex-col items-center">
+            <div style="border: 1px solid var(--border-highlight); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; margin-bottom: 1.5rem; color: var(--text-secondary); background: var(--bg-card);">
+                <span style="color: #a78bfa; font-weight: 600;">v6.0</span> System Update Available Now
             </div>
-            <div id="tab-style" class="tab-pane">
-                <div id="formStyle" class="form-stack"></div>
+            <h1>Stop installing junk plugins.<br><span class="text-gradient">Build a legendary server.</span></h1>
+            <p style="max-width: 40rem; margin: 1rem auto 2.5rem; font-size: 1.15rem;">
+                Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world.
+            </p>
+            <div class="action-group justify-center" style="max-width: 24rem; margin: 0 auto;">
+                <a href="#admin-suite" class="btn btn-primary">View Products</a>
             </div>
         </div>
-        <div class="sheet-footer">
-            <button class="btn-save" id="saveEditBtn">Terapkan Perubahan</button>
-        </div>
-    </div>
+    </section>
 
-    <div class="bottom-sheet" id="iconSheet">
-        <div class="sheet-header">
-            <div class="sheet-handle"></div>
-            <h3 class="sheet-title">Pilih Ikon</h3>
-            <button class="icon-btn close-sheet-btn" onclick="closeAllSheets()">
-                <span class="material-symbols-rounded">close</span>
-            </button>
-        </div>
-        <div class="sheet-body">
-            <div id="iconGrid" class="icon-grid"></div>
-        </div>
-    </div>
-
-    <div class="bottom-sheet" id="globalSheet">
-        <div class="sheet-header">
-            <div class="sheet-handle"></div>
-            <h3 class="sheet-title">Global Settings</h3>
-            <button class="icon-btn close-sheet-btn" onclick="closeAllSheets()">
-                <span class="material-symbols-rounded">close</span>
-            </button>
-        </div>
-        <div class="sheet-body">
-            <div class="form-stack">
-                <div class="form-group">
-                    <label style="font-size:13px; font-weight:500; display:block; margin-bottom:8px">Font Family</label>
-                    <select id="global-font" class="input-field">
-                        <option value="'Outfit', sans-serif">Outfit (Modern)</option>
-                        <option value="'Inter', sans-serif">Inter (Clean)</option>
-                        <option value="serif">Serif</option>
-                        <option value="monospace">Monospace</option>
-                    </select>
+    <!-- Products: Admin Suite -->
+    <section id="admin-suite" class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="product-box">
+                <div class="product-header">
+                    <div class="product-header-text">
+                        <span class="badge"><i class="fa-solid fa-crown"></i> Flagship Add-on</span>
+                        <h2>Admin Suite</h2>
+                        <p class="mt-2">One suite to replace them all. Manage your economy, players, RPG progression, and world security through a single, highly-optimized core. Zero lag, pure performance.</p>
+                    </div>
+                    <div class="product-header-actions action-group">
+                        <a href="#pricing" class="btn btn-gradient"><i class="fa-solid fa-download"></i> Get Pro License</a>
+                        <a href="changelog.html" target="_blank" class="btn btn-outline"><i class="fa-solid fa-code-branch"></i> Read Changelog</a>
+                    </div>
                 </div>
                 
-                <div class="form-group" style="margin-top:16px">
-                    <label style="font-size:13px; font-weight:500; display:block; margin-bottom:8px">Background Page (Light Mode)</label>
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                        <div id="trigger-global-bg" onclick="openColorPicker('global-bg')" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background-color: #f1f5f9; cursor: pointer; flex-shrink: 0;"></div>
-                        <div class="input-wrapper" style="flex: 1;">
-                            <input type="text" id="global-bg" onchange="updateGlobalBg(this.value)" value="#f1f5f9" placeholder="#HEXCODE" class="input-field" maxlength="7" style="text-transform: uppercase;">
+                <!-- The "Meat" -> Core Specs -->
+                <div class="feature-grid">
+                    <div class="feature-cell">
+                        <i class="fa-solid fa-sack-dollar" style="color: #f59e0b;"></i>
+                        <h3>Complex Economy</h3>
+                        <p>Physical currencies, robust buying/selling logic, job assignments, starter kits, and automated daily rewards.</p>
+                    </div>
+                    <div class="feature-cell">
+                        <i class="fa-solid fa-khanda" style="color: #f43f5e;"></i>
+                        <h3>RPG Progression</h3>
+                        <p>Keep retention high with skill leveling, interactive quests, and fully customizable PvE/PvP battle mechanics.</p>
+                    </div>
+                    <div class="feature-cell">
+                        <i class="fa-solid fa-globe" style="color: #3b82f6;"></i>
+                        <h3>World & Security</h3>
+                        <p>Secure land claims, precise role/permission management, and automated repeated broadcast systems.</p>
+                    </div>
+                    <div class="feature-cell">
+                        <i class="fa-solid fa-users" style="color: #10b981;"></i>
+                        <h3>Clan Ecosystem</h3>
+                        <p>Allow players to form alliances, manage members, use private clan chats, and equip custom overhead nametags.</p>
+                    </div>
+                    <div class="feature-cell">
+                        <i class="fa-solid fa-list-ol" style="color: #8b5cf6;"></i>
+                        <h3>Immersive UI & NPCs</h3>
+                        <p>Spawn interactive NPCs, display live sidebars, and set up floating holograms or leaderboards without coding.</p>
+                    </div>
+                    <div class="feature-cell">
+                        <i class="fa-solid fa-flask" style="color: var(--text-muted);"></i>
+                        <h3>Native Auth (Beta)</h3>
+                        <p>Built-in registration and login system. Manage player authentications natively within Bedrock.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products: Cinemato -->
+            <div id="cinemato" class="product-box" style="margin-bottom: 0;">
+                <div class="product-header" style="background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.08), transparent 50%); border-bottom: none;">
+                    <div class="product-header-text">
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.3);"><i class="fa-solid fa-film"></i> Creator Tool</span>
+                        <h2>Cinemato Studio</h2>
+                        <p class="mt-2">The definitive camera tool for Bedrock creators. Execute smooth bezier camera paths, direct cinematic sequences, and create stunning timelapses effortlessly.</p>
+                    </div>
+                    <div class="product-header-actions action-group">
+                        <a href="https://www.curseforge.com/minecraft-bedrock/addons/cinemato-studio" target="_blank" class="btn btn-outline">
+                            CurseForge <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing (No Fluff) -->
+    <section id="pricing" class="section" style="border-top: 1px solid var(--border-light); background: rgba(0,0,0,0.3);">
+        <div class="container text-center">
+            <h2>Simple Pricing. No Subscriptions.</h2>
+            <p>Pay once, dominate your server forever.</p>
+            
+            <div class="pricing-wrap text-left">
+                <div class="price-card">
+                    <h3>Starter</h3>
+                    <div class="price-val">$0 <span>/ lifetime</span></div>
+                    <ul class="check-list">
+                        <li><i class="fa-solid fa-check"></i> Basic World & Player Management</li>
+                        <li><i class="fa-solid fa-check"></i> Core Economy Trading</li>
+                        <li><i class="fa-solid fa-check"></i> Essential Slash Commands</li>
+                        <li class="disabled"><i class="fa-solid fa-xmark"></i> No RPG or Clan Systems</li>
+                        <li class="disabled"><i class="fa-solid fa-xmark"></i> No Holograms or UIs</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline w-full mt-auto">Download Basic</a>
+                </div>
+
+                <div class="price-card pro">
+                    <h3 style="color: #c4b5fd;">Pro License</h3>
+                    <div class="price-val">$19.99 <span>/ one-time</span></div>
+                    <ul class="check-list">
+                        <li><i class="fa-solid fa-check"></i> <strong style="color: white;">Everything in Starter</strong></li>
+                        <li><i class="fa-solid fa-check"></i> Full RPG, Quests & Battle Mechanics</li>
+                        <li><i class="fa-solid fa-check"></i> Clans, Custom Chat & Nametags</li>
+                        <li><i class="fa-solid fa-check"></i> Holograms, Sidebars & NPCs</li>
+                        <li><i class="fa-solid fa-check"></i> Secure Land Claims</li>
+                        <li><i class="fa-solid fa-check"></i> Priority Discord Support</li>
+                    </ul>
+                    <a href="#" class="btn btn-gradient w-full mt-auto">Unlock Full Suite</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ & ToS -->
+    <section id="faq" class="section" style="border-top: 1px solid var(--border-light);">
+        <div class="container">
+            <h2 class="text-center">FAQ & Terms of Service</h2>
+            
+            <div class="faq-wrap">
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>Will Admin Suite cause lag?</span> <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>No. Replacing 10+ unoptimized plugins with our single, cohesive architecture actually reduces your server's load and drastically improves TPS.</p>
                         </div>
                     </div>
-                    <div id="global-palette-row" class="palette-row" style="width:100%; display:flex; gap:5px; flex-wrap:wrap; padding-top:4px;"></div>
                 </div>
-                
-                <div class="prop-section" style="margin-top:20px; padding-top:20px; border-top:1px dashed var(--border)">
-                    <div class="prop-title" style="margin-bottom:12px">Page Spacing (px)</div>
-                    
-                    <label style="font-size:12px; font-weight:500; display:block; margin-bottom:8px">Page Padding</label>
-                    <div class="box-grid">
-                        <div class="box-cell"><input type="number" id="global-pTop" placeholder="0" class="input-field"><span>Top</span></div>
-                        <div class="box-cell"><input type="number" id="global-pRight" placeholder="0" class="input-field"><span>Right</span></div>
-                        <div class="box-cell"><input type="number" id="global-pBottom" placeholder="0" class="input-field"><span>Btm</span></div>
-                        <div class="box-cell"><input type="number" id="global-pLeft" placeholder="0" class="input-field"><span>Left</span></div>
-                    </div>
-
-                    <div style="height:16px"></div>
-
-                    <label style="font-size:12px; font-weight:500; display:block; margin-bottom:8px">Page Margin</label>
-                    <div class="box-grid">
-                        <div class="box-cell"><input type="number" id="global-mTop" placeholder="0" class="input-field"><span>Top</span></div>
-                        <div class="box-cell"><input type="number" id="global-mRight" placeholder="0" class="input-field"><span>Right</span></div>
-                        <div class="box-cell"><input type="number" id="global-mBottom" placeholder="0" class="input-field"><span>Btm</span></div>
-                        <div class="box-cell"><input type="number" id="global-mLeft" placeholder="0" class="input-field"><span>Left</span></div>
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>Do I need coding experience?</span> <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>Zero. Everything from the economy to custom NPCs is managed through intuitive in-game menus and simple slash commands.</p>
+                        </div>
                     </div>
                 </div>
-
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>What happens when Minecraft updates?</span> <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>We push compatibility patches within 24-48 hours of major Bedrock updates, ensuring your server never faces long downtimes.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>Is the Pro License a monthly subscription?</span> <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>No, this is a full lifetime license. You buy it once and use it forever. Every member is given the same access and benefits.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>Can I use the Pro License on multiple accounts?</span> <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>No. One license is strictly tied to one gamertag. Please make sure you do not change your gamertag after purchasing it, as the license cannot be transferred.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>What is your refund policy?</span> <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>All purchases are permanent, and there are no refunds or exchanges. Please read the features and think carefully before you buy.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>Are there strict rules for Pro members?</span> <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>Yes. You may not share anything related to the Pro version without the creator's permission, nor attempt to find security loopholes. Violating these absolute terms will result in the deletion of all your benefits and permanent removal from the VIP forum.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="sheet-footer"><button class="btn-save" id="saveGlobalBtn">Simpan</button></div>
-    </div>
+    </section>
 
-    <div class="bottom-sheet" id="colorPickerSheet" style="z-index: 9999;">
-        <div class="sheet-header">
-            <div class="sheet-handle"></div>
-            <h3 class="sheet-title">Pilih Warna</h3>
-            <button class="icon-btn close-sheet-btn">
-                <span class="material-symbols-rounded">check</span>
-            </button>
+    <footer>
+        <div class="container">
+            <p>© 2026 Heraclaus. Not associated with Mojang or Microsoft.</p>
         </div>
-        <div class="sheet-body" style="display:flex; flex-direction:column; align-items:center; padding-bottom:40px;">
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.querySelector('#mobile-menu-btn i');
             
-            <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:20px; width:100%">
-                <div style="font-size:11px; font-weight:600; color:var(--text-gray); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Preview</div>
-                <div id="color-sheet-preview" style="width: 60px; height: 60px; border-radius: 16px; background-color: #ffffff; border: 4px solid var(--surface); box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: background 0.1s;"></div>
-                <div id="color-sheet-hex" style="margin-top:8px; font-family:monospace; font-size:14px; font-weight:600; color:var(--text-dark);">#FFFFFF</div>
-            </div>
+            menu.classList.toggle('open');
+            
+            if (menu.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+                document.body.style.overflow = 'hidden'; // Cegah scroll layar belakang saat menu terbuka
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+                document.body.style.overflow = 'auto'; // Kembalikan scroll
+            }
+        }
 
-            <div id="iro-picker-container"></div>
-            <div style="margin-top:20px; width:100%; text-align:center; color:var(--text-gray); font-size:12px;">
-                Geser roda untuk memilih
-            </div>
-        </div>
-    </div>
-
-    <div class="bottom-sheet" id="layerSheet">
-        <div class="sheet-header">
-            <div class="sheet-handle"></div>
-            <h3 class="sheet-title">Layers</h3>
-            <button class="icon-btn close-sheet-btn" onclick="closeAllSheets()">
-                <span class="material-symbols-rounded">close</span>
-            </button>
-        </div>
-        <div class="layer-controls">
-            <button class="layer-ctrl-btn" onclick="moveLayer('up')" title="Naik"><span class="material-symbols-rounded">arrow_upward</span></button>
-            <button class="layer-ctrl-btn" onclick="moveLayer('down')" title="Turun"><span class="material-symbols-rounded">arrow_downward</span></button>
-            <div class="divider-v" style="height:20px; background:var(--border)"></div>
-            <button class="layer-ctrl-btn" onclick="moveLayer('out')" title="Keluar Parent"><span class="material-symbols-rounded">chevron_left</span></button>
-            <button class="layer-ctrl-btn" onclick="moveLayer('in')" title="Masuk Container"><span class="material-symbols-rounded">chevron_right</span></button>
-        </div>
-        <div class="sheet-body" style="padding: 0;">
-            <div id="layerList" class="layer-list"></div>
-        </div>
-    </div>
-
-    <script src="js/config.js"></script>
-    <script src="js/pagemanager.js"></script> <script src="js/store.js"></script>
-    <script src="js/elements.js"></script>
-    <script src="js/renderer.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/export.js"></script>
-    <script src="js/app.js"></script>
-
+        function toggleFaq(btn) {
+            const currentItem = btn.parentElement;
+            document.querySelectorAll('.faq-item').forEach(item => {
+                if(item !== currentItem) item.classList.remove('active');
+            });
+            currentItem.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
