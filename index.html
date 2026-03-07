@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heraclaus | Premium Minecraft Bedrock Add-ons</title>
     
-    <!-- Modern Tech Fonts: Outfit for Headings, Inter for Body -->
+    <!-- Modern Tech Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        /* * PURE VANILLA CSS - MOBILE OPTIMIZED HIGH-VALUE THEME * */
+        /* * PURE VANILLA CSS - MODERN TECH SAAS THEME * */
          
         :root {
             --bg-base: #050505; 
@@ -37,77 +37,66 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth; }
         
-        .container { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem; }
+        .container { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
         .flex { display: flex; } .flex-col { flex-direction: column; }
         .items-center { align-items: center; } .justify-between { justify-content: space-between; } .justify-center { justify-content: center; }
-        .gap-2 { gap: 0.5rem; } .gap-4 { gap: 1rem; } .gap-6 { gap: 1.5rem; }
+        .gap-2 { gap: 0.5rem; } .gap-4 { gap: 1rem; } .gap-6 { gap: 1.5rem; } .gap-8 { gap: 2rem; }
         .w-full { width: 100%; } .text-center { text-align: center; }
         .mb-2 { margin-bottom: 0.5rem; } .mb-4 { margin-bottom: 1rem; } .mb-8 { margin-bottom: 2rem; } .mt-4 { margin-top: 1rem; }
         
+        /* Typography Polish */
         h1, h2, h3, h4, .font-outfit { font-family: 'Outfit', sans-serif; }
-        h1 { font-size: clamp(2.25rem, 8vw, 4rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.15; }
-        h2 { font-size: clamp(1.75rem, 6vw, 2.5rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; }
+        h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+        h2 { font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; }
         h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; color: var(--text-primary); line-height: 1.3; }
         p { color: var(--text-secondary); font-size: clamp(0.95rem, 3vw, 1.05rem); }
         
         .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Ambient Glow */
+        /* Ambient Glow (Softer, larger) */
         .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
-        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.4; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(140px); opacity: 0.35; }
         .blob-1 { top: -20%; left: -10%; width: 60vw; height: 60vw; background: rgba(139, 92, 246, 0.15); }
         .blob-2 { bottom: -20%; right: -10%; width: 50vw; height: 50vw; background: rgba(59, 130, 246, 0.15); }
 
-        /* Navigation */
-        .navbar { position: fixed; top: 0; width: 100%; height: 4.5rem; z-index: 100; background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; }
+        /* Navigation - MINIMALIST */
+        .navbar { position: fixed; top: 0; width: 100%; height: 5rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
         
         .nav-links { display: none; } 
-        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
-        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a.reg-link { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-links a.reg-link:hover { color: var(--text-primary); }
         
-        .discord-btn { background: rgba(88, 101, 242, 0.1); color: #fff; padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid rgba(88, 101, 242, 0.3); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
-        .discord-btn:hover { background: rgba(88, 101, 242, 0.25); border-color: #5865F2; }
+        /* Nav Icon Button (Discord) */
+        .nav-icon-btn { color: var(--text-secondary); font-size: 1.25rem; transition: all 0.2s; display: flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border-radius: 8px; background: transparent; }
+        .nav-icon-btn:hover { color: #5865F2; background: rgba(88, 101, 242, 0.1); }
+
+        .nav-divider { width: 1px; height: 1.5rem; background: var(--border-light); margin: 0 0.5rem; }
         
-        /* Hamburger Button Precision */
-        .menu-btn { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            width: 2.75rem; 
-            height: 2.75rem; 
-            font-size: 1.5rem; 
-            color: var(--text-primary); 
-            background: transparent; 
-            border: none; 
-            cursor: pointer; 
-            border-radius: 8px;
-            margin-right: -0.5rem; 
-            transition: background-color 0.2s ease; 
-        }
-        .menu-btn:hover, .menu-btn:active { background-color: rgba(255, 255, 255, 0.1); }
+        /* Nav Login Button */
+        .login-nav-btn { background: rgba(255,255,255,0.04); color: #fff; padding: 0.6rem 1.25rem; border-radius: 10px; border: 1px solid var(--border-light); text-decoration: none; font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
+        .login-nav-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--border-highlight); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+        /* Hamburger */
+        .menu-btn { display: flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; font-size: 1.5rem; color: var(--text-primary); background: transparent; border: none; cursor: pointer; border-radius: 8px; margin-right: -0.5rem; transition: background-color 0.2s; }
+        .menu-btn:hover { background-color: rgba(255, 255, 255, 0.05); }
         
         @media (min-width: 768px) { 
-            .nav-links { display: flex; align-items: center; }
-            .nav-links a { margin-left: 1.5rem; } 
+            .nav-links { display: flex; align-items: center; gap: 1.5rem; }
             .menu-btn { display: none; }
         }
 
-        /* Mobile Menu Overlay */
-        .mobile-menu { 
-            position: fixed; top: 4.5rem; left: 0; width: 100%; height: calc(100vh - 4.5rem); overflow-y: auto;
-            background: var(--bg-surface); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; 
-            transform: translateY(-100%); opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
-            pointer-events: none; z-index: 90; border-bottom: 1px solid var(--border-light);
-        }
+        /* Mobile Menu */
+        .mobile-menu { position: fixed; top: 5rem; left: 0; width: 100%; height: calc(100vh - 5rem); overflow-y: auto; background: var(--bg-surface); padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; transform: translateY(-100%); opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; z-index: 90; border-bottom: 1px solid var(--border-light); }
         .mobile-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
-        .mobile-menu a { color: var(--text-primary); text-decoration: none; font-size: 1.125rem; font-weight: 500; border-bottom: 1px solid var(--border-light); padding: 1rem 0; display: flex; align-items: center; gap: 0.75rem; }
-        .mobile-menu .discord-btn { border-bottom: none; margin-top: 1rem; padding: 1rem; font-size: 1rem; }
+        .mobile-menu a { color: var(--text-primary); text-decoration: none; font-size: 1.125rem; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1.25rem 0; display: flex; align-items: center; gap: 1rem; }
+        .mobile-menu a i { width: 1.5rem; text-align: center; color: var(--text-muted); }
+        .mobile-menu .login-nav-btn { border-bottom: none; margin-top: 1.5rem; padding: 1rem; justify-content: center; }
 
-        /* Responsive Action Groups (Buttons) */
+        /* Buttons */
         .action-group { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0 1.5rem; min-height: 3rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; font-family: 'Inter', sans-serif; text-align: center; width: 100%; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0 1.75rem; min-height: 3.25rem; border-radius: 12px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; font-family: 'Inter', sans-serif; text-align: center; width: 100%; letter-spacing: 0.01em; }
         
         @media (min-width: 640px) { 
             .action-group { flex-direction: row; } 
@@ -116,46 +105,42 @@
         }
 
         .btn-primary { background: var(--text-primary); color: var(--bg-base); }
-        .btn-primary:hover { background: #e4e4e7; transform: translateY(-2px); }
+        .btn-primary:hover { background: #e4e4e7; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,255,255,0.1); }
         .btn-gradient { background: var(--gradient-admin); color: #fff; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); border: 1px solid rgba(255,255,255,0.1); }
-        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5); filter: brightness(1.1); }
-        .btn-outline { background: rgba(255,255,255,0.03); color: var(--text-primary); border: 1px solid var(--border-highlight); }
-        .btn-outline:hover { background: rgba(255,255,255,0.08); }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5); filter: brightness(1.1); }
+        .btn-outline { background: rgba(255,255,255,0.02); color: var(--text-primary); border: 1px solid var(--border-highlight); }
+        .btn-outline:hover { background: rgba(255,255,255,0.06); }
 
         /* YouTube Badge */
-        .yt-badge {
-            display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.375rem 1rem; 
-            background: rgba(255, 0, 0, 0.1); border: 1px solid rgba(255, 0, 0, 0.3); 
-            border-radius: 9999px; font-size: 0.875rem; font-weight: 600; margin-bottom: 1.5rem; 
-            backdrop-filter: blur(10px); color: var(--text-primary); text-decoration: none; transition: all 0.3s;
-        }
-        .yt-badge:hover { background: rgba(255, 0, 0, 0.2); border-color: rgba(255, 0, 0, 0.5); transform: translateY(-2px); }
+        .yt-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.375rem 1rem; background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 9999px; font-size: 0.875rem; font-weight: 600; margin-bottom: 2rem; color: var(--text-primary); text-decoration: none; transition: all 0.3s; }
+        .yt-badge:hover { background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.4); transform: translateY(-2px); }
         .yt-icon { color: #ff0000; font-size: 1.1rem; }
         .yt-verified { color: #3ea6ff; font-size: 0.8rem; }
 
-        /* Sections */
-        .section-hero { padding: 8rem 0 4rem 0; }
-        .section { padding: 4rem 0; }
-        @media (min-width: 768px) { .section-hero { padding: 10rem 0 5rem 0; } .section { padding: 6rem 0; } }
+        /* Sections Spacing */
+        .section-hero { padding: 9rem 0 5rem 0; }
+        .section { padding: 5rem 0; }
+        @media (min-width: 768px) { .section-hero { padding: 11rem 0 7rem 0; } .section { padding: 7rem 0; } }
 
-        /* Product Container (The "Meat") */
-        .product-box { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 20px; overflow: hidden; margin-bottom: 2rem; }
-        .product-header { padding: 2rem 1.25rem; border-bottom: 1px solid var(--border-light); background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 70%); display: flex; flex-direction: column; gap: 1.5rem; }
+        /* Product Container */
+        .product-box { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 24px; overflow: hidden; margin-bottom: 3rem; }
+        .product-header { padding: 2.5rem 1.5rem; border-bottom: 1px solid var(--border-light); background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.08), transparent 60%); display: flex; flex-direction: column; gap: 1.5rem; }
         .product-header-actions { display: flex; flex-direction: column; gap: 0.75rem; width: 100%; }
         
-        .badge { display: inline-block; padding: 0.25rem 0.75rem; background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1rem; border: 1px solid rgba(139, 92, 246, 0.3); }
+        .badge { display: inline-block; padding: 0.35rem 0.85rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1.25rem; border: 1px solid rgba(139, 92, 246, 0.25); }
         
-        /* Dense Feature Grid */
-        .feature-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--border-light); }
-        .feature-cell { background: var(--bg-surface); padding: 1.5rem; }
-        .feature-cell i { font-size: 1.5rem; margin-bottom: 1rem; display: block; }
-        .feature-cell p { font-size: 0.9rem; margin-top: 0.5rem; }
+        /* Clean Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; padding: 1.5rem; background: transparent; }
+        .feature-cell { background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); border-radius: 16px; padding: 1.75rem; transition: background 0.3s, border-color 0.3s; }
+        .feature-cell:hover { background: rgba(255,255,255,0.04); border-color: var(--border-highlight); }
+        .feature-cell i { font-size: 1.75rem; margin-bottom: 1.25rem; display: block; }
+        .feature-cell p { font-size: 0.95rem; margin-top: 0.5rem; color: var(--text-secondary); line-height: 1.6; }
 
         @media (min-width: 768px) {
-            .product-header { padding: 3rem 2.5rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 3rem; }
+            .product-header { padding: 4rem 3rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 4rem; }
             .product-header-text { flex: 1; }
-            .product-header-actions { width: auto; min-width: 220px; }
-            .feature-grid { grid-template-columns: repeat(2, 1fr); }
+            .product-header-actions { width: auto; min-width: 240px; }
+            .feature-grid { grid-template-columns: repeat(2, 1fr); padding: 2rem; gap: 1.5rem; }
             .feature-cell { padding: 2rem; }
         }
         @media (min-width: 1024px) {
@@ -163,36 +148,47 @@
         }
 
         /* Pricing Simplified */
-        .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 1.5rem; max-width: 54rem; margin: 2rem auto 0; }
-        .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 2rem 1.5rem; display: flex; flex-direction: column; }
-        .price-card.pro { border-color: rgba(139, 92, 246, 0.5); background: linear-gradient(180deg, rgba(139, 92, 246, 0.05), transparent); }
-        .price-val { font-family: 'Outfit'; font-size: 3rem; font-weight: 700; color: #fff; line-height: 1; margin: 1rem 0; }
-        .price-val span { font-size: 1rem; color: var(--text-secondary); font-weight: 400; font-family: 'Inter'; }
-        .check-list { list-style: none; margin: 1.5rem 0; flex-grow: 1; }
-        .check-list li { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
-        .check-list i { color: #10b981; font-size: 0.8rem; margin-top: 0.3rem; flex-shrink: 0; }
+        .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 1.5rem; max-width: 56rem; margin: 3rem auto 0; }
+        .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 24px; padding: 2.5rem 2rem; display: flex; flex-direction: column; transition: transform 0.3s; }
+        .price-card:hover { transform: translateY(-4px); }
+        .price-card.pro { border-color: rgba(139, 92, 246, 0.4); background: linear-gradient(180deg, rgba(139, 92, 246, 0.08), transparent); position: relative; overflow: hidden; }
+        .price-val { font-family: 'Outfit'; font-size: 3.5rem; font-weight: 700; color: #fff; line-height: 1; margin: 1rem 0; letter-spacing: -0.02em; }
+        .price-val span { font-size: 1rem; color: var(--text-secondary); font-weight: 400; font-family: 'Inter'; letter-spacing: normal; }
+        .check-list { list-style: none; margin: 1.5rem 0 2.5rem 0; flex-grow: 1; }
+        .check-list li { display: flex; align-items: flex-start; gap: 1rem; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1rem; }
+        .check-list i { color: #10b981; font-size: 0.85rem; margin-top: 0.35rem; flex-shrink: 0; }
         
-        @media (min-width: 768px) { .pricing-wrap { grid-template-columns: 1fr 1fr; } .price-card { padding: 2.5rem; } }
+        @media (min-width: 768px) { .pricing-wrap { grid-template-columns: 1fr 1fr; gap: 2rem; } .price-card { padding: 3rem; } }
 
         /* Smooth FAQ */
-        .faq-wrap { max-width: 48rem; margin: 2rem auto 0; display: flex; flex-direction: column; gap: 0.75rem; }
-        .faq-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; transition: border-color 0.3s; }
-        .faq-item.active { border-color: var(--border-highlight); background: rgba(255,255,255,0.05); }
-        .faq-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.25rem; background: none; border: none; color: var(--text-primary); font-family: 'Outfit'; font-size: 1.05rem; font-weight: 600; cursor: pointer; text-align: left; gap: 1rem; }
+        .faq-wrap { max-width: 50rem; margin: 3rem auto 0; display: flex; flex-direction: column; gap: 1rem; }
+        .faq-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; transition: border-color 0.3s; }
+        .faq-item.active { border-color: var(--border-highlight); background: rgba(255,255,255,0.04); }
+        .faq-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; background: none; border: none; color: var(--text-primary); font-family: 'Outfit'; font-size: 1.1rem; font-weight: 600; cursor: pointer; text-align: left; gap: 1rem; }
         .faq-btn i { color: var(--text-muted); transition: transform 0.3s ease; flex-shrink: 0; }
         .faq-item.active .faq-btn i { transform: rotate(180deg); color: var(--text-primary); }
         .faq-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
         .faq-item.active .faq-content { grid-template-rows: 1fr; }
         .faq-inner { overflow: hidden; }
-        .faq-inner p { padding: 0 1.25rem 1.25rem 1.25rem; font-size: 0.95rem; margin: 0; color: var(--text-secondary); }
+        .faq-inner p { padding: 0 1.5rem 1.5rem 1.5rem; font-size: 0.95rem; margin: 0; color: var(--text-secondary); line-height: 1.6; }
 
-        @media (min-width: 768px) { .faq-btn { padding: 1.25rem 1.5rem; } .faq-inner p { padding: 0 1.5rem 1.25rem 1.5rem; } }
+        /* Pre-footer CTA */
+        .cta-section { padding: 6rem 0; border-top: 1px solid var(--border-light); background: radial-gradient(circle at center, rgba(139, 92, 246, 0.08), transparent 60%); text-align: center; }
 
-        /* Footer */
-        footer { padding: 3rem 0; border-top: 1px solid var(--border-light); text-align: center; margin-top: 3rem; color: var(--text-muted); font-size: 0.85rem; }
-        .social-links { display: inline-flex; gap: 1rem; margin-bottom: 1rem; }
-        .social-links a { color: var(--text-muted); font-size: 1.25rem; transition: color 0.2s; }
-        .social-links a:hover { color: var(--text-primary); }
+        /* Advanced Footer */
+        footer { padding: 4rem 0 2rem 0; border-top: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.9rem; background: rgba(0,0,0,0.5); }
+        .footer-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; margin-bottom: 3rem; text-align: left; }
+        @media (min-width: 768px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr; } }
+        .footer-brand h3 { font-family: 'Outfit'; font-size: 1.5rem; color: #fff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .footer-links-col { display: flex; flex-direction: column; gap: 0.75rem; }
+        .footer-links-col h4 { color: #fff; font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 0.75rem; }
+        .footer-links-col a { color: var(--text-secondary); text-decoration: none; transition: all 0.2s; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .footer-links-col a:hover { color: var(--accent-primary); transform: translateX(4px); }
+        .footer-bottom { padding-top: 2rem; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+        @media (min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; } }
+        .social-row { display: flex; gap: 1rem; }
+        .social-row a { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.2s; font-size: 1.1rem; border: 1px solid transparent; }
+        .social-row a:hover { background: rgba(139, 92, 246, 0.1); color: #fff; border-color: rgba(139, 92, 246, 0.3); transform: translateY(-3px); }
     </style>
 </head>
 <body>
@@ -202,11 +198,10 @@
         <div class="blob blob-2"></div>
     </div>
 
-    <!-- Nav -->
-    <nav class="navbar">
+    <!-- Nav (Minimal & Important Only) -->
+    <nav class="navbar" id="navbar">
         <div class="container flex justify-between items-center w-full">
-            <!-- Pindahkan link logo ke #top agar halaman scroll ke atas saat ditekan -->
-            <a href="#" class="font-outfit" style="font-size: 1.25rem; font-weight: 800; color: #fff; text-decoration: none;">
+            <a href="#" class="font-outfit" style="font-size: 1.35rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em;">
                 <i class="fa-solid fa-code text-gradient mr-2"></i> Heraclaus
             </a>
             
@@ -214,31 +209,45 @@
                 <i class="fa-solid fa-bars"></i>
             </button>
 
+            <!-- Desktop Links -->
             <div class="nav-links">
-                <a href="#admin-suite">Admin Suite</a>
-                <a href="#cinemato">Cinemato</a>
-                <a href="#pricing">Pricing</a>
-                <a href="changelog.html" target="_blank"><i class="fa-solid fa-clock-rotate-left"></i> Changelog</a>
-                <a href="https://discord.gg/xQStZUvukS" target="_blank" class="discord-btn ml-4"><i class="fa-brands fa-discord"></i> Discord</a>
+                <a href="#admin-suite" class="reg-link">Admin Suite</a>
+                <a href="#pricing" class="reg-link">Pricing</a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="https://discord.gg/xQStZUvukS" target="_blank" class="nav-icon-btn" title="Join our Discord">
+                    <i class="fa-brands fa-discord"></i>
+                </a>
+                <a href="client.html" class="login-nav-btn">
+                    <i class="fa-solid fa-right-to-bracket text-gradient"></i> Client Portal
+                </a>
             </div>
         </div>
     </nav>
 
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu" id="mobile-menu">
-        <a href="#admin-suite" onclick="toggleMenu()"><i class="fa-solid fa-server text-muted"></i> Admin Suite</a>
-        <a href="#cinemato" onclick="toggleMenu()"><i class="fa-solid fa-film text-muted"></i> Cinemato Studio</a>
-        <a href="#pricing" onclick="toggleMenu()"><i class="fa-solid fa-tag text-muted"></i> Pricing</a>
-        <a href="#faq" onclick="toggleMenu()"><i class="fa-solid fa-circle-question text-muted"></i> FAQ & ToS</a>
-        <a href="changelog.html" target="_blank" onclick="toggleMenu()"><i class="fa-solid fa-clock-rotate-left text-muted"></i> View Changelog</a>
-        <a href="https://discord.gg/xQStZUvukS" target="_blank" class="discord-btn" onclick="toggleMenu()"><i class="fa-brands fa-discord"></i> Join Discord Server</a>
+        <a href="#admin-suite" onclick="toggleMenu()"><i class="fa-solid fa-server"></i> Admin Suite</a>
+        <a href="#cinemato" onclick="toggleMenu()"><i class="fa-solid fa-film"></i> Cinemato Studio</a>
+        <a href="#pricing" onclick="toggleMenu()"><i class="fa-solid fa-tag"></i> Pricing</a>
+        <a href="#faq" onclick="toggleMenu()"><i class="fa-solid fa-circle-question"></i> FAQ & ToS</a>
+        <a href="changelog.html" target="_blank" onclick="toggleMenu()"><i class="fa-solid fa-clock-rotate-left"></i> System Changelog</a>
+        
+        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 1rem 0;"></div>
+        
+        <a href="https://discord.gg/xQStZUvukS" target="_blank" style="color: #a5b4fc;" onclick="toggleMenu()">
+            <i class="fa-brands fa-discord"></i> Join Discord
+        </a>
+        <a href="client.html" class="login-nav-btn" onclick="toggleMenu()">
+            <i class="fa-solid fa-right-to-bracket text-gradient"></i> Login to Portal
+        </a>
     </div>
 
     <!-- Hero -->
     <section class="section-hero text-center">
         <div class="container flex flex-col items-center">
             
-            <!-- YouTube Channel Badge (Replacing Update Badge) -->
             <a href="https://www.youtube.com/@heraclaus" target="_blank" class="yt-badge">
                 <i class="fa-brands fa-youtube yt-icon"></i>
                 Heraclaus
@@ -246,11 +255,11 @@
             </a>
             
             <h1>Stop installing junk plugins.<br><span class="text-gradient">Build a legendary server.</span></h1>
-            <p style="max-width: 40rem; margin: 1rem auto 2.5rem; font-size: 1.15rem;">
-                Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world.
+            <p style="max-width: 42rem; margin: 1.25rem auto 3rem; font-size: 1.15rem; line-height: 1.7;">
+                Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world's economy and progression.
             </p>
-            <div class="action-group justify-center" style="max-width: 24rem; margin: 0 auto;">
-                <a href="#admin-suite" class="btn btn-primary">View Products</a>
+            <div class="action-group justify-center" style="max-width: 26rem; margin: 0 auto;">
+                <a href="#admin-suite" class="btn btn-primary">Explore Admin Suite</a>
             </div>
         </div>
     </section>
@@ -261,9 +270,9 @@
             <div class="product-box">
                 <div class="product-header">
                     <div class="product-header-text">
-                        <span class="badge"><i class="fa-solid fa-crown"></i> Flagship Add-on</span>
+                        <span class="badge"><i class="fa-solid fa-crown"></i> Flagship Architecture</span>
                         <h2>Admin Suite</h2>
-                        <p class="mt-2">One suite to replace them all. Manage your economy, players, RPG progression, and world security through a single, highly-optimized core. Zero lag, pure performance.</p>
+                        <p class="mt-2" style="font-size: 1.05rem;">One suite to replace them all. Manage your economy, players, RPG progression, and world security through a single, highly-optimized core. Zero lag, pure performance.</p>
                     </div>
                     <div class="product-header-actions action-group">
                         <a href="#pricing" class="btn btn-gradient"><i class="fa-solid fa-arrow-down"></i> View Pricing</a>
@@ -271,53 +280,52 @@
                     </div>
                 </div>
                 
-                <!-- The "Meat" -> Core Specs -->
+                <!-- Clean Feature Grid -->
                 <div class="feature-grid">
                     <div class="feature-cell">
                         <i class="fa-solid fa-sack-dollar" style="color: #f59e0b;"></i>
-                        <h3>Hybrid Economy</h3>
+                        <h3 style="margin-bottom: 0.25rem;">Hybrid Economy</h3>
                         <p>Bypass Minecraft's scoreboard limits with our hybrid money model. Includes physical currencies, robust trading, and jobs.</p>
                     </div>
                     <div class="feature-cell">
                         <i class="fa-solid fa-khanda" style="color: #f43f5e;"></i>
-                        <h3>RPG Progression</h3>
+                        <h3 style="margin-bottom: 0.25rem;">RPG Progression</h3>
                         <p>Keep retention high with skill leveling, player gravestones upon death, and fully customizable PvE/PvP battle mechanics.</p>
                     </div>
                     <div class="feature-cell">
                         <i class="fa-solid fa-globe" style="color: #3b82f6;"></i>
-                        <h3>Advanced Regions</h3>
+                        <h3 style="margin-bottom: 0.25rem;">Advanced Regions</h3>
                         <p>Create advanced lobby menus, secure land claims, manage precise roles, and run automated repeated broadcast systems.</p>
                     </div>
                     <div class="feature-cell">
                         <i class="fa-solid fa-users" style="color: #10b981;"></i>
-                        <h3>Clan Ecosystem</h3>
+                        <h3 style="margin-bottom: 0.25rem;">Clan Ecosystem</h3>
                         <p>Allow players to form alliances, manage members, use private clan chats, and equip custom overhead nametags.</p>
                     </div>
                     <div class="feature-cell">
                         <i class="fa-solid fa-list-ol" style="color: #8b5cf6;"></i>
-                        <h3>Immersive UI & NPCs</h3>
+                        <h3 style="margin-bottom: 0.25rem;">Immersive UI & NPCs</h3>
                         <p>Spawn interactive NPCs with custom cosmetics, display live sidebars, and set up floating holograms without coding.</p>
                     </div>
                     <div class="feature-cell">
                         <i class="fa-solid fa-shield-halved" style="color: #f87171;"></i>
-                        <h3>Security & Logs</h3>
+                        <h3 style="margin-bottom: 0.25rem;">Security & Logs</h3>
                         <p>Built-in native login/registration system to secure accounts, plus comprehensive server chat logs for easy moderation.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Products: Cinemato -->
-            <div id="cinemato" class="product-box" style="margin-bottom: 0;">
-                <div class="product-header" style="background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.08), transparent 50%); border-bottom: none;">
+            <div id="cinemato" class="product-box" style="margin-bottom: 0; border-color: rgba(16, 185, 129, 0.2);">
+                <div class="product-header" style="background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent 50%); border-bottom: none; padding-bottom: 3rem;">
                     <div class="product-header-text">
-                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.3);"><i class="fa-solid fa-film"></i> Creator Tool</span>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.25);"><i class="fa-solid fa-film"></i> Creator Tool</span>
                         <h2>Cinemato Studio</h2>
-                        <p class="mt-2">The definitive camera tool for Bedrock creators. Execute smooth bezier camera paths, direct cinematic sequences, and create stunning timelapses effortlessly.</p>
+                        <p class="mt-2" style="font-size: 1.05rem;">The definitive camera tool for Bedrock creators. Execute smooth bezier camera paths, direct cinematic sequences, and create stunning timelapses effortlessly.</p>
                     </div>
                     <div class="product-header-actions action-group">
-                        <!-- LINK CURSEFORGE SUDAH BERFUNGSI -->
-                        <a href="https://www.curseforge.com/minecraft-bedrock/addons/cinemato-studio" target="_blank" class="btn btn-outline">
-                            CurseForge <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        <a href="https://www.curseforge.com/minecraft-bedrock/addons/cinemato-studio" target="_blank" class="btn btn-outline" style="border-color: rgba(16, 185, 129, 0.3);">
+                            CurseForge <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.85rem;"></i>
                         </a>
                     </div>
                 </div>
@@ -326,40 +334,46 @@
     </section>
 
     <!-- Pricing (No Fluff) -->
-    <section id="pricing" class="section" style="border-top: 1px solid var(--border-light); background: rgba(0,0,0,0.3);">
+    <section id="pricing" class="section" style="border-top: 1px solid var(--border-light); background: rgba(0,0,0,0.4);">
         <div class="container text-center">
             <h2>Simple Pricing. No Subscriptions.</h2>
-            <p>Pay once, dominate your server forever.</p>
+            <p style="font-size: 1.1rem; margin-top: 0.5rem;">Pay once, dominate your server forever.</p>
             
             <div class="pricing-wrap text-left">
+                <!-- Starter Edition -->
                 <div class="price-card">
                     <h3>Starter</h3>
                     <div class="price-val">$0 <span>/ trial</span></div>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -1rem; margin-bottom: 1rem; font-style: italic;">No license attached. May deactivate anytime.</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: -0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1.5rem;">
+                        No license attached. May deactivate anytime without notice.
+                    </p>
                     <ul class="check-list">
                         <li><i class="fa-solid fa-check"></i> Admin, World & Player Management</li>
                         <li><i class="fa-solid fa-check"></i> Economy, Jobs, Quests & RPG Skills</li>
                         <li><i class="fa-solid fa-check"></i> Clans, Land Claims & Custom Chat</li>
                         <li><i class="fa-solid fa-check"></i> Basic Holograms, Sidebars & NPCs</li>
-                        <li class="disabled"><i class="fa-solid fa-xmark"></i> Non-permanent Access (Trial)</li>
-                        <li class="disabled"><i class="fa-solid fa-xmark"></i> No Hybrid Economy or Native Login</li>
+                        <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> Non-permanent Access (Trial)</li>
+                        <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> No Hybrid Economy or Native Login</li>
                     </ul>
                     <a href="https://www.curseforge.com/minecraft-bedrock/scripts/admin-suite-server-tools" target="_blank" class="btn btn-outline w-full mt-auto">Download Trial</a>
                 </div>
 
+                <!-- Pro Edition -->
                 <div class="price-card pro">
                     <h3 style="color: #c4b5fd;">Pro License</h3>
                     <div class="price-val">$5 <span>/ one-time</span></div>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -1rem; margin-bottom: 1rem; font-style: italic;">Equivalent to ~Rp80.000 (Permanent License)</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: -0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 1.5rem;">
+                        Equivalent to ~Rp80.000. Permanent License.
+                    </p>
                     <ul class="check-list">
                         <li><i class="fa-solid fa-check"></i> <strong style="color: white;">Everything in Starter, plus:</strong></li>
                         <li><i class="fa-solid fa-check"></i> Hybrid Money (No Scoreboard Limits)</li>
                         <li><i class="fa-solid fa-check"></i> Native Login System & Server Chat Logs</li>
                         <li><i class="fa-solid fa-check"></i> Custom Leaderboards & Sidebar Icons</li>
                         <li><i class="fa-solid fa-check"></i> Advanced Regions, Battles & Gravestones</li>
-                        <li><i class="fa-solid fa-check"></i> NPC Cosmetics & Priority Support</li>
+                        <li><i class="fa-solid fa-check"></i> Access to the Heraclaus Client Portal</li>
                     </ul>
-                    <a href="https://discord.gg/XNp95JTz" target="_blank" class="btn btn-gradient w-full mt-auto">Unlock Full Suite</a>
+                    <a href="payment.html" class="btn btn-gradient w-full mt-auto">Secure Checkout</a>
                 </div>
             </div>
         </div>
@@ -371,6 +385,16 @@
             <h2 class="text-center">FAQ & Terms of Service</h2>
             
             <div class="faq-wrap">
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>How do I get my files after payment?</span> <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>After you complete the checkout via QRIS, we will verify your payment and email you a secure <strong>License Key</strong>. You can then use it to login to our <strong>Client Portal</strong> and download your files.</p>
+                        </div>
+                    </div>
+                </div>
                 <div class="faq-item">
                     <button class="faq-btn" onclick="toggleFaq(this)">
                         <span>Will Admin Suite cause lag?</span> <i class="fa-solid fa-chevron-down"></i>
@@ -397,7 +421,7 @@
                     </button>
                     <div class="faq-content">
                         <div class="faq-inner">
-                            <p>We push compatibility patches within 24-48 hours of major Bedrock updates, ensuring your server never faces long downtimes.</p>
+                            <p>We push compatibility patches within 24-48 hours of major Bedrock updates, ensuring your server never faces long downtimes. You can download updates directly from the Client Portal.</p>
                         </div>
                     </div>
                 </div>
@@ -423,16 +447,6 @@
                 </div>
                 <div class="faq-item">
                     <button class="faq-btn" onclick="toggleFaq(this)">
-                        <span>What is your refund policy?</span> <i class="fa-solid fa-chevron-down"></i>
-                    </button>
-                    <div class="faq-content">
-                        <div class="faq-inner">
-                            <p>All purchases are permanent, and there are no refunds or exchanges. Please read the features and think carefully before you buy.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-btn" onclick="toggleFaq(this)">
                         <span>Are there strict rules for Pro members?</span> <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <div class="faq-content">
@@ -445,19 +459,62 @@
         </div>
     </section>
 
-    <footer>
-        <div class="container flex flex-col items-center">
-            <div class="social-links">
-                <!-- YouTube Link -->
-                <a href="https://www.youtube.com/@heraclaus" target="_blank" title="YouTube" style="color: #ff0000;"><i class="fa-brands fa-youtube"></i></a>
-                <!-- Discord Link -->
-                <a href="https://discord.gg/xQStZUvukS" target="_blank" title="Discord"><i class="fa-brands fa-discord"></i></a>
+    <!-- Final Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 style="font-size: clamp(2rem, 5vw, 2.5rem); margin-bottom: 1rem;">Ready to level up your server?</h2>
+            <p style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 1.1rem;">Join thousands of players and admins using Heraclaus Add-ons.</p>
+            <div class="action-group justify-center">
+                <a href="#pricing" class="btn btn-gradient" style="padding: 0 3rem; font-size: 1.05rem; height: 3.5rem;">Get Pro License Now</a>
             </div>
-            <p>© 2026 Heraclaus. Not associated with Mojang or Microsoft.</p>
+        </div>
+    </section>
+
+    <!-- Advanced Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3><i class="fa-solid fa-code text-gradient"></i> Heraclaus</h3>
+                    <p style="max-width: 22rem; line-height: 1.6;">Premium Minecraft Bedrock add-ons built for performance, security, and absolute control. Stop dealing with junk plugins.</p>
+                </div>
+                <div class="footer-links-col">
+                    <h4>Products</h4>
+                    <a href="#admin-suite"><i class="fa-solid fa-angle-right" style="font-size:0.75rem"></i> Admin Suite</a>
+                    <a href="#cinemato"><i class="fa-solid fa-angle-right" style="font-size:0.75rem"></i> Cinemato Studio</a>
+                    <a href="#pricing"><i class="fa-solid fa-angle-right" style="font-size:0.75rem"></i> Pricing & Trial</a>
+                </div>
+                <div class="footer-links-col">
+                    <h4>Resources</h4>
+                    <a href="client.html"><i class="fa-solid fa-angle-right" style="font-size:0.75rem"></i> Client Portal</a>
+                    <a href="changelog.html" target="_blank"><i class="fa-solid fa-angle-right" style="font-size:0.75rem"></i> System Changelog</a>
+                    <a href="#faq"><i class="fa-solid fa-angle-right" style="font-size:0.75rem"></i> Terms of Service</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2026 Heraclaus. Not associated with Mojang or Microsoft.</p>
+                <div class="social-row">
+                    <a href="https://www.youtube.com/@heraclaus" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://discord.gg/xQStZUvukS" target="_blank" title="Discord Server"><i class="fa-brands fa-discord"></i></a>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.style.background = 'rgba(5, 5, 5, 0.9)';
+                nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)';
+            } else {
+                nav.style.background = 'rgba(5, 5, 5, 0.75)';
+                nav.style.boxShadow = 'none';
+            }
+        });
+
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
             const icon = document.querySelector('#mobile-menu-btn i');
