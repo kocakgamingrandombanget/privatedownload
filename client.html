@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Portal | Heraclaus Admin Suite</title>
+    
+    <!-- Modern Tech Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-base: #050505; --bg-surface: #0a0a0a; --bg-card: rgba(255, 255, 255, 0.03);
+            --border-light: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff; --text-secondary: #a1a1aa; --text-muted: #71717a;
+            --accent-primary: #8b5cf6; --accent-success: #10b981; --accent-danger: #f43f5e;
+            --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        .navbar { position: fixed; top: 0; width: 100%; height: 4.5rem; z-index: 100; background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; }
+        .font-outfit { font-family: 'Outfit', sans-serif; }
+        
+        .main-content { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 7rem 1rem 4rem 1rem; position: relative; }
+        
+        /* Glow Background */
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.3; }
+        .blob-1 { top: 10%; right: 10%; width: 40vw; height: 40vw; background: rgba(139, 92, 246, 0.15); }
+
+        /* Container Styles */
+        .auth-container, .dashboard-container { max-width: 28rem; width: 100%; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 24px; padding: 2.5rem 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); backdrop-filter: blur(10px); display: none; }
+        .auth-container.active, .dashboard-container.active { display: block; animation: fadeIn 0.4s ease; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-size: 1.75rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
+        p.desc { text-align: center; color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem; }
+
+        /* Form */
+        .form-group { margin-bottom: 1.25rem; }
+        label { display: block; font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 500; }
+        input[type="text"], input[type="email"] { width: 100%; padding: 0.875rem 1.25rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border-light); border-radius: 12px; color: var(--text-primary); font-size: 0.95rem; outline: none; transition: all 0.3s; }
+        input:focus { border-color: var(--accent-primary); background: rgba(0,0,0,0.6); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); }
+
+        .btn-submit { width: 100%; padding: 1rem; background: var(--gradient-admin); color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-top: 1rem; transition: transform 0.2s; display: flex; justify-content: center; align-items: center; gap: 0.5rem; }
+        .btn-submit:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        .btn-outline { background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-light); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-size: 0.875rem; }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+        .msg-box { margin-top: 1rem; padding: 0.875rem; border-radius: 12px; font-size: 0.875rem; text-align: center; display: none; }
+        .msg-error { background: rgba(244, 63, 94, 0.1); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.3); }
+
+        /* Dashboard UI */
+        .user-card { background: rgba(255,255,255,0.05); border: 1px solid var(--border-highlight); border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 2rem; }
+        .user-avatar { width: 4rem; height: 4rem; background: var(--gradient-admin); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem; }
+        .license-badge { display: inline-block; background: rgba(16, 185, 129, 0.1); color: var(--accent-success); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; border: 1px solid rgba(16, 185, 129, 0.3); margin-top: 0.5rem; }
+        
+        .download-box { border: 1px dashed var(--border-highlight); border-radius: 16px; padding: 2rem 1.5rem; text-align: center; background: rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg"><div class="blob blob-1"></div></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="font-outfit" style="font-size: 1.25rem; font-weight: 800; color: #fff; text-decoration: none;">
+            <i class="fa-solid fa-code" style="color: var(--accent-primary);"></i> Heraclaus 
+            <span style="color: var(--text-muted); font-weight: 500; font-family: 'Inter'; font-size: 1rem; margin-left: 0.25rem;">| Client</span>
+        </a>
+        <button id="btn-logout" class="btn-outline" style="display: none;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </nav>
+
+    <main class="main-content">
+        
+        <!-- LOGIN SECTION -->
+        <div id="auth-section" class="auth-container active">
+            <h1 class="font-outfit">Client Portal</h1>
+            <p class="desc">Login menggunakan Email dan Password (License Key) yang dikirim ke email Anda.</p>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="login-email" required placeholder="Email saat mendaftar">
+                </div>
+                <div class="form-group">
+                    <label>Password (License Key)</label>
+                    <input type="text" id="login-key" required placeholder="HRC-XXXXX">
+                </div>
+                
+                <button type="submit" class="btn-submit" id="btn-login">
+                    <i class="fa-solid fa-right-to-bracket"></i> Login to Dashboard
+                </button>
+                <div id="login-msg" class="msg-box msg-error"></div>
+            </form>
+        </div>
+
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboard-section" class="dashboard-container">
+            <div class="user-card">
+                <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+                <h2 id="dash-name" class="font-outfit" style="margin-bottom: 0.25rem;">Gamertag</h2>
+                <div class="license-badge"><i class="fa-solid fa-check-circle"></i> PRO LICENSE ACTIVE</div>
+            </div>
+            
+            <div class="download-box">
+                <i class="fa-solid fa-box-open" style="font-size: 2.5rem; color: var(--text-secondary); margin-bottom: 1rem;"></i>
+                <h3 style="margin-bottom: 0.5rem; font-weight: 600;">Admin Suite Pro - v6.0</h3>
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">Lisensi Anda permanen. Anda dapat selalu mengunduh versi terbaru di sini.</p>
+                <a id="btn-download" href="#" target="_blank" class="btn-submit" style="text-decoration: none;">
+                    <i class="fa-solid fa-download"></i> Download Add-on
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // LINK WEB APP GOOGLE SCRIPT SUDAH TERPASANG DI SINI
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtw7l0_rUIAvfqoilqneT7OJiOgOBQUFWePgKIUCga79DtKnS4FzYw4wtAkRywxZGa2g/exec";
+
+        // Cek Session saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", () => {
+            const session = localStorage.getItem("heraclaus_session");
+            if (session) {
+                const userData = JSON.parse(session);
+                showDashboard(userData);
+            }
+        });
+
+        // Proses Login
+        document.getElementById("login-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById("btn-login");
+            const msgBox = document.getElementById("login-msg");
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Authenticating...';
+            msgBox.style.display = "none";
+
+            const payload = {
+                action: "login",
+                email: document.getElementById("login-email").value.trim(),
+                licenseKey: document.getElementById("login-key").value.trim()
+            };
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "success") {
+                    // Simpan data session di browser
+                    localStorage.setItem("heraclaus_session", JSON.stringify(data));
+                    showDashboard(data);
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(err => {
+                msgBox.innerText = err.message;
+                msgBox.style.display = "block";
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login to Dashboard';
+            });
+        });
+
+        function showDashboard(data) {
+            document.getElementById("auth-section").classList.remove("active");
+            document.getElementById("dashboard-section").classList.add("active");
+            document.getElementById("btn-logout").style.display = "block";
+            
+            document.getElementById("dash-name").innerText = data.gamertag;
+            document.getElementById("btn-download").href = data.downloadLink;
+        }
+
+        function logout() {
+            localStorage.removeItem("heraclaus_session");
+            location.reload(); // Muat ulang halaman
+        }
+    </script>
+</body>
+</html>
