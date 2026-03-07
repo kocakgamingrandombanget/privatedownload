@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Heraclaus Admin Suite Pro</title>
+    
+    <!-- Modern Tech Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* * PURE VANILLA CSS - MODERN TECH SAAS THEME * */
+         
+        :root {
+            --bg-base: #050505; 
+            --bg-surface: #0a0a0a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.05);
+            
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(255, 255, 255, 0.15);
+            
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            
+            --accent-primary: #8b5cf6; 
+            --accent-success: #10b981;
+            --accent-danger: #f43f5e;
+            
+            --gradient-hero: linear-gradient(135deg, #e879f9 0%, #8b5cf6 50%, #3b82f6 100%);
+            --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        .container { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem; width: 100%; }
+        
+        /* Typography */
+        h1, h2, .font-outfit { font-family: 'Outfit', sans-serif; }
+        h1 { font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+        p.desc { text-align: center; color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2.5rem; }
+        .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Ambient Glow */
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.3; }
+        .blob-1 { top: -10%; right: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
+        .blob-2 { bottom: -10%; left: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
+
+        /* Navigation */
+        .navbar { position: fixed; top: 0; width: 100%; height: 4.5rem; z-index: 100; background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; }
+
+        /* Checkout Layout */
+        .main-content { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 7rem 1rem 4rem 1rem; }
+        
+        .checkout-container { max-width: 32rem; width: 100%; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 24px; padding: 2.5rem 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); position: relative; overflow: hidden; backdrop-filter: blur(10px); }
+        .checkout-container::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--gradient-admin); }
+
+        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; margin-bottom: 1.5rem; transition: color 0.2s; font-weight: 500; }
+        .back-link:hover { color: var(--text-primary); }
+
+        /* QRIS Box */
+        .qris-box { background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 16px; margin: 0 auto 1.5rem auto; border: 1px solid var(--border-highlight); backdrop-filter: blur(5px); display: flex; justify-content: center; }
+        .qris-box img { max-width: 100%; height: auto; border-radius: 8px; display: block; }
+        
+        .price-tag { text-align: center; font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; margin-bottom: 2rem; color: #c4b5fd; line-height: 1; }
+        
+        /* Form Elements */
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 500; }
+        
+        input[type="text"], input[type="email"] { width: 100%; padding: 0.875rem 1.25rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border-light); border-radius: 12px; color: var(--text-primary); font-size: 0.95rem; outline: none; transition: all 0.3s; font-family: 'Inter', sans-serif; }
+        input[type="text"]:focus, input[type="email"]:focus { border-color: var(--accent-primary); background: rgba(0,0,0,0.6); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); }
+        input::placeholder { color: var(--text-muted); }
+        
+        .file-upload { position: relative; width: 100%; height: 110px; border: 2px dashed var(--border-light); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-secondary); cursor: pointer; transition: all 0.3s; background: rgba(0,0,0,0.3); }
+        .file-upload:hover { border-color: var(--accent-primary); color: var(--text-primary); background: rgba(139, 92, 246, 0.05); }
+        .file-upload input[type="file"] { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+        
+        .btn-submit { width: 100%; padding: 1rem; background: var(--gradient-admin); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-top: 1rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; justify-content: center; align-items: center; gap: 0.5rem; font-family: 'Inter', sans-serif; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4); filter: brightness(1.1); }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .loading-spinner { display: none; width: 1.25rem; height: 1.25rem; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        #status-msg { margin-top: 1.25rem; text-align: center; font-size: 0.9rem; font-weight: 500; display: none; padding: 0.875rem; border-radius: 12px; }
+        .status-success { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--accent-success); }
+        .status-error { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); color: var(--accent-danger); }
+
+        /* Footer */
+        footer { padding: 2rem 0; border-top: 1px solid var(--border-light); text-align: center; color: var(--text-muted); font-size: 0.85rem; width: 100%; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- App Bar -->
+    <nav class="navbar">
+        <div class="container flex items-center">
+            <a href="index.html" class="font-outfit" style="font-size: 1.25rem; font-weight: 800; color: #fff; text-decoration: none;">
+                <i class="fa-solid fa-code text-gradient mr-2"></i> Heraclaus 
+                <span style="color: var(--text-muted); font-weight: 500; font-family: 'Inter', sans-serif; font-size: 1rem; margin-left: 0.25rem;">| Secure Checkout</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="checkout-container">
+            <a href="index.html" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </a>
+            
+            <h1>Admin Suite Pro</h1>
+            <p class="desc">Complete your payment via QRIS to claim your permanent license.</p>
+            
+            <div class="qris-box">
+                <img src="https://image2url.com/r2/default/images/1772880891631-13f0dca4-0a81-4537-871e-d152e7940604.jpg" alt="Heraclaus QRIS Code">
+            </div>
+            
+            <div class="price-tag">Rp 80.000</div>
+            
+            <form id="payment-form">
+                <div class="form-group">
+                    <label>Xbox/Minecraft Gamertag</label>
+                    <input type="text" id="gamertag" required placeholder="e.g. HeraclausReal">
+                </div>
+                
+                <div class="form-group">
+                    <label>Delivery Email Address</label>
+                    <input type="email" id="email" required placeholder="your@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>Upload Payment Proof (Screenshot)</label>
+                    <div class="file-upload">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--accent-primary);"></i>
+                        <span id="file-name-text">Select an image file</span>
+                        <input type="file" id="file" accept="image/*" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-submit" id="submit-btn">
+                    <span id="btn-text">Submit Payment Proof</span>
+                    <div class="loading-spinner" id="spinner"></div>
+                </button>
+                
+                <div id="status-msg"></div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Heraclaus. All transactions are securely processed.</p>
+        </div>
+    </footer>
+
+    <script>
+        // URL WEB APP GOOGLE SCRIPT SUDAH TERPASANG DI SINI
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxM6O9CT20KrJ2SIqPxImZANrvnRXIkdjy68w96Bv-gaa0W19LVVZWVBzk4GF5PoLUtTw/exec";
+
+        let base64File = null;
+
+        // Script untuk menangkap file dan mengubahnya jadi Base64
+        document.getElementById('file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('file-name-text').innerText = file.name;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    base64File = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Script untuk mengirim data saat tombol ditekan
+        document.getElementById('payment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!base64File) {
+                alert("Please upload your payment proof!");
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const spinner = document.getElementById('spinner');
+            const statusMsg = document.getElementById('status-msg');
+
+            // Set tampilan loading
+            btn.disabled = true;
+            btnText.innerText = "Submitting...";
+            spinner.style.display = "block";
+            statusMsg.style.display = "none";
+
+            const payload = {
+                gamertag: document.getElementById('gamertag').value,
+                email: document.getElementById('email').value,
+                fileBase64: base64File
+            };
+
+            // Kirim ke Google Apps Script
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === "success") {
+                    statusMsg.className = "status-success";
+                    statusMsg.innerHTML = '<i class="fa-solid fa-check-circle"></i> Success! We will verify your payment and email you the Pro files shortly.';
+                    document.getElementById('payment-form').reset();
+                    document.getElementById('file-name-text').innerText = "Select an image file";
+                    base64File = null;
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(error => {
+                statusMsg.className = "status-error";
+                statusMsg.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Submission failed: ' + error.message;
+            })
+            .finally(() => {
+                statusMsg.style.display = "block";
+                btn.disabled = false;
+                btnText.innerText = "Submit Payment Proof";
+                spinner.style.display = "none";
+            });
+        });
+    </script>
+</body>
+</html>
