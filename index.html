@@ -37,7 +37,11 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth; }
+        
+        /* Tambahkan kode html ini untuk efek scroll meluncur yang mulus dan mencegah tertutup navbar */
+        html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+        
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
         
         .container { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
         .flex { display: flex; } .flex-col { flex-direction: column; }
@@ -189,6 +193,22 @@
         .social-row { display: flex; gap: 1rem; }
         .social-row a { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.2s; font-size: 1.1rem; border: 1px solid transparent; }
         .social-row a:hover { background: rgba(139, 92, 246, 0.1); color: #fff; border-color: rgba(139, 92, 246, 0.3); transform: translateY(-3px); }
+
+        /* Scroll Animation Classes */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Delays for staggered animations */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
     </style>
 </head>
 <body>
@@ -246,7 +266,7 @@
 
     <!-- Hero -->
     <section class="section-hero text-center">
-        <div class="container flex flex-col items-center">
+        <div class="container flex flex-col items-center animate-on-scroll">
             
             <a href="https://www.youtube.com/@heraclaus" target="_blank" class="yt-badge">
                 <i class="fa-brands fa-youtube yt-icon"></i>
@@ -258,7 +278,7 @@
             <p style="max-width: 42rem; margin: 1.25rem auto 3rem; font-size: 1.15rem; line-height: 1.7;">
                 Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world's economy and progression.
             </p>
-            <div class="action-group justify-center" style="max-width: 26rem; margin: 0 auto;">
+            <div class="action-group justify-center delay-200 animate-on-scroll" style="max-width: 26rem; margin: 0 auto;">
                 <a href="#admin-suite" class="btn btn-primary">Explore Admin Suite</a>
             </div>
         </div>
@@ -267,7 +287,7 @@
     <!-- Products: Admin Suite -->
     <section id="admin-suite" class="section" style="padding-top: 0;">
         <div class="container">
-            <div class="product-box">
+            <div class="product-box animate-on-scroll">
                 <div class="product-header">
                     <div class="product-header-text">
                         <span class="badge"><i class="fa-solid fa-crown"></i> Flagship Architecture</span>
@@ -282,32 +302,32 @@
                 
                 <!-- Clean Feature Grid -->
                 <div class="feature-grid">
-                    <div class="feature-cell">
+                    <div class="feature-cell animate-on-scroll">
                         <i class="fa-solid fa-sack-dollar" style="color: #f59e0b;"></i>
                         <h3 style="margin-bottom: 0.25rem;">Hybrid Economy</h3>
                         <p>Bypass Minecraft's scoreboard limits with our hybrid money model. Includes physical currencies, robust trading, and jobs.</p>
                     </div>
-                    <div class="feature-cell">
+                    <div class="feature-cell animate-on-scroll delay-100">
                         <i class="fa-solid fa-khanda" style="color: #f43f5e;"></i>
                         <h3 style="margin-bottom: 0.25rem;">RPG Progression</h3>
                         <p>Keep retention high with skill leveling, player gravestones upon death, and fully customizable PvE/PvP battle mechanics.</p>
                     </div>
-                    <div class="feature-cell">
+                    <div class="feature-cell animate-on-scroll delay-200">
                         <i class="fa-solid fa-globe" style="color: #3b82f6;"></i>
                         <h3 style="margin-bottom: 0.25rem;">Advanced Regions</h3>
                         <p>Create advanced lobby menus, secure land claims, manage precise roles, and run automated repeated broadcast systems.</p>
                     </div>
-                    <div class="feature-cell">
+                    <div class="feature-cell animate-on-scroll">
                         <i class="fa-solid fa-users" style="color: #10b981;"></i>
                         <h3 style="margin-bottom: 0.25rem;">Clan Ecosystem</h3>
                         <p>Allow players to form alliances, manage members, use private clan chats, and equip custom overhead nametags.</p>
                     </div>
-                    <div class="feature-cell">
+                    <div class="feature-cell animate-on-scroll delay-100">
                         <i class="fa-solid fa-list-ol" style="color: #8b5cf6;"></i>
                         <h3 style="margin-bottom: 0.25rem;">Immersive UI & NPCs</h3>
                         <p>Spawn interactive NPCs with custom cosmetics, display live sidebars, and set up floating holograms without coding.</p>
                     </div>
-                    <div class="feature-cell">
+                    <div class="feature-cell animate-on-scroll delay-200">
                         <i class="fa-solid fa-shield-halved" style="color: #f87171;"></i>
                         <h3 style="margin-bottom: 0.25rem;">Security & Logs</h3>
                         <p>Built-in native login/registration system to secure accounts, plus comprehensive server chat logs for easy moderation.</p>
@@ -316,7 +336,7 @@
             </div>
 
             <!-- Products: Cinemato -->
-            <div id="cinemato" class="product-box" style="margin-bottom: 0; border-color: rgba(16, 185, 129, 0.2);">
+            <div id="cinemato" class="product-box animate-on-scroll" style="margin-bottom: 0; border-color: rgba(16, 185, 129, 0.2);">
                 <div class="product-header" style="background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent 50%); border-bottom: none; padding-bottom: 3rem;">
                     <div class="product-header-text">
                         <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.25);"><i class="fa-solid fa-film"></i> Creator Tool</span>
@@ -335,13 +355,13 @@
 
     <!-- Pricing (No Fluff) -->
     <section id="pricing" class="section" style="border-top: 1px solid var(--border-light); background: rgba(0,0,0,0.4);">
-        <div class="container text-center">
+        <div class="container text-center animate-on-scroll">
             <h2>Simple Pricing. No Subscriptions.</h2>
             <p style="font-size: 1.1rem; margin-top: 0.5rem;">Pay once, dominate your server forever.</p>
             
             <div class="pricing-wrap text-left">
                 <!-- Starter Edition -->
-                <div class="price-card">
+                <div class="price-card animate-on-scroll">
                     <h3>Starter</h3>
                     <div class="price-val">$0 <span>/ trial</span></div>
                     <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: -0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1.5rem;">
@@ -359,7 +379,7 @@
                 </div>
 
                 <!-- Pro Edition -->
-                <div class="price-card pro">
+                <div class="price-card pro animate-on-scroll delay-200">
                     <h3 style="color: #c4b5fd;">Pro License</h3>
                     <div class="price-val">$5 <span>/ one-time</span></div>
                     <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: -0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 1.5rem;">
@@ -381,7 +401,7 @@
 
     <!-- FAQ & ToS -->
     <section id="faq" class="section" style="border-top: 1px solid var(--border-light);">
-        <div class="container">
+        <div class="container animate-on-scroll">
             <h2 class="text-center">FAQ & Terms of Service</h2>
             
             <div class="faq-wrap">
@@ -460,7 +480,7 @@
     </section>
 
     <!-- Final Call to Action -->
-    <section class="cta-section">
+    <section class="cta-section animate-on-scroll">
         <div class="container">
             <h2 style="font-size: clamp(2rem, 5vw, 2.5rem); margin-bottom: 1rem;">Ready to level up your server?</h2>
             <p style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 1.1rem;">Join thousands of players and admins using Heraclaus Add-ons.</p>
@@ -471,7 +491,7 @@
     </section>
 
     <!-- Advanced Footer -->
-    <footer>
+    <footer class="animate-on-scroll">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
@@ -503,6 +523,28 @@
     </footer>
 
     <script>
+        // Scroll Animation Observer (NEW)
+        document.addEventListener("DOMContentLoaded", () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 // Elemen akan animasi ketika 15% masuk ke layar
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Animasi hanya terjadi 1 kali
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
         // Navbar scroll effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
