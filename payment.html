@@ -92,8 +92,12 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         
         #status-msg { margin-top: 1.25rem; text-align: center; font-size: 0.9rem; font-weight: 500; display: none; padding: 0.875rem; border-radius: 12px; }
-        .status-success { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--accent-success); }
         .status-error { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); color: var(--accent-danger); }
+
+        /* Success Section Styles */
+        #success-section { text-align: center; padding: 2rem 0; display: none; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .success-icon { font-size: 5rem; color: var(--accent-success); margin-bottom: 1.5rem; text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
 
         /* Footer */
         footer { padding: 2rem 0; border-top: 1px solid var(--border-light); text-align: center; color: var(--text-muted); font-size: 0.85rem; width: 100%; margin-top: auto; }
@@ -119,46 +123,63 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="checkout-container">
-            <a href="index.html" class="back-link">
-                <i class="fa-solid fa-arrow-left"></i> Back to Home
-            </a>
             
-            <h1>Admin Suite Pro</h1>
-            <p class="desc">Complete your payment via QRIS to claim your permanent license.</p>
-            
-            <div class="qris-box">
-                <img src="https://image2url.com/r2/default/images/1772880891631-13f0dca4-0a81-4537-871e-d152e7940604.jpg" alt="Heraclaus QRIS Code">
-            </div>
-            
-            <div class="price-tag">Rp 80.000</div>
-            
-            <form id="payment-form">
-                <div class="form-group">
-                    <label>Xbox/Minecraft Gamertag</label>
-                    <input type="text" id="gamertag" required placeholder="e.g. HeraclausReal">
+            <!-- FORM SECTION -->
+            <div id="form-section">
+                <a href="index.html" class="back-link">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Home
+                </a>
+                
+                <h1>Admin Suite Pro</h1>
+                <p class="desc">Complete your payment via QRIS to claim your permanent license.</p>
+                
+                <div class="qris-box">
+                    <img src="https://image2url.com/r2/default/images/1772880891631-13f0dca4-0a81-4537-871e-d152e7940604.jpg" alt="Heraclaus QRIS Code">
                 </div>
                 
-                <div class="form-group">
-                    <label>Delivery Email Address</label>
-                    <input type="email" id="email" required placeholder="your@email.com">
-                </div>
+                <div class="price-tag">Rp 80.000</div>
                 
-                <div class="form-group">
-                    <label>Upload Payment Proof (Screenshot)</label>
-                    <div class="file-upload">
-                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--accent-primary);"></i>
-                        <span id="file-name-text">Select an image file</span>
-                        <input type="file" id="file" accept="image/*" required>
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label>Xbox/Minecraft Gamertag</label>
+                        <input type="text" id="gamertag" required placeholder="e.g. HeraclausReal">
                     </div>
-                </div>
-                
-                <button type="submit" class="btn-submit" id="submit-btn">
-                    <span id="btn-text">Submit Payment Proof</span>
-                    <div class="loading-spinner" id="spinner"></div>
-                </button>
-                
-                <div id="status-msg"></div>
-            </form>
+                    
+                    <div class="form-group">
+                        <label>Delivery Email Address</label>
+                        <input type="email" id="email" required placeholder="your@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Upload Payment Proof (Screenshot)</label>
+                        <div class="file-upload">
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--accent-primary);"></i>
+                            <span id="file-name-text">Select an image file</span>
+                            <input type="file" id="file" accept="image/*" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit" id="submit-btn">
+                        <span id="btn-text">Submit Payment Proof</span>
+                        <div class="loading-spinner" id="spinner"></div>
+                    </button>
+                    
+                    <div id="status-msg"></div>
+                </form>
+            </div>
+
+            <!-- SUCCESS SECTION (Hidden by default) -->
+            <div id="success-section">
+                <i class="fa-solid fa-circle-check success-icon"></i>
+                <h2 style="font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 1rem; color: #fff;">Payment Sent!</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2.5rem; line-height: 1.6;">
+                    Thank you for your purchase. We are currently verifying your payment. Your Pro license and files will be sent to your email shortly.
+                </p>
+                <a href="index.html" class="btn-submit" style="text-decoration: none; max-width: 250px; margin: 0 auto;">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+
         </div>
     </main>
 
@@ -201,9 +222,9 @@
             const spinner = document.getElementById('spinner');
             const statusMsg = document.getElementById('status-msg');
 
-            // Set tampilan loading
+            // Set tampilan loading - Tambahkan teks yang menginformasikan proses agar user sabar
             btn.disabled = true;
-            btnText.innerText = "Submitting...";
+            btnText.innerText = "Uploading & Verifying... Please wait";
             spinner.style.display = "block";
             statusMsg.style.display = "none";
 
@@ -221,11 +242,9 @@
             .then(response => response.json())
             .then(data => {
                 if(data.status === "success") {
-                    statusMsg.className = "status-success";
-                    statusMsg.innerHTML = '<i class="fa-solid fa-check-circle"></i> Success! We will verify your payment and email you the Pro files shortly.';
-                    document.getElementById('payment-form').reset();
-                    document.getElementById('file-name-text').innerText = "Select an image file";
-                    base64File = null;
+                    // Transisi ke Halaman Sukses
+                    document.getElementById('form-section').style.display = "none";
+                    document.getElementById('success-section').style.display = "block";
                 } else {
                     throw new Error(data.message);
                 }
@@ -233,9 +252,9 @@
             .catch(error => {
                 statusMsg.className = "status-error";
                 statusMsg.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Submission failed: ' + error.message;
-            })
-            .finally(() => {
                 statusMsg.style.display = "block";
+                
+                // Kembalikan tombol jika error
                 btn.disabled = false;
                 btnText.innerText = "Submit Payment Proof";
                 spinner.style.display = "none";
