@@ -60,17 +60,26 @@
         /* Checkout Layout */
         .main-content { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 7rem 1rem 4rem 1rem; }
         
-        .checkout-container { max-width: 32rem; width: 100%; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 24px; padding: 2.5rem 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); position: relative; overflow: hidden; backdrop-filter: blur(10px); }
+        .checkout-container { max-width: 34rem; width: 100%; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 24px; padding: 2.5rem 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); position: relative; overflow: hidden; backdrop-filter: blur(10px); }
         .checkout-container::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--gradient-admin); }
 
         .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; margin-bottom: 1.5rem; transition: color 0.2s; font-weight: 500; }
         .back-link:hover { color: var(--text-primary); }
 
-        /* QRIS Box */
+        /* Region Selection */
+        .region-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+        .region-card { background: rgba(0,0,0,0.3); border: 2px solid var(--border-light); border-radius: 16px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .region-card:hover { border-color: rgba(139, 92, 246, 0.5); background: rgba(139, 92, 246, 0.05); }
+        .region-card.active { border-color: var(--accent-primary); background: rgba(139, 92, 246, 0.15); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); }
+        .region-card h3 { font-family: 'Outfit', sans-serif; font-size: 1.1rem; color: #fff; margin-top: 0.5rem; }
+        .region-card p { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem; }
+
+        /* Payment Methods */
+        .payment-method-box { margin-bottom: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px solid var(--border-light); }
         .qris-box { background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 16px; margin: 0 auto 1.5rem auto; border: 1px solid var(--border-highlight); backdrop-filter: blur(5px); display: flex; justify-content: center; }
         .qris-box img { max-width: 100%; height: auto; border-radius: 8px; display: block; }
         
-        .price-tag { text-align: center; font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; margin-bottom: 2rem; color: #c4b5fd; line-height: 1; }
+        .price-tag { text-align: center; font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; color: #c4b5fd; line-height: 1; }
         
         /* Form Elements */
         .form-group { margin-bottom: 1.5rem; }
@@ -131,49 +140,91 @@
                 </a>
                 
                 <h1>Admin Suite Pro</h1>
-                <p class="desc">Complete your payment via QRIS to claim your permanent license.</p>
+                <p class="desc">Select your payment method to claim your permanent license.</p>
                 
-                <div class="qris-box">
-                    <img src="https://image2url.com/r2/default/images/1772880891631-13f0dca4-0a81-4537-871e-d152e7940604.jpg" alt="Heraclaus QRIS Code">
+                <!-- Region Selection -->
+                <div class="region-grid">
+                    <div class="region-card" id="btn-id" onclick="selectRegion('id')">
+                        <span style="font-size: 2.25rem; display: block; margin-bottom: 0.5rem;">🇮🇩</span>
+                        <h3>Indonesia</h3>
+                        <p>QRIS (Rp 80.000)</p>
+                    </div>
+                    <div class="region-card" id="btn-intl" onclick="selectRegion('intl')">
+                        <span style="font-size: 2.25rem; display: block; margin-bottom: 0.5rem;">🌍</span>
+                        <h3>International</h3>
+                        <p>Sociabuzz ($5.00)</p>
+                    </div>
                 </div>
-                
-                <div class="price-tag">Rp 80.000</div>
-                
-                <form id="payment-form">
-                    <div class="form-group">
-                        <label>Xbox/Minecraft Gamertag</label>
-                        <input type="text" id="gamertag" required placeholder="e.g. HeraclausReal">
-                    </div>
+
+                <!-- Payment Details (Hidden until region is selected) -->
+                <div id="payment-details" style="display: none; animation: fadeIn 0.4s ease;">
                     
-                    <div class="form-group">
-                        <label>Delivery Email Address</label>
-                        <input type="email" id="email" required placeholder="your@email.com">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Upload Payment Proof (Screenshot)</label>
-                        <div class="file-upload">
-                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--accent-primary);"></i>
-                            <span id="file-name-text">Select an image file</span>
-                            <input type="file" id="file" accept="image/*" required>
+                    <!-- QRIS BOX -->
+                    <div id="qris-content" class="payment-method-box">
+                        <div class="qris-box">
+                            <img src="https://image2url.com/r2/default/images/1772880891631-13f0dca4-0a81-4537-871e-d152e7940604.jpg" alt="Heraclaus QRIS Code">
                         </div>
+                        <div class="price-tag">Rp 80.000</div>
+                        <p style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">Scan the QR code above using any supported e-wallet or banking app.</p>
+                    </div>
+
+                    <!-- SOCIABUZZ BOX -->
+                    <div id="sociabuzz-content" class="payment-method-box" style="display: none; text-align: center;">
+                        <i class="fa-solid fa-earth-americas" style="font-size: 3rem; color: var(--accent-primary); margin-bottom: 1rem;"></i>
+                        <div class="price-tag">$5.00</div>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">Please complete your payment via our Sociabuzz Tribe page using PayPal, Credit Card, or other international methods.</p>
+                        
+                        <a href="https://sociabuzz.com/heraclausid/tribe" target="_blank" class="btn-submit" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-light); margin-bottom: 1rem; color: #fff; text-decoration: none;">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Pay via Sociabuzz
+                        </a>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);"><i class="fa-solid fa-circle-info"></i> Don't forget to take a screenshot of your receipt!</p>
                     </div>
                     
-                    <button type="submit" class="btn-submit" id="submit-btn">
-                        <span id="btn-text">Submit Payment Proof</span>
-                        <div class="loading-spinner" id="spinner"></div>
-                    </button>
-                    
-                    <div id="status-msg"></div>
-                </form>
+                    <div style="width: 100%; height: 1px; background: var(--border-light); margin: 2rem 0;"></div>
+
+                    <form id="payment-form">
+                        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; margin-bottom: 1rem; text-align: center;">Submit Payment Proof</h3>
+                        
+                        <div class="form-group">
+                            <label>Xbox/Minecraft Gamertag</label>
+                            <input type="text" id="gamertag" required placeholder="e.g. HeraclausReal">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Discord Username (For VIP Role)</label>
+                            <input type="text" id="discord" required placeholder="e.g. username#1234 or username">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Delivery Email Address</label>
+                            <input type="email" id="email" required placeholder="your@email.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Upload Payment Receipt (Screenshot)</label>
+                            <div class="file-upload">
+                                <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--accent-primary);"></i>
+                                <span id="file-name-text">Select an image file</span>
+                                <input type="file" id="file" accept="image/*" required>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-submit" id="submit-btn">
+                            <span id="btn-text">Submit Request</span>
+                            <div class="loading-spinner" id="spinner"></div>
+                        </button>
+                        
+                        <div id="status-msg"></div>
+                    </form>
+                </div>
             </div>
 
             <!-- SUCCESS SECTION -->
             <div id="success-section">
                 <i class="fa-solid fa-circle-check success-icon"></i>
-                <h2 style="font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 1rem; color: #fff;">Payment Sent!</h2>
+                <h2 style="font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 1rem; color: #fff;">Submission Received!</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 2.5rem; line-height: 1.6;">
-                    Thank you for your purchase. We are currently verifying your payment. Your Pro license and files will be sent to your email shortly.
+                    Thank you for your purchase. We are currently verifying your payment receipt. Your License Key and access link will be sent to your email shortly.
                 </p>
                 <a href="index.html" class="btn-submit" style="text-decoration: none; max-width: 250px; margin: 0 auto;">
                     <i class="fa-solid fa-arrow-left"></i> Back to Home
@@ -191,9 +242,27 @@
 
     <script>
         // LINK WEB APP GOOGLE SCRIPT SUDAH TERPASANG DI SINI
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIZ8WNzJbH82k3U_CO9qh1oFadwikLnrBsR8GzDuo-zLhxIIEiWcvcSF8O7jVj9QPr/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtw7l0_rUIAvfqoilqneT7OJiOgOBQUFWePgKIUCga79DtKnS4FzYw4wtAkRywxZGa2g/exec";
 
         let base64File = null;
+
+        // Script untuk memilih Region / Metode Pembayaran
+        function selectRegion(region) {
+            document.getElementById('btn-id').classList.remove('active');
+            document.getElementById('btn-intl').classList.remove('active');
+            
+            document.getElementById('payment-details').style.display = 'block';
+
+            if (region === 'id') {
+                document.getElementById('btn-id').classList.add('active');
+                document.getElementById('qris-content').style.display = 'block';
+                document.getElementById('sociabuzz-content').style.display = 'none';
+            } else {
+                document.getElementById('btn-intl').classList.add('active');
+                document.getElementById('qris-content').style.display = 'none';
+                document.getElementById('sociabuzz-content').style.display = 'block';
+            }
+        }
 
         document.getElementById('file').addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -227,6 +296,7 @@
 
             const payload = {
                 gamertag: document.getElementById('gamertag').value,
+                discord: document.getElementById('discord').value,
                 email: document.getElementById('email').value,
                 fileBase64: base64File
             };
@@ -250,7 +320,7 @@
                 statusMsg.style.display = "block";
                 
                 btn.disabled = false;
-                btnText.innerText = "Submit Payment Proof";
+                btnText.innerText = "Submit Request";
                 spinner.style.display = "none";
             });
         });
