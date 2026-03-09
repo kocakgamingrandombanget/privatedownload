@@ -64,22 +64,33 @@
         .badge { display: inline-block; padding: 0.35rem 0.85rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; border: 1px solid rgba(139, 92, 246, 0.25); }
         .badge.success { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.25); }
 
-        /* Forms */
+        /* Forms - FIXED: Added input[type="password"] to ensure consistent styling */
         .form-group { margin-bottom: 1.5rem; }
         label { display: block; font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 500; }
-        input[type="text"], input[type="email"] { width: 100%; padding: 0.875rem 1.25rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border-light); border-radius: 12px; color: var(--text-primary); font-size: 1rem; /* 1rem (16px) wajib agar iOS tidak zoom otomatis */ outline: none; transition: all 0.3s; font-family: inherit; }
+        input[type="text"], input[type="email"], input[type="password"] { 
+            width: 100%; 
+            padding: 0.875rem 1.25rem; 
+            background: rgba(0,0,0,0.4); 
+            border: 1px solid var(--border-light); 
+            border-radius: 12px; 
+            color: var(--text-primary); 
+            font-size: 1rem; 
+            outline: none; 
+            transition: all 0.3s; 
+            font-family: inherit; 
+        }
         input:focus { border-color: var(--accent-primary); background: rgba(0,0,0,0.6); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); }
 
         /* Messages */
         .msg-box { margin-top: 1.25rem; padding: 0.875rem; border-radius: 12px; font-size: 0.9rem; font-weight: 500; text-align: center; display: none; }
         .msg-error { background: rgba(244, 63, 94, 0.1); color: var(--accent-danger); border: 1px solid rgba(244, 63, 94, 0.3); }
+        .msg-success { background: rgba(16, 185, 129, 0.1); color: var(--accent-success); border: 1px solid rgba(16, 185, 129, 0.3); }
 
         /* --- NAVBAR (LOGIN SCREEN) --- */
         .navbar { position: fixed; top: 0; width: 100%; height: 5rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
         .nav-container { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; width: 100%; display: flex; justify-content: space-between; align-items: center; }
 
         /* --- AUTH SECTION (LOGIN) --- */
-        /* Menggunakan flex-col agar footer tetap di bawah, tanpa position:absolute yang error saat keyboard mobile terbuka */
         .auth-wrapper { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6rem 1rem 2rem 1rem; position: relative; min-height: 100vh; }
         .auth-container { max-width: 28rem; width: 100%; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 24px; padding: 3rem 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); backdrop-filter: blur(10px); display: none; margin: auto 0; }
         .auth-container.active { display: block; animation: fadeIn 0.4s ease; }
@@ -95,7 +106,6 @@
         .sidebar { width: var(--sidebar-width); background: rgba(5, 5, 5, 0.75); border-right: 1px solid var(--border-light); display: flex; flex-direction: column; height: 100%; z-index: 20; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); transition: transform 0.3s ease; }
         .sidebar-header { padding: 1.5rem; height: 5rem; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; }
         
-        /* FIX LEBAR TOMBOL - Menggunakan align-items: stretch */
         .sidebar-nav { padding: 1.5rem 1rem; flex-grow: 1; display: flex; flex-direction: column; align-items: stretch; gap: 0.5rem; width: 100%; box-sizing: border-box; }
         
         /* Unified Nav Items */
@@ -157,14 +167,12 @@
         .sidebar-overlay.show { display: block; opacity: 1; }
 
         @media (max-width: 768px) {
-            /* Perbaikan Khusus Form Login Mobile */
             .desktop-only { display: none !important; }
             .auth-wrapper { padding: 5rem 1rem 1.5rem 1rem; justify-content: flex-start; }
             .auth-container { padding: 2rem 1.5rem; margin-top: 2rem; border-radius: 20px; }
             .auth-container h1 { font-size: 1.75rem; }
             .auth-container p.desc { font-size: 0.85rem; margin-bottom: 1.5rem; }
             
-            /* Perbaikan Menu Dashboard */
             .sidebar { position: fixed; transform: translateX(-100%); width: 280px; }
             .sidebar.show { transform: translateX(0); box-shadow: 0 0 50px rgba(0,0,0,0.8); }
             .mobile-toggle { display: block; }
@@ -202,7 +210,7 @@
     <main class="auth-wrapper" id="auth-section">
         <div class="auth-container active">
             <h1 class="font-outfit" style="letter-spacing: -0.02em;">Client Portal</h1>
-            <p class="desc">Login using your Email and Password (License Key) sent to your inbox.</p>
+            <p class="desc">Login using your Email and Password (Portal Key) sent to your inbox.</p>
             
             <form id="login-form">
                 <div class="form-group">
@@ -212,7 +220,7 @@
                 
                 <div class="form-group">
                     <label>Password (Portal Key)</label>
-                    <input type="text" id="login-key" required placeholder="HRC-XXXXX">
+                    <input type="password" id="login-key" required placeholder="HRC-XXXXX">
                 </div>
                 
                 <button type="submit" class="btn btn-gradient w-full" id="btn-login" style="margin-top: 1rem; width: 100%;">
@@ -222,7 +230,6 @@
             </form>
         </div>
 
-        <!-- Login Footer (Disesuaikan posisinya untuk mobile) -->
         <div class="login-footer">
             <p>© 2026 Heraclaus. Not associated with Mojang or Microsoft.</p>
         </div>
@@ -321,7 +328,6 @@
                     <h2 class="section-title font-outfit">My Add-ons</h2>
                     
                     <div class="grid-cards" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
-                        <!-- Admin Suite Pro Card -->
                         <div class="addon-card">
                             <div class="addon-banner">
                                 <i class="fa-solid fa-server"></i>
@@ -380,6 +386,30 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- NEW: SECURITY / CHANGE PASSWORD SECTION -->
+                    <h3 class="font-outfit" style="margin-top: 2.5rem; margin-bottom: 1.25rem; font-size: 1.35rem; color: #fff;">Security</h3>
+                    <div class="profile-field" style="max-width: 36rem;">
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.5;">
+                            <i class="fa-solid fa-shield-halved text-gradient" style="margin-right: 0.25rem;"></i> Change your portal login password here. <br>
+                            <span style="color: var(--accent-danger); font-size: 0.8rem; font-weight: 600;">NOTE: Limit 1 change per 30 days.</span>
+                        </p>
+                        <form id="change-pwd-form">
+                            <div class="form-group">
+                                <label>Current Portal Password</label>
+                                <input type="password" id="cp-old" required placeholder="HRC-XXXXX">
+                            </div>
+                            <div class="form-group">
+                                <label>New Portal Password</label>
+                                <input type="password" id="cp-new" required placeholder="Enter new password (min. 5 chars)" minlength="5">
+                            </div>
+                            <button type="submit" class="btn btn-outline" id="btn-change-pwd" style="width: 100%; margin-top: 0.5rem;">
+                                <i class="fa-solid fa-key"></i> Update Password
+                            </button>
+                            <div id="cp-msg" class="msg-box" style="margin-top: 1.5rem;"></div>
+                        </form>
+                    </div>
+
                 </div>
 
                 <!-- Footer Dashboard -->
@@ -398,10 +428,9 @@
     </div>
 
     <script>
-        // LINK WEB APP GOOGLE SCRIPT SUDAH TERPASANG DI SINI
+        // LINK WEB APP GOOGLE SCRIPT ANDA
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
 
-        // Cek Session saat halaman dimuat (SEKARANG MENGGUNAKAN sessionStorage)
         document.addEventListener("DOMContentLoaded", () => {
             const session = sessionStorage.getItem("heraclaus_session");
             if (session) {
@@ -423,6 +452,7 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Authenticating...';
             msgBox.style.display = "none";
+            msgBox.className = "msg-box msg-error";
 
             const payload = {
                 action: "login",
@@ -439,7 +469,6 @@
                 if(data.status === "success") {
                     data.email = emailInput;
                     data.licenseKey = keyInput;
-                    // SIMPAN DI sessionStorage, BUKAN localStorage
                     sessionStorage.setItem("heraclaus_session", JSON.stringify(data));
                     showDashboard(data);
                 } else {
@@ -447,7 +476,7 @@
                 }
             })
             .catch(err => {
-                msgBox.innerText = err.message;
+                msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message;
                 msgBox.style.display = "block";
             })
             .finally(() => {
@@ -456,18 +485,70 @@
             });
         });
 
+        // Proses Ubah Password
+        document.getElementById("change-pwd-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+            if(!session) return logout();
+
+            const btn = document.getElementById("btn-change-pwd");
+            const msgBox = document.getElementById("cp-msg");
+            
+            const oldKey = document.getElementById("cp-old").value.trim();
+            const newKey = document.getElementById("cp-new").value.trim();
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
+            msgBox.style.display = "none";
+            msgBox.className = "msg-box";
+
+            const payload = {
+                action: "change_password",
+                email: session.email,
+                oldKey: oldKey,
+                newKey: newKey
+            };
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "success") {
+                    msgBox.className = "msg-box msg-success";
+                    msgBox.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + data.message;
+                    msgBox.style.display = "block";
+                    
+                    // Update session storage dengan key yang baru agar tidak ter-logout
+                    session.licenseKey = newKey;
+                    sessionStorage.setItem("heraclaus_session", JSON.stringify(session));
+                    
+                    document.getElementById("change-pwd-form").reset();
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(err => {
+                msgBox.className = "msg-box msg-error";
+                msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message;
+                msgBox.style.display = "block";
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-key"></i> Update Password';
+            });
+        });
+
         function showDashboard(data) {
-            // Sembunyikan Navbar Utama dan Tampilan Login
             document.getElementById("main-navbar").style.display = "none";
             document.getElementById("auth-section").style.display = "none";
-            
-            // Tampilkan Dashboard
             document.getElementById("dashboard-section").classList.add("active");
             
             const desktopEls = document.querySelectorAll('.desktop-only');
             desktopEls.forEach(el => el.style.display = 'block');
             
-            // Pastikan tidak ada karakter spasi kosong menggunakan .trim()
             const cleanGamertag = data.gamertag ? data.gamertag.trim() : "Player";
             
             document.getElementById("top-gamertag").innerText = cleanGamertag;
@@ -478,11 +559,9 @@
             if(data.email) document.getElementById("profile-email").innerText = data.email;
             if(data.gamertag) document.getElementById("profile-gamertag").innerText = cleanGamertag;
             
-            // MENAMPILKAN KODE LISENSI 16 DIGIT (Bukan lagi password loginnya)
             if(data.addonLicense) {
                 document.getElementById("display-key").innerText = data.addonLicense;
             } else if (data.licenseKey) {
-                // Fallback (Jika data lama di session belum ada addonLicense)
                 document.getElementById("display-key").innerText = "Please re-login to view key";
             }
         }
