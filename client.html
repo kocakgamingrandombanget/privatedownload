@@ -82,15 +82,6 @@
         .msg-error { background: rgba(244, 63, 94, 0.1); color: var(--accent-danger); border: 1px solid rgba(244, 63, 94, 0.3); }
         .msg-success { background: rgba(16, 185, 129, 0.1); color: var(--accent-success); border: 1px solid rgba(16, 185, 129, 0.3); }
 
-        .chip-label { cursor: pointer; position: relative; }
-        .chip-input { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border-width: 0; }
-        .chip-content { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-light); background-color: rgba(255,255,255,0.02); color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; transition: all 0.2s; }
-        .chip-content:hover { background-color: rgba(255,255,255,0.05); color: var(--text-primary); }
-        .chip-input:checked + .chip-content { background-color: rgba(245, 158, 11, 0.1); color: var(--accent-admin); border-color: rgba(245, 158, 11, 0.3); }
-        .chip-icon { display: none; font-size: 0.75rem; }
-        .chip-input:checked + .chip-content .chip-icon { display: block; }
-        .visibility-box { border: 1px solid var(--border-light); background-color: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px; margin-bottom: 1.5rem; }
-
         .navbar { position: fixed; top: 0; width: 100%; height: 5rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
         .nav-container { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; width: 100%; display: flex; justify-content: space-between; align-items: center; }
 
@@ -311,7 +302,7 @@
                     <h3 class="font-outfit" style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.25rem; color: #fff;">Version History</h3>
                     <div class="list-box">
                         <table class="history-table" id="user-history-table">
-                            <thead><tr><th>Version</th><th>Release Date</th><th>Tags / Notes</th><th style="text-align: right;">Download</th></tr></thead>
+                            <thead><tr><th>Version</th><th>Release Date</th><th>Update Notes</th><th style="text-align: right;">Download</th></tr></thead>
                             <tbody><!-- Injected via JS --></tbody>
                         </table>
                     </div>
@@ -395,10 +386,10 @@
             <div class="content-body">
                 <!-- ADMIN: COMBINED PUBLISH FORM -->
                 <div id="tab-admin-publish" class="tab-content active">
-                    <h2 class="section-title font-outfit">Publish Integrated Release</h2>
+                    <h2 class="section-title font-outfit">Publish Global Release</h2>
                     <div class="profile-field" style="max-width: 48rem; background: var(--bg-card);">
                         <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem;">
-                            Satu form untuk semuanya. File akan masuk ke Dashboard User, dan teks Changelog otomatis terbaca oleh sistem Publik.
+                            Satu form untuk semuanya. File akan masuk ke Dashboard User, dan teks Changelog otomatis terbaca oleh sistem Publik secara global.
                         </p>
                         
                         <form id="admin-publish-form">
@@ -410,14 +401,6 @@
                             <div class="form-group">
                                 <label class="form-label">Google Drive Link (Untuk User Download)</label>
                                 <input type="url" id="p-link" required placeholder="https://drive.google.com/file/d/XXXXX/view">
-                            </div>
-
-                            <div class="visibility-box">
-                                <label class="form-label" style="margin-bottom: 0.5rem;">Visibility Tags</label>
-                                <div style="display: flex; gap: 1rem;">
-                                    <label class="chip-label"><input type="checkbox" id="p-tag-public" value="public" checked class="chip-input"><div class="chip-content"><i class="fa-solid fa-check chip-icon"></i> Public</div></label>
-                                    <label class="chip-label"><input type="checkbox" id="p-tag-pro" value="pro" checked class="chip-input"><div class="chip-content"><i class="fa-solid fa-check chip-icon"></i> Pro</div></label>
-                                </div>
                             </div>
 
                             <div class="form-group">
@@ -458,11 +441,9 @@
         </main>
     </div>
 
-    <!-- Hidden Iframe untuk Download -->
     <iframe id="hidden-download-frame" style="display:none;"></iframe>
 
     <script>
-        // LINK WEB APP TERBARU (Pastikan tidak berubah)
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -476,7 +457,6 @@
             if(pDate) pDate.valueAsDate = new Date();
         });
 
-        // --- PASSWORD TOGGLE ---
         function togglePassword(inputId, icon) {
             const input = document.getElementById(inputId);
             if(input.type === 'password') {
@@ -498,7 +478,6 @@
             }
         }
 
-        // --- USER LOGIN ---
         document.getElementById("login-form").addEventListener("submit", function(e) {
             e.preventDefault();
             const btn = document.getElementById("btn-login");
@@ -520,7 +499,6 @@
             });
         });
 
-        // --- ADMIN LOGIN ---
         document.getElementById("admin-login-form").addEventListener("submit", function(e) {
             e.preventDefault();
             const btn = document.getElementById("btn-admin-login"), msgBox = document.getElementById("admin-login-msg");
@@ -546,17 +524,10 @@
             return (match && match[1]) ? `https://drive.google.com/uc?export=download&id=${match[1]}` : url;
         }
 
-        // --- ADMIN: PUBLISH COMBINED RELEASE ---
         document.getElementById("admin-publish-form").addEventListener("submit", function(e) {
             e.preventDefault();
             const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
             if(!session || session.role !== 'admin') return logout();
-
-            const tags = [];
-            if(document.getElementById('p-tag-public').checked) tags.push('public');
-            if(document.getElementById('p-tag-pro').checked) tags.push('pro');
-
-            if(tags.length === 0) return alert("Select at least one tag.");
 
             const btn = document.getElementById("btn-publish-release"), msgBox = document.getElementById("publish-msg");
             btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Publishing...';
@@ -570,7 +541,6 @@
                     versionName: document.getElementById("p-version").value.trim(),
                     date: document.getElementById("p-date").value,
                     link: convertDriveLink(document.getElementById("p-link").value.trim()),
-                    tags: tags,
                     added: document.getElementById("p-added").value.trim(),
                     fixed: document.getElementById("p-fixed").value.trim(),
                     removed: document.getElementById("p-removed").value.trim()
@@ -587,9 +557,8 @@
             }).finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Publish & Update All'; });
         });
 
-        // --- ADMIN: DELETE RELEASE ---
         function deleteRelease(id) {
-            if(!confirm("Are you sure you want to permanently delete this release? This will remove the download link and changelog.")) return;
+            if(!confirm("Are you sure you want to permanently delete this release? This will remove the download link and changelog globally.")) return;
             const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
             fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST", body: JSON.stringify({ action: "admin_delete_release", adminPassword: session.adminPassword, logId: id })
@@ -600,7 +569,6 @@
             });
         }
 
-        // --- RENDER DASHBOARDS ---
         function showUserDashboard(data) {
             document.getElementById("main-navbar").style.display = "none"; document.getElementById("auth-section").style.display = "none"; document.getElementById("user-dashboard").classList.add("active");
             
@@ -614,14 +582,12 @@
                 document.getElementById("latest-ver-text").innerText = history[0].versionName; document.getElementById("addon-badge-version").innerText = history[0].versionName;
                 const tbody = document.querySelector("#user-history-table tbody"); tbody.innerHTML = "";
                 history.forEach((h, index) => {
-                    // Extract first line of "added" as short note
                     const noteStr = h.added ? h.added.split('\n')[0].substring(0, 50) + "..." : "Performance & Security update.";
-                    const tagsHtml = (h.tags||[]).map(t => `<span style="font-size:0.65rem; background:rgba(255,255,255,0.1); padding:2px 4px; border-radius:4px; margin-right:4px; text-transform:uppercase;">${t}</span>`).join('');
                     
                     tbody.innerHTML += `<tr>
                         <td><span class="version-badge">${h.versionName}</span> ${index === 0 ? '<span style="color:var(--accent-success); font-size:0.75rem; margin-left:0.5rem; font-weight:600;">LATEST</span>' : ''}</td>
                         <td>${new Date(h.date).toLocaleDateString()}</td>
-                        <td style="font-size: 0.85rem;">${tagsHtml}<br><span style="opacity:0.7">${noteStr}</span></td>
+                        <td style="font-size: 0.85rem;"><span style="opacity:0.7">${noteStr}</span></td>
                         <td style="text-align:right;"><button onclick="triggerDownload('${h.link}')" class="btn btn-sm btn-outline"><i class="fa-solid fa-download"></i></button></td>
                     </tr>`;
                 });

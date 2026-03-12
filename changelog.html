@@ -58,12 +58,6 @@
 
         .app-bar { background-color: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); position: fixed; top: 0; width: 100%; height: 5rem; z-index: 50; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
         .main-content { padding-top: 8rem; padding-bottom: 5rem; flex-grow: 1; }
-        
-        /* Segmented Control Updated */
-        .segmented-control { display: flex; padding: 0.35rem; background-color: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid var(--border-light); }
-        .segment-btn { border: none; background: transparent; padding: 0.5rem 1.25rem; font-size: 0.875rem; font-weight: 600; border-radius: 8px; transition: all 0.2s ease; color: var(--text-secondary); cursor: pointer; font-family: inherit; }
-        .segment-btn:hover { color: var(--text-primary); }
-        .segment-btn.active { background: rgba(255,255,255,0.1); color: var(--text-primary); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
         /* Search Bar Updated */
         .search-wrapper { position: relative; margin-bottom: 3rem; max-width: 42rem; margin-left: auto; margin-right: auto; }
@@ -148,12 +142,8 @@
     <header class="app-bar">
         <div class="container flex justify-between items-center w-full">
             <a href="index.html" class="font-outfit" style="font-size: 1.35rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em;">
-                <i class="fa-solid fa-code text-gradient mr-2"></i> Heraclaus <span style="color: var(--text-muted); font-weight: 500; font-size: 1rem; font-family: 'Inter', sans-serif; margin-left: 0.25rem;" class="desktop-only">| Changelog</span>
+                <i class="fa-solid fa-code text-gradient mr-2"></i> Heraclaus <span style="color: var(--text-muted); font-weight: 500; font-size: 1rem; font-family: 'Inter', sans-serif; margin-left: 0.25rem;" class="desktop-only">| Global Changelog</span>
             </a>
-            <div class="segmented-control">
-                <button onclick="setViewType('public')" id="view-btn-public" class="segment-btn active">Public</button>
-                <button onclick="setViewType('pro')" id="view-btn-pro" class="segment-btn">Pro</button>
-            </div>
         </div>
     </header>
 
@@ -190,11 +180,9 @@
     </footer>
 
     <script>
-        // LINK WEB APP TERBARU HARUS SAMA DENGAN YANG DI CLIENT PORTAL
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
         
         let allLogs = [];
-        let currentViewType = 'public';
 
         document.addEventListener("DOMContentLoaded", () => {
             fetch(GOOGLE_SCRIPT_URL + "?action=get_changelog")
@@ -210,13 +198,6 @@
                     document.getElementById('loading-state').innerHTML = "<div class='state-icon' style='color: var(--accent-danger);'><i class='fa-solid fa-triangle-exclamation'></i></div><p style='color: var(--text-secondary); font-weight: 500;'>Failed to load database. Please try refreshing the page.</p>";
                 });
         });
-
-        function setViewType(type) {
-            currentViewType = type;
-            document.getElementById('view-btn-public').classList.toggle('active', type === 'public');
-            document.getElementById('view-btn-pro').classList.toggle('active', type === 'pro');
-            render();
-        }
 
         function toggleAccordion(id) {
             const card = document.getElementById(`card-${id}`);
@@ -239,7 +220,7 @@
             const container = document.getElementById('changelog-container');
             const search = document.getElementById('search-input').value.toLowerCase();
             
-            let filtered = allLogs.filter(log => !log.tags || log.tags.includes(currentViewType));
+            let filtered = allLogs;
             if (search) {
                 filtered = filtered.filter(log => 
                     log.versionName.toLowerCase().includes(search) || 
@@ -256,7 +237,7 @@
                 } else if (search) {
                      document.getElementById('empty-msg').innerHTML = `We couldn't find any release notes matching "<b>${search}</b>".`;
                 } else {
-                     document.getElementById('empty-msg').innerText = `No release history found for ${currentViewType} category.`;
+                     document.getElementById('empty-msg').innerText = `No release history found.`;
                 }
                 container.innerHTML = '';
                 return;
@@ -266,7 +247,6 @@
             container.innerHTML = '';
 
             filtered.forEach((log, index) => {
-                // Auto-open the latest release if no search is active
                 const isActive = index === 0 && !search ? 'active' : '';
                 const dateStr = new Date(log.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                 
@@ -276,7 +256,6 @@
                 
                 const content = (addedHtml || fixedHtml || removedHtml) ? (addedHtml + fixedHtml + removedHtml) : "<p style='color: var(--text-muted); margin-top: 1rem; font-style: italic;'>No specific notes provided for this release.</p>";
 
-                // Calculate animation delay for smooth staggered entrance
                 const animDelay = (index * 0.1) > 0.8 ? 0 : (index * 0.1);
 
                 container.innerHTML += `
