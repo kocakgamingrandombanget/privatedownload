@@ -9,140 +9,97 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* * PURE VANILLA CSS - COMPACT SAAS THEME * */
         :root {
-            --bg-base: #050505; 
-            --bg-surface: #0a0a0a; 
-            --bg-card: rgba(255, 255, 255, 0.03); 
-            --bg-card-hover: rgba(255, 255, 255, 0.05);
-            --border-light: rgba(255, 255, 255, 0.08); 
-            --border-highlight: rgba(255, 255, 255, 0.15);
-            --text-primary: #ffffff; 
-            --text-secondary: #a1a1aa; 
-            --text-muted: #71717a;
-            --accent-primary: #8b5cf6; 
-            --emerald-500: #10b981; 
-            --blue-500: #3b82f6; 
-            --rose-500: #f43f5e;
+            --bg-base: #050505; --bg-surface: #0a0a0a; --bg-card: rgba(255, 255, 255, 0.03); --bg-card-hover: rgba(255, 255, 255, 0.05);
+            --border-light: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff; --text-secondary: #a1a1aa; --text-muted: #71717a;
+            --accent-primary: #8b5cf6; --emerald-500: #10b981; --blue-500: #3b82f6; --rose-500: #f43f5e;
             --gradient-hero: linear-gradient(135deg, #e879f9 0%, #8b5cf6 50%, #3b82f6 100%);
             --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
         
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-base); 
-            color: var(--text-primary); 
-            line-height: 1.6; 
-            overflow-x: hidden; 
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .container { max-width: 56rem; margin: 0 auto; padding: 0 1.25rem; width: 100%; }
+        .container { max-width: 48rem; margin: 0 auto; padding: 0 1.25rem; width: 100%; }
         .hidden { display: none !important; }
-        .flex { display: flex; } 
-        .flex-col { display: flex; flex-direction: column; }
-        .items-center { align-items: center; } 
-        .justify-between { justify-content: space-between; }
+        .flex { display: flex; } .items-center { align-items: center; } .justify-between { justify-content: space-between; }
         
         h1, h2, .font-outfit { font-family: 'Outfit', sans-serif; }
         .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .desktop-only { display: inline-block; }
         
-        /* Ambient Glow */
         .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
-        .blob { position: absolute; border-radius: 50%; filter: blur(140px); opacity: 0.35; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; }
         .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
         .blob-2 { bottom: -10%; right: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
 
-        .app-bar { background-color: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); position: fixed; top: 0; width: 100%; height: 5rem; z-index: 50; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
-        .main-content { padding-top: 8rem; padding-bottom: 5rem; flex-grow: 1; }
+        .app-bar { background-color: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); position: fixed; top: 0; width: 100%; height: 3.5rem; z-index: 50; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; }
+        .main-content { padding-top: 5.5rem; padding-bottom: 2.5rem; flex-grow: 1; }
 
-        /* Search Bar Updated */
-        .search-wrapper { position: relative; margin-bottom: 3rem; max-width: 42rem; margin-left: auto; margin-right: auto; }
-        .search-icon { position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
-        .search-input { width: 100%; padding: 1.25rem 1.5rem 1.25rem 3.5rem; background-color: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; color: var(--text-primary); font-size: 1rem; outline: none; transition: all 0.3s ease; font-family: inherit; }
-        .search-input:focus { border-color: var(--accent-primary); background-color: rgba(0,0,0,0.6); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); }
-        .search-input::placeholder { color: var(--text-muted); }
+        /* Compact Search */
+        .search-wrapper { position: relative; margin-bottom: 1.5rem; max-width: 32rem; margin-left: auto; margin-right: auto; }
+        .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.9rem; }
+        .search-input { width: 100%; padding: 0.75rem 1rem 0.75rem 2.25rem; background-color: var(--bg-card); border: 1px solid var(--border-light); border-radius: 10px; color: var(--text-primary); font-size: 0.85rem; outline: none; transition: all 0.3s; font-family: inherit; }
+        .search-input:focus { border-color: var(--accent-primary); background-color: rgba(0,0,0,0.6); box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15); }
         
-        /* Accordion Cards Modernized */
-        .list-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 20px; margin-bottom: 1.25rem; overflow: hidden; transition: all 0.3s ease; }
-        .list-card:hover { border-color: var(--border-highlight); background: var(--bg-card-hover); transform: translateY(-2px); }
-        .list-card.active { border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05); transform: translateY(0); }
+        /* Compact List Cards */
+        .list-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 10px; margin-bottom: 0.75rem; overflow: hidden; transition: all 0.2s; }
+        .list-card:hover { border-color: var(--border-highlight); background: var(--bg-card-hover); }
+        .list-card.active { border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05); }
         
-        .list-card-header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; background: transparent; border: none; color: var(--text-primary); cursor: pointer; text-align: left; }
+        .list-card-header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1rem; background: transparent; border: none; color: var(--text-primary); cursor: pointer; text-align: left; }
+        .header-info { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
         
-        /* Responsive Header Adjustments */
-        .header-info { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-        @media (max-width: 640px) {
-            .header-info { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-            .list-card-header { padding: 1.25rem 1.5rem; }
-            .badge-primary { margin: 0 !important; }
-        }
+        @media (max-width: 640px) { .header-info { flex-direction: column; align-items: flex-start; gap: 0.25rem; } .desktop-only { display: none; } }
 
-        .accordion-wrapper { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+        .accordion-wrapper { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s; }
         .list-card.active .accordion-wrapper { grid-template-rows: 1fr; }
-        .accordion-inner { overflow: hidden; opacity: 0; transition: opacity 0.3s ease; }
+        .accordion-inner { overflow: hidden; opacity: 0; transition: opacity 0.3s; }
         .list-card.active .accordion-inner { opacity: 1; }
-        .accordion-content-area { padding: 0.5rem 2rem 2rem 2rem; border-top: 1px solid rgba(255,255,255,0.05); }
+        .accordion-content-area { padding: 0.25rem 1rem 1rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); }
 
-        .expand-icon { transition: transform 0.3s ease; color: var(--text-muted); font-size: 1.1rem; }
+        .expand-icon { transition: transform 0.3s; color: var(--text-muted); font-size: 0.8rem; }
         .list-card.active .expand-icon { transform: rotate(180deg); color: var(--text-primary); }
 
-        /* Badges */
-        .badge { display: inline-flex; align-items: center; padding: 0.35rem 0.85rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid transparent; }
-        .badge-primary { background: var(--gradient-admin); color: #fff; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 10px rgba(139, 92, 246, 0.2); }
-        .badge-lg { padding: 0.4rem 0.85rem; font-size: 0.8rem; gap: 0.5rem; text-transform: none; border-radius: 8px; font-weight: 600; margin-bottom: 0.75rem; letter-spacing: normal; }
-        
+        /* Compact Badges & Lists */
+        .badge { display: inline-flex; align-items: center; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; border: 1px solid transparent; }
+        .badge-primary { background: var(--gradient-admin); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+        .badge-lg { padding: 0.25rem 0.5rem; font-size: 0.7rem; gap: 0.3rem; text-transform: none; border-radius: 6px; margin-bottom: 0.4rem; font-weight: 600; }
         .badge-emerald { background-color: rgba(16, 185, 129, 0.1); color: var(--emerald-500); border-color: rgba(16, 185, 129, 0.2); }
         .badge-blue { background-color: rgba(59, 130, 246, 0.1); color: var(--blue-500); border-color: rgba(59, 130, 246, 0.2); }
         .badge-rose { background-color: rgba(244, 63, 94, 0.1); color: var(--rose-500); border-color: rgba(244, 63, 94, 0.2); }
 
-        /* List Styles */
-        .changelog-list { margin-top: 1.5rem; }
-        .changelog-list:first-child { margin-top: 0.5rem; }
-        .changelog-list ul { list-style: none; margin-top: 0.75rem; }
-        .changelog-list li { position: relative; padding-left: 1.75rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
-        .changelog-list li::before { content: ''; position: absolute; left: 0.5rem; top: 0.6rem; width: 0.35rem; height: 0.35rem; border-radius: 50%; }
-        
-        .dot-emerald::before { background-color: var(--emerald-500); box-shadow: 0 0 8px var(--emerald-500); }
-        .dot-blue::before { background-color: var(--blue-500); box-shadow: 0 0 8px var(--blue-500); }
-        .dot-rose::before { background-color: var(--rose-500); box-shadow: 0 0 8px var(--rose-500); }
+        .changelog-list { margin-top: 0.75rem; }
+        .changelog-list:first-child { margin-top: 0.4rem; }
+        .changelog-list ul { list-style: none; margin-top: 0.3rem; }
+        .changelog-list li { position: relative; padding-left: 1rem; margin-bottom: 0.3rem; color: var(--text-secondary); font-size: 0.8rem; line-height: 1.5; }
+        .changelog-list li::before { content: ''; position: absolute; left: 0.25rem; top: 0.5rem; width: 0.25rem; height: 0.25rem; border-radius: 50%; }
+        .dot-emerald::before { background-color: var(--emerald-500); }
+        .dot-blue::before { background-color: var(--blue-500); }
+        .dot-rose::before { background-color: var(--rose-500); }
 
-        /* Empty & Loading States */
-        .loader { width: 48px; height: 48px; border: 3px solid var(--border-light); border-bottom-color: var(--accent-primary); border-radius: 50%; display: inline-block; box-sizing: border-box; animation: rotation 1s linear infinite; }
+        .loader { width: 28px; height: 28px; border: 2px solid var(--border-light); border-bottom-color: var(--accent-primary); border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .state-container { text-align: center; padding: 5rem 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .state-icon { font-size: 3.5rem; margin-bottom: 1.5rem; color: rgba(255,255,255,0.05); }
+        .state-container { text-align: center; padding: 3rem 0; display: flex; flex-direction: column; align-items: center; }
+        .state-icon { font-size: 2rem; margin-bottom: 0.75rem; color: rgba(255,255,255,0.05); }
 
-        /* Footer */
-        footer { padding: 3rem 0; border-top: 1px solid var(--border-light); text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: auto; background: rgba(0,0,0,0.4); }
-        .social-links { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1rem; }
-        .social-links a { color: var(--text-muted); font-size: 1.25rem; transition: all 0.2s; display: flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: rgba(255,255,255,0.02); }
-        .social-links a:hover { color: #fff; background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+        footer { padding: 1.5rem 0; border-top: 1px solid var(--border-light); text-align: center; color: var(--text-muted); font-size: 0.75rem; background: rgba(0,0,0,0.5); margin-top: auto; }
+        .social-links { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem; }
+        .social-links a { color: var(--text-muted); font-size: 1rem; transition: all 0.2s; width: 1.75rem; height: 1.75rem; border-radius: 6px; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; }
+        .social-links a:hover { color: #fff; background: rgba(255,255,255,0.08); }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade { animation: fadeInUp 0.4s ease forwards; }
-
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade { animation: fadeInUp 0.3s ease forwards; }
     </style>
 </head>
 <body>
-    
-    <div class="ambient-bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
-
+    <div class="ambient-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
     <header class="app-bar">
         <div class="container flex justify-between items-center w-full">
-            <a href="index.html" class="font-outfit" style="font-size: 1.35rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em;">
-                <i class="fa-solid fa-code text-gradient mr-2"></i> Heraclaus <span style="color: var(--text-muted); font-weight: 500; font-size: 1rem; font-family: 'Inter', sans-serif; margin-left: 0.25rem;" class="desktop-only">| Global Changelog</span>
+            <a href="index.html" class="font-outfit" style="font-size: 1.15rem; font-weight: 800; color: #fff; text-decoration: none;">
+                <i class="fa-solid fa-code text-gradient mr-1"></i> Heraclaus <span style="color: var(--text-muted); font-weight: 500; font-size: 0.85rem; font-family: 'Inter';" class="desktop-only">| Global Changelog</span>
             </a>
         </div>
     </header>
@@ -153,27 +110,24 @@
             <input type="text" id="search-input" oninput="render()" placeholder="Search versions, features, or fixes..." class="search-input">
         </div>
         
-        <!-- Loading State -->
         <div id="loading-state" class="state-container">
             <span class="loader"></span>
-            <p style="color: var(--text-secondary); margin-top: 1.5rem; font-weight: 500;">Connecting to secure database...</p>
+            <p style="color: var(--text-secondary); margin-top: 0.75rem; font-weight: 500; font-size: 0.8rem;">Connecting to database...</p>
         </div>
 
-        <!-- Empty State -->
         <div id="empty-state" class="hidden state-container">
             <div class="state-icon"><i class="fa-regular fa-folder-open"></i></div>
-            <p class="font-outfit" style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary);">No history found</p>
-            <p style="color: var(--text-muted); margin-top: 0.5rem;" id="empty-msg">We couldn't find any release notes matching your search.</p>
+            <p class="font-outfit" style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary);">No history found</p>
+            <p style="color: var(--text-muted); margin-top: 0.25rem; font-size: 0.8rem;" id="empty-msg"></p>
         </div>
-        
         <div id="changelog-container"></div>
     </main>
 
     <footer>
         <div class="container">
             <div class="social-links">
-                <a href="https://www.youtube.com/@heraclaus" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                <a href="https://discord.gg/xQStZUvukS" target="_blank" title="Discord"><i class="fa-brands fa-discord"></i></a>
+                <a href="https://www.youtube.com/@heraclaus" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://discord.gg/xQStZUvukS" target="_blank"><i class="fa-brands fa-discord"></i></a>
             </div>
             <p>© 2026 Heraclaus. Not associated with Mojang or Microsoft.</p>
         </div>
@@ -181,100 +135,55 @@
 
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
-        
         let allLogs = [];
 
         document.addEventListener("DOMContentLoaded", () => {
-            fetch(GOOGLE_SCRIPT_URL + "?action=get_changelog")
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById('loading-state').style.display = 'none';
-                    if (data.status === "success") {
-                        allLogs = data.changelogs || [];
-                        render();
-                    }
-                })
-                .catch(err => {
-                    document.getElementById('loading-state').innerHTML = "<div class='state-icon' style='color: var(--accent-danger);'><i class='fa-solid fa-triangle-exclamation'></i></div><p style='color: var(--text-secondary); font-weight: 500;'>Failed to load database. Please try refreshing the page.</p>";
-                });
+            fetch(GOOGLE_SCRIPT_URL + "?action=get_changelog").then(res => res.json())
+            .then(data => { document.getElementById('loading-state').style.display = 'none'; if (data.status === "success") { allLogs = data.changelogs || []; render(); } })
+            .catch(err => { document.getElementById('loading-state').innerHTML = "<div class='state-icon' style='color: var(--accent-danger);'><i class='fa-solid fa-triangle-exclamation'></i></div><p style='color: var(--text-secondary); font-size: 0.85rem;'>Failed to load database.</p>"; });
         });
 
         function toggleAccordion(id) {
-            const card = document.getElementById(`card-${id}`);
-            const wasActive = card.classList.contains('active');
+            const card = document.getElementById(`card-${id}`), wasActive = card.classList.contains('active');
             document.querySelectorAll('.list-card').forEach(c => c.classList.remove('active'));
             if (!wasActive) card.classList.add('active');
         }
 
         function renderList(text, iconClass, label, badgeClass, dotClass) {
-            if (!text) return '';
-            const items = text.split('\n').filter(i => i.trim());
-            if (!items.length) return '';
-            return `<div class="changelog-list">
-                <span class="badge badge-lg ${badgeClass}"><i class="fa-solid ${iconClass}"></i> ${label}</span>
-                <ul>${items.map(i => `<li class="${dotClass}">${i}</li>`).join('')}</ul>
-            </div>`;
+            if (!text) return ''; const items = text.split('\n').filter(i => i.trim()); if (!items.length) return '';
+            return `<div class="changelog-list"><span class="badge badge-lg ${badgeClass}"><i class="fa-solid ${iconClass}"></i> ${label}</span><ul>${items.map(i => `<li class="${dotClass}">${i}</li>`).join('')}</ul></div>`;
         }
 
         function render() {
-            const container = document.getElementById('changelog-container');
-            const search = document.getElementById('search-input').value.toLowerCase();
-            
-            let filtered = allLogs;
-            if (search) {
-                filtered = filtered.filter(log => 
-                    log.versionName.toLowerCase().includes(search) || 
-                    (log.added||'').toLowerCase().includes(search) || 
-                    (log.fixed||'').toLowerCase().includes(search) ||
-                    (log.removed||'').toLowerCase().includes(search)
-                );
-            }
+            const container = document.getElementById('changelog-container'), search = document.getElementById('search-input').value.toLowerCase();
+            let filtered = search ? allLogs.filter(log => log.versionName.toLowerCase().includes(search) || (log.added||'').toLowerCase().includes(search) || (log.fixed||'').toLowerCase().includes(search) || (log.removed||'').toLowerCase().includes(search)) : allLogs;
 
             if (filtered.length === 0) {
                 document.getElementById('empty-state').classList.remove('hidden');
-                if(!search && allLogs.length === 0) {
-                     document.getElementById('empty-msg').innerText = "System database is currently empty.";
-                } else if (search) {
-                     document.getElementById('empty-msg').innerHTML = `We couldn't find any release notes matching "<b>${search}</b>".`;
-                } else {
-                     document.getElementById('empty-msg').innerText = `No release history found.`;
-                }
-                container.innerHTML = '';
-                return;
+                document.getElementById('empty-msg').innerText = (!search && allLogs.length === 0) ? "System database is currently empty." : `No results matching "${search}".`;
+                container.innerHTML = ''; return;
             }
             
-            document.getElementById('empty-state').classList.add('hidden');
-            container.innerHTML = '';
-
+            document.getElementById('empty-state').classList.add('hidden'); container.innerHTML = '';
             filtered.forEach((log, index) => {
-                const isActive = index === 0 && !search ? 'active' : '';
-                const dateStr = new Date(log.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                
+                const isActive = index === 0 && !search ? 'active' : '', dateStr = new Date(log.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                 const addedHtml = renderList(log.added, 'fa-rocket', 'New Features', 'badge-emerald', 'dot-emerald');
                 const fixedHtml = renderList(log.fixed, 'fa-bug', 'Bug Fixes', 'badge-blue', 'dot-blue');
                 const removedHtml = renderList(log.removed, 'fa-trash-can', 'Removed', 'badge-rose', 'dot-rose');
-                
-                const content = (addedHtml || fixedHtml || removedHtml) ? (addedHtml + fixedHtml + removedHtml) : "<p style='color: var(--text-muted); margin-top: 1rem; font-style: italic;'>No specific notes provided for this release.</p>";
-
-                const animDelay = (index * 0.1) > 0.8 ? 0 : (index * 0.1);
+                const content = (addedHtml || fixedHtml || removedHtml) ? (addedHtml + fixedHtml + removedHtml) : "<p style='color: var(--text-muted); margin-top: 0.5rem; font-style: italic; font-size: 0.8rem;'>No specific notes provided for this release.</p>";
+                const animDelay = (index * 0.05) > 0.5 ? 0 : (index * 0.05);
 
                 container.innerHTML += `
                     <div class="list-card animate-fade ${isActive}" id="card-${log.id}" style="animation-delay: ${animDelay}s;">
                         <button onclick="toggleAccordion(${log.id})" class="list-card-header">
                             <div class="header-info">
-                                <span class="font-outfit" style="font-size: 1.35rem; font-weight: 700;">${log.versionName}</span>
-                                ${index === 0 && !search ? '<span class="badge badge-primary" style="margin: 0 0.5rem;"><i class="fa-solid fa-star" style="margin-right:4px;"></i> Latest</span>' : ''}
-                                <span style="color: var(--text-muted); font-size: 0.9rem; font-weight: 500;">
-                                    <i class="fa-regular fa-calendar" style="margin-right: 0.25rem;"></i> ${dateStr}
-                                </span>
+                                <span class="font-outfit" style="font-size: 1.05rem; font-weight: 700;">${log.versionName}</span>
+                                ${index === 0 && !search ? '<span class="badge badge-primary" style="margin: 0 0.3rem;"><i class="fa-solid fa-star" style="margin-right:3px;"></i> Latest</span>' : ''}
+                                <span style="color: var(--text-muted); font-size: 0.75rem; font-weight: 500;"><i class="fa-regular fa-calendar" style="margin-right: 0.2rem;"></i> ${dateStr}</span>
                             </div>
                             <div class="expand-icon"><i class="fa-solid fa-chevron-down"></i></div>
                         </button>
-                        <div class="accordion-wrapper">
-                            <div class="accordion-inner">
-                                <div class="accordion-content-area">${content}</div>
-                            </div>
-                        </div>
+                        <div class="accordion-wrapper"><div class="accordion-inner"><div class="accordion-content-area">${content}</div></div></div>
                     </div>`;
             });
         }
