@@ -78,6 +78,11 @@
         .yt-badge:hover { background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.4); }
         .yt-icon { color: #ff0000; font-size: 0.85rem; }
 
+        /* LIVE STATS BADGE */
+        .live-stats-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 0.4rem 0.8rem; border-radius: 99px; font-size: 0.8rem; color: #6ee7b7; font-weight: 600; margin-top: 1.5rem; transition: all 0.3s; }
+        .live-indicator { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } 100% { opacity: 1; transform: scale(1); } }
+
         /* Sections Scaled Down */
         .section-hero { padding: 6rem 0 2rem 0; }
         .section { padding: 3rem 0; }
@@ -107,7 +112,7 @@
         .price-val { font-family: 'Outfit'; font-size: 2rem; font-weight: 700; color: #fff; line-height: 1; margin: 0.4rem 0; letter-spacing: -0.02em; }
         .price-val span { font-size: 0.8rem; color: var(--text-secondary); font-weight: 400; font-family: 'Inter'; }
         .check-list { list-style: none; margin: 0.75rem 0 1.25rem 0; flex-grow: 1; }
-        .check-list li { display: flex; align-items: flex-start; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; }
+        .check-list li { display: flex; align-items: flex-start; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
         .check-list i { color: #10b981; font-size: 0.7rem; margin-top: 0.2rem; flex-shrink: 0; }
         
         @media (min-width: 768px) { .pricing-wrap { grid-template-columns: 1fr 1fr; } .price-card { padding: 1.5rem; } }
@@ -182,9 +187,15 @@
                 <i class="fa-brands fa-youtube yt-icon"></i> Heraclaus <i class="fa-solid fa-circle-check yt-verified"></i>
             </a>
             <h1>Stop installing junk plugins.<br><span class="text-gradient">Build a legendary server.</span></h1>
-            <p style="max-width: 32rem; margin: 0.75rem auto 1.5rem; line-height: 1.5;">
+            <p style="max-width: 32rem; margin: 0.75rem auto 0; line-height: 1.5;">
                 Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world's economy and progression.
             </p>
+            
+            <div class="user-stats-badge animate-on-scroll delay-100" id="stats-badge">
+                <span class="live-indicator"></span>
+                Join <span id="pro-user-count" style="color: #fff; font-family: 'Outfit';">...</span> Active Pro Servers
+            </div>
+
             <div class="action-group justify-center delay-200 animate-on-scroll">
                 <a href="#admin-suite" class="btn btn-primary">Explore Admin Suite</a>
             </div>
@@ -253,13 +264,14 @@
                 <div class="price-card pro animate-on-scroll delay-100">
                     <h3 style="color: #c4b5fd;">Pro License</h3>
                     <div class="price-val">$5 <span>/ one-time</span></div>
-                    <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 0.75rem;">Equivalent to ~Rp80.000. Permanent License.</p>
+                    <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 0.75rem;">Equivalent to ~Rp80.000. Secure and Ad-Free.</p>
                     <ul class="check-list">
                         <li><i class="fa-solid fa-check"></i> <strong style="color: white;">Everything in Starter, plus:</strong></li>
-                        <li><i class="fa-solid fa-check"></i> Hybrid Money (No Scoreboard Limits)</li>
-                        <li><i class="fa-solid fa-check"></i> Native Login System & Server Chat Logs</li>
-                        <li><i class="fa-solid fa-check"></i> Advanced Regions, Battles & Gravestones</li>
-                        <li><i class="fa-solid fa-check"></i> Access to the Heraclaus Client Portal</li>
+                        <li><i class="fa-solid fa-check"></i> Native UI & High-Speed Database (No Scoreboard Lag)</li>
+                        <li><i class="fa-solid fa-check"></i> VIP Discord Role & Direct Developer Support</li>
+                        <li><i class="fa-solid fa-check"></i> Live Ticket System via Client Portal</li>
+                        <li><i class="fa-solid fa-check"></i> Permanent Binding (Pay Once, Yours Forever)</li>
+                        <li><i class="fa-solid fa-check"></i> Early Access to Beta Features & Fast Updates</li>
                     </ul>
                     <a href="payment.html" class="btn btn-gradient w-full mt-auto">Secure Checkout</a>
                 </div>
@@ -319,6 +331,8 @@
     </footer>
 
     <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
+
         document.addEventListener("DOMContentLoaded", () => {
             const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
             const observer = new IntersectionObserver((entries, observer) => {
@@ -327,6 +341,27 @@
                 });
             }, observerOptions);
             document.querySelectorAll('.animate-on-scroll').forEach(el => { observer.observe(el); });
+
+            // Fetch Active User Stats
+            fetch(GOOGLE_SCRIPT_URL + "?action=get_stats")
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === 'success' && data.activeUsers > 0) {
+                        // Animasi counting angka
+                        let count = 0;
+                        const target = data.activeUsers;
+                        const el = document.getElementById('pro-user-count');
+                        const interval = setInterval(() => {
+                            count += Math.ceil(target / 20);
+                            if(count >= target) { count = target; clearInterval(interval); }
+                            el.innerText = count;
+                        }, 50);
+                    } else {
+                        document.getElementById('stats-badge').style.display = 'none';
+                    }
+                }).catch(() => {
+                    document.getElementById('stats-badge').style.display = 'none';
+                });
         });
 
         window.addEventListener('scroll', () => {
