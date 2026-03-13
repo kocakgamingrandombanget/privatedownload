@@ -344,7 +344,7 @@
                             </div>
                         </div>
                     </div>
-                    <h3 class="font-outfit" style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.15rem; color: #fff; letter-spacing: -0.01em;">Version History</h3>
+                    <h3 class="font-outfit" style="margin-top: 2.5rem; margin-bottom: 1.25rem; font-size: 1.15rem; color: #fff; letter-spacing: -0.01em;">Version History</h3>
                     <div class="list-box">
                         <div style="overflow-x: auto;">
                             <table class="history-table" id="user-history-table">
@@ -542,6 +542,7 @@
                                         <div style="color: var(--text-muted); font-size: 0.7rem; margin-top: 0.15rem;" id="ac-email">No active selection</div>
                                     </div>
                                 </div>
+                                <button id="btn-resolve-ticket" onclick="adminDeleteTicket()" class="btn-icon danger" title="Close and Delete Ticket" style="width: 2rem; height: 2rem; border-radius: 6px; display: none;"><i class="fa-solid fa-check-double" style="font-size: 0.85rem;"></i></button>
                             </div>
                             
                             <div class="chat-container" id="admin-chat-box">
@@ -696,9 +697,6 @@
                 return;
             }
             messages.forEach(m => {
-                // LOGIC PERBAIKAN: 
-                // Jika user yang buka web, pesannya sendiri (user) ada di Kanan (chat-me).
-                // Jika admin yang buka web, pesannya sendiri (admin) ada di Kanan (chat-me).
                 const isMe = (isUserView && m.sender === 'user') || (!isUserView && m.sender === 'admin');
                 const bubbleClass = isMe ? 'chat-me' : 'chat-them';
                 
@@ -766,7 +764,7 @@
 
         function adminDeleteTicket() {
             if(!activeAdminTicketEmail) return;
-            if(!confirm("Selesaikan dan hapus tiket ini? Histori obrolan akan hilang permanen, sehingga user dapat membuat tiket baru lagi.")) return;
+            if(!confirm("Resolve and delete this ticket? Chat history will be permanently lost, allowing the user to create a new ticket later.")) return;
             
             const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
             fetch(GOOGLE_SCRIPT_URL, { 
