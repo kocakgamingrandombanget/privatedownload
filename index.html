@@ -42,7 +42,7 @@
         .blob-1 { top: -20%; left: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
         .blob-2 { bottom: -20%; right: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
 
-        /* Navbar Scaled Down */
+        /* Navbar */
         .navbar { position: fixed; top: 0; width: 100%; height: 3.5rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
         .nav-links { display: none; } 
         .nav-links a.reg-link { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.8rem; transition: color 0.2s; }
@@ -62,90 +62,127 @@
         .mobile-menu a { color: var(--text-primary); text-decoration: none; font-size: 0.9rem; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 0.85rem 0; display: flex; align-items: center; gap: 0.75rem; }
         .mobile-menu .login-nav-btn { border-bottom: none; margin-top: 1rem; padding: 0.65rem; justify-content: center; }
 
-        /* Buttons Scaled Down */
+        /* Buttons */
         .action-group { display: flex; flex-direction: column; gap: 0.6rem; width: 100%; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1rem; min-height: 2.25rem; border-radius: 6px; font-weight: 600; font-size: 0.8rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; text-align: center; width: 100%; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1.25rem; min-height: 2.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; text-align: center; width: 100%; }
         @media (min-width: 640px) { .action-group { flex-direction: row; } .btn { width: auto; } }
 
         .btn-primary { background: var(--text-primary); color: var(--bg-base); }
-        .btn-primary:hover { background: #e4e4e7; transform: translateY(-1px); }
+        .btn-primary:hover { background: #e4e4e7; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,255,255,0.15); }
         .btn-gradient { background: var(--gradient-admin); color: #fff; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.2); border: 1px solid rgba(255,255,255,0.1); }
-        .btn-gradient:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4); filter: brightness(1.1); }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); filter: brightness(1.1); }
         .btn-outline { background: rgba(255,255,255,0.02); color: var(--text-primary); border: 1px solid var(--border-highlight); }
         .btn-outline:hover { background: rgba(255,255,255,0.06); }
 
-        .yt-badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.6rem; background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1.25rem; color: var(--text-primary); text-decoration: none; transition: all 0.2s; }
+        .yt-badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.75rem; background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1.25rem; color: var(--text-primary); text-decoration: none; transition: all 0.2s; }
         .yt-badge:hover { background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.4); }
         .yt-icon { color: #ff0000; font-size: 0.85rem; }
 
-        /* LIVE STATS BADGE */
-        .live-stats-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 0.4rem 0.8rem; border-radius: 99px; font-size: 0.8rem; color: #6ee7b7; font-weight: 600; margin-top: 1.5rem; transition: all 0.3s; }
-        .live-indicator { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } 100% { opacity: 1; transform: scale(1); } }
+        /* LIVE STATS BADGE (NEW DESIGN) */
+        .stats-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 1.5rem 0 2rem 0; /* Jarak pas antara deskripsi dan tombol */
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            opacity: 0; /* Default invisible before load */
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+        }
+        .stats-badge:hover {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.05);
+        }
+        .stats-badge strong {
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
 
-        /* Sections Scaled Down */
-        .section-hero { padding: 6rem 0 2rem 0; }
+        /* Sections */
+        .section-hero { padding: 6rem 0 2.5rem 0; }
         .section { padding: 3rem 0; }
         
         .product-box { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
-        .product-header { padding: 1.25rem; border-bottom: 1px solid var(--border-light); background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.05), transparent 60%); display: flex; flex-direction: column; gap: 0.75rem; }
+        .product-header { padding: 1.5rem; border-bottom: 1px solid var(--border-light); background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.05), transparent 60%); display: flex; flex-direction: column; gap: 1rem; }
         .product-header-actions { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
         .badge { display: inline-block; padding: 0.2rem 0.5rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; border: 1px solid rgba(139, 92, 246, 0.25); }
         
-        .feature-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; padding: 0.75rem; }
-        .feature-cell { background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); border-radius: 8px; padding: 1rem; transition: background 0.3s; }
+        .feature-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; padding: 1rem; }
+        .feature-cell { background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); border-radius: 8px; padding: 1.25rem; transition: background 0.3s; }
         .feature-cell:hover { background: rgba(255,255,255,0.04); border-color: var(--border-highlight); }
-        .feature-cell i { font-size: 1.1rem; margin-bottom: 0.5rem; display: block; }
-        .feature-cell p { font-size: 0.8rem; margin-top: 0.2rem; }
+        .feature-cell i { font-size: 1.25rem; margin-bottom: 0.75rem; display: block; }
+        .feature-cell p { font-size: 0.85rem; margin-top: 0.2rem; }
 
         @media (min-width: 768px) {
-            .product-header { padding: 1.75rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.5rem; }
-            .feature-grid { grid-template-columns: repeat(2, 1fr); padding: 1.25rem; gap: 0.75rem; }
-            .feature-cell { padding: 1.25rem; }
+            .product-header { padding: 2rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.5rem; }
+            .product-header-actions { width: auto; flex-direction: row; }
+            .feature-grid { grid-template-columns: repeat(2, 1fr); padding: 1.5rem; gap: 1rem; }
         }
         @media (min-width: 1024px) { .feature-grid { grid-template-columns: repeat(3, 1fr); } }
 
-        /* Pricing Details Scaled Down */
-        .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 0.75rem; max-width: 44rem; margin: 1.5rem auto 0; }
-        .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; transition: transform 0.2s; }
-        .price-card.pro { border-color: rgba(139, 92, 246, 0.4); background: linear-gradient(180deg, rgba(139, 92, 246, 0.05), transparent); }
-        .price-val { font-family: 'Outfit'; font-size: 2rem; font-weight: 700; color: #fff; line-height: 1; margin: 0.4rem 0; letter-spacing: -0.02em; }
-        .price-val span { font-size: 0.8rem; color: var(--text-secondary); font-weight: 400; font-family: 'Inter'; }
-        .check-list { list-style: none; margin: 0.75rem 0 1.25rem 0; flex-grow: 1; }
-        .check-list li { display: flex; align-items: flex-start; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
-        .check-list i { color: #10b981; font-size: 0.7rem; margin-top: 0.2rem; flex-shrink: 0; }
+        /* Pricing Details */
+        .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 48rem; margin: 2rem auto 0; }
+        .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; transition: transform 0.2s; }
+        .price-card.pro { border-color: rgba(139, 92, 246, 0.4); background: linear-gradient(180deg, rgba(139, 92, 246, 0.05), transparent); position: relative; overflow: hidden; }
+        .price-val { font-family: 'Outfit'; font-size: 2.25rem; font-weight: 700; color: #fff; line-height: 1; margin: 0.5rem 0; letter-spacing: -0.02em; }
+        .price-val span { font-size: 0.85rem; color: var(--text-secondary); font-weight: 400; font-family: 'Inter'; }
+        .check-list { list-style: none; margin: 1rem 0 1.5rem 0; flex-grow: 1; }
+        .check-list li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.6rem; }
+        .check-list i { color: #10b981; font-size: 0.75rem; margin-top: 0.25rem; flex-shrink: 0; }
         
-        @media (min-width: 768px) { .pricing-wrap { grid-template-columns: 1fr 1fr; } .price-card { padding: 1.5rem; } }
+        @media (min-width: 768px) { .pricing-wrap { grid-template-columns: 1fr 1fr; } .price-card { padding: 2rem; } }
 
-        /* FAQ Compact */
-        .faq-wrap { max-width: 38rem; margin: 1.5rem auto 0; display: flex; flex-direction: column; gap: 0.4rem; }
-        .faq-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 8px; }
+        /* FAQ */
+        .faq-wrap { max-width: 42rem; margin: 2rem auto 0; display: flex; flex-direction: column; gap: 0.5rem; }
+        .faq-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 10px; }
         .faq-item.active { border-color: var(--border-highlight); background: rgba(255,255,255,0.04); }
-        .faq-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1rem; background: none; border: none; color: var(--text-primary); font-family: 'Outfit'; font-size: 0.9rem; font-weight: 600; cursor: pointer; text-align: left; gap: 0.75rem; }
-        .faq-btn i { color: var(--text-muted); transition: transform 0.2s ease; font-size: 0.75rem; }
+        .faq-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background: none; border: none; color: var(--text-primary); font-family: 'Outfit'; font-size: 0.95rem; font-weight: 600; cursor: pointer; text-align: left; gap: 0.75rem; }
+        .faq-btn i { color: var(--text-muted); transition: transform 0.2s ease; font-size: 0.8rem; }
         .faq-item.active .faq-btn i { transform: rotate(180deg); color: var(--text-primary); }
         .faq-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
         .faq-item.active .faq-content { grid-template-rows: 1fr; }
         .faq-inner { overflow: hidden; }
-        .faq-inner p { padding: 0 1rem 1rem 1rem; font-size: 0.8rem; margin: 0; }
+        .faq-inner p { padding: 0 1.25rem 1.25rem 1.25rem; font-size: 0.85rem; margin: 0; line-height: 1.6; }
 
-        .cta-section { padding: 3rem 0; border-top: 1px solid var(--border-light); background: radial-gradient(circle at center, rgba(139, 92, 246, 0.05), transparent 60%); text-align: center; }
+        .cta-section { padding: 4rem 0; border-top: 1px solid var(--border-light); background: radial-gradient(circle at center, rgba(139, 92, 246, 0.05), transparent 60%); text-align: center; }
 
-        footer { padding: 2.5rem 0 1rem 0; border-top: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.8rem; background: rgba(0,0,0,0.5); }
-        .footer-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.5rem; text-align: left; }
+        footer { padding: 3rem 0 1.5rem 0; border-top: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.8rem; background: rgba(0,0,0,0.5); }
+        .footer-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem; text-align: left; }
         @media (min-width: 768px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr; } }
-        .footer-brand h3 { font-family: 'Outfit'; font-size: 1.1rem; color: #fff; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
-        .footer-links-col { display: flex; flex-direction: column; gap: 0.4rem; }
-        .footer-links-col h4 { color: #fff; font-family: 'Outfit'; font-size: 0.85rem; margin-bottom: 0.2rem; }
-        .footer-links-col a { color: var(--text-secondary); text-decoration: none; transition: all 0.2s; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .footer-brand h3 { font-family: 'Outfit'; font-size: 1.2rem; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+        .footer-links-col { display: flex; flex-direction: column; gap: 0.5rem; }
+        .footer-links-col h4 { color: #fff; font-family: 'Outfit'; font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .footer-links-col a { color: var(--text-secondary); text-decoration: none; transition: all 0.2s; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem; }
         .footer-links-col a:hover { color: var(--accent-primary); }
-        .footer-bottom { padding-top: 1rem; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+        .footer-bottom { padding-top: 1.5rem; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; gap: 1rem; }
         @media (min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; } }
-        .social-row { display: flex; gap: 0.4rem; }
-        .social-row a { width: 1.75rem; height: 1.75rem; border-radius: 4px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.2s; font-size: 0.8rem; border: 1px solid transparent; }
-        .social-row a:hover { background: rgba(139, 92, 246, 0.1); color: #fff; border-color: rgba(139, 92, 246, 0.3); }
+        .social-row { display: flex; gap: 0.5rem; }
+        .social-row a { width: 2rem; height: 2rem; border-radius: 6px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.2s; font-size: 0.9rem; border: 1px solid transparent; }
+        .social-row a:hover { background: rgba(139, 92, 246, 0.1); color: #fff; border-color: rgba(139, 92, 246, 0.3); transform: translateY(-2px); }
 
-        .animate-on-scroll { opacity: 0; transform: translateY(15px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .animate-on-scroll { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
         .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
         .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; }
     </style>
@@ -187,16 +224,17 @@
                 <i class="fa-brands fa-youtube yt-icon"></i> Heraclaus <i class="fa-solid fa-circle-check yt-verified"></i>
             </a>
             <h1>Stop installing junk plugins.<br><span class="text-gradient">Build a legendary server.</span></h1>
-            <p style="max-width: 32rem; margin: 0.75rem auto 0; line-height: 1.5;">
+            <p style="max-width: 36rem; margin: 1rem auto 0; line-height: 1.6;">
                 Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world's economy and progression.
             </p>
             
-            <div class="user-stats-badge animate-on-scroll delay-100" id="stats-badge">
-                <span class="live-indicator"></span>
-                Join <span id="pro-user-count" style="color: #fff; font-family: 'Outfit';">...</span> Active Pro Servers
+            <!-- NEW GLOSSY BADGE -->
+            <div class="stats-badge" id="stats-badge">
+                <div class="pulse-dot"></div>
+                <span>Trusted by <strong id="pro-user-count">0</strong> Pro Servers</span>
             </div>
 
-            <div class="action-group justify-center delay-200 animate-on-scroll">
+            <div class="action-group justify-center">
                 <a href="#admin-suite" class="btn btn-primary">Explore Admin Suite</a>
             </div>
         </div>
@@ -250,7 +288,7 @@
                 <div class="price-card animate-on-scroll">
                     <h3>Starter</h3>
                     <div class="price-val">$0 <span>/ trial</span></div>
-                    <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.75rem;">No license attached. May deactivate anytime.</p>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1rem;">No license attached. May deactivate anytime.</p>
                     <ul class="check-list">
                         <li><i class="fa-solid fa-check"></i> Admin, World & Player Management</li>
                         <li><i class="fa-solid fa-check"></i> Economy, Jobs, Quests & RPG Skills</li>
@@ -264,7 +302,7 @@
                 <div class="price-card pro animate-on-scroll delay-100">
                     <h3 style="color: #c4b5fd;">Pro License</h3>
                     <div class="price-val">$5 <span>/ one-time</span></div>
-                    <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 0.75rem;">Equivalent to ~Rp80.000. Secure and Ad-Free.</p>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 1rem;">Equivalent to ~Rp80.000. Secure and Ad-Free.</p>
                     <ul class="check-list">
                         <li><i class="fa-solid fa-check"></i> <strong style="color: white;">Everything in Starter, plus:</strong></li>
                         <li><i class="fa-solid fa-check"></i> Native UI & High-Speed Database (No Scoreboard Lag)</li>
@@ -295,7 +333,7 @@
     <section class="cta-section animate-on-scroll">
         <div class="container">
             <h2 style="font-size: clamp(1.25rem, 3.5vw, 1.75rem); margin-bottom: 0.5rem;">Ready to level up your server?</h2>
-            <p style="margin-bottom: 1.25rem;">Join thousands of players and admins using Heraclaus Add-ons.</p>
+            <p style="margin-bottom: 1.5rem;">Join thousands of players and admins using Heraclaus Add-ons.</p>
             <div class="action-group justify-center"><a href="#pricing" class="btn btn-gradient" style="padding: 0 1.5rem;">Get Pro License Now</a></div>
         </div>
     </section>
@@ -347,21 +385,21 @@
                 .then(res => res.json())
                 .then(data => {
                     if(data.status === 'success' && data.activeUsers > 0) {
+                        const badge = document.getElementById('stats-badge');
+                        badge.style.opacity = '1';
+                        badge.style.transform = 'translateY(0)';
+                        
                         // Animasi counting angka
                         let count = 0;
                         const target = data.activeUsers;
                         const el = document.getElementById('pro-user-count');
                         const interval = setInterval(() => {
-                            count += Math.ceil(target / 20);
+                            count += Math.ceil(target / 15);
                             if(count >= target) { count = target; clearInterval(interval); }
                             el.innerText = count;
                         }, 50);
-                    } else {
-                        document.getElementById('stats-badge').style.display = 'none';
                     }
-                }).catch(() => {
-                    document.getElementById('stats-badge').style.display = 'none';
-                });
+                }).catch(err => console.log("Stats error:", err));
         });
 
         window.addEventListener('scroll', () => {
