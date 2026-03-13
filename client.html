@@ -756,11 +756,40 @@
             document.getElementById('ac-gamertag').innerText = gamertag;
             document.getElementById('ac-email').innerText = email;
             
-            // Enable inputs
+            // Enable inputs & delete button
             document.getElementById('admin-chat-input').disabled = false;
             document.getElementById('btn-admin-chat').disabled = false;
+            document.getElementById('btn-resolve-ticket').style.display = 'inline-flex';
             
             fetchAdminTickets(); // trigger immediate refresh
+        }
+
+        function adminDeleteTicket() {
+            if(!activeAdminTicketEmail) return;
+            if(!confirm("Selesaikan dan hapus tiket ini? Histori obrolan akan hilang permanen, sehingga user dapat membuat tiket baru lagi.")) return;
+            
+            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+            fetch(GOOGLE_SCRIPT_URL, { 
+                method: "POST", 
+                body: JSON.stringify({ 
+                    action: "admin_delete_ticket", 
+                    adminPassword: session.adminPassword, 
+                    targetEmail: activeAdminTicketEmail 
+                }) 
+            })
+            .then(res => res.json()).then(data => { 
+                if(data.status === "success") { 
+                    activeAdminTicketEmail = null;
+                    document.getElementById('ac-gamertag').innerText = "Select User";
+                    document.getElementById('ac-email').innerText = "No active selection";
+                    document.getElementById('admin-chat-input').disabled = true;
+                    document.getElementById('btn-admin-chat').disabled = true;
+                    document.getElementById('btn-resolve-ticket').style.display = 'none';
+                    document.getElementById('admin-chat-box').innerHTML = '<div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem;">Select a ticket from the left to start replying.</div>';
+                    showToast('Ticket marked as resolved and deleted.');
+                    fetchAdminTickets(); 
+                } 
+            });
         }
 
         function adminSendChat(e) {
