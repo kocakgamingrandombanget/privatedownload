@@ -173,11 +173,15 @@
                 const content = (addedHtml || fixedHtml || removedHtml) ? (addedHtml + fixedHtml + removedHtml) : "<p style='color: var(--text-muted); margin-top: 0.5rem; font-style: italic; font-size: 0.8rem;'>No specific notes provided for this release.</p>";
                 const animDelay = (index * 0.05) > 0.5 ? 0 : (index * 0.05);
 
+                // UPDATED: MC Version badge di Changelog
+                const mcBadge = log.mcVersion ? `<span class="badge badge-blue" style="margin: 0 0.3rem; font-size: 0.6rem;"><i class="fa-solid fa-gamepad" style="margin-right:3px;"></i> MC ${log.mcVersion}</span>` : '';
+
                 container.innerHTML += `
                     <div class="list-card animate-fade ${isActive}" id="card-${log.id}" style="animation-delay: ${animDelay}s;">
                         <button onclick="toggleAccordion(${log.id})" class="list-card-header">
                             <div class="header-info">
                                 <span class="font-outfit" style="font-size: 1.05rem; font-weight: 700;">${log.versionName}</span>
+                                ${mcBadge}
                                 ${index === 0 && !search ? '<span class="badge badge-primary" style="margin: 0 0.3rem;"><i class="fa-solid fa-star" style="margin-right:3px;"></i> Latest</span>' : ''}
                                 <span style="color: var(--text-muted); font-size: 0.75rem; font-weight: 500;"><i class="fa-regular fa-calendar" style="margin-right: 0.2rem;"></i> ${dateStr}</span>
                             </div>

@@ -239,7 +239,7 @@
         <div class="dl-desc" id="dl-status-text">Connecting to secure server...</div>
     </div>
 
-    <!-- INVOICE MODAL (DI PERBAIKI) -->
+    <!-- INVOICE MODAL -->
     <div class="modal-overlay" id="invoice-modal">
         <div class="modal-card">
             <div class="modal-header">
@@ -542,8 +542,10 @@
                     <div class="profile-field" style="max-width: 48rem;">
                         <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">Fill the details below to push an update to all members and the public changelog.</p>
                         <form id="admin-publish-form">
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <!-- UPDATED: Added MC Version Field -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                                 <div><label>Version Name</label><input type="text" id="p-version" required placeholder="e.g. v6.2.0"></div>
+                                <div><label>MC Version</label><input type="text" id="p-mcversion" required placeholder="e.g. 1.20.70+"></div>
                                 <div><label>Release Date</label><input type="date" id="p-date" required></div>
                             </div>
                             
@@ -778,12 +780,15 @@
                 history.forEach((h, index) => {
                     const noteStr = h.added ? h.added.split('\n')[0].substring(0, 50) + "..." : "System patch.";
                     
+                    // UPDATED: MC Version badge di User Dashboard
+                    const mcBadge = h.mcVersion ? `<span style="font-size: 0.6rem; color: var(--accent-secondary); background: rgba(59, 130, 246, 0.1); padding: 0.1rem 0.3rem; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.2); margin-left: 0.3rem;">MC ${h.mcVersion}</span>` : '';
+                    
                     // Parse Link to support Dual Link system (Backward Compatibility)
                     let linkData = { realms: '#', bds: '#' };
                     try { linkData = JSON.parse(h.link); } catch(e) { linkData = { realms: h.link, bds: h.link }; }
                     
                     tbody.innerHTML += `<tr>
-                        <td><span class="version-badge">${h.versionName}</span> ${index === 0 ? '<span style="color:var(--accent-success); font-size:0.65rem; margin-left:0.3rem; font-weight:700;">LATEST</span>' : ''}</td>
+                        <td><span class="version-badge">${h.versionName}</span> ${mcBadge} ${index === 0 ? '<span style="color:var(--accent-success); font-size:0.65rem; margin-left:0.3rem; font-weight:700;">LATEST</span>' : ''}</td>
                         <td>${new Date(h.date).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</td><td style="font-size: 0.8rem;"><span style="opacity:0.8">${noteStr}</span></td>
                         <td style="text-align:right; display: flex; gap: 0.4rem; justify-content: flex-end; align-items: center;">
                             <button onclick="triggerDownload('${linkData.realms}')" class="btn btn-sm btn-outline" title="Download Realms" style="padding: 0 0.5rem;"><i class="fa-solid fa-cube"></i></button>
@@ -830,8 +835,11 @@
 
                 let dlCount = h.downloads || 0; // MENAMPILKAN DLS DATA
                 
+                // UPDATED: MC Version badge di Admin Database
+                const mcBadge = h.mcVersion ? `<div style="font-size:0.65rem; color: var(--text-muted); margin-top: 0.2rem;">MC: ${h.mcVersion}</div>` : '';
+                
                 tbody.innerHTML += `<tr>
-                    <td><span class="version-badge" style="border-color: rgba(245, 158, 11, 0.4); color: #fcd34d;">${h.versionName}</span></td>
+                    <td><span class="version-badge" style="border-color: rgba(245, 158, 11, 0.4); color: #fcd34d;">${h.versionName}</span> ${mcBadge}</td>
                     <td>${new Date(h.date).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</td>
                     <td><textarea readonly style="background:transparent; border:none; color:var(--text-muted); width:100%; font-size:0.75rem; font-family: monospace; resize:none;" rows="2" onclick="this.select()">${linkDisplay}</textarea></td>
                     <td style="text-align: center; font-weight: 600; color: #fff;">${dlCount} <span style="font-size: 0.65rem; font-weight: normal; color: var(--text-muted);">x</span></td>
@@ -1259,7 +1267,22 @@
             // AMBIL DATA DARI CHECKBOX SEND EMAIL
             const isSendEmail = document.getElementById("p-send-email").checked;
 
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_publish_release", adminPassword: session.adminPassword, versionName: document.getElementById("p-version").value.trim(), date: document.getElementById("p-date").value, link: finalLink, added: document.getElementById("p-added").value.trim(), fixed: document.getElementById("p-fixed").value.trim(), removed: document.getElementById("p-removed").value.trim(), sendEmail: isSendEmail }) })
+            // UPDATED: Include mcVersion from form
+            fetch(GOOGLE_SCRIPT_URL, { 
+                method: "POST", 
+                body: JSON.stringify({ 
+                    action: "admin_publish_release", 
+                    adminPassword: session.adminPassword, 
+                    versionName: document.getElementById("p-version").value.trim(), 
+                    mcVersion: document.getElementById("p-mcversion").value.trim(),
+                    date: document.getElementById("p-date").value, 
+                    link: finalLink, 
+                    added: document.getElementById("p-added").value.trim(), 
+                    fixed: document.getElementById("p-fixed").value.trim(), 
+                    removed: document.getElementById("p-removed").value.trim(), 
+                    sendEmail: isSendEmail 
+                }) 
+            })
             .then(res => res.json()).then(data => { if(data.status === "success") { document.getElementById("admin-publish-form").reset(); document.getElementById('p-date').valueAsDate = new Date(); session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast('Published to all users!'); } else throw new Error(data.message); })
             .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
             .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Publish & Update All'; });
