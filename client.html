@@ -549,6 +549,8 @@
 
                 <!-- ADMIN: TICKETS -->
                 <div id="tab-admin-tickets" class="tab-content">
+                <!-- ADMIN: TICKETS (NEW) -->
+                <div id="tab-admin-tickets" class="tab-content">
                     <h2 class="section-title font-outfit">Support Tickets</h2>
                     <div class="ticket-layout">
                         <!-- User List -->
@@ -582,8 +584,6 @@
             </div>
         </main>
     </div>
-
-    <iframe id="hidden-download-frame" style="display:none;"></iframe>
 
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
@@ -881,7 +881,13 @@
             if(role === 'admin' && tabId === 'members') { fetchAdminMembers(); pollingInterval = setInterval(fetchAdminMembers, 10000); }
         }
 
-        function triggerDownload(url) { document.getElementById('hidden-download-frame').src = url; showToast('Download started in the background.'); }
+        // PERBAIKAN FITUR DOWNLOAD
+        function triggerDownload(url) { 
+            // Buka link di tab baru, sehingga Google Drive bisa langsung memproses filenya
+            window.open(url, '_blank'); 
+            showToast('Download started.'); 
+        }
+
         document.getElementById("btn-download").addEventListener("click", function() {
             const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
             if (!session || !session.addonHistory || session.addonHistory.length === 0) return;
