@@ -236,7 +236,7 @@
         <div class="dl-desc" id="dl-status-text">Connecting to secure server...</div>
     </div>
 
-    <!-- INVOICE MODAL (NEW) -->
+    <!-- INVOICE MODAL (DI PERBAIKI) -->
     <div class="modal-overlay" id="invoice-modal">
         <div class="modal-card">
             <div class="modal-header">
@@ -634,8 +634,6 @@
         </main>
     </div>
 
-    <iframe id="hidden-download-frame" style="display:none;"></iframe>
-
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
         
@@ -867,13 +865,12 @@
             
             let receiptHtml = '';
             if(m.receipt && m.receipt !== "-" && m.receipt !== "") {
-                // Berusaha memunculkan gambar langsung dari Google Drive Preview Link
+                // TRIK BARU: Gunakan IFRAME dengan /preview agar tidak diblokir Google Drive
                 const match = m.receipt.match(/\/d\/([a-zA-Z0-9_-]+)/);
                 if(match && match[1]) {
-                    const imgUrl = `https://drive.google.com/uc?id=${match[1]}`;
                     receiptHtml = `
-                        <div style="width: 100%; border-radius: 8px; border: 1px solid var(--border-light); margin-top: 0.5rem; background: rgba(0,0,0,0.5); padding: 0.5rem; text-align: center;">
-                            <img src="${imgUrl}" alt="Payment Receipt" style="max-width: 100%; max-height: 250px; object-fit: contain; border-radius: 4px;" onerror="this.onerror=null; this.parentElement.innerHTML='<p style=\\'color: var(--text-muted); font-size: 0.8rem; padding: 1rem;\\'>Image preview blocked by Drive. Please use the button below.</p>'">
+                        <div style="width: 100%; border-radius: 8px; border: 1px solid var(--border-light); margin-top: 0.5rem; background: rgba(0,0,0,0.5); overflow: hidden;">
+                            <iframe src="https://drive.google.com/file/d/${match[1]}/preview" width="100%" height="250" style="border:none; display:block;"></iframe>
                         </div>
                         <a href="${m.receipt}" target="_blank" class="btn btn-outline w-full" style="margin-top: 0.75rem; font-size: 0.8rem;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Full Image</a>`;
                 } else {
