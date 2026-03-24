@@ -549,7 +549,7 @@
                     <div class="list-box">
                         <div style="overflow-x: auto;">
                             <table class="history-table" id="admin-history-table">
-                                <thead><tr><th style="width: 20%;">Version</th><th style="width: 20%;">Date</th><th>Link Data</th><th style="text-align: right; width: 10%;">Action</th></tr></thead>
+                                <thead><tr><th style="width: 20%;">Version</th><th style="width: 20%;">Date</th><th>Link Data</th><th style="text-align: center; width: 10%;">DLs</th><th style="text-align: right; width: 10%;">Action</th></tr></thead>
                                 <tbody></tbody>
                             </table>
                         </div>
@@ -564,11 +564,9 @@
                             <table class="history-table" id="admin-members-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 15%;">Date</th>
-                                        <th>Gamertag</th>
-                                        <th>Email</th>
-                                        <th>Status</th>
-                                        <th>License Key</th>
+                                        <th>User Info</th>
+                                        <th>License & Status</th>
+                                        <th>Activity & Stats</th>
                                         <th style="text-align: right; width: 15%;">Actions</th>
                                     </tr>
                                 </thead>
@@ -739,7 +737,7 @@
 
         function renderAdminDatabase(history) {
             const tbody = document.querySelector("#admin-history-table tbody"); tbody.innerHTML = "";
-            if(history.length === 0) return tbody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding: 2rem;'><span style='color: var(--text-muted); font-size: 0.85rem;'>Database is empty.</span></td></tr>";
+            if(history.length === 0) return tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 2rem;'><span style='color: var(--text-muted); font-size: 0.85rem;'>Database is empty.</span></td></tr>";
             history.forEach(h => {
                 
                 let linkDisplay = h.link;
@@ -748,10 +746,14 @@
                     linkDisplay = `R: ${parsed.realms}\nB: ${parsed.bds}`; 
                 } catch(e) {}
                 
+                // Variabel Hitungan Unduhan Global
+                let dlCount = h.downloads || 0;
+                
                 tbody.innerHTML += `<tr>
                     <td><span class="version-badge" style="border-color: rgba(245, 158, 11, 0.4); color: #fcd34d;">${h.versionName}</span></td>
                     <td>${new Date(h.date).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</td>
                     <td><textarea readonly style="background:transparent; border:none; color:var(--text-muted); width:100%; font-size:0.75rem; font-family: monospace; resize:none;" rows="2" onclick="this.select()">${linkDisplay}</textarea></td>
+                    <td style="text-align: center; font-weight: 600; color: #fff;">${dlCount}</td>
                     <td style="text-align:right;"><button onclick="deleteRelease(${h.id})" class="btn-icon danger"><i class="fa-solid fa-trash-can"></i></button></td>
                 </tr>`;
             });
@@ -768,7 +770,7 @@
 
         function renderAdminMembers(members) {
             const tbody = document.querySelector("#admin-members-table tbody"); tbody.innerHTML = "";
-            if(!members || members.length === 0) return tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; padding: 2rem;'><span style='color: var(--text-muted); font-size: 0.85rem;'>No members found in database.</span></td></tr>";
+            if(!members || members.length === 0) return tbody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding: 2rem;'><span style='color: var(--text-muted); font-size: 0.85rem;'>No members found in database.</span></td></tr>";
             
             members.forEach(m => {
                 let statusBadge = '';
@@ -776,15 +778,42 @@
                 else if(m.status === 'PENDING') statusBadge = `<span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fcd34d; border-color: rgba(245, 158, 11, 0.25);">PENDING</span>`;
                 else statusBadge = `<span class="badge" style="background: rgba(244, 63, 94, 0.15); color: #fda4af; border-color: rgba(244, 63, 94, 0.25);">${m.status}</span>`;
 
+                // Logika Waktu Terakhir Login
+                let lastActiveStr = "Never logged in";
+                if (m.lastActive && m.lastActive !== "Never") {
+                    const d = new Date(m.lastActive);
+                    lastActiveStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                }
+
+                // Logika Histori Unduhan Member
+                let dlStatsHtml = "";
+                try {
+                    const dlObj = JSON.parse(m.downloadHistory);
+                    for(let v in dlObj) { 
+                        dlStatsHtml += `<span style="display:inline-block; margin-right: 0.4rem; background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px; border:1px solid var(--border-light);">${v}: <span style="color:#fff; font-weight:bold;">${dlObj[v]}x</span></span>`; 
+                    }
+                } catch(e) {}
+                if (!dlStatsHtml) dlStatsHtml = "No downloads yet";
+
                 tbody.innerHTML += `<tr>
-                    <td>${new Date(m.date).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</td>
-                    <td style="font-weight: 600; color: #fff;">${m.gamertag}</td>
-                    <td style="font-size: 0.8rem;">${m.email}</td>
-                    <td>${statusBadge}</td>
-                    <td style="font-family: monospace; color: var(--accent-primary); font-size: 0.8rem;">${m.license || '-'}</td>
-                    <td style="text-align:right; display: flex; gap: 0.4rem; justify-content: flex-end;">
-                        <button onclick="adminToggleMemberStatus(${m.row}, '${m.status}')" class="btn-icon" title="Toggle Status (Approve/Suspend)" style="width: 2rem; height: 2rem;"><i class="fa-solid fa-power-off" style="font-size: 0.8rem;"></i></button>
-                        <button onclick="adminDeleteMember(${m.row})" class="btn-icon danger" title="Delete Member" style="width: 2rem; height: 2rem;"><i class="fa-solid fa-trash-can" style="font-size: 0.8rem;"></i></button>
+                    <td>
+                        <div style="font-weight: 600; color: #fff; font-size: 0.9rem;">${m.gamertag}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">${m.email}</div>
+                        <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.2rem;">Joined: ${new Date(m.date).toLocaleDateString()}</div>
+                    </td>
+                    <td>
+                        ${statusBadge}
+                        <div style="font-family: monospace; color: var(--accent-primary); font-size: 0.75rem; margin-top: 0.3rem;">${m.license || '-'}</div>
+                    </td>
+                    <td>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.3rem;"><i class="fa-solid fa-clock-rotate-left"></i> Last: ${lastActiveStr}</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); display:flex; flex-wrap:wrap; gap:0.2rem; margin-top: 0.25rem;">${dlStatsHtml}</div>
+                    </td>
+                    <td style="text-align:right;">
+                        <div style="display: flex; gap: 0.4rem; justify-content: flex-end;">
+                            <button onclick="adminToggleMemberStatus(${m.row}, '${m.status}')" class="btn-icon" title="Toggle Status (Approve/Suspend)" style="width: 2rem; height: 2rem;"><i class="fa-solid fa-power-off" style="font-size: 0.8rem;"></i></button>
+                            <button onclick="adminDeleteMember(${m.row})" class="btn-icon danger" title="Delete Member" style="width: 2rem; height: 2rem;"><i class="fa-solid fa-trash-can" style="font-size: 0.8rem;"></i></button>
+                        </div>
                     </td>
                 </tr>`;
             });
@@ -963,15 +992,26 @@
             }, 4500);
         }
 
+        // FUNGSI PEREKAM STATISTIK DI LATAR BELAKANG
+        function recordDownloadStat() {
+            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+            if (!session || !session.addonHistory || session.addonHistory.length === 0) return;
+            fetch(GOOGLE_SCRIPT_URL, { 
+                method: "POST", 
+                body: JSON.stringify({ action: "record_download", email: session.email, versionName: session.addonHistory[0].versionName }) 
+            });
+        }
+
         // Assign Dual Buttons Download Actions
         document.getElementById("btn-download-realms").addEventListener("click", function() {
             const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
             if (!session || !session.addonHistory || session.addonHistory.length === 0) return;
             
             let link = session.addonHistory[0].link;
-            try { link = JSON.parse(link).realms; } catch(e) {} // Backward compatible
+            try { link = JSON.parse(link).realms; } catch(e) {} 
             
             triggerDownload(link); 
+            recordDownloadStat(); // Rekam
         });
 
         document.getElementById("btn-download-bds").addEventListener("click", function() {
@@ -979,9 +1019,10 @@
             if (!session || !session.addonHistory || session.addonHistory.length === 0) return;
             
             let link = session.addonHistory[0].link;
-            try { link = JSON.parse(link).bds; } catch(e) {} // Backward compatible
+            try { link = JSON.parse(link).bds; } catch(e) {} 
             
             triggerDownload(link); 
+            recordDownloadStat(); // Rekam
         });
 
         document.getElementById("admin-publish-form").addEventListener("submit", function(e) {
