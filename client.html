@@ -418,6 +418,7 @@
                 <div id="tab-user-support" class="tab-content">
                     <h2 class="section-title font-outfit">Support & Help Desk</h2>
                     
+                    <!-- NEW SAAS CHAT LAYOUT -->
                     <div class="chat-box-wrapper">
                         <!-- Chat Header -->
                         <div class="chat-header">
@@ -516,7 +517,7 @@
                                 <div><label>Version Name</label><input type="text" id="p-version" required placeholder="e.g. v6.2.0"></div>
                                 <div><label>Release Date</label><input type="date" id="p-date" required></div>
                             </div>
-                            <div class="form-group"><label>Google Drive Link</label><input type="url" id="p-link" required placeholder="https://drive.google.com/file/d/XXXXX/view"></div>
+                            <div class="form-group"><label>Direct Download Link</label><input type="url" id="p-link" required placeholder="Discord CDN link or Google Drive link"></div>
                             <div class="form-group"><label style="color: #10b981;"><i class="fa-solid fa-rocket" style="margin-right: 0.3rem;"></i> New Features</label><textarea id="p-added" class="focus-emerald" placeholder="Separate points by pressing enter..."></textarea></div>
                             <div class="form-group"><label style="color: #3b82f6;"><i class="fa-solid fa-bug" style="margin-right: 0.3rem;"></i> Bug Fixes</label><textarea id="p-fixed" class="focus-blue" placeholder="Separate points by pressing enter..."></textarea></div>
                             <div class="form-group"><label style="color: #f43f5e;"><i class="fa-solid fa-trash-can" style="margin-right: 0.3rem;"></i> Removed</label><textarea id="p-removed" class="focus-rose" placeholder="Separate points by pressing enter..."></textarea></div>
@@ -910,16 +911,22 @@
             setTimeout(() => {
                 overlay.classList.remove('show');
                 
-                // TRIK BARU: Murni eksekusi di latar belakang tanpa tab baru
-                // Browser akan otomatis membatalkan navigasi dan memulai unduhan lokal
-                const tempLink = document.createElement('a');
-                tempLink.href = url;
-                // Kita TIDAK menyertakan target="_blank" di sini
-                document.body.appendChild(tempLink);
-                tempLink.click();
-                document.body.removeChild(tempLink);
-                
-                showToast('Download started securely.');
+                // Cek apakah link dari Google Drive
+                if (url.includes('drive.google.com')) {
+                    // Google Drive akan tetap membuka tab baru untuk melewati blokir iframe/virus scan
+                    window.open(url, '_blank');
+                    showToast('Download request sent to browser.');
+                } else {
+                    // TRIK DOWNLOAD LATAR BELAKANG: Untuk Hosting Sendiri / Discord CDN / Github
+                    const tempLink = document.createElement('a');
+                    tempLink.style.display = 'none';
+                    tempLink.href = url;
+                    tempLink.setAttribute('download', '');
+                    document.body.appendChild(tempLink);
+                    tempLink.click();
+                    document.body.removeChild(tempLink);
+                    showToast('Download started securely.');
+                }
             }, 4500);
         }
 
@@ -953,7 +960,12 @@
             .finally(() => { btn.disabled = false; btn.innerHTML = 'Update Password'; });
         });
 
-        function convertDriveLink(url) { const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/); return (match && match[1]) ? `https://drive.google.com/uc?export=download&id=${match[1]}` : url; }
+        function convertDriveLink(url) { 
+            const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/); 
+            // Menambahkan &confirm=t ke URL Google Drive agar melewati scan virus
+            return (match && match[1]) ? `https://drive.google.com/uc?export=download&confirm=t&id=${match[1]}` : url; 
+        }
+        
         function deleteRelease(id) { if(!confirm("Delete this release permanently?")) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_delete_release", adminPassword: session.adminPassword, logId: id }) }).then(res => res.json()).then(data => { if(data.status === "success") { session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast('Release deleted.'); } else alert(data.message); }); }
         function toggleSidebar(sidebarId) { const sidebar = document.getElementById(sidebarId), overlay = sidebar.previousElementSibling; sidebar.classList.toggle('show'); overlay.classList.toggle('show'); }
         function logout() { sessionStorage.removeItem("heraclaus_session"); location.reload(); }
