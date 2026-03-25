@@ -79,7 +79,7 @@
         .toast { background: rgba(16, 185, 129, 0.95); color: #fff; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500; box-shadow: 0 4px 15px rgba(0,0,0,0.2); backdrop-filter: blur(10px); transform: translateY(50px); opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(255,255,255,0.2); }
         .toast.show { transform: translateY(0); opacity: 1; }
 
-        /* --- OVERLAYS (DOWNLOAD & INVOICE MODAL) --- */
+        /* --- OVERLAYS (DOWNLOAD, INVOICE & EDIT MODAL) --- */
         .download-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 5, 5, 0.85); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; backdrop-filter: blur(8px); }
         .download-overlay.show { opacity: 1; pointer-events: auto; }
         .dl-spinner { font-size: 3.5rem; color: var(--accent-primary); animation: spin 1s linear infinite; margin-bottom: 1.5rem; }
@@ -248,6 +248,35 @@
             </div>
             <div class="modal-body" id="invoice-content">
                 <!-- Content injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT RELEASE MODAL -->
+    <div class="modal-overlay" id="edit-release-modal">
+        <div class="modal-card" style="max-width: 48rem;">
+            <div class="modal-header">
+                <h2 class="font-outfit" style="margin: 0; font-size: 1.35rem; color: #fff;"><i class="fa-solid fa-pen-to-square text-gradient" style="margin-right: 0.5rem;"></i> Edit Release</h2>
+                <button class="btn-icon danger" onclick="closeEditReleaseModal()" style="width: 2rem; height: 2rem; border: none; background: transparent;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-release-form">
+                    <input type="hidden" id="e-logid">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div><label>Version Name</label><input type="text" id="e-version" required></div>
+                        <div><label>MC Version</label><input type="text" id="e-mcversion" required></div>
+                        <div><label>Release Date</label><input type="date" id="e-date" required></div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="form-group" style="margin-bottom: 0;"><label>Realms Link</label><input type="url" id="e-link-realms" required></div>
+                        <div class="form-group" style="margin-bottom: 0;"><label>BDS Link</label><input type="url" id="e-link-bds" required></div>
+                    </div>
+                    <div class="form-group"><label style="color: #10b981;"><i class="fa-solid fa-rocket" style="margin-right: 0.3rem;"></i> New Features</label><textarea id="e-added" class="focus-emerald"></textarea></div>
+                    <div class="form-group"><label style="color: #3b82f6;"><i class="fa-solid fa-bug" style="margin-right: 0.3rem;"></i> Bug Fixes</label><textarea id="e-fixed" class="focus-blue"></textarea></div>
+                    <div class="form-group"><label style="color: #f43f5e;"><i class="fa-solid fa-trash-can" style="margin-right: 0.3rem;"></i> Removed</label><textarea id="e-removed" class="focus-rose"></textarea></div>
+                    <button type="submit" class="btn btn-master w-full" id="btn-save-edit" style="margin-top: 0.5rem;"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+                    <div id="edit-msg" class="msg-box"></div>
+                </form>
             </div>
         </div>
     </div>
@@ -466,7 +495,7 @@
                         </div>
                         
                         <!-- Chat Input -->
-                        <form class="chat-input-area" onsubmit="userSendChat(event)">
+                        <form class="chat-input-area" id="user-chat-form">
                             <input type="text" id="user-chat-input" required placeholder="Type your message here..." autocomplete="off">
                             <button type="submit" id="btn-user-chat"><i class="fa-solid fa-paper-plane"></i></button>
                         </form>
@@ -634,7 +663,7 @@
                                 <div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem;">Select a ticket from the left to start replying.</div>
                             </div>
                             
-                            <form class="chat-input-area" onsubmit="adminSendChat(event)" id="admin-chat-form">
+                            <form class="chat-input-area" id="admin-chat-form">
                                 <input type="text" id="admin-chat-input" required placeholder="Type reply as Admin..." autocomplete="off" disabled>
                                 <button type="submit" id="btn-admin-chat" disabled><i class="fa-solid fa-paper-plane"></i></button>
                             </form>
@@ -730,36 +759,42 @@
         }
 
         // --- LOGIN LOGIC ---
-        document.getElementById("login-form").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const btn = document.getElementById("btn-login"), msgBox = document.getElementById("login-msg");
-            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Checking...';
-            msgBox.style.display = "none"; msgBox.className = "msg-box msg-error";
+        const loginForm = document.getElementById("login-form");
+        if(loginForm) {
+            loginForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const btn = document.getElementById("btn-login"), msgBox = document.getElementById("login-msg");
+                btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Checking...';
+                msgBox.style.display = "none"; msgBox.className = "msg-box msg-error";
 
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "login", email: document.getElementById("login-email").value.trim(), licenseKey: document.getElementById("login-key").value.trim() }) })
-            .then(res => res.json()).then(data => {
-                if(data.status === "success") {
-                    data.role = "user"; sessionStorage.setItem("heraclaus_session", JSON.stringify(data)); showUserDashboard(data); showToast('Welcome back, ' + data.gamertag + '!');
-                } else throw new Error(data.message);
-            }).catch(err => { msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
-            .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login to Dashboard'; });
-        });
+                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "login", email: document.getElementById("login-email").value.trim(), licenseKey: document.getElementById("login-key").value.trim() }) })
+                .then(res => res.json()).then(data => {
+                    if(data.status === "success") {
+                        data.role = "user"; sessionStorage.setItem("heraclaus_session", JSON.stringify(data)); showUserDashboard(data); showToast('Welcome back, ' + data.gamertag + '!');
+                    } else throw new Error(data.message);
+                }).catch(err => { msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
+                .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login to Dashboard'; });
+            });
+        }
 
-        document.getElementById("admin-login-form").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const btn = document.getElementById("btn-admin-login"), msgBox = document.getElementById("admin-login-msg");
-            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Verifying...';
-            msgBox.style.display = "none"; msgBox.className = "msg-box msg-error";
+        const adminLoginForm = document.getElementById("admin-login-form");
+        if(adminLoginForm) {
+            adminLoginForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const btn = document.getElementById("btn-admin-login"), msgBox = document.getElementById("admin-login-msg");
+                btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Verifying...';
+                msgBox.style.display = "none"; msgBox.className = "msg-box msg-error";
 
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_login", adminPassword: document.getElementById("admin-key").value.trim() }) })
-            .then(res => res.json()).then(data => {
-                if(data.status === "success") {
-                    data.role = "admin"; data.adminPassword = document.getElementById("admin-key").value.trim();
-                    sessionStorage.setItem("heraclaus_session", JSON.stringify(data)); showAdminDashboard(data); showToast('Access Granted');
-                } else throw new Error(data.message);
-            }).catch(err => { msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
-            .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Authenticate'; });
-        });
+                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_login", adminPassword: document.getElementById("admin-key").value.trim() }) })
+                .then(res => res.json()).then(data => {
+                    if(data.status === "success") {
+                        data.role = "admin"; data.adminPassword = document.getElementById("admin-key").value.trim();
+                        sessionStorage.setItem("heraclaus_session", JSON.stringify(data)); showAdminDashboard(data); showToast('Access Granted');
+                    } else throw new Error(data.message);
+                }).catch(err => { msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
+                .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Authenticate'; });
+            });
+        }
 
         // --- DASHBOARD RENDERERS ---
         function showUserDashboard(data) {
@@ -834,8 +869,6 @@
                 } catch(e) {}
 
                 let dlCount = h.downloads || 0; // MENAMPILKAN DLS DATA
-                
-                // UPDATED: MC Version badge di Admin Database
                 const mcBadge = h.mcVersion ? `<div style="font-size:0.65rem; color: var(--text-muted); margin-top: 0.2rem;">MC: ${h.mcVersion}</div>` : '';
                 
                 tbody.innerHTML += `<tr>
@@ -843,8 +876,91 @@
                     <td>${new Date(h.date).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</td>
                     <td><textarea readonly style="background:transparent; border:none; color:var(--text-muted); width:100%; font-size:0.75rem; font-family: monospace; resize:none;" rows="2" onclick="this.select()">${linkDisplay}</textarea></td>
                     <td style="text-align: center; font-weight: 600; color: #fff;">${dlCount} <span style="font-size: 0.65rem; font-weight: normal; color: var(--text-muted);">x</span></td>
-                    <td style="text-align:right;"><button onclick="deleteRelease(${h.id})" class="btn-icon danger"><i class="fa-solid fa-trash-can"></i></button></td>
+                    <td style="text-align:right; display: flex; gap: 0.4rem; justify-content: flex-end;">
+                        <button onclick="openEditReleaseModal(${h.id})" class="btn-icon" title="Edit Release" style="color: var(--accent-primary); border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05);"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteRelease(${h.id})" class="btn-icon danger" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
                 </tr>`;
+            });
+        }
+
+        // --- NEW: EDIT RELEASE LOGIC ---
+        window.openEditReleaseModal = function(id) {
+            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+            const release = session.history.find(h => h.id === id);
+            if (!release) return;
+
+            document.getElementById("e-logid").value = release.id;
+            document.getElementById("e-version").value = release.versionName;
+            document.getElementById("e-mcversion").value = release.mcVersion || "";
+            document.getElementById("e-date").value = release.date;
+            
+            let linkData = { realms: '', bds: '' };
+            try { linkData = JSON.parse(release.link); } catch(e) { linkData = { realms: release.link, bds: release.link }; }
+            
+            document.getElementById("e-link-realms").value = linkData.realms || "";
+            document.getElementById("e-link-bds").value = linkData.bds || "";
+            document.getElementById("e-added").value = release.added || "";
+            document.getElementById("e-fixed").value = release.fixed || "";
+            document.getElementById("e-removed").value = release.removed || "";
+
+            document.getElementById("edit-release-modal").classList.add("show");
+        }
+
+        window.closeEditReleaseModal = function() {
+            document.getElementById("edit-release-modal").classList.remove("show");
+        }
+
+        const editReleaseForm = document.getElementById("edit-release-form");
+        if(editReleaseForm) {
+            editReleaseForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+                if(!session || session.role !== 'admin') return;
+
+                const btn = document.getElementById("btn-save-edit");
+                const msgBox = document.getElementById("edit-msg");
+                btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Saving...';
+                msgBox.style.display = "none";
+
+                const linkObj = {
+                    realms: convertDriveLink(document.getElementById("e-link-realms").value.trim()),
+                    bds: convertDriveLink(document.getElementById("e-link-bds").value.trim())
+                };
+
+                const payload = {
+                    action: "admin_edit_release",
+                    adminPassword: session.adminPassword,
+                    logId: document.getElementById("e-logid").value,
+                    versionName: document.getElementById("e-version").value.trim(),
+                    mcVersion: document.getElementById("e-mcversion").value.trim(),
+                    date: document.getElementById("e-date").value,
+                    link: JSON.stringify(linkObj),
+                    added: document.getElementById("e-added").value.trim(),
+                    fixed: document.getElementById("e-fixed").value.trim(),
+                    removed: document.getElementById("e-removed").value.trim()
+                };
+
+                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === "success") {
+                        session.history = data.history;
+                        sessionStorage.setItem("heraclaus_session", JSON.stringify(session));
+                        renderAdminDatabase(data.history);
+                        closeEditReleaseModal();
+                        showToast('Release updated successfully!');
+                    } else throw new Error(data.message);
+                })
+                .catch(err => {
+                    msgBox.className = "msg-box msg-error";
+                    msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message;
+                    msgBox.style.display = "block";
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Changes';
+                });
             });
         }
 
@@ -1086,14 +1202,17 @@
             .then(res => res.json()).then(data => { if(data.status === "success") renderChatBox('user-chat-box', data.ticket ? data.ticket.messages : [], true); });
         }
 
-        function userSendChat(e) {
-            e.preventDefault();
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session")), input = document.getElementById('user-chat-input'), text = input.value.trim(), btn = document.getElementById('btn-user-chat');
-            if(!text) return;
-            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; input.value = "";
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "user_send_msg", email: session.email, gamertag: session.gamertag, msg: text }) })
-            .then(res => res.json()).then(data => { if(data.status === "success") renderChatBox('user-chat-box', data.ticket.messages, true); })
-            .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>'; });
+        const userChatForm = document.getElementById("user-chat-form");
+        if(userChatForm) {
+            userChatForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const session = JSON.parse(sessionStorage.getItem("heraclaus_session")), input = document.getElementById('user-chat-input'), text = input.value.trim(), btn = document.getElementById('btn-user-chat');
+                if(!text) return;
+                btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; input.value = "";
+                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "user_send_msg", email: session.email, gamertag: session.gamertag, msg: text }) })
+                .then(res => res.json()).then(data => { if(data.status === "success") renderChatBox('user-chat-box', data.ticket.messages, true); })
+                .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>'; });
+            });
         }
 
         // Admin Chat Functions
@@ -1152,14 +1271,17 @@
             });
         }
 
-        function adminSendChat(e) {
-            e.preventDefault();
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session")), input = document.getElementById('admin-chat-input'), text = input.value.trim(), btn = document.getElementById('btn-admin-chat');
-            if(!text || !activeAdminTicketEmail) return;
-            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; input.value = "";
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_send_msg", adminPassword: session.adminPassword, targetEmail: activeAdminTicketEmail, msg: text }) })
-            .then(res => res.json()).then(data => { if(data.status === "success") fetchAdminTickets(); })
-            .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>'; });
+        const adminChatForm = document.getElementById("admin-chat-form");
+        if(adminChatForm) {
+            adminChatForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const session = JSON.parse(sessionStorage.getItem("heraclaus_session")), input = document.getElementById('admin-chat-input'), text = input.value.trim(), btn = document.getElementById('btn-admin-chat');
+                if(!text || !activeAdminTicketEmail) return;
+                btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; input.value = "";
+                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_send_msg", adminPassword: session.adminPassword, targetEmail: activeAdminTicketEmail, msg: text }) })
+                .then(res => res.json()).then(data => { if(data.status === "success") fetchAdminTickets(); })
+                .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>'; });
+            });
         }
 
         // --- TAB & POLLING MANAGEMENT ---
@@ -1228,75 +1350,87 @@
         }
 
         // Assign Dual Buttons Download Actions
-        document.getElementById("btn-download-realms").addEventListener("click", function() {
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            if (!session || !session.addonHistory || session.addonHistory.length === 0) return;
-            
-            let link = session.addonHistory[0].link;
-            try { link = JSON.parse(link).realms; } catch(e) {} // Backward compatible
-            
-            triggerDownload(link); 
-            recordDownloadStat(); // PANGGIL REKAM HISTORI
-        });
+        const btnDlRealms = document.getElementById("btn-download-realms");
+        if(btnDlRealms) {
+            btnDlRealms.addEventListener("click", function() {
+                const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+                if (!session || !session.addonHistory || session.addonHistory.length === 0) return;
+                
+                let link = session.addonHistory[0].link;
+                try { link = JSON.parse(link).realms; } catch(e) {} // Backward compatible
+                
+                triggerDownload(link); 
+                recordDownloadStat(); // PANGGIL REKAM HISTORI
+            });
+        }
 
-        document.getElementById("btn-download-bds").addEventListener("click", function() {
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            if (!session || !session.addonHistory || session.addonHistory.length === 0) return;
-            
-            let link = session.addonHistory[0].link;
-            try { link = JSON.parse(link).bds; } catch(e) {} // Backward compatible
-            
-            triggerDownload(link); 
-            recordDownloadStat(); // PANGGIL REKAM HISTORI
-        });
+        const btnDlBds = document.getElementById("btn-download-bds");
+        if(btnDlBds) {
+            btnDlBds.addEventListener("click", function() {
+                const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+                if (!session || !session.addonHistory || session.addonHistory.length === 0) return;
+                
+                let link = session.addonHistory[0].link;
+                try { link = JSON.parse(link).bds; } catch(e) {} // Backward compatible
+                
+                triggerDownload(link); 
+                recordDownloadStat(); // PANGGIL REKAM HISTORI
+            });
+        }
 
-        document.getElementById("admin-publish-form").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            if(!session || session.role !== 'admin') return logout();
-            const btn = document.getElementById("btn-publish-release"), msgBox = document.getElementById("publish-msg");
-            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Publishing...'; msgBox.style.display = "none";
-            
-            // Susun link ganda dalam format JSON untuk backend Google Scripts
-            const linkObj = {
-                realms: convertDriveLink(document.getElementById("p-link-realms").value.trim()),
-                bds: convertDriveLink(document.getElementById("p-link-bds").value.trim())
-            };
-            const finalLink = JSON.stringify(linkObj);
+        const adminPublishForm = document.getElementById("admin-publish-form");
+        if(adminPublishForm) {
+            adminPublishForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+                if(!session || session.role !== 'admin') return logout();
+                const btn = document.getElementById("btn-publish-release"), msgBox = document.getElementById("publish-msg");
+                btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Publishing...'; msgBox.style.display = "none";
+                
+                // Susun link ganda dalam format JSON untuk backend Google Scripts
+                const linkObj = {
+                    realms: convertDriveLink(document.getElementById("p-link-realms").value.trim()),
+                    bds: convertDriveLink(document.getElementById("p-link-bds").value.trim())
+                };
+                const finalLink = JSON.stringify(linkObj);
 
-            // AMBIL DATA DARI CHECKBOX SEND EMAIL
-            const isSendEmail = document.getElementById("p-send-email").checked;
+                // AMBIL DATA DARI CHECKBOX SEND EMAIL
+                const isSendEmail = document.getElementById("p-send-email").checked;
 
-            // UPDATED: Include mcVersion from form
-            fetch(GOOGLE_SCRIPT_URL, { 
-                method: "POST", 
-                body: JSON.stringify({ 
-                    action: "admin_publish_release", 
-                    adminPassword: session.adminPassword, 
-                    versionName: document.getElementById("p-version").value.trim(), 
-                    mcVersion: document.getElementById("p-mcversion").value.trim(),
-                    date: document.getElementById("p-date").value, 
-                    link: finalLink, 
-                    added: document.getElementById("p-added").value.trim(), 
-                    fixed: document.getElementById("p-fixed").value.trim(), 
-                    removed: document.getElementById("p-removed").value.trim(), 
-                    sendEmail: isSendEmail 
-                }) 
-            })
-            .then(res => res.json()).then(data => { if(data.status === "success") { document.getElementById("admin-publish-form").reset(); document.getElementById('p-date').valueAsDate = new Date(); session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast('Published to all users!'); } else throw new Error(data.message); })
-            .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
-            .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Publish & Update All'; });
-        });
+                // UPDATED: Include mcVersion from form
+                fetch(GOOGLE_SCRIPT_URL, { 
+                    method: "POST", 
+                    body: JSON.stringify({ 
+                        action: "admin_publish_release", 
+                        adminPassword: session.adminPassword, 
+                        versionName: document.getElementById("p-version").value.trim(), 
+                        mcVersion: document.getElementById("p-mcversion").value.trim(),
+                        date: document.getElementById("p-date").value, 
+                        link: finalLink, 
+                        added: document.getElementById("p-added").value.trim(), 
+                        fixed: document.getElementById("p-fixed").value.trim(), 
+                        removed: document.getElementById("p-removed").value.trim(), 
+                        sendEmail: isSendEmail 
+                    }) 
+                })
+                .then(res => res.json()).then(data => { if(data.status === "success") { document.getElementById("admin-publish-form").reset(); document.getElementById('p-date').valueAsDate = new Date(); session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast('Published to all users!'); } else throw new Error(data.message); })
+                .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
+                .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Publish & Update All'; });
+            });
+        }
 
-        document.getElementById("change-pwd-form").addEventListener("submit", function(e) {
-            e.preventDefault(); const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); if(!session) return logout();
-            const btn = document.getElementById("btn-change-pwd"), msgBox = document.getElementById("cp-msg"), oldKey = document.getElementById("cp-old").value.trim(), newKey = document.getElementById("cp-new").value.trim();
-            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...'; msgBox.style.display = "none";
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "change_password", email: session.email, oldKey: oldKey, newKey: newKey }) })
-            .then(res => res.json()).then(data => { if(data.status === "success") { session.licenseKey = newKey; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); document.getElementById("change-pwd-form").reset(); showToast('Security updated!'); } else throw new Error(data.message); })
-            .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
-            .finally(() => { btn.disabled = false; btn.innerHTML = 'Update Password'; });
-        });
+        const changePwdForm = document.getElementById("change-pwd-form");
+        if(changePwdForm) {
+            changePwdForm.addEventListener("submit", function(e) {
+                e.preventDefault(); const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); if(!session) return logout();
+                const btn = document.getElementById("btn-change-pwd"), msgBox = document.getElementById("cp-msg"), oldKey = document.getElementById("cp-old").value.trim(), newKey = document.getElementById("cp-new").value.trim();
+                btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...'; msgBox.style.display = "none";
+                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "change_password", email: session.email, oldKey: oldKey, newKey: newKey }) })
+                .then(res => res.json()).then(data => { if(data.status === "success") { session.licenseKey = newKey; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); document.getElementById("change-pwd-form").reset(); showToast('Security updated!'); } else throw new Error(data.message); })
+                .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
+                .finally(() => { btn.disabled = false; btn.innerHTML = 'Update Password'; });
+            });
+        }
 
         function convertDriveLink(url) { 
             const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/); 
