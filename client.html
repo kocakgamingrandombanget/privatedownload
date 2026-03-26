@@ -198,6 +198,32 @@
         .chat-me .chat-time { text-align: right; color: rgba(255,255,255,0.9); }
         .chat-them .chat-time { text-align: left; color: var(--text-muted); }
         
+        /* LIVE CHAT INDICATOR (NEW) */
+        .live-chat-badge {
+            color: var(--accent-danger);
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-top: 0.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-danger);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-danger);
+            animation: pulse-live 1.5s infinite;
+        }
+        @keyframes pulse-live {
+            0% { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+            70% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 0 5px rgba(244, 63, 94, 0); }
+            100% { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+        }
+        
         .chat-input-area { display: flex; gap: 0.75rem; padding: 1rem; background: rgba(255,255,255,0.02); border-top: 1px solid var(--border-light); flex-shrink: 0; align-items: center; }
         .chat-input-area input { flex-grow: 1; border-radius: 9999px; padding: 0.6rem 1.25rem; }
         .chat-input-area button { background: var(--accent-primary); color: #fff; border: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 1rem; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3); flex-shrink: 0; }
@@ -209,7 +235,7 @@
         .ticket-item { padding: 1rem; border-bottom: 1px solid var(--border-light); cursor: pointer; transition: background 0.2s; }
         .ticket-item:hover { background: rgba(255,255,255,0.05); }
         .ticket-item.active { background: rgba(245, 158, 11, 0.1); border-left: 3px solid var(--accent-admin); }
-        .ticket-name { font-weight: 600; color: #fff; font-size: 0.85rem; margin-bottom: 0.15rem; }
+        .ticket-name { font-weight: 600; color: #fff; font-size: 0.85rem; margin-bottom: 0.15rem; display: flex; align-items: center; }
         .ticket-email { font-size: 0.75rem; color: var(--text-muted); }
         .ticket-preview { font-size: 0.75rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 0.5rem; }
         
@@ -351,7 +377,10 @@
                 
                 <p style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin: 1rem 0 0.2rem 0.5rem; letter-spacing: 0.05em;">Help & Settings</p>
                 <a class="nav-item" onclick="switchTab('user', 'guide', this)"><i class="fa-solid fa-book"></i> Installation</a>
-                <a class="nav-item" onclick="switchTab('user', 'support', this)"><i class="fa-solid fa-headset"></i> Support Desk</a>
+                <a class="nav-item" onclick="switchTab('user', 'support', this)">
+                    <i class="fa-solid fa-headset"></i> Support Desk 
+                    <span id="user-ticket-badge" style="display:none; background:var(--accent-danger); color:#fff; border-radius:4px; padding:0.1rem 0.4rem; font-size:0.6rem; font-weight:bold; margin-left:auto;">New</span>
+                </a>
                 <a class="nav-item" onclick="switchTab('user', 'profile', this)"><i class="fa-solid fa-user"></i> Profile</a>
             </nav>
             <div class="sidebar-footer"><a class="nav-item logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a></div>
@@ -484,7 +513,7 @@
                                 <div class="chat-header-icon"><i class="fa-solid fa-headset"></i></div>
                                 <div>
                                     <h3 style="color: #fff; font-size: 0.95rem; font-family: 'Outfit'; margin: 0; line-height: 1.2;">Heraclaus Support</h3>
-                                    <div style="color: var(--accent-success); font-size: 0.7rem; display: flex; align-items: center; gap: 0.25rem; margin-top: 0.15rem;"><i class="fa-solid fa-circle" style="font-size: 0.3rem;"></i> Online</div>
+                                    <div class="live-chat-badge"><span class="live-dot"></span> Live</div>
                                 </div>
                             </div>
                         </div>
@@ -546,7 +575,10 @@
                 <a class="nav-item admin-active" onclick="switchTab('admin', 'publish', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Publish Release</a>
                 <a class="nav-item" onclick="switchTab('admin', 'database', this)"><i class="fa-solid fa-database"></i> Release Database</a>
                 <a class="nav-item" onclick="switchTab('admin', 'members', this)"><i class="fa-solid fa-users"></i> Manage Members</a>
-                <a class="nav-item" onclick="switchTab('admin', 'tickets', this)"><i class="fa-solid fa-headset"></i> Support Tickets</a>
+                <a class="nav-item" onclick="switchTab('admin', 'tickets', this)">
+                    <i class="fa-solid fa-headset"></i> Support Tickets 
+                    <span id="admin-ticket-badge" style="display:none; background:var(--accent-danger); color:#fff; border-radius:4px; padding:0.1rem 0.4rem; font-size:0.6rem; font-weight:bold; margin-left:auto;">0</span>
+                </a>
             </nav>
             <div class="sidebar-footer"><a class="nav-item logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Lock Console</a></div>
         </aside>
@@ -571,25 +603,15 @@
                     <div class="profile-field" style="max-width: 48rem;">
                         <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">Fill the details below to push an update to all members and the public changelog.</p>
                         <form id="admin-publish-form">
-                            <!-- UPDATED: Added MC Version Field -->
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                                 <div><label>Version Name</label><input type="text" id="p-version" required placeholder="e.g. v6.2.0"></div>
                                 <div><label>MC Version</label><input type="text" id="p-mcversion" required placeholder="e.g. 1.20.70+"></div>
                                 <div><label>Release Date</label><input type="date" id="p-date" required></div>
                             </div>
-                            
-                            <!-- NEW DUAL LINK INPUTS -->
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label>Realms Link</label>
-                                    <input type="url" id="p-link-realms" required placeholder="Direct Link (Discord CDN)">
-                                </div>
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label>BDS Link</label>
-                                    <input type="url" id="p-link-bds" required placeholder="Direct Link (Discord CDN)">
-                                </div>
+                                <div class="form-group" style="margin-bottom: 0;"><label>Realms Link</label><input type="url" id="p-link-realms" required placeholder="Direct Link (Discord CDN)"></div>
+                                <div class="form-group" style="margin-bottom: 0;"><label>BDS Link</label><input type="url" id="p-link-bds" required placeholder="Direct Link (Discord CDN)"></div>
                             </div>
-
                             <div class="form-group"><label style="color: #10b981;"><i class="fa-solid fa-rocket" style="margin-right: 0.3rem;"></i> New Features</label><textarea id="p-added" class="focus-emerald" placeholder="Separate points by pressing enter..."></textarea></div>
                             <div class="form-group"><label style="color: #3b82f6;"><i class="fa-solid fa-bug" style="margin-right: 0.3rem;"></i> Bug Fixes</label><textarea id="p-fixed" class="focus-blue" placeholder="Separate points by pressing enter..."></textarea></div>
                             <div class="form-group"><label style="color: #f43f5e;"><i class="fa-solid fa-trash-can" style="margin-right: 0.3rem;"></i> Removed</label><textarea id="p-removed" class="focus-rose" placeholder="Separate points by pressing enter..."></textarea></div>
@@ -653,7 +675,7 @@
                                     <div class="chat-header-icon" style="background: var(--bg-card); border: 1px solid var(--border-light);"><i class="fa-solid fa-user"></i></div>
                                     <div>
                                         <h3 style="color: #fff; font-size: 0.95rem; font-family: 'Outfit'; margin: 0; line-height: 1.2;" id="ac-gamertag">Select User</h3>
-                                        <div style="color: var(--text-muted); font-size: 0.7rem; margin-top: 0.15rem;" id="ac-email">No active selection</div>
+                                        <div class="live-chat-badge"><span class="live-dot"></span> Live</div>
                                     </div>
                                 </div>
                                 <button id="btn-resolve-ticket" onclick="adminDeleteTicket()" class="btn-icon danger" title="Close and Delete Ticket" style="width: 2rem; height: 2rem; border-radius: 6px; display: none;"><i class="fa-solid fa-check-double" style="font-size: 0.85rem;"></i></button>
@@ -815,10 +837,8 @@
                 history.forEach((h, index) => {
                     const noteStr = h.added ? h.added.split('\n')[0].substring(0, 50) + "..." : "System patch.";
                     
-                    // UPDATED: MC Version badge di User Dashboard
                     const mcBadge = h.mcVersion ? `<span style="font-size: 0.6rem; color: var(--accent-secondary); background: rgba(59, 130, 246, 0.1); padding: 0.1rem 0.3rem; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.2); margin-left: 0.3rem;">MC ${h.mcVersion}</span>` : '';
                     
-                    // Parse Link to support Dual Link system (Backward Compatibility)
                     let linkData = { realms: '#', bds: '#' };
                     try { linkData = JSON.parse(h.link); } catch(e) { linkData = { realms: h.link, bds: h.link }; }
                     
@@ -837,9 +857,8 @@
         function showAdminDashboard(data) {
             document.getElementById("main-navbar").style.display = "none"; document.getElementById("auth-section").style.display = "none"; document.getElementById("admin-dashboard").classList.add("active");
             
-            // Render dari data sementara lalu panggil pembaruan live
             renderAdminDatabase(data.history || []);
-            fetchAdminDatabase(); // Tarik data paling segar dari API
+            fetchAdminDatabase(); 
         }
 
         function fetchAdminDatabase() {
@@ -868,7 +887,7 @@
                     linkDisplay = `R: ${parsed.realms}\nB: ${parsed.bds}`; 
                 } catch(e) {}
 
-                let dlCount = h.downloads || 0; // MENAMPILKAN DLS DATA
+                let dlCount = h.downloads || 0; 
                 const mcBadge = h.mcVersion ? `<div style="font-size:0.65rem; color: var(--text-muted); margin-top: 0.2rem;">MC: ${h.mcVersion}</div>` : '';
                 
                 tbody.innerHTML += `<tr>
@@ -1199,7 +1218,23 @@
         function fetchUserTicket() {
             const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
             fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "user_get_ticket", email: session.email }) })
-            .then(res => res.json()).then(data => { if(data.status === "success") renderChatBox('user-chat-box', data.ticket ? data.ticket.messages : [], true); });
+            .then(res => res.json()).then(data => { 
+                if(data.status === "success") {
+                    renderChatBox('user-chat-box', data.ticket ? data.ticket.messages : [], true); 
+                    
+                    // Lógica Unread Badge (Pesan belum dibaca oleh User)
+                    const badge = document.getElementById('user-ticket-badge');
+                    if (data.ticket && data.ticket.messages.length > 0) {
+                        const lastMsg = data.ticket.messages[data.ticket.messages.length - 1];
+                        // Jika pengirim terakhir admin dan user sedang tidak di tab support
+                        if (lastMsg.sender === 'admin' && !document.getElementById('tab-user-support').classList.contains('active')) {
+                            badge.style.display = 'inline-flex';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    }
+                }
+            });
         }
 
         const userChatForm = document.getElementById("user-chat-form");
@@ -1224,15 +1259,34 @@
                     const list = document.getElementById('admin-ticket-list'); list.innerHTML = "";
                     if(!data.tickets || data.tickets.length === 0) return list.innerHTML = `<div style="padding: 1rem; color: var(--text-muted); text-align: center; font-size: 0.8rem;">No active tickets.</div>`;
                     
+                    let unreadCount = 0;
+
                     data.tickets.forEach(t => {
-                        const lastMsg = t.messages.length > 0 ? t.messages[t.messages.length-1].text : "No message";
+                        const lastMsg = t.messages.length > 0 ? t.messages[t.messages.length-1] : null;
+                        const lastMsgText = lastMsg ? lastMsg.text : "No message";
+                        const isUnread = lastMsg && lastMsg.sender === 'user';
+                        if (isUnread) unreadCount++;
+
                         const activeCls = (t.email === activeAdminTicketEmail) ? "active" : "";
+                        // Menambahkan titik merah untuk pesan yang belum terbaca (Unread Message)
+                        const unreadDot = isUnread ? `<span style="width:8px;height:8px;background:var(--accent-danger);border-radius:50%;display:inline-block;margin-left:6px;box-shadow:0 0 5px var(--accent-danger);"></span>` : "";
+
                         list.innerHTML += `<div class="ticket-item ${activeCls}" onclick="openAdminTicket('${t.email}', '${t.gamertag}')">
-                            <div class="ticket-name">${t.gamertag}</div><div class="ticket-email">${t.email}</div>
-                            <div class="ticket-preview">${lastMsg}</div>
+                            <div class="ticket-name" style="display:flex; align-items:center;">${t.gamertag} ${unreadDot}</div>
+                            <div class="ticket-email">${t.email}</div>
+                            <div class="ticket-preview" style="${isUnread ? 'color:#fff; font-weight:600;' : ''}">${lastMsgText}</div>
                         </div>`;
                         if(t.email === activeAdminTicketEmail) renderChatBox('admin-chat-box', t.messages, false);
                     });
+
+                    // Lógica Unread Badge (Pesan belum dibaca oleh Admin)
+                    const badge = document.getElementById('admin-ticket-badge');
+                    if(unreadCount > 0) {
+                        badge.style.display = 'inline-flex';
+                        badge.innerText = unreadCount;
+                    } else {
+                        badge.style.display = 'none';
+                    }
                 }
             });
         }
@@ -1295,7 +1349,13 @@
 
             // Intervals
             if(pollingInterval) clearInterval(pollingInterval);
-            if(role === 'user' && tabId === 'support') { fetchUserTicket(); pollingInterval = setInterval(fetchUserTicket, 8000); }
+            
+            // Logika membersihkan badge notifikasi saat tab chat dibuka
+            if(role === 'user' && tabId === 'support') { 
+                document.getElementById('user-ticket-badge').style.display = 'none';
+                fetchUserTicket(); 
+                pollingInterval = setInterval(fetchUserTicket, 8000); 
+            }
             if(role === 'admin' && tabId === 'tickets') { fetchAdminTickets(); pollingInterval = setInterval(fetchAdminTickets, 8000); }
             if(role === 'admin' && tabId === 'members') { fetchAdminMembers(); pollingInterval = setInterval(fetchAdminMembers, 10000); }
             
