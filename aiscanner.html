@@ -74,7 +74,7 @@
     </div>
 
     <script>
-        const HUGGINGFACE_TOKEN = "MASUKKAN_TOKEN_BARUMU_DI_SINI"; // Jangan lupa isi token baru ya!
+        const HUGGINGFACE_TOKEN = "MASUKKAN_TOKEN_BARUMU_DI_SINI"; // Pastikan pakai token yang masih aktif
 
         function previewImage() {
             const file = document.getElementById("imageInput").files[0];
@@ -96,37 +96,41 @@
             }
 
             const file = fileInput.files[0];
-            resultDiv.innerHTML = "<span class='loading'>Sedang menganalisis... Mohon tunggu.</span>";
+            resultDiv.innerHTML = "<span class='loading'>Sedang mengirim gambar ke server AI... Mohon tunggu.</span>";
             btn.disabled = true;
 
             try {
-                const arrayBuffer = await file.arrayBuffer();
-
+                // KUNCI PERUBAHAN: Kita langsung mengirim variabel 'file' tanpa diubah-ubah
+                // dan menghapus aturan "Content-Type" agar browser yang menentukannya otomatis.
                 const response = await fetch(
                     "https://api-inference.huggingface.co/models/umm-maybe/AI-image-detector",
                     {
                         headers: { 
-                            "Authorization": `Bearer ${HUGGINGFACE_TOKEN}`, 
-                            "Content-Type": file.type // Diperbaiki di sini
+                            "Authorization": `Bearer ${HUGGINGFACE_TOKEN}`
                         },
                         method: "POST",
-                        body: arrayBuffer,
+                        body: file, 
                     }
                 );
+
+                // Cek apakah server menolak sebelum membaca datanya
+                if (!response.ok) {
+                    let pesanErrorServer = "Ditolak oleh server";
+                    try {
+                        const errorData = await response.json();
+                        pesanErrorServer = errorData.error || pesanErrorServer;
+                    } catch(e) {}
+                    throw new Error(`[Status ${response.status}] ${pesanErrorServer}`);
+                }
 
                 const data = await response.json();
 
                 if (data.error && data.estimated_time) {
-                    resultDiv.innerHTML = `<span style="color:red;">Model sedang disiapkan oleh server. Coba lagi dalam ${Math.round(data.estimated_time)} detik.</span>`;
+                    resultDiv.innerHTML = `<span style="color:red;">AI sedang "bangun tidur". Coba klik tombol Analisis lagi dalam ${Math.round(data.estimated_time)} detik.</span>`;
                     btn.disabled = false;
                     return;
                 }
 
-                if (!response.ok) {
-                    throw new Error(data.error || "Gagal memproses gambar dari server");
-                }
-
-                // Ambil prediksi tertinggi
                 const prediksi = data[0];
                 const persentase = (prediksi.score * 100).toFixed(2);
                 const status = prediksi.label === "human" ? "Buatan Manusia 🧍" : "Buatan AI 🤖";
@@ -135,8 +139,8 @@
                 resultDiv.innerHTML = `Hasil: <span style="color:${warna}">${status}</span><br>Keyakinan: ${persentase}%`;
 
             } catch (error) {
-                // Pesan error dipertajam agar lebih jelas jika gagal lagi
-                resultDiv.innerHTML = `<span style="color:red;">Error: ${error.message}.<br>Cek koneksi internet atau coba beberapa saat lagi.</span>`;
+                resultDiv.innerHTML = `<span style="color:red;">Error: ${error.message}.<br><br>Tip: Jika masih gagal, pastikan kamu tidak memakai VPN/Adblocker yang memblokir API.</span>`;
+                console.error(error); // Untuk melihat detail error di console
             } finally {
                 btn.disabled = false;
             }
