@@ -74,10 +74,8 @@
     </div>
 
     <script>
-        // Token kamu ditanam langsung di sini
-        const HUGGINGFACE_TOKEN = "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";
+        const HUGGINGFACE_TOKEN = "MASUKKAN_TOKEN_BARUMU_DI_SINI"; // Jangan lupa isi token baru ya!
 
-        // Menampilkan preview gambar yang dipilih
         function previewImage() {
             const file = document.getElementById("imageInput").files[0];
             const preview = document.getElementById("preview");
@@ -87,7 +85,6 @@
             }
         }
 
-        // Fungsi utama untuk memanggil API
         async function analyzeImage() {
             const fileInput = document.getElementById("imageInput");
             const resultDiv = document.getElementById("result");
@@ -103,16 +100,14 @@
             btn.disabled = true;
 
             try {
-                // Mengubah file gambar menjadi format array buffer untuk dikirim
                 const arrayBuffer = await file.arrayBuffer();
 
-                // Memanggil model deteksi AI dari Hugging Face
                 const response = await fetch(
                     "https://api-inference.huggingface.co/models/umm-maybe/AI-image-detector",
                     {
                         headers: { 
                             "Authorization": `Bearer ${HUGGINGFACE_TOKEN}`, 
-                            "Content-Type": "application/json" 
+                            "Content-Type": file.type // Diperbaiki di sini
                         },
                         method: "POST",
                         body: arrayBuffer,
@@ -121,7 +116,6 @@
 
                 const data = await response.json();
 
-                // Menangani jika model sedang "tertidur" dan butuh waktu untuk dimuat
                 if (data.error && data.estimated_time) {
                     resultDiv.innerHTML = `<span style="color:red;">Model sedang disiapkan oleh server. Coba lagi dalam ${Math.round(data.estimated_time)} detik.</span>`;
                     btn.disabled = false;
@@ -129,10 +123,10 @@
                 }
 
                 if (!response.ok) {
-                    throw new Error(data.error || "Gagal memproses gambar");
+                    throw new Error(data.error || "Gagal memproses gambar dari server");
                 }
 
-                // Mengambil hasil dengan persentase tertinggi
+                // Ambil prediksi tertinggi
                 const prediksi = data[0];
                 const persentase = (prediksi.score * 100).toFixed(2);
                 const status = prediksi.label === "human" ? "Buatan Manusia 🧍" : "Buatan AI 🤖";
@@ -141,11 +135,13 @@
                 resultDiv.innerHTML = `Hasil: <span style="color:${warna}">${status}</span><br>Keyakinan: ${persentase}%`;
 
             } catch (error) {
-                resultDiv.innerHTML = `<span style="color:red;">Error: ${error.message}.</span>`;
+                // Pesan error dipertajam agar lebih jelas jika gagal lagi
+                resultDiv.innerHTML = `<span style="color:red;">Error: ${error.message}.<br>Cek koneksi internet atau coba beberapa saat lagi.</span>`;
             } finally {
                 btn.disabled = false;
             }
         }
     </script>
+
 </body>
 </html>
