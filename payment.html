@@ -130,19 +130,19 @@
                 </a>
                 
                 <h1>Admin Suite Pro</h1>
-                <p class="desc">Selesaikan langkah di bawah untuk mengklaim lisensi Anda.</p>
+                <p class="desc">Complete the steps below to claim your license.</p>
                 
                 <div class="alert-warning">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <div class="alert-text">
-                        <h4>INFORMASI PENTING</h4>
-                        <p>Hanya melakukan pembayaran tidak akan mengaktifkan lisensi Anda. <b>Anda WAJIB mengirimkan bukti pembayaran pada formulir (Langkah 2)</b> setelah transfer.</p>
+                        <h4>IMPORTANT INFORMATION</h4>
+                        <p>Making a payment alone will not activate your license. <b>You MUST submit your payment receipt in the form (Step 2)</b> after transferring the funds.</p>
                     </div>
                 </div>
 
                 <div class="step-header">
                     <div class="step-badge">1</div>
-                    Pilih Metode Pembayaran
+                    Select Payment Method
                 </div>
 
                 <div class="region-grid">
@@ -165,7 +165,7 @@
                             <img src="https://image2url.com/r2/default/images/1772880891631-13f0dca4-0a81-4537-871e-d152e7940604.jpg" alt="Heraclaus QRIS Code">
                         </div>
                         <div class="price-tag">Rp 80.000</div>
-                        <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">Scan QR code di atas menggunakan e-wallet atau m-banking Anda. <b>Simpan bukti transfer!</b></p>
+                        <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">Scan the QR code above using your e-wallet or mobile banking app. <b>Please save your receipt!</b></p>
                     </div>
 
                     <div id="sociabuzz-content" class="payment-method-box" style="display: none; text-align: center;">
@@ -183,7 +183,7 @@
 
                     <div class="step-header">
                         <div class="step-badge" style="background: var(--accent-danger);">2</div>
-                        Konfirmasi Pembayaran
+                        Confirm Payment
                     </div>
 
                     <form id="payment-form">
@@ -203,7 +203,7 @@
                         </div>
                         
                         <div class="form-group">
-                            <label>Upload Payment Receipt / Bukti Transfer <span style="color:var(--accent-danger)">*</span></label>
+                            <label>Upload Payment Receipt <span style="color:var(--accent-danger)">*</span></label>
                             <div class="file-upload">
                                 <i class="fa-solid fa-cloud-arrow-up"></i>
                                 <span id="file-name-text">Click to browse or drag image here</span>
@@ -266,7 +266,7 @@
         document.getElementById('file').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                // Maksimal 2MB untuk keamanan
+                // Maximum 2MB for security
                 if (file.size > 2 * 1024 * 1024) { 
                     alert("File is too large! Maximum 2MB."); 
                     this.value = ""; 
