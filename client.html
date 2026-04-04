@@ -59,7 +59,7 @@
         input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="url"], textarea { width: 100%; padding: 0.6rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border-light); border-radius: 8px; color: var(--text-primary); font-size: 0.85rem; outline: none; transition: all 0.3s; font-family: inherit; }
         input[type="date"] { color-scheme: dark; }
         textarea { resize: vertical; min-height: 80px; }
-        input:focus, textarea:focus { border-color: var(--accent-primary); background: rgba(0,0,0,0.6); box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15); }
+        input:focus, textarea:focus, select:focus { border-color: var(--accent-primary); background: rgba(0,0,0,0.6); box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15); }
 
         .pwd-wrapper { position: relative; width: 100%; }
         .pwd-toggle { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 0.9rem; transition: color 0.2s; }
@@ -438,11 +438,23 @@
                         <form id="add-server-form">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                                 <div class="form-group"><label>Nama Server</label><input type="text" id="srv-name" required placeholder="Contoh: Heraclaus SMP"></div>
-                                <div class="form-group"><label>Link (Discord/WA/Website)</label><input type="url" id="srv-link" required placeholder="https://discord.gg/..."></div>
+                                <div class="form-group">
+                                    <label>Jenis Link</label>
+                                    <select id="srv-link-type" required style="width: 100%; padding: 0.6rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border-light); border-radius: 8px; color: var(--text-primary); font-size: 0.85rem; outline: none;">
+                                        <option value="discord" style="color:#000;">Discord Server</option>
+                                        <option value="whatsapp" style="color:#000;">WhatsApp Group</option>
+                                        <option value="website" style="color:#000;">Website / Lainnya</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div class="form-group" style="margin-bottom: 1rem;"><label>Link Tujuan</label><input type="url" id="srv-link" required placeholder="https://..."></div>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 0.5rem;">
                                 <div class="form-group"><label>IP Server</label><input type="text" id="srv-ip" required placeholder="play.server-kamu.com"></div>
                                 <div class="form-group"><label>Port</label><input type="text" id="srv-port" required placeholder="19132"></div>
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                                <input type="checkbox" id="srv-port-public" checked style="width: 1.1rem; height: 1.1rem; cursor: pointer;">
+                                <label for="srv-port-public" style="margin: 0; text-transform: none; letter-spacing: normal; font-size: 0.8rem; color: var(--text-secondary); cursor: pointer;">Tampilkan Port di Publik (Hapus centang jika ingin menyembunyikan)</label>
                             </div>
                             <div class="form-group"><label>Deskripsi Singkat</label><textarea id="srv-desc" required placeholder="Deskripsikan keseruan atau fitur di dalam server Anda..."></textarea></div>
                             <button type="submit" class="btn btn-gradient w-full" id="btn-add-server" style="margin-top: 0.5rem;"><i class="fa-solid fa-paper-plane"></i> Daftarkan Server</button>
