@@ -74,7 +74,7 @@
         .msg-error { background: rgba(244, 63, 94, 0.1); color: var(--accent-danger); border: 1px solid rgba(244, 63, 94, 0.3); }
         .msg-success { background: rgba(16, 185, 129, 0.1); color: var(--accent-success); border: 1px solid rgba(16, 185, 129, 0.3); }
 
-        /* --- GLOBAL SCROLLBAR --- */
+        /* --- GLOBAL SCROLLBAR (TEMA GELAP MENYATU) --- */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 10px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -85,7 +85,7 @@
         .toast { background: rgba(16, 185, 129, 0.95); color: #fff; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500; box-shadow: 0 4px 15px rgba(0,0,0,0.2); backdrop-filter: blur(10px); transform: translateY(50px); opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(255,255,255,0.2); }
         .toast.show { transform: translateY(0); opacity: 1; }
 
-        /* --- OVERLAYS (DOWNLOAD, INVOICE & EDIT MODAL) --- */
+        /* --- OVERLAYS --- */
         .download-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 5, 5, 0.85); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; backdrop-filter: blur(8px); }
         .download-overlay.show { opacity: 1; pointer-events: auto; }
         .dl-spinner { font-size: 3.5rem; color: var(--accent-primary); animation: spin 1s linear infinite; margin-bottom: 1.5rem; }
@@ -150,11 +150,11 @@
 
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
         .stat-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.85rem; transition: transform 0.2s ease, border-color 0.2s ease; }
-        .stat-card:hover { transform: translateY(-2px); border-color: var(--border-highlight); background: var(--bg-card-hover); }
+        .stat-card:hover { transform: translateY(-2px); border-color: var(--border-highlight); background: rgba(255,255,255,0.05); }
         .stat-icon { width: 2.75rem; height: 2.75rem; border-radius: 8px; background: rgba(139, 92, 246, 0.15); color: var(--accent-primary); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
         
         .addon-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s ease, border-color 0.2s ease; }
-        .addon-card:hover { transform: translateY(-2px); border-color: var(--border-highlight); background: var(--bg-card-hover); }
+        .addon-card:hover { transform: translateY(-2px); border-color: var(--border-highlight); background: rgba(255,255,255,0.05); }
         .addon-banner { height: 110px; background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.15), transparent 70%); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: rgba(255,255,255,0.1); }
         .addon-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
         
@@ -179,66 +179,21 @@
         .guide-content h4 { font-family: 'Outfit'; font-size: 1.05rem; color: #fff; margin-bottom: 0.3rem; line-height: 1.2; }
         .guide-content p { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0; line-height: 1.5; }
 
-        /* --- 2-WAY SUPPORT CHAT APP DESIGN --- */
-        .chat-box-wrapper { display: flex; flex-direction: column; height: 450px; border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
-        
-        .chat-header { padding: 1rem 1.25rem; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+        /* --- GLOBAL SOCIAL CHAT DESIGN --- */
+        .chat-box-wrapper { display: flex; flex-direction: column; height: 500px; border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; background: var(--bg-card); max-width: 100%; }
+        .chat-header { padding: 1.25rem; background: var(--bg-input); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
         .chat-header-info { display: flex; align-items: center; gap: 0.75rem; }
-        .chat-header-icon { width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--gradient-admin); display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #fff; }
-        
-        .chat-container { flex-grow: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.85rem; background: var(--bg-surface); }
-        .chat-container::-webkit-scrollbar { width: 5px; }
-        .chat-container::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 10px; }
-        
-        .chat-bubble { max-width: 75%; padding: 0.75rem 1rem; font-size: 0.85rem; line-height: 1.4; position: relative; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        
-        .chat-them { background: var(--bg-card); border: 1px solid var(--border-light); color: var(--text-primary); align-self: flex-start; border-radius: 14px 14px 14px 4px; }
-        .chat-me { background: var(--accent-primary); border: 1px solid rgba(255,255,255,0.1); color: #fff; align-self: flex-end; border-radius: 14px 14px 4px 14px; }
-        
-        .chat-time { display: block; font-size: 0.65rem; margin-top: 0.3rem; opacity: 0.7; }
-        .chat-me .chat-time { text-align: right; color: rgba(255,255,255,0.9); }
-        .chat-them .chat-time { text-align: left; color: var(--text-muted); }
-        
-        /* LIVE CHAT INDICATOR */
-        .live-chat-badge {
-            color: var(--accent-danger);
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
-            margin-top: 0.2rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .live-dot {
-            width: 6px;
-            height: 6px;
-            background-color: var(--accent-danger);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-danger);
-            animation: pulse-live 1.5s infinite;
-        }
-        @keyframes pulse-live {
-            0% { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
-            70% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 0 5px rgba(244, 63, 94, 0); }
-            100% { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
-        }
-        
-        .chat-input-area { display: flex; gap: 0.75rem; padding: 1rem; background: rgba(255,255,255,0.02); border-top: 1px solid var(--border-light); flex-shrink: 0; align-items: center; }
-        .chat-input-area input { flex-grow: 1; border-radius: 9999px; padding: 0.6rem 1.25rem; }
-        .chat-input-area button { background: var(--accent-primary); color: #fff; border: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 1rem; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3); flex-shrink: 0; }
-        .chat-input-area button:hover { background: #7c3aed; transform: scale(1.05); }
+        .chat-header-icon { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--gradient-admin); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #fff; }
+        .chat-container { flex-grow: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; background: var(--bg-base); }
+        .chat-bubble { max-width: 80%; padding: 0.8rem 1.2rem; font-size: 0.85rem; line-height: 1.5; position: relative; word-wrap: break-word; }
+        .chat-them { background: var(--bg-input); border: 1px solid var(--border-light); color: var(--text-primary); align-self: flex-start; border-radius: 14px 14px 14px 4px; }
+        .chat-me { background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.3); color: #fff; align-self: flex-end; border-radius: 14px 14px 4px 14px; }
+        .chat-time { display: block; font-size: 0.7rem; margin-top: 0.4rem; color: var(--text-muted); }
+        .chat-input-area { display: flex; gap: 0.75rem; padding: 1.25rem; background: var(--bg-input); border-top: 1px solid var(--border-light); flex-shrink: 0; align-items: center; }
+        .chat-input-area input { flex-grow: 1; border-radius: 9999px; padding: 0.8rem 1.25rem; border: 1px solid var(--border-highlight); background: rgba(0,0,0,0.5); }
+        .chat-input-area button { background: var(--accent-primary); color: #fff; border: none; width: 3rem; height: 3rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 1.1rem; flex-shrink: 0; }
+        .chat-input-area button:hover { transform: scale(1.05); }
 
-        .ticket-layout { display: grid; grid-template-columns: 280px 1fr; gap: 1.25rem; height: 500px; }
-        .ticket-list { border: 1px solid var(--border-light); border-radius: 12px; background: var(--bg-card); overflow-y: auto; display: flex; flex-direction: column; }
-        .ticket-item { padding: 1rem; border-bottom: 1px solid var(--border-light); cursor: pointer; transition: background 0.2s; }
-        .ticket-item:hover { background: rgba(255,255,255,0.05); }
-        .ticket-item.active { background: rgba(245, 158, 11, 0.1); border-left: 3px solid var(--accent-admin); }
-        .ticket-name { font-weight: 600; color: #fff; font-size: 0.85rem; margin-bottom: 0.15rem; display: flex; align-items: center; }
-        .ticket-email { font-size: 0.75rem; color: var(--text-muted); }
-        .ticket-preview { font-size: 0.75rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 0.5rem; }
-        
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 15; backdrop-filter: blur(2px); opacity: 0; transition: opacity 0.3s; }
         .sidebar-overlay.show { display: block; opacity: 1; }
 
@@ -250,7 +205,6 @@
             .content-body { padding: 1rem; }
             .history-table th:nth-child(3), .history-table td:nth-child(3) { display: none; } 
             .chat-bubble { max-width: 90%; }
-            .ticket-layout { grid-template-columns: 1fr; grid-template-rows: 200px 1fr; height: auto; }
         }
     </style>
 </head>
@@ -271,9 +225,7 @@
                 <h2 class="font-outfit" style="margin: 0; font-size: 1.35rem; color: #fff;"><i class="fa-solid fa-file-invoice-dollar text-gradient" style="margin-right: 0.5rem;"></i> Invoice Details</h2>
                 <button class="btn-icon danger" onclick="closeInvoiceModal()" style="width: 2rem; height: 2rem; border: none; background: transparent;"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="modal-body" id="invoice-content">
-                <!-- Content injected via JS -->
-            </div>
+            <div class="modal-body" id="invoice-content"></div>
         </div>
     </div>
 
@@ -296,9 +248,9 @@
                         <div class="form-group" style="margin-bottom: 0;"><label>Realms Link</label><input type="url" id="e-link-realms" required></div>
                         <div class="form-group" style="margin-bottom: 0;"><label>BDS Link</label><input type="url" id="e-link-bds" required></div>
                     </div>
-                    <div class="form-group"><label style="color: #10b981;"><i class="fa-solid fa-rocket" style="margin-right: 0.3rem;"></i> New Features</label><textarea id="e-added" class="focus-emerald"></textarea></div>
-                    <div class="form-group"><label style="color: #3b82f6;"><i class="fa-solid fa-bug" style="margin-right: 0.3rem;"></i> Bug Fixes</label><textarea id="e-fixed" class="focus-blue"></textarea></div>
-                    <div class="form-group"><label style="color: #f43f5e;"><i class="fa-solid fa-trash-can" style="margin-right: 0.3rem;"></i> Removed</label><textarea id="e-removed" class="focus-rose"></textarea></div>
+                    <div class="form-group"><label style="color: #10b981;"><i class="fa-solid fa-rocket" style="margin-right: 0.3rem;"></i> New Features</label><textarea id="e-added"></textarea></div>
+                    <div class="form-group"><label style="color: #3b82f6;"><i class="fa-solid fa-bug" style="margin-right: 0.3rem;"></i> Bug Fixes</label><textarea id="e-fixed"></textarea></div>
+                    <div class="form-group"><label style="color: #f43f5e;"><i class="fa-solid fa-trash-can" style="margin-right: 0.3rem;"></i> Removed</label><textarea id="e-removed"></textarea></div>
                     <button type="submit" class="btn btn-master w-full" id="btn-save-edit" style="margin-top: 0.5rem;"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
                     <div id="edit-msg" class="msg-box"></div>
                 </form>
@@ -369,12 +321,9 @@
                 <a class="nav-item" onclick="switchTab('user', 'addons', this)"><i class="fa-solid fa-box-open"></i> My Add-ons</a>
                 <a class="nav-item" onclick="switchTab('user', 'licenses', this)"><i class="fa-solid fa-key"></i> Licenses</a>
                 
-                <p style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin: 1rem 0 0.2rem 0.5rem; letter-spacing: 0.05em;">Help & Settings</p>
+                <p style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin: 1rem 0 0.2rem 0.5rem; letter-spacing: 0.05em;">Community</p>
                 <a class="nav-item" onclick="switchTab('user', 'guide', this)"><i class="fa-solid fa-book"></i> Installation</a>
-                <a class="nav-item" onclick="switchTab('user', 'support', this)">
-                    <i class="fa-solid fa-headset"></i> Support Desk 
-                    <span id="user-ticket-badge" style="display:none; background:var(--accent-danger); color:#fff; border-radius:4px; padding:0.1rem 0.4rem; font-size:0.6rem; font-weight:bold; margin-left:auto;">New</span>
-                </a>
+                <a class="nav-item" onclick="switchTab('user', 'social', this)"><i class="fa-solid fa-earth-americas"></i> Global Chat</a>
                 <a class="nav-item" onclick="switchTab('user', 'profile', this)"><i class="fa-solid fa-user"></i> Profile</a>
             </nav>
             <div class="sidebar-footer"><a class="nav-item logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a></div>
@@ -491,37 +440,30 @@
                     </div>
                 </div>
 
-                <div id="tab-user-support" class="tab-content">
-                    <h2 class="section-title font-outfit">Support & Help Desk</h2>
+                <!-- USER SOCIAL TAB -->
+                <div id="tab-user-social" class="tab-content">
+                    <h2 class="section-title font-outfit">Global Community Chat</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">Connect with other users. You can delete your own messages.</p>
                     
                     <div class="chat-box-wrapper">
                         <div class="chat-header">
                             <div class="chat-header-info">
-                                <div class="chat-header-icon"><i class="fa-solid fa-headset"></i></div>
+                                <div class="chat-header-icon"><i class="fa-solid fa-earth-americas"></i></div>
                                 <div>
-                                    <h3 style="color: #fff; font-size: 0.95rem; font-family: 'Outfit'; margin: 0; line-height: 1.2;">Heraclaus Support</h3>
-                                    <div class="live-chat-badge"><span class="live-dot"></span> Live</div>
+                                    <h3 style="color: #fff; font-size: 0.95rem; font-family: 'Outfit'; font-weight: 700; margin: 0;">Global Channel</h3>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.1rem;">Public to all members</div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="chat-container" id="user-chat-box">
-                            <div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem;"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading chat history...</div>
+                            <div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem;"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading chat...</div>
                         </div>
                         
                         <form class="chat-input-area" id="user-chat-form">
-                            <input type="text" id="user-chat-input" required placeholder="Type your message here..." autocomplete="off">
+                            <input type="text" id="user-chat-input" required placeholder="Type a message to everyone..." autocomplete="off">
                             <button type="submit" id="btn-user-chat"><i class="fa-solid fa-paper-plane"></i></button>
                         </form>
-                    </div>
-
-                    <div class="grid-cards" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
-                        <div class="stat-card" style="align-items: center; text-align: center; padding: 2rem 1.5rem;">
-                            <i class="fa-brands fa-discord" style="font-size: 3rem; color: #5865F2; margin-bottom: 0.5rem;"></i>
-                            <h3 style="color: #fff; font-family: 'Outfit'; font-size: 1.25rem; letter-spacing: -0.01em;">Join VIP Community</h3>
-                            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.85rem;">Get the exclusive VIP Pro Member role and priority technical support directly from our developers.</p>
-                            <a href="https://discord.gg/xQStZUvukS" target="_blank" class="btn btn-outline" style="border-color: rgba(88, 101, 242, 0.5); color: #fff; background: rgba(88, 101, 242, 0.1);">Connect to Discord</a>
-                        </div>
                     </div>
                 </div>
 
@@ -559,10 +501,7 @@
                 <a class="nav-item admin-active" onclick="switchTab('admin', 'publish', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Publish Release</a>
                 <a class="nav-item" onclick="switchTab('admin', 'database', this)"><i class="fa-solid fa-database"></i> Release Database</a>
                 <a class="nav-item" onclick="switchTab('admin', 'members', this)"><i class="fa-solid fa-users"></i> Manage Members</a>
-                <a class="nav-item" onclick="switchTab('admin', 'tickets', this)">
-                    <i class="fa-solid fa-headset"></i> Support Tickets 
-                    <span id="admin-ticket-badge" style="display:none; background:var(--accent-danger); color:#fff; border-radius:4px; padding:0.1rem 0.4rem; font-size:0.6rem; font-weight:bold; margin-left:auto;">0</span>
-                </a>
+                <a class="nav-item" onclick="switchTab('admin', 'social', this)"><i class="fa-solid fa-comments"></i> Global Chat Moderation</a>
             </nav>
             <div class="sidebar-footer"><a class="nav-item logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Lock Console</a></div>
         </aside>
@@ -649,33 +588,30 @@
                     </div>
                 </div>
 
-                <div id="tab-admin-tickets" class="tab-content">
-                    <h2 class="section-title font-outfit">Support Tickets</h2>
-                    <div class="ticket-layout">
-                        <div class="ticket-list" id="admin-ticket-list">
-                            <div style="padding: 1rem; color: var(--text-muted); font-size: 0.8rem; text-align: center;">Loading tickets...</div>
-                        </div>
-                        <div class="chat-box-wrapper" style="margin: 0;">
-                            <div class="chat-header">
-                                <div class="chat-header-info">
-                                    <div class="chat-header-icon" style="background: var(--bg-card); border: 1px solid var(--border-light);"><i class="fa-solid fa-user"></i></div>
-                                    <div>
-                                        <h3 style="color: #fff; font-size: 0.95rem; font-family: 'Outfit'; margin: 0; line-height: 1.2;" id="ac-gamertag">Select User</h3>
-                                        <div class="live-chat-badge"><span class="live-dot"></span> Live</div>
-                                    </div>
+                <!-- ADMIN SOCIAL MODERATION -->
+                <div id="tab-admin-social" class="tab-content">
+                    <h2 class="section-title font-outfit">Global Chat Moderation</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">As an admin, you can delete any inappropriate messages from the global chat.</p>
+                    
+                    <div class="chat-box-wrapper">
+                        <div class="chat-header">
+                            <div class="chat-header-info">
+                                <div class="chat-header-icon" style="background: var(--gradient-master);"><i class="fa-solid fa-shield-halved"></i></div>
+                                <div>
+                                    <h3 style="color: #fff; font-size: 0.95rem; font-family: 'Outfit'; font-weight: 700; margin: 0;">Global Channel (Admin View)</h3>
+                                    <div style="font-size: 0.7rem; color: var(--accent-admin); margin-top: 0.1rem; font-weight: 600;">Full Moderation Access</div>
                                 </div>
-                                <button id="btn-resolve-ticket" onclick="adminDeleteTicket()" class="btn-icon danger" title="Close and Delete Ticket" style="width: 2rem; height: 2rem; border-radius: 6px; display: none;"><i class="fa-solid fa-check-double" style="font-size: 0.85rem;"></i></button>
                             </div>
-                            
-                            <div class="chat-container" id="admin-chat-box">
-                                <div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem;">Select a ticket from the left to start replying.</div>
-                            </div>
-                            
-                            <form class="chat-input-area" id="admin-chat-form">
-                                <input type="text" id="admin-chat-input" required placeholder="Type reply as Admin..." autocomplete="off" disabled>
-                                <button type="submit" id="btn-admin-chat" disabled><i class="fa-solid fa-paper-plane"></i></button>
-                            </form>
                         </div>
+                        
+                        <div class="chat-container" id="admin-chat-box">
+                            <div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem;"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading chat...</div>
+                        </div>
+                        
+                        <form class="chat-input-area" id="admin-chat-form">
+                            <input type="text" id="admin-chat-input" required placeholder="Send message as Admin..." autocomplete="off">
+                            <button type="submit" id="btn-admin-chat" style="background: var(--gradient-master);"><i class="fa-solid fa-paper-plane"></i></button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -720,18 +656,13 @@
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
         
         let pollingInterval = null;
-        let activeAdminTicketEmail = null;
         window.adminMembersData = []; 
 
-        // Fungsi Helper untuk Mencegah Error Null Event Listener
         function safelyAttachListener(elementId, eventType, callback) {
             const el = document.getElementById(elementId);
-            if (el) {
-                el.addEventListener(eventType, callback);
-            }
+            if (el) { el.addEventListener(eventType, callback); }
         }
 
-        // MEMBUNGKUS SEMUA LISTENER DENGAN AMAN
         document.addEventListener("DOMContentLoaded", () => {
             const session = sessionStorage.getItem("heraclaus_session");
             if (session) {
@@ -775,49 +706,35 @@
                 .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Authenticate'; });
             });
 
-            // Form Chat User
+            // Social Chat Form (User)
             safelyAttachListener("user-chat-form", "submit", function(e) {
                 e.preventDefault();
-                const session = JSON.parse(sessionStorage.getItem("heraclaus_session")), input = document.getElementById('user-chat-input'), text = input.value.trim(), btn = document.getElementById('btn-user-chat');
+                const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+                const input = document.getElementById('user-chat-input'), text = input.value.trim(), btn = document.getElementById('btn-user-chat');
                 if(!text) return;
                 btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; input.value = "";
-                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "user_send_msg", email: session.email, gamertag: session.gamertag, msg: text }) })
-                .then(res => res.json()).then(data => { if(data.status === "success") renderChatBox('user-chat-box', data.ticket.messages, true); })
+                
+                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "send_global_chat", email: session.email, gamertag: session.gamertag, role: "user", msg: text }) })
+                .then(res => res.json()).then(data => { if(data.status === "success") renderChatBox('user-chat-box', data.chat, session); })
                 .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>'; });
             });
 
-            // Form Chat Admin
+            // Social Chat Form (Admin)
             safelyAttachListener("admin-chat-form", "submit", function(e) {
                 e.preventDefault();
-                const session = JSON.parse(sessionStorage.getItem("heraclaus_session")), input = document.getElementById('admin-chat-input'), text = input.value.trim(), btn = document.getElementById('btn-admin-chat');
-                if(!text || !activeAdminTicketEmail) return;
+                const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+                const input = document.getElementById('admin-chat-input'), text = input.value.trim(), btn = document.getElementById('btn-admin-chat');
+                if(!text) return;
                 btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; input.value = "";
-                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_send_msg", adminPassword: session.adminPassword, targetEmail: activeAdminTicketEmail, msg: text }) })
-                .then(res => res.json()).then(data => { if(data.status === "success") fetchAdminTickets(); })
+                
+                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "send_global_chat", adminPassword: session.adminPassword, role: "admin", msg: text }) })
+                .then(res => res.json()).then(data => { if(data.status === "success") renderChatBox('admin-chat-box', data.chat, session); })
                 .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>'; });
             });
 
-            // Tombol Download Realms
-            safelyAttachListener("btn-download-realms", "click", function() {
-                const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-                if (!session || !session.addonHistory || session.addonHistory.length === 0) return;
-                
-                let link = session.addonHistory[0].link;
-                try { link = JSON.parse(link).realms; } catch(e) {} 
-                triggerDownload(link); 
-                recordDownloadStat(); 
-            });
-
-            // Tombol Download BDS
-            safelyAttachListener("btn-download-bds", "click", function() {
-                const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-                if (!session || !session.addonHistory || session.addonHistory.length === 0) return;
-                
-                let link = session.addonHistory[0].link;
-                try { link = JSON.parse(link).bds; } catch(e) {} 
-                triggerDownload(link); 
-                recordDownloadStat(); 
-            });
+            // Tombol Download
+            safelyAttachListener("btn-download-realms", "click", function() { const s = JSON.parse(sessionStorage.getItem("heraclaus_session")); if(!s || !s.addonHistory || s.addonHistory.length === 0) return; let l = s.addonHistory[0].link; try { l = JSON.parse(l).realms; } catch(e){} triggerDownload(l); recordDownloadStat(); });
+            safelyAttachListener("btn-download-bds", "click", function() { const s = JSON.parse(sessionStorage.getItem("heraclaus_session")); if(!s || !s.addonHistory || s.addonHistory.length === 0) return; let l = s.addonHistory[0].link; try { l = JSON.parse(l).bds; } catch(e){} triggerDownload(l); recordDownloadStat(); });
 
             // Form Publish Release
             safelyAttachListener("admin-publish-form", "submit", function(e) {
@@ -827,26 +744,16 @@
                 const btn = document.getElementById("btn-publish-release"), msgBox = document.getElementById("publish-msg");
                 btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Publishing...'; msgBox.style.display = "none";
                 
-                const linkObj = {
-                    realms: convertDriveLink(document.getElementById("p-link-realms").value.trim()),
-                    bds: convertDriveLink(document.getElementById("p-link-bds").value.trim())
-                };
-                const finalLink = JSON.stringify(linkObj);
-                const isSendEmail = document.getElementById("p-send-email").checked;
+                const linkObj = { realms: convertDriveLink(document.getElementById("p-link-realms").value.trim()), bds: convertDriveLink(document.getElementById("p-link-bds").value.trim()) };
 
                 fetch(GOOGLE_SCRIPT_URL, { 
                     method: "POST", 
                     body: JSON.stringify({ 
-                        action: "admin_publish_release", 
-                        adminPassword: session.adminPassword, 
-                        versionName: document.getElementById("p-version").value.trim(), 
-                        mcVersion: document.getElementById("p-mcversion").value.trim(),
-                        date: document.getElementById("p-date").value, 
-                        link: finalLink, 
-                        added: document.getElementById("p-added").value.trim(), 
-                        fixed: document.getElementById("p-fixed").value.trim(), 
-                        removed: document.getElementById("p-removed").value.trim(), 
-                        sendEmail: isSendEmail 
+                        action: "admin_publish_release", adminPassword: session.adminPassword, 
+                        versionName: document.getElementById("p-version").value.trim(), mcVersion: document.getElementById("p-mcversion").value.trim(),
+                        date: document.getElementById("p-date").value, link: JSON.stringify(linkObj), 
+                        added: document.getElementById("p-added").value.trim(), fixed: document.getElementById("p-fixed").value.trim(), 
+                        removed: document.getElementById("p-removed").value.trim(), sendEmail: document.getElementById("p-send-email").checked 
                     }) 
                 })
                 .then(res => res.json()).then(data => { if(data.status === "success") { document.getElementById("admin-publish-form").reset(); document.getElementById('p-date').valueAsDate = new Date(); session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast('Published to all users!'); } else throw new Error(data.message); })
@@ -859,36 +766,21 @@
                 e.preventDefault();
                 const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
                 if(!session || session.role !== 'admin') return;
-
                 const btn = document.getElementById("btn-save-edit"), msgBox = document.getElementById("edit-msg");
                 btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Saving...'; msgBox.style.display = "none";
-
-                const linkObj = {
-                    realms: convertDriveLink(document.getElementById("e-link-realms").value.trim()),
-                    bds: convertDriveLink(document.getElementById("e-link-bds").value.trim())
-                };
+                
+                const linkObj = { realms: convertDriveLink(document.getElementById("e-link-realms").value.trim()), bds: convertDriveLink(document.getElementById("e-link-bds").value.trim()) };
 
                 fetch(GOOGLE_SCRIPT_URL, { 
                     method: "POST", 
                     body: JSON.stringify({
-                        action: "admin_edit_release",
-                        adminPassword: session.adminPassword,
-                        logId: document.getElementById("e-logid").value,
-                        versionName: document.getElementById("e-version").value.trim(),
-                        mcVersion: document.getElementById("e-mcversion").value.trim(),
-                        date: document.getElementById("e-date").value,
-                        link: JSON.stringify(linkObj),
-                        added: document.getElementById("e-added").value.trim(),
-                        fixed: document.getElementById("e-fixed").value.trim(),
-                        removed: document.getElementById("e-removed").value.trim()
+                        action: "admin_edit_release", adminPassword: session.adminPassword, logId: document.getElementById("e-logid").value,
+                        versionName: document.getElementById("e-version").value.trim(), mcVersion: document.getElementById("e-mcversion").value.trim(),
+                        date: document.getElementById("e-date").value, link: JSON.stringify(linkObj),
+                        added: document.getElementById("e-added").value.trim(), fixed: document.getElementById("e-fixed").value.trim(), removed: document.getElementById("e-removed").value.trim()
                     })
                 })
-                .then(res => res.json())
-                .then(data => {
-                    if(data.status === "success") {
-                        session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); closeEditReleaseModal(); showToast('Release updated successfully!');
-                    } else throw new Error(data.message);
-                })
+                .then(res => res.json()).then(data => { if(data.status === "success") { session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); closeEditReleaseModal(); showToast('Release updated successfully!'); } else throw new Error(data.message); })
                 .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
                 .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Changes'; });
             });
@@ -896,10 +788,10 @@
             // Form Ganti Password
             safelyAttachListener("change-pwd-form", "submit", function(e) {
                 e.preventDefault(); const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); if(!session) return logout();
-                const btn = document.getElementById("btn-change-pwd"), msgBox = document.getElementById("cp-msg"), oldKey = document.getElementById("cp-old").value.trim(), newKey = document.getElementById("cp-new").value.trim();
+                const btn = document.getElementById("btn-change-pwd"), msgBox = document.getElementById("cp-msg");
                 btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...'; msgBox.style.display = "none";
-                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "change_password", email: session.email, oldKey: oldKey, newKey: newKey }) })
-                .then(res => res.json()).then(data => { if(data.status === "success") { session.licenseKey = newKey; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); document.getElementById("change-pwd-form").reset(); showToast('Security updated!'); } else throw new Error(data.message); })
+                fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "change_password", email: session.email, oldKey: document.getElementById("cp-old").value.trim(), newKey: document.getElementById("cp-new").value.trim() }) })
+                .then(res => res.json()).then(data => { if(data.status === "success") { session.licenseKey = document.getElementById("cp-new").value.trim(); sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); document.getElementById("change-pwd-form").reset(); showToast('Security updated!'); } else throw new Error(data.message); })
                 .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
                 .finally(() => { btn.disabled = false; btn.innerHTML = 'Update Password'; });
             });
@@ -920,10 +812,7 @@
         function copyLicenseKey() {
             const keyText = document.getElementById("display-key").innerText;
             if(keyText && keyText !== "Loading..." && keyText !== "License pending generation...") {
-                const el = document.createElement('textarea');
-                el.value = keyText; document.body.appendChild(el); el.select();
-                document.execCommand('copy'); document.body.removeChild(el);
-                showToast('License Key copied to clipboard!');
+                const el = document.createElement('textarea'); el.value = keyText; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); showToast('License Key copied to clipboard!');
             }
         }
 
@@ -956,17 +845,14 @@
                 const tbody = document.querySelector("#user-history-table tbody"); tbody.innerHTML = "";
                 history.forEach((h, index) => {
                     const noteStr = h.added ? h.added.split('\n')[0].substring(0, 50) + "..." : "System patch.";
-                    
                     const mcBadge = h.mcVersion ? `<span style="font-size: 0.6rem; color: var(--accent-secondary); background: rgba(59, 130, 246, 0.1); padding: 0.1rem 0.3rem; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.2); margin-left: 0.3rem;">MC ${h.mcVersion}</span>` : '';
-                    
-                    let linkData = { realms: '#', bds: '#' };
-                    try { linkData = JSON.parse(h.link); } catch(e) { linkData = { realms: h.link, bds: h.link }; }
+                    let linkData = { realms: '#', bds: '#' }; try { linkData = JSON.parse(h.link); } catch(e) { linkData = { realms: h.link, bds: h.link }; }
                     
                     tbody.innerHTML += `<tr>
                         <td><span class="version-badge">${h.versionName}</span> ${mcBadge} ${index === 0 ? '<span style="color:var(--accent-success); font-size:0.65rem; margin-left:0.3rem; font-weight:700;">LATEST</span>' : ''}</td>
                         <td>${new Date(h.date).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</td><td style="font-size: 0.8rem;"><span style="opacity:0.8">${noteStr}</span></td>
                         <td style="text-align:right;">
-                            <div style="display: flex; gap: 0.4rem; justify-content: flex-end; align-items: center;">
+                            <div style="display: flex; gap: 0.4rem; justify-content: flex-end; align-items: center; height: 100%;">
                                 <button onclick="triggerDownload('${linkData.realms}')" class="btn btn-sm btn-outline" title="Download Realms" style="padding: 0 0.5rem;"><i class="fa-solid fa-cube"></i></button>
                                 <button onclick="triggerDownload('${linkData.bds}')" class="btn btn-sm btn-outline" style="color: var(--accent-success); border-color: rgba(16, 185, 129, 0.3);" title="Download BDS" style="padding: 0 0.5rem;"><i class="fa-solid fa-server"></i></button>
                             </div>
@@ -978,22 +864,84 @@
 
         function showAdminDashboard(data) {
             document.getElementById("main-navbar").style.display = "none"; document.getElementById("auth-section").style.display = "none"; document.getElementById("admin-dashboard").classList.add("active");
-            
-            // Render dari data sementara lalu panggil pembaruan live
             renderAdminDatabase(data.history || []);
-            fetchAdminDatabase(); // Tarik data paling segar dari API
+            fetchAdminDatabase(); 
         }
 
-        function fetchAdminDatabase() {
-            fetch(GOOGLE_SCRIPT_URL + "?action=get_changelog")
-            .then(res => res.json())
-            .then(data => {
+        // --- GLOBAL CHAT SYSTEM LOGIC ---
+        function fetchGlobalChat() {
+            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "get_global_chat" }) })
+            .then(res => res.json()).then(data => {
                 if(data.status === "success") {
                     const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
                     if(session) {
-                        session.history = data.changelogs;
-                        sessionStorage.setItem("heraclaus_session", JSON.stringify(session));
+                        if (session.role === 'user') renderChatBox('user-chat-box', data.chat, session);
+                        if (session.role === 'admin') renderChatBox('admin-chat-box', data.chat, session);
                     }
+                }
+            });
+        }
+
+        function renderChatBox(boxId, messages, session) {
+            const box = document.getElementById(boxId);
+            const isAtBottom = box.scrollHeight - box.scrollTop <= box.clientHeight + 50; 
+            box.innerHTML = "";
+            if(!messages || messages.length === 0) {
+                box.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size: 0.85rem;">No messages yet. Start the conversation!</div>`;
+                return;
+            }
+            messages.forEach(m => {
+                const isMe = (session.role === 'user' && m.senderEmail === session.email) || (session.role === 'admin' && m.role === 'admin');
+                const isAdmin = (session.role === 'admin');
+                const canDelete = isMe || isAdmin;
+                
+                const bubbleClass = isMe ? 'chat-me' : 'chat-them';
+                const adminBadge = m.role === 'admin' ? '<i class="fa-solid fa-shield-halved" style="color:var(--accent-admin); margin-right: 4px;"></i>' : '';
+                const senderName = isMe ? 'You' : m.senderGamertag;
+                const timeStr = new Date(m.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                let deleteBtn = '';
+                if(canDelete) {
+                    deleteBtn = `<button onclick="deleteChatMessage('${m.id}')" title="Delete Message" style="background:none; border:none; color:inherit; opacity:0.6; cursor:pointer; font-size:0.75rem; margin-left:8px; padding:0; transition: opacity 0.2s;"><i class="fa-solid fa-trash"></i></button>`;
+                }
+
+                box.innerHTML += `
+                <div class="chat-bubble ${bubbleClass}">
+                    <div style="font-size:0.75rem; font-weight:700; margin-bottom:0.25rem; opacity:0.9; display:flex; align-items:center;">
+                        ${adminBadge}${senderName}
+                    </div>
+                    ${m.text}
+                    <div class="chat-time" style="display:flex; justify-content: ${isMe ? 'flex-end' : 'flex-start'}; align-items:center;">
+                        ${timeStr} ${deleteBtn}
+                    </div>
+                </div>`;
+            });
+            if (isAtBottom) box.scrollTop = box.scrollHeight;
+        }
+
+        window.deleteChatMessage = function(msgId) {
+            if(!confirm("Are you sure you want to delete this message?")) return;
+            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+            const payload = { action: "delete_global_chat", messageId: msgId, role: session.role };
+            if (session.role === 'user') payload.email = session.email;
+            if (session.role === 'admin') payload.adminPassword = session.adminPassword;
+            
+            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+            .then(res => res.json()).then(data => {
+                if(data.status === "success") {
+                    if(session.role === 'user') renderChatBox('user-chat-box', data.chat, session);
+                    if(session.role === 'admin') renderChatBox('admin-chat-box', data.chat, session);
+                }
+            });
+        }
+
+        // --- DASHBOARD DATA FETCHERS ---
+        function fetchAdminDatabase() {
+            fetch(GOOGLE_SCRIPT_URL + "?action=get_changelog")
+            .then(res => res.json()).then(data => {
+                if(data.status === "success") {
+                    const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+                    if(session) { session.history = data.changelogs; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); }
                     renderAdminDatabase(data.changelogs);
                 }
             });
@@ -1003,14 +951,8 @@
             const tbody = document.querySelector("#admin-history-table tbody"); tbody.innerHTML = "";
             if(history.length === 0) return tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 2rem;'><span style='color: var(--text-muted); font-size: 0.85rem;'>Database is empty.</span></td></tr>";
             history.forEach(h => {
-                
-                let linkDisplay = h.link;
-                try { 
-                    let parsed = JSON.parse(h.link); 
-                    linkDisplay = `R: ${parsed.realms}\nB: ${parsed.bds}`; 
-                } catch(e) {}
-
-                let dlCount = h.downloads || 0; // MENAMPILKAN DLS DATA
+                let linkDisplay = h.link; try { let parsed = JSON.parse(h.link); linkDisplay = `R: ${parsed.realms}\nB: ${parsed.bds}`; } catch(e) {}
+                let dlCount = h.downloads || 0; 
                 const mcBadge = h.mcVersion ? `<div style="font-size:0.65rem; color: var(--text-muted); margin-top: 0.2rem;">MC: ${h.mcVersion}</div>` : '';
                 
                 tbody.innerHTML += `<tr>
@@ -1029,41 +971,20 @@
         }
 
         window.openEditReleaseModal = function(id) {
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            const release = session.history.find(h => h.id === id);
-            if (!release) return;
-
-            document.getElementById("e-logid").value = release.id;
-            document.getElementById("e-version").value = release.versionName;
-            document.getElementById("e-mcversion").value = release.mcVersion || "";
-            document.getElementById("e-date").value = release.date;
-            
-            let linkData = { realms: '', bds: '' };
-            try { linkData = JSON.parse(release.link); } catch(e) { linkData = { realms: release.link, bds: release.link }; }
-            
-            document.getElementById("e-link-realms").value = linkData.realms || "";
-            document.getElementById("e-link-bds").value = linkData.bds || "";
-            document.getElementById("e-added").value = release.added || "";
-            document.getElementById("e-fixed").value = release.fixed || "";
-            document.getElementById("e-removed").value = release.removed || "";
-
+            const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); const release = session.history.find(h => h.id === id); if (!release) return;
+            document.getElementById("e-logid").value = release.id; document.getElementById("e-version").value = release.versionName;
+            document.getElementById("e-mcversion").value = release.mcVersion || ""; document.getElementById("e-date").value = release.date;
+            let linkData = { realms: '', bds: '' }; try { linkData = JSON.parse(release.link); } catch(e) { linkData = { realms: release.link, bds: release.link }; }
+            document.getElementById("e-link-realms").value = linkData.realms || ""; document.getElementById("e-link-bds").value = linkData.bds || "";
+            document.getElementById("e-added").value = release.added || ""; document.getElementById("e-fixed").value = release.fixed || ""; document.getElementById("e-removed").value = release.removed || "";
             document.getElementById("edit-release-modal").classList.add("show");
         }
+        window.closeEditReleaseModal = function() { document.getElementById("edit-release-modal").classList.remove("show"); }
 
-        window.closeEditReleaseModal = function() {
-            document.getElementById("edit-release-modal").classList.remove("show");
-        }
-
-        // --- ADMIN MEMBER MANAGEMENT ---
         function fetchAdminMembers() {
             const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
             fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_get_members", adminPassword: session.adminPassword }) })
-            .then(res => res.json()).then(data => {
-                if(data.status === "success") {
-                    window.adminMembersData = data.members;
-                    renderAdminMembers(data.members);
-                }
-            });
+            .then(res => res.json()).then(data => { if(data.status === "success") { window.adminMembersData = data.members; renderAdminMembers(data.members); } });
         }
 
         function renderAdminMembers(members) {
@@ -1077,18 +998,10 @@
                 else statusBadge = `<span class="badge" style="background: rgba(244, 63, 94, 0.15); color: #fda4af; border-color: rgba(244, 63, 94, 0.25);">${m.status}</span>`;
 
                 let lastActiveStr = "Never logged in";
-                if (m.lastActive && m.lastActive !== "Never") {
-                    const d = new Date(m.lastActive);
-                    lastActiveStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                }
-
+                if (m.lastActive && m.lastActive !== "Never") { const d = new Date(m.lastActive); lastActiveStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); }
+                
                 let dlStatsHtml = "";
-                try {
-                    const dlObj = JSON.parse(m.downloadHistory);
-                    for(let v in dlObj) { 
-                        dlStatsHtml += `<span style="display:inline-block; margin-right: 0.4rem; background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px; border:1px solid var(--border-light);">${v}: <span style="color:#fff; font-weight:bold;">${dlObj[v]}x</span></span>`; 
-                    }
-                } catch(e) {}
+                try { const dlObj = JSON.parse(m.downloadHistory); for(let v in dlObj) { dlStatsHtml += `<span style="display:inline-block; margin-right: 0.4rem; background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px; border:1px solid var(--border-light);">${v}: <span style="color:#fff; font-weight:bold;">${dlObj[v]}x</span></span>`; } } catch(e) {}
                 if (!dlStatsHtml) dlStatsHtml = "No downloads yet";
 
                 tbody.innerHTML += `<tr>
@@ -1106,7 +1019,7 @@
                         <div style="font-size: 0.7rem; color: var(--text-muted); display:flex; flex-wrap:wrap; gap:0.2rem; margin-top: 0.25rem;">${dlStatsHtml}</div>
                     </td>
                     <td style="text-align:right;">
-                        <div style="display: flex; gap: 0.4rem; justify-content: flex-end;">
+                        <div style="display: flex; gap: 0.4rem; justify-content: flex-end; align-items: center; height: 100%;">
                             <button onclick="viewInvoice(${index})" class="btn-icon" title="View Invoice" style="width: 2rem; height: 2rem; color: var(--accent-primary); border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05);"><i class="fa-solid fa-file-invoice-dollar" style="font-size: 0.8rem;"></i></button>
                             <button onclick="adminToggleMemberStatus(${m.row}, '${m.status}')" class="btn-icon" title="Toggle Status (Approve/Suspend)" style="width: 2rem; height: 2rem;"><i class="fa-solid fa-power-off" style="font-size: 0.8rem;"></i></button>
                             <button onclick="adminDeleteMember(${m.row})" class="btn-icon danger" title="Delete Member" style="width: 2rem; height: 2rem;"><i class="fa-solid fa-trash-can" style="font-size: 0.8rem;"></i></button>
@@ -1117,224 +1030,56 @@
         }
         
         window.viewInvoice = function(index) {
-            const m = window.adminMembersData[index];
-            if(!m) return;
-            
+            const m = window.adminMembersData[index]; if(!m) return;
             let receiptHtml = '';
             if(m.receipt && m.receipt !== "-" && m.receipt !== "") {
                 const match = m.receipt.match(/\/d\/([a-zA-Z0-9_-]+)/);
-                if(match && match[1]) {
-                    receiptHtml = `
-                        <div style="width: 100%; border-radius: 8px; border: 1px solid var(--border-light); margin-top: 0.5rem; background: rgba(0,0,0,0.5); overflow: hidden;">
-                            <iframe src="https://drive.google.com/file/d/${match[1]}/preview" width="100%" height="250" style="border:none; display:block;"></iframe>
-                        </div>`;
-                } else {
-                    receiptHtml = `<p style="color: var(--text-secondary); font-size: 0.8rem; text-align: center;">External link detected.</p>`;
-                }
-            } else {
-                receiptHtml = `<p style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed var(--border-light);">No payment receipt provided.</p>`;
-            }
-
-            let actionButtonsHtml = `
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem;">
-                    <a href="${m.receipt}" target="_blank" class="btn btn-outline w-full" style="font-size: 0.8rem;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Full Image</a>
-                    <button onclick="exportInvoiceImage(${index}, this)" class="btn btn-gradient w-full" style="font-size: 0.8rem;"><i class="fa-solid fa-file-export"></i> Export Data (No Key)</button>
-                </div>
-            `;
+                if(match && match[1]) receiptHtml = `<div style="width: 100%; border-radius: 8px; border: 1px solid var(--border-light); margin-top: 0.5rem; background: rgba(0,0,0,0.5); overflow: hidden;"><iframe src="https://drive.google.com/file/d/${match[1]}/preview" width="100%" height="250" style="border:none; display:block;"></iframe></div>`;
+                else receiptHtml = `<p style="color: var(--text-secondary); font-size: 0.8rem; text-align: center;">External link detected.</p>`;
+            } else receiptHtml = `<p style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed var(--border-light);">No payment receipt provided.</p>`;
 
             const modalBody = document.getElementById('invoice-content');
             modalBody.innerHTML = `
                 <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; background: rgba(255,255,255,0.02); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-light);">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: var(--text-muted); font-size: 0.8rem;">Gamertag</span>
-                        <span style="color: #fff; font-weight: 600; font-size: 0.85rem;">${m.gamertag}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: var(--text-muted); font-size: 0.8rem;">Email</span>
-                        <span style="color: #fff; font-weight: 500; font-size: 0.85rem;">${m.email}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: var(--text-muted); font-size: 0.8rem;">Date Joined</span>
-                        <span style="color: #fff; font-size: 0.85rem;">${new Date(m.date).toLocaleString()}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: var(--text-muted); font-size: 0.8rem;">License Key</span>
-                        <span style="color: var(--accent-primary); font-family: monospace; font-weight: 600; font-size: 0.85rem; padding: 0.1rem 0.4rem; background: rgba(139,92,246,0.1); border-radius: 4px;">${m.license || '-'}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: var(--text-muted); font-size: 0.8rem;">Status</span>
-                        <span style="color: ${m.status === 'APPROVED' ? 'var(--accent-success)' : (m.status === 'PENDING' ? '#fcd34d' : 'var(--accent-danger)')}; font-weight: 700; font-size: 0.85rem;">${m.status}</span>
-                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--text-muted); font-size: 0.8rem;">Gamertag</span><span style="color: #fff; font-weight: 600; font-size: 0.85rem;">${m.gamertag}</span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--text-muted); font-size: 0.8rem;">Email</span><span style="color: #fff; font-weight: 500; font-size: 0.85rem;">${m.email}</span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--text-muted); font-size: 0.8rem;">Date Joined</span><span style="color: #fff; font-size: 0.85rem;">${new Date(m.date).toLocaleString()}</span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--text-muted); font-size: 0.8rem;">License Key</span><span style="color: var(--accent-primary); font-family: monospace; font-weight: 600; font-size: 0.85rem; padding: 0.1rem 0.4rem; background: rgba(139,92,246,0.1); border-radius: 4px;">${m.license || '-'}</span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--text-muted); font-size: 0.8rem;">Status</span><span style="color: ${m.status === 'APPROVED' ? 'var(--accent-success)' : (m.status === 'PENDING' ? '#fcd34d' : 'var(--accent-danger)')}; font-weight: 700; font-size: 0.85rem;">${m.status}</span></div>
                 </div>
                 <h4 style="font-family: 'Outfit'; color: #fff; font-size: 1rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-image" style="color: var(--text-muted); margin-right: 0.4rem;"></i> Payment Receipt</h4>
                 ${receiptHtml}
-                ${actionButtonsHtml}
-            `;
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem;">
+                    <a href="${m.receipt}" target="_blank" class="btn btn-outline w-full" style="font-size: 0.8rem;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Full Image</a>
+                    <button onclick="exportInvoiceImage(${index}, this)" class="btn btn-gradient w-full" style="font-size: 0.8rem;"><i class="fa-solid fa-file-export"></i> Export Data (No Key)</button>
+                </div>`;
             document.getElementById('invoice-modal').classList.add('show');
         }
 
         window.exportInvoiceImage = function(index, btnEl) {
-            const m = window.adminMembersData[index];
-            if (!m) return;
-            const originalText = btnEl.innerHTML;
-            btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Rendering...';
-            btnEl.disabled = true;
+            const m = window.adminMembersData[index]; if (!m) return;
+            const originalText = btnEl.innerHTML; btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Rendering...'; btnEl.disabled = true;
 
-            document.getElementById('ex-gamertag').innerText = m.gamertag;
-            document.getElementById('ex-email').innerText = m.email;
-            document.getElementById('ex-date').innerText = new Date(m.date).toLocaleString();
-            
-            const exStatusEl = document.getElementById('ex-status');
-            exStatusEl.innerText = m.status;
-            exStatusEl.style.color = m.status === 'APPROVED' ? '#10b981' : (m.status === 'PENDING' ? '#fcd34d' : '#f43f5e');
-
-            const imgEl = document.getElementById('ex-image');
-            let imgSrc = m.receipt;
+            document.getElementById('ex-gamertag').innerText = m.gamertag; document.getElementById('ex-email').innerText = m.email; document.getElementById('ex-date').innerText = new Date(m.date).toLocaleString();
+            const exStatusEl = document.getElementById('ex-status'); exStatusEl.innerText = m.status; exStatusEl.style.color = m.status === 'APPROVED' ? '#10b981' : (m.status === 'PENDING' ? '#fcd34d' : '#f43f5e');
+            const imgEl = document.getElementById('ex-image'); let imgSrc = m.receipt;
             const match = m.receipt ? m.receipt.match(/\/d\/([a-zA-Z0-9_-]+)/) : null;
-            if(match && match[1]) {
-                imgSrc = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://drive.google.com/uc?id=' + match[1])}`;
-            }
+            if(match && match[1]) imgSrc = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://drive.google.com/uc?id=' + match[1])}`;
 
             const renderAndDownload = () => {
                 const template = document.getElementById('export-template');
                 html2canvas(template, { useCORS: true, allowTaint: true, backgroundColor: '#050505', scale: 2 }).then(canvas => {
-                    const link = document.createElement('a');
-                    link.download = `Invoice_Heraclaus_${m.gamertag.replace(/[^a-zA-Z0-9]/g, '')}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                    btnEl.innerHTML = originalText; btnEl.disabled = false;
-                    showToast('Invoice exported securely!');
-                }).catch(e => {
-                    console.error("Canvas Error: ", e);
-                    showToast('Failed to render image. Check console.', true);
-                    btnEl.innerHTML = originalText; btnEl.disabled = false;
-                });
+                    const link = document.createElement('a'); link.download = `Invoice_Heraclaus_${m.gamertag.replace(/[^a-zA-Z0-9]/g, '')}.png`; link.href = canvas.toDataURL('image/png'); link.click();
+                    btnEl.innerHTML = originalText; btnEl.disabled = false; showToast('Invoice exported securely!');
+                }).catch(e => { showToast('Failed to render image. Check console.', true); btnEl.innerHTML = originalText; btnEl.disabled = false; });
             };
-
-            if (imgSrc && imgSrc !== "-" && imgSrc !== "") {
-                imgEl.style.display = "block";
-                imgEl.onload = renderAndDownload;
-                imgEl.onerror = () => { imgEl.style.display = "none"; renderAndDownload(); };
-                imgEl.src = imgSrc;
-            } else {
-                imgEl.style.display = "none";
-                renderAndDownload();
-            }
+            if (imgSrc && imgSrc !== "-" && imgSrc !== "") { imgEl.style.display = "block"; imgEl.onload = renderAndDownload; imgEl.onerror = () => { imgEl.style.display = "none"; renderAndDownload(); }; imgEl.src = imgSrc; } 
+            else { imgEl.style.display = "none"; renderAndDownload(); }
         }
 
         window.closeInvoiceModal = function() { document.getElementById('invoice-modal').classList.remove('show'); }
-
-        window.adminToggleMemberStatus = function(row, currentStatus) {
-            const newStatus = currentStatus === 'APPROVED' ? 'SUSPENDED' : 'APPROVED';
-            if(!confirm(`Change member status to ${newStatus}?`)) return;
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_toggle_member", adminPassword: session.adminPassword, targetRow: row, newStatus: newStatus }) })
-            .then(res => res.json()).then(data => { if(data.status === "success") { showToast(`Member updated to ${newStatus}`); fetchAdminMembers(); } });
-        }
-
-        window.adminDeleteMember = function(row) {
-            if(!confirm("Warning: This will permanently delete this member's account and license from the database! Proceed?")) return;
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_delete_member", adminPassword: session.adminPassword, targetRow: row }) })
-            .then(res => res.json()).then(data => { if(data.status === "success") { showToast('Member deleted.'); fetchAdminMembers(); } });
-        }
-
-        // --- 2-WAY CHAT SYSTEM LOGIC ---
-        function renderChatBox(boxId, messages, isUserView) {
-            const box = document.getElementById(boxId);
-            box.innerHTML = "";
-            if(!messages || messages.length === 0) {
-                box.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem;">No messages yet. Send a message to start the conversation.</div>`;
-                return;
-            }
-            messages.forEach(m => {
-                const isMe = (isUserView && m.sender === 'user') || (!isUserView && m.sender === 'admin');
-                const bubbleClass = isMe ? 'chat-me' : 'chat-them';
-                
-                let senderName = '';
-                if(isUserView) senderName = m.sender === 'admin' ? 'Heraclaus Support' : 'You';
-                else senderName = m.sender === 'user' ? 'Client' : 'You';
-                
-                const timeStr = new Date(m.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                box.innerHTML += `<div class="chat-bubble ${bubbleClass}">${m.text}<span class="chat-time">${senderName} • ${timeStr}</span></div>`;
-            });
-            box.scrollTop = box.scrollHeight;
-        }
-
-        function fetchUserTicket() {
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "user_get_ticket", email: session.email }) })
-            .then(res => res.json()).then(data => { 
-                if(data.status === "success") {
-                    renderChatBox('user-chat-box', data.ticket ? data.ticket.messages : [], true); 
-                    const badge = document.getElementById('user-ticket-badge');
-                    if (data.ticket && data.ticket.messages.length > 0) {
-                        const lastMsg = data.ticket.messages[data.ticket.messages.length - 1];
-                        if (lastMsg.sender === 'admin' && !document.getElementById('tab-user-support').classList.contains('active')) {
-                            badge.style.display = 'inline-flex';
-                        } else { badge.style.display = 'none'; }
-                    }
-                }
-            });
-        }
-
-        function fetchAdminTickets() {
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_get_tickets", adminPassword: session.adminPassword }) })
-            .then(res => res.json()).then(data => {
-                if(data.status === "success") {
-                    const list = document.getElementById('admin-ticket-list'); list.innerHTML = "";
-                    if(!data.tickets || data.tickets.length === 0) return list.innerHTML = `<div style="padding: 1rem; color: var(--text-muted); text-align: center; font-size: 0.8rem;">No active tickets.</div>`;
-                    
-                    let unreadCount = 0;
-                    data.tickets.forEach(t => {
-                        const lastMsg = t.messages.length > 0 ? t.messages[t.messages.length-1] : null;
-                        const lastMsgText = lastMsg ? lastMsg.text : "No message";
-                        const isUnread = lastMsg && lastMsg.sender === 'user';
-                        if (isUnread) unreadCount++;
-
-                        const activeCls = (t.email === activeAdminTicketEmail) ? "active" : "";
-                        const unreadDot = isUnread ? `<span style="width:8px;height:8px;background:var(--accent-danger);border-radius:50%;display:inline-block;margin-left:6px;box-shadow:0 0 5px var(--accent-danger);"></span>` : "";
-
-                        list.innerHTML += `<div class="ticket-item ${activeCls}" onclick="openAdminTicket('${t.email}', '${t.gamertag}')">
-                            <div class="ticket-name" style="display:flex; align-items:center;">${t.gamertag} ${unreadDot}</div>
-                            <div class="ticket-email">${t.email}</div>
-                            <div class="ticket-preview" style="${isUnread ? 'color:#fff; font-weight:600;' : ''}">${lastMsgText}</div>
-                        </div>`;
-                        if(t.email === activeAdminTicketEmail) renderChatBox('admin-chat-box', t.messages, false);
-                    });
-
-                    const badge = document.getElementById('admin-ticket-badge');
-                    if(unreadCount > 0) { badge.style.display = 'inline-flex'; badge.innerText = unreadCount; } 
-                    else { badge.style.display = 'none'; }
-                }
-            });
-        }
-
-        window.openAdminTicket = function(email, gamertag) {
-            activeAdminTicketEmail = email;
-            document.getElementById('ac-gamertag').innerText = gamertag; document.getElementById('ac-email').innerText = email;
-            document.getElementById('admin-chat-input').disabled = false; document.getElementById('btn-admin-chat').disabled = false;
-            document.getElementById('btn-resolve-ticket').style.display = 'inline-flex';
-            fetchAdminTickets(); 
-        }
-
-        window.adminDeleteTicket = function() {
-            if(!activeAdminTicketEmail) return;
-            if(!confirm("Resolve and delete this ticket? Chat history will be permanently lost, allowing the user to create a new ticket later.")) return;
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_delete_ticket", adminPassword: session.adminPassword, targetEmail: activeAdminTicketEmail }) })
-            .then(res => res.json()).then(data => { 
-                if(data.status === "success") { 
-                    activeAdminTicketEmail = null;
-                    document.getElementById('ac-gamertag').innerText = "Select User"; document.getElementById('ac-email').innerText = "No active selection";
-                    document.getElementById('admin-chat-input').disabled = true; document.getElementById('btn-admin-chat').disabled = true;
-                    document.getElementById('btn-resolve-ticket').style.display = 'none';
-                    document.getElementById('admin-chat-box').innerHTML = '<div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem;">Select a ticket from the left to start replying.</div>';
-                    showToast('Ticket marked as resolved and deleted.'); fetchAdminTickets(); 
-                } 
-            });
-        }
+        window.adminToggleMemberStatus = function(row, currentStatus) { const newStatus = currentStatus === 'APPROVED' ? 'SUSPENDED' : 'APPROVED'; if(!confirm(`Change member status to ${newStatus}?`)) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_toggle_member", adminPassword: session.adminPassword, targetRow: row, newStatus: newStatus }) }).then(res => res.json()).then(data => { if(data.status === "success") { showToast(`Member updated to ${newStatus}`); fetchAdminMembers(); } }); }
+        window.adminDeleteMember = function(row) { if(!confirm("Warning: This will permanently delete this member's account and license! Proceed?")) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_delete_member", adminPassword: session.adminPassword, targetRow: row }) }).then(res => res.json()).then(data => { if(data.status === "success") { showToast('Member deleted.'); fetchAdminMembers(); } }); }
 
         function switchTab(role, tabId, element) {
             const dash = document.getElementById(`${role}-dashboard`);
@@ -1346,8 +1091,8 @@
 
             if(pollingInterval) clearInterval(pollingInterval);
             
-            if(role === 'user' && tabId === 'support') { document.getElementById('user-ticket-badge').style.display = 'none'; fetchUserTicket(); pollingInterval = setInterval(fetchUserTicket, 8000); }
-            if(role === 'admin' && tabId === 'tickets') { fetchAdminTickets(); pollingInterval = setInterval(fetchAdminTickets, 8000); }
+            if(role === 'user' && tabId === 'social') { fetchGlobalChat(); pollingInterval = setInterval(fetchGlobalChat, 5000); }
+            if(role === 'admin' && tabId === 'social') { fetchGlobalChat(); pollingInterval = setInterval(fetchGlobalChat, 5000); }
             if(role === 'admin' && tabId === 'members') { fetchAdminMembers(); pollingInterval = setInterval(fetchAdminMembers, 10000); }
             if(role === 'admin' && tabId === 'database') { fetchAdminDatabase(); pollingInterval = setInterval(fetchAdminDatabase, 10000); }
         }
@@ -1355,28 +1100,16 @@
         function triggerDownload(url) { 
             const overlay = document.getElementById('download-overlay'); const statusText = document.getElementById('dl-status-text');
             overlay.classList.add('show'); statusText.innerText = "Connecting to secure server...";
-            setTimeout(() => { statusText.innerText = "Authenticating license key..."; }, 1500);
-            setTimeout(() => { statusText.innerText = "Requesting file from database..."; }, 3000);
+            setTimeout(() => { statusText.innerText = "Authenticating license key..."; }, 1500); setTimeout(() => { statusText.innerText = "Requesting file from database..."; }, 3000);
             setTimeout(() => {
                 overlay.classList.remove('show');
                 if (url.includes('drive.google.com')) { window.open(url, '_blank'); showToast('Download request sent to browser.'); } 
-                else {
-                    const tempLink = document.createElement('a'); tempLink.style.display = 'none'; tempLink.href = url; tempLink.setAttribute('download', '');
-                    document.body.appendChild(tempLink); tempLink.click(); document.body.removeChild(tempLink); showToast('Download started securely.');
-                }
+                else { const tempLink = document.createElement('a'); tempLink.style.display = 'none'; tempLink.href = url; tempLink.setAttribute('download', ''); document.body.appendChild(tempLink); tempLink.click(); document.body.removeChild(tempLink); showToast('Download started securely.'); }
             }, 4500);
         }
 
-        function recordDownloadStat() {
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            if (!session || !session.addonHistory || session.addonHistory.length === 0) return;
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "record_download", email: session.email, versionName: session.addonHistory[0].versionName }) });
-        }
-
-        function convertDriveLink(url) { 
-            const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/); 
-            return (match && match[1]) ? `https://drive.google.com/uc?export=download&confirm=t&id=${match[1]}` : url; 
-        }
+        function recordDownloadStat() { const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); if (!session || !session.addonHistory || session.addonHistory.length === 0) return; fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "record_download", email: session.email, versionName: session.addonHistory[0].versionName }) }); }
+        function convertDriveLink(url) { const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/); return (match && match[1]) ? `https://drive.google.com/uc?export=download&confirm=t&id=${match[1]}` : url; }
         
         window.deleteRelease = function(id) { if(!confirm("Delete this release permanently?")) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_delete_release", adminPassword: session.adminPassword, logId: id }) }).then(res => res.json()).then(data => { if(data.status === "success") { session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast('Release deleted.'); } else alert(data.message); }); }
         window.toggleSidebar = function(sidebarId) { const sidebar = document.getElementById(sidebarId), overlay = sidebar.previousElementSibling; sidebar.classList.toggle('show'); overlay.classList.toggle('show'); }
