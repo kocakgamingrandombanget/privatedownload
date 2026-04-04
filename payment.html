@@ -5,118 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout | Heraclaus Admin Suite Pro</title>
     
-    <!-- Modern Tech Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        /* * PURE VANILLA CSS - COMPACT SAAS THEME * */
+        /* * THEME UPDATE - Solid Dark UI * */
         :root {
-            --bg-base: #050505; 
+            --bg-base: #000000; 
             --bg-surface: #0a0a0a;
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --border-light: rgba(255, 255, 255, 0.08);
-            --border-highlight: rgba(255, 255, 255, 0.15);
+            --bg-card: #121214; /* Solid, no glass effect */
+            --bg-input: #18181b;
+            --border-light: #27272a;
+            --border-highlight: #3f3f46;
             --text-primary: #ffffff;
             --text-secondary: #a1a1aa;
             --text-muted: #71717a;
             --accent-primary: #8b5cf6; 
             --accent-success: #10b981;
             --accent-danger: #f43f5e;
+            --warning-bg: rgba(245, 158, 11, 0.1);
+            --warning-border: #f59e0b;
             --gradient-hero: linear-gradient(135deg, #e879f9 0%, #8b5cf6 50%, #3b82f6 100%);
             --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
         
         .container { max-width: 64rem; margin: 0 auto; padding: 0 1.25rem; width: 100%; }
-        h1, h2, .font-outfit { font-family: 'Outfit', sans-serif; }
+        h1, h2, .font-display { font-family: 'Space Grotesk', sans-serif; }
         
-        /* Scaled Down Headers */
         h1 { font-size: 1.75rem; font-weight: 700; text-align: center; margin-bottom: 0.25rem; letter-spacing: -0.02em; }
-        p.desc { text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.75rem; }
+        p.desc { text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem; }
         .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
-        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; }
-        .blob-1 { top: -10%; right: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
-        .blob-2 { bottom: -10%; left: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
+        .navbar { position: fixed; top: 0; width: 100%; height: 4rem; z-index: 100; background: var(--bg-base); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; }
 
-        /* Compact Navbar */
-        .navbar { position: fixed; top: 0; width: 100%; height: 4rem; z-index: 100; background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; }
-
-        /* Scaled Down Container */
         .main-content { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 6rem 1rem 3rem 1rem; }
-        .checkout-container { max-width: 30rem; width: 100%; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 20px; padding: 2rem 1.75rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); position: relative; backdrop-filter: blur(10px); }
-        .checkout-container::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--gradient-admin); }
+        .checkout-container { max-width: 32rem; width: 100%; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); position: relative; }
+        .checkout-container::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--gradient-admin); border-radius: 16px 16px 0 0; }
 
-        .back-link { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; margin-bottom: 1.25rem; transition: color 0.2s; font-weight: 500; }
+        .back-link { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; margin-bottom: 1.25rem; transition: color 0.2s; font-weight: 600; }
         .back-link:hover { color: var(--text-primary); }
 
-        /* Region Cards Compact */
-        .region-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
-        .region-card { background: rgba(0,0,0,0.3); border: 1px solid var(--border-light); border-radius: 12px; padding: 1.25rem 0.75rem; text-align: center; cursor: pointer; transition: all 0.2s; }
-        .region-card:hover { border-color: rgba(139, 92, 246, 0.5); background: rgba(139, 92, 246, 0.05); }
-        .region-card.active { border-color: var(--accent-primary); background: rgba(139, 92, 246, 0.15); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); }
+        /* Alert Warning Box */
+        .alert-warning { background: var(--warning-bg); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 4px solid var(--warning-border); border-radius: 8px; padding: 1rem; margin-bottom: 1.75rem; display: flex; gap: 0.75rem; align-items: flex-start; }
+        .alert-warning i { color: var(--warning-border); font-size: 1.25rem; margin-top: 0.1rem; }
+        .alert-warning .alert-text h4 { color: var(--warning-border); font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .alert-warning .alert-text p { color: #fde68a; font-size: 0.8rem; line-height: 1.4; margin: 0; }
+
+        /* Step Headers */
+        .step-header { display: flex; align-items: center; gap: 0.75rem; font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary); }
+        .step-badge { background: var(--accent-primary); color: white; width: 1.75rem; height: 1.75rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .step-divider { width: 100%; height: 1px; background: var(--border-light); margin: 2rem 0 1.5rem 0; }
+
+        /* Region Cards */
+        .region-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+        .region-card { background: var(--bg-input); border: 1px solid var(--border-light); border-radius: 12px; padding: 1.25rem 0.75rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .region-card:hover { border-color: var(--border-highlight); background: #202024; }
+        .region-card.active { border-color: var(--accent-primary); background: rgba(139, 92, 246, 0.1); }
         .region-card span { font-size: 1.75rem; display: block; margin-bottom: 0.25rem; }
-        .region-card h3 { font-family: 'Outfit', sans-serif; font-size: 1rem; color: #fff; }
+        .region-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; color: #fff; }
         .region-card p { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.15rem; }
 
-        /* Payment Methods Compact */
-        .payment-method-box { margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid var(--border-light); }
-        .qris-box { background: rgba(255, 255, 255, 0.05); padding: 0.75rem; border-radius: 12px; margin: 0 auto 1rem auto; border: 1px solid var(--border-highlight); display: flex; justify-content: center; }
+        /* Payment Methods */
+        .payment-method-box { margin-bottom: 1.5rem; padding: 1.25rem; background: var(--bg-input); border-radius: 12px; border: 1px solid var(--border-light); }
+        .qris-box { background: #fff; padding: 0.75rem; border-radius: 12px; margin: 0 auto 1rem auto; display: flex; justify-content: center; max-width: 250px; }
         .qris-box img { max-width: 100%; height: auto; border-radius: 6px; display: block; }
-        .price-tag { text-align: center; font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 0.25rem; color: #c4b5fd; line-height: 1; }
+        .price-tag { text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 0.25rem; color: #c4b5fd; line-height: 1; }
         
-        /* Forms Scaled Down */
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.3rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        /* Forms */
+        .form-group { margin-bottom: 1.25rem; }
+        label { display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; font-weight: 600; }
         
-        input[type="text"], input[type="email"] { width: 100%; padding: 0.7rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border-light); border-radius: 8px; color: var(--text-primary); font-size: 0.85rem; outline: none; transition: all 0.3s; font-family: 'Inter', sans-serif; }
-        input[type="text"]:focus, input[type="email"]:focus { border-color: var(--accent-primary); background: rgba(0,0,0,0.6); box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15); }
+        input[type="text"], input[type="email"] { width: 100%; padding: 0.8rem 1rem; background: var(--bg-input); border: 1px solid var(--border-highlight); border-radius: 8px; color: var(--text-primary); font-size: 0.9rem; outline: none; transition: all 0.3s; font-family: 'Plus Jakarta Sans', sans-serif; }
+        input[type="text"]:focus, input[type="email"]:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); }
         input::placeholder { color: var(--text-muted); }
         
-        .file-upload { position: relative; width: 100%; height: 90px; border: 1px dashed var(--border-light); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-secondary); cursor: pointer; transition: all 0.3s; background: rgba(0,0,0,0.2); }
+        .file-upload { position: relative; width: 100%; height: 100px; border: 2px dashed var(--border-highlight); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-secondary); cursor: pointer; transition: all 0.3s; background: var(--bg-input); }
         .file-upload:hover { border-color: var(--accent-primary); color: var(--text-primary); background: rgba(139, 92, 246, 0.05); }
         .file-upload input[type="file"] { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-        .file-upload i { font-size: 1.25rem; margin-bottom: 0.25rem; color: var(--accent-primary); }
-        .file-upload span { font-size: 0.8rem; font-weight: 500; }
+        .file-upload i { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-secondary); transition: color 0.3s; }
+        .file-upload:hover i { color: var(--accent-primary); }
+        .file-upload span { font-size: 0.85rem; font-weight: 500; text-align: center; padding: 0 1rem; }
         
-        /* Submit Button Compact */
-        .btn-submit { width: 100%; padding: 0.8rem; background: var(--gradient-admin); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; margin-top: 0.5rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; justify-content: center; align-items: center; gap: 0.5rem; font-family: 'Inter', sans-serif; }
-        .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); filter: brightness(1.1); }
+        /* Submit Button */
+        .btn-submit { width: 100%; padding: 0.9rem; background: var(--gradient-admin); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; margin-top: 0.5rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; justify-content: center; align-items: center; gap: 0.5rem; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4); }
         .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .loading-spinner { display: none; width: 1.1rem; height: 1.1rem; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; }
+        .loading-spinner { display: none; width: 1.25rem; height: 1.25rem; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        .msg-box { margin-top: 1rem; text-align: center; font-size: 0.8rem; font-weight: 500; display: none; padding: 0.75rem; border-radius: 8px; }
+        .msg-box { margin-top: 1.25rem; text-align: center; font-size: 0.85rem; font-weight: 600; display: none; padding: 0.8rem; border-radius: 8px; }
         .status-error { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); color: var(--accent-danger); }
         .status-success { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--accent-success); }
 
-        /* Success Section */
-        #success-section { display: none; text-align: center; padding: 1.5rem 0; animation: fadeIn 0.4s ease-out; }
+        #success-section { display: none; text-align: center; padding: 2rem 0; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .success-icon { font-size: 4rem; color: var(--accent-success); margin-bottom: 1rem; text-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+        .success-icon { font-size: 4.5rem; color: var(--accent-success); margin-bottom: 1.25rem; }
 
-        footer { padding: 1.5rem 0; border-top: 1px solid var(--border-light); text-align: center; color: var(--text-muted); font-size: 0.75rem; margin-top: auto; background: rgba(0,0,0,0.5); }
+        footer { padding: 1.5rem 0; border-top: 1px solid var(--border-light); text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: auto; background: var(--bg-base); }
     </style>
 </head>
 <body>
 
-    <div class="ambient-bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
-
     <nav class="navbar">
         <div class="container flex justify-between items-center w-full">
-            <a href="index.html" class="font-outfit" style="font-size: 1.15rem; font-weight: 800; color: #fff; text-decoration: none;">
+            <a href="index.html" class="font-display" style="font-size: 1.2rem; font-weight: 800; color: #fff; text-decoration: none;">
                 <i class="fa-solid fa-code text-gradient mr-1"></i> Heraclaus 
-                <span style="color: var(--text-muted); font-weight: 500; font-family: 'Inter', sans-serif; font-size: 0.85rem; margin-left: 0.25rem;">| Secure Checkout</span>
+                <span style="color: var(--text-muted); font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; margin-left: 0.25rem;">| Secure Checkout</span>
             </a>
         </div>
     </nav>
@@ -130,8 +130,21 @@
                 </a>
                 
                 <h1>Admin Suite Pro</h1>
-                <p class="desc">Select payment method to claim your license.</p>
+                <p class="desc">Selesaikan langkah di bawah untuk mengklaim lisensi Anda.</p>
                 
+                <div class="alert-warning">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div class="alert-text">
+                        <h4>INFORMASI PENTING</h4>
+                        <p>Hanya melakukan pembayaran tidak akan mengaktifkan lisensi Anda. <b>Anda WAJIB mengirimkan bukti pembayaran pada formulir (Langkah 2)</b> setelah transfer.</p>
+                    </div>
+                </div>
+
+                <div class="step-header">
+                    <div class="step-badge">1</div>
+                    Pilih Metode Pembayaran
+                </div>
+
                 <div class="region-grid">
                     <div class="region-card" id="btn-id" onclick="selectRegion('id')">
                         <span>🇮🇩</span>
@@ -147,32 +160,33 @@
 
                 <div id="payment-details" style="display: none; animation: fadeIn 0.4s ease;">
                     
-                    <!-- QRIS BOX -->
                     <div id="qris-content" class="payment-method-box">
                         <div class="qris-box">
                             <img src="https://image2url.com/r2/default/images/1772880891631-13f0dca4-0a81-4537-871e-d152e7940604.jpg" alt="Heraclaus QRIS Code">
                         </div>
                         <div class="price-tag">Rp 80.000</div>
-                        <p style="text-align: center; color: var(--text-secondary); font-size: 0.8rem;">Scan the QR code above using any supported e-wallet or banking app.</p>
+                        <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">Scan QR code di atas menggunakan e-wallet atau m-banking Anda. <b>Simpan bukti transfer!</b></p>
                     </div>
 
-                    <!-- SOCIABUZZ BOX -->
                     <div id="sociabuzz-content" class="payment-method-box" style="display: none; text-align: center;">
                         <i class="fa-solid fa-earth-americas" style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.75rem;"></i>
                         <div class="price-tag">$5.00</div>
-                        <p style="color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 0.8rem;">Complete your payment via our Sociabuzz Tribe page using PayPal, Credit Card, or other international methods.</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 0.85rem;">Complete your payment via our Sociabuzz Tribe page using PayPal, Credit Card, or other international methods.</p>
                         
-                        <a href="https://sociabuzz.com/heraclausid/tribe" target="_blank" class="btn-submit" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-light); margin-bottom: 0.75rem; color: #fff; text-decoration: none;">
+                        <a href="https://sociabuzz.com/heraclausid/tribe" target="_blank" class="btn-submit" style="background: var(--bg-card); border: 1px solid var(--border-highlight); margin-bottom: 0.75rem; color: #fff; text-decoration: none;">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i> Pay via Sociabuzz
                         </a>
-                        <p style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-circle-info"></i> Don't forget to take a screenshot of your receipt!</p>
+                        <p style="font-size: 0.8rem; color: var(--accent-danger); font-weight: 600;"><i class="fa-solid fa-camera"></i> Take a screenshot of your receipt!</p>
                     </div>
                     
-                    <div style="width: 100%; height: 1px; background: var(--border-light); margin: 1.5rem 0;"></div>
+                    <div class="step-divider"></div>
+
+                    <div class="step-header">
+                        <div class="step-badge" style="background: var(--accent-danger);">2</div>
+                        Konfirmasi Pembayaran
+                    </div>
 
                     <form id="payment-form">
-                        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; margin-bottom: 1rem; text-align: center;">Submit Payment Proof</h3>
-                        
                         <div class="form-group">
                             <label>Xbox/Minecraft Gamertag <span style="color:var(--accent-danger)">*</span></label>
                             <input type="text" id="gamertag" required placeholder="e.g. HeraclausReal">
@@ -184,21 +198,21 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Discord Username <span style="color:var(--text-muted); text-transform: none; font-weight: 400; letter-spacing: normal;">(Optional)</span></label>
+                            <label>Discord Username <span style="color:var(--text-muted); font-weight: 400;">(Optional)</span></label>
                             <input type="text" id="discord" placeholder="For VIP Role (e.g. username#1234)">
                         </div>
                         
                         <div class="form-group">
-                            <label>Upload Payment Receipt <span style="color:var(--accent-danger)">*</span></label>
+                            <label>Upload Payment Receipt / Bukti Transfer <span style="color:var(--accent-danger)">*</span></label>
                             <div class="file-upload">
                                 <i class="fa-solid fa-cloud-arrow-up"></i>
-                                <span id="file-name-text">Select or drop image here</span>
+                                <span id="file-name-text">Click to browse or drag image here</span>
                                 <input type="file" id="file" accept="image/*" required>
                             </div>
                         </div>
                         
                         <button type="submit" class="btn-submit" id="submit-btn">
-                            <span id="btn-text"><i class="fa-solid fa-lock"></i> Submit Verification</span>
+                            <span id="btn-text"><i class="fa-solid fa-paper-plane"></i> Submit Verification</span>
                             <div class="loading-spinner" id="spinner"></div>
                         </button>
                         
@@ -207,14 +221,13 @@
                 </div>
             </div>
 
-            <!-- SUCCESS SECTION -->
             <div id="success-section">
                 <i class="fa-solid fa-circle-check success-icon"></i>
-                <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: #fff;">Submission Received!</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.85rem; line-height: 1.5;">
+                <h2 class="font-display" style="font-size: 1.75rem; margin-bottom: 0.75rem; color: #fff;">Submission Received!</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.9rem; line-height: 1.6;">
                     Thank you for your purchase. We are currently verifying your payment receipt. Your License Key and access link will be sent to your email shortly.
                 </p>
-                <a href="index.html" class="btn-submit" style="text-decoration: none; max-width: 200px; margin: 0 auto; padding: 0.6rem;">
+                <a href="index.html" class="btn-submit" style="text-decoration: none; max-width: 200px; margin: 0 auto;">
                     <i class="fa-solid fa-arrow-left"></i> Back to Home
                 </a>
             </div>
@@ -313,7 +326,7 @@
                 statusMsg.style.display = "block";
                 
                 btn.disabled = false;
-                btnText.innerHTML = '<i class="fa-solid fa-lock"></i> Submit Verification';
+                btnText.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Verification';
                 spinner.style.display = "none";
             });
         });
