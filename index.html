@@ -399,7 +399,7 @@
             }, observerOptions);
             document.querySelectorAll('.animate-on-scroll').forEach(el => { observer.observe(el); });
 
-            // Ambil Statistik
+            // Fetch Active User Stats
             fetch(GOOGLE_SCRIPT_URL + "?action=get_stats")
                 .then(res => res.json())
                 .then(data => {
@@ -436,7 +436,9 @@
                         // Cek visibilitas port
                         const isPortPublic = s.isPortPublic !== false;
                         const portVal = isPortPublic ? s.port : '';
-                        const portText = (portVal && portVal !== "19132") ? `<span style="color: var(--text-muted);">:${portVal}</span>` : '';
+                        
+                        // Tampilkan port secara publik jika ada, bahkan jika itu 19132
+                        const portText = portVal ? `<span style="color: var(--text-muted);">:${portVal}</span>` : '';
                         
                         // Setel tombol sesuai Link Type
                         let btnIcon = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
@@ -478,7 +480,8 @@
         }
         
         window.copyIp = function(ip, port, btn) {
-            const text = ip + (port !== "19132" && port ? ":" + port : "");
+            // Port selalu disalin jika valuenya tidak kosong
+            const text = ip + (port ? ":" + port : "");
             const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
             const oldHtml = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-check" style="color: #10b981;"></i>';
