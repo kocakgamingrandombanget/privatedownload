@@ -135,7 +135,7 @@
         .feature-cell { background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); border-radius: 8px; padding: 1.25rem; transition: background 0.3s; }
         .feature-cell:hover { background: rgba(255,255,255,0.04); border-color: var(--border-highlight); }
         .feature-cell i { font-size: 1.25rem; margin-bottom: 0.75rem; display: block; }
-        .feature-cell p { font-size: 0.85rem; margin-top: 0.2rem; }
+        .feature-cell p { font-size: 0.85rem; margin-top: 0.2rem; line-height: 1.5; }
         .grid-cards { display: grid; gap: 1rem; }
 
         /* Server Description Clamp */
@@ -279,12 +279,36 @@
                     </div>
                 </div>
                 <div class="feature-grid">
-                    <div class="feature-cell animate-on-scroll"><i class="fa-solid fa-sack-dollar" style="color: #f59e0b;"></i><h3 style="margin-bottom: 0.2rem;">Hybrid Economy</h3><p>Bypass Minecraft's scoreboard limits with our hybrid money model. Includes physical currencies & jobs.</p></div>
-                    <div class="feature-cell animate-on-scroll delay-100"><i class="fa-solid fa-khanda" style="color: #f43f5e;"></i><h3 style="margin-bottom: 0.2rem;">RPG Progression</h3><p>Keep retention high with skill leveling, player gravestones, and customizable PvE/PvP mechanics.</p></div>
-                    <div class="feature-cell animate-on-scroll delay-200"><i class="fa-solid fa-globe" style="color: #3b82f6;"></i><h3 style="margin-bottom: 0.2rem;">Advanced Regions</h3><p>Create secure land claims, manage precise roles, and run automated repeated broadcasts.</p></div>
-                    <div class="feature-cell animate-on-scroll"><i class="fa-solid fa-users" style="color: #10b981;"></i><h3 style="margin-bottom: 0.2rem;">Clan Ecosystem</h3><p>Allow players to form alliances, manage members, and equip custom overhead nametags.</p></div>
-                    <div class="feature-cell animate-on-scroll delay-100"><i class="fa-solid fa-list-ol" style="color: #8b5cf6;"></i><h3 style="margin-bottom: 0.2rem;">Immersive UI & NPCs</h3><p>Spawn interactive NPCs, display live sidebars, and set up floating holograms without coding.</p></div>
-                    <div class="feature-cell animate-on-scroll delay-200"><i class="fa-solid fa-shield-halved" style="color: #f87171;"></i><h3 style="margin-bottom: 0.2rem;">Security & Logs</h3><p>Built-in native login system to secure accounts, plus comprehensive chat logs for moderation.</p></div>
+                    <div class="feature-cell animate-on-scroll">
+                        <i class="fa-solid fa-sack-dollar" style="color: #f59e0b;"></i>
+                        <h3 style="margin-bottom: 0.2rem;">Economy & Auction House</h3>
+                        <p>Complete economy system to bypass limits with physical currencies, jobs, and a fully functional Auction House.</p>
+                    </div>
+                    <div class="feature-cell animate-on-scroll delay-100">
+                        <i class="fa-solid fa-skull" style="color: #f43f5e;"></i>
+                        <h3 style="margin-bottom: 0.2rem;">RPG & Gravestone Feature</h3>
+                        <p>Keep retention high with skill leveling, PvP mechanics, and secure Player Gravestones to protect loot upon death.</p>
+                    </div>
+                    <div class="feature-cell animate-on-scroll delay-200">
+                        <i class="fa-solid fa-shield-halved" style="color: #3b82f6;"></i>
+                        <h3 style="margin-bottom: 0.2rem;">Security & Login Feature</h3>
+                        <p>Built-in native Login Feature to secure player accounts from offline spoofers and unauthorized access.</p>
+                    </div>
+                    <div class="feature-cell animate-on-scroll">
+                        <i class="fa-solid fa-eye" style="color: #10b981;"></i>
+                        <h3 style="margin-bottom: 0.2rem;">X-Ray Feature & Moderation</h3>
+                        <p>Powerful moderation tools including an X-Ray feature to easily spot hidden ores, secret bases, or cheating players.</p>
+                    </div>
+                    <div class="feature-cell animate-on-scroll delay-100">
+                        <i class="fa-solid fa-network-wired" style="color: #8b5cf6;"></i>
+                        <h3 style="margin-bottom: 0.2rem;">Free Server Promotion</h3>
+                        <p>Pro members get free server promotion directly on our high-traffic Community Servers page to grow their player base.</p>
+                    </div>
+                    <div class="feature-cell animate-on-scroll delay-200">
+                        <i class="fa-solid fa-comments" style="color: #f87171;"></i>
+                        <h3 style="margin-bottom: 0.2rem;">Private Social Chat</h3>
+                        <p>Gain access to an exclusive Private Social Chat in the Client Portal to interact with other verified server owners.</p>
+                    </div>
                 </div>
             </div>
 
@@ -330,7 +354,8 @@
                     <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1rem;">No license attached. May deactivate anytime.</p>
                     <ul class="check-list">
                         <li><i class="fa-solid fa-check"></i> Admin, World & Player Management</li>
-                        <li><i class="fa-solid fa-check"></i> Economy, Jobs, Quests & RPG Skills</li>
+                        <li><i class="fa-solid fa-check"></i> Basic Economy, Quests & Gravestone Feature</li>
+                        <li><i class="fa-solid fa-check"></i> Basic Security & Login Feature</li>
                         <li><i class="fa-solid fa-check"></i> Clans, Land Claims & Custom Chat</li>
                         <li><i class="fa-solid fa-check"></i> Basic Holograms, Sidebars & NPCs</li>
                         <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> Non-permanent Access (Trial)</li>
@@ -344,9 +369,10 @@
                     <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 1rem;">Equivalent to ~Rp99.000. Secure and Ad-Free.</p>
                     <ul class="check-list">
                         <li><i class="fa-solid fa-check"></i> <strong style="color: white;">Everything in Starter, plus:</strong></li>
-                        <li><i class="fa-solid fa-check"></i> Native UI & High-Speed Database (No Scoreboard Lag)</li>
-                        <li><i class="fa-solid fa-check"></i> Server Promotion in Community Section</li>
-                        <li><i class="fa-solid fa-check"></i> Global Chat Community Access via Portal</li>
+                        <li><i class="fa-solid fa-check"></i> Auction House & X-Ray Feature Unlocked</li>
+                        <li><i class="fa-solid fa-check"></i> Free Server Promotion in Community Section</li>
+                        <li><i class="fa-solid fa-check"></i> Private Social Chat Community Access via Portal</li>
+                        <li><i class="fa-solid fa-check"></i> Native UI & High-Speed Database (No Lag)</li>
                         <li><i class="fa-solid fa-check"></i> Permanent Binding (Pay Once, Yours Forever)</li>
                         <li><i class="fa-solid fa-check"></i> Early Access to Beta Features & Fast Updates</li>
                     </ul>
@@ -441,7 +467,7 @@
         });
 
         function checkServerStatus(ip, port, elementId) {
-            const apiPort = port ? port : '19132'; // Selalu butuh port untuk API
+            const apiPort = port ? port : '19132'; 
             
             fetch(`https://api.mcsrvstat.us/bedrock/2/${ip}:${apiPort}`)
                 .then(res => res.json())
