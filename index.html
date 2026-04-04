@@ -27,7 +27,7 @@
         .container { max-width: 64rem; margin: 0 auto; padding: 0 1.25rem; }
         .flex { display: flex; } .flex-col { flex-direction: column; }
         .items-center { align-items: center; } .justify-between { justify-content: space-between; } .justify-center { justify-content: center; }
-        .w-full { width: 100%; } .text-center { text-align: center; }
+        .w-full { width: 100%; } .text-center { text-align: center; } .text-left { text-align: left; }
         
         /* Typography Scaled Down */
         h1, h2, h3, h4, .font-outfit { font-family: 'Outfit', sans-serif; }
@@ -144,7 +144,7 @@
 
         /* Pricing Details */
         .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 48rem; margin: 2rem auto 0; }
-        .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; transition: transform 0.2s; }
+        .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; transition: transform 0.2s; text-align: left; }
         .price-card.pro { border-color: rgba(139, 92, 246, 0.4); background: linear-gradient(180deg, rgba(139, 92, 246, 0.05), transparent); position: relative; overflow: hidden; }
         .price-val { font-family: 'Outfit'; font-size: 2.25rem; font-weight: 700; color: #fff; line-height: 1; margin: 0.5rem 0; letter-spacing: -0.02em; }
         .price-val span { font-size: 0.85rem; color: var(--text-secondary); font-weight: 400; font-family: 'Inter'; }
