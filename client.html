@@ -374,9 +374,10 @@
                                 <h3 style="font-size: 1.15rem; color: #fff; margin-bottom: 0.4rem; font-family: 'Outfit'; letter-spacing: -0.01em;">Admin Suite Pro</h3>
                                 <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem; flex-grow: 1;">Download the latest updated file directly from our secure server.</p>
                                 
-                                <div style="display: flex; gap: 0.75rem; width: 100%;">
-                                    <button id="btn-download-realms" class="btn btn-gradient" style="flex: 1;"><i class="fa-solid fa-cube"></i> Realms</button>
-                                    <button id="btn-download-bds" class="btn btn-outline" style="flex: 1; border-color: rgba(16, 185, 129, 0.3); color: #10b981;"><i class="fa-solid fa-server"></i> BDS</button>
+                                <div style="display: flex; gap: 0.5rem; width: 100%;">
+                                    <button id="btn-download-realms" class="btn btn-gradient" style="flex: 1; padding: 0 0.5rem;"><i class="fa-solid fa-cube"></i> Realms</button>
+                                    <button id="btn-download-bds" class="btn btn-outline" style="flex: 1; border-color: rgba(16, 185, 129, 0.3); color: #10b981; padding: 0 0.5rem;"><i class="fa-solid fa-server"></i> BDS</button>
+                                    <a href="changelog.html" target="_blank" class="btn btn-outline" style="flex: 1; padding: 0 0.5rem; text-decoration: none;"><i class="fa-solid fa-clock-rotate-left"></i> Changelog</a>
                                 </div>
                             </div>
                         </div>
@@ -939,7 +940,7 @@
                         <td><span class="version-badge">${h.versionName}</span> ${mcBadge} ${index === 0 ? '<span style="color:var(--accent-success); font-size:0.65rem; margin-left:0.3rem; font-weight:700;">LATEST</span>' : ''}</td>
                         <td>${new Date(h.date).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</td><td style="font-size: 0.8rem;"><span style="opacity:0.8">${noteStr}</span></td>
                         <td style="text-align:right;">
-                            <div style="display: flex; gap: 0.4rem; justify-content: flex-end; align-items: center; height: 100%;">
+                            <div style="display: flex; gap: 0.5rem; justify-content: flex-end; align-items: center; height: 100%;">
                                 <button onclick="triggerDownload('${linkData.realms}')" class="btn btn-sm btn-outline" title="Download Realms" style="padding: 0 0.5rem;"><i class="fa-solid fa-cube"></i></button>
                                 <button onclick="triggerDownload('${linkData.bds}')" class="btn btn-sm btn-outline" style="color: var(--accent-success); border-color: rgba(16, 185, 129, 0.3);" title="Download BDS" style="padding: 0 0.5rem;"><i class="fa-solid fa-server"></i></button>
                             </div>
@@ -1161,7 +1162,6 @@
                 try { const dlObj = JSON.parse(m.downloadHistory); for(let v in dlObj) { dlStatsHtml += `<span style="display:inline-block; margin-right: 0.4rem; background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px; border:1px solid var(--border-light);">${v}: <span style="color:#fff; font-weight:bold;">${dlObj[v]}x</span></span>`; } } catch(e) {}
                 if (!dlStatsHtml) dlStatsHtml = "No downloads yet";
 
-                // --- SENSOR EMAIL & LICENSE ---
                 let maskedEmail = m.email || "-";
                 if (m.email && m.email.includes('@')) {
                     let parts = m.email.split('@');
