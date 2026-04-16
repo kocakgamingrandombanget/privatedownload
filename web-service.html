@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heraclaus Web Studio | Jasa Pembuatan Website</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* --- CORE STYLES --- */
+        :root {
+            --bg-base: #050505; --bg-surface: #0a0a0a; --bg-card: rgba(255, 255, 255, 0.03); --bg-card-hover: rgba(255, 255, 255, 0.05);
+            --border-light: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff; --text-secondary: #a1a1aa; --text-muted: #71717a;
+            --accent-primary: #8b5cf6; --accent-secondary: #3b82f6; 
+            --gradient-hero: linear-gradient(135deg, #e879f9 0%, #8b5cf6 50%, #3b82f6 100%);
+            --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; }
+        
+        /* --- MULTILANGUAGE CSS --- */
+        body.lang-en .lang-id { display: none !important; }
+        body.lang-id .lang-en { display: none !important; }
+
+        .container { max-width: 64rem; margin: 0 auto; padding: 0 1.25rem; }
+        .flex { display: flex; } .flex-col { flex-direction: column; }
+        .items-center { align-items: center; } .justify-between { justify-content: space-between; } .justify-center { justify-content: center; }
+        .w-full { width: 100%; } .text-center { text-align: center; }
+        
+        h1, h2, h3, h4, .font-outfit { font-family: 'Outfit', sans-serif; }
+        h1 { font-size: clamp(1.75rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; }
+        h2 { font-size: clamp(1.25rem, 3.5vw, 1.875rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+        h3 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); line-height: 1.3; margin-bottom: 0.5rem; }
+        p { color: var(--text-secondary); font-size: clamp(0.85rem, 1.5vw, 0.9rem); }
+        .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; }
+        .blob-1 { top: -20%; left: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
+        .blob-2 { bottom: -20%; right: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
+
+        /* Navbar */
+        .navbar { position: fixed; top: 0; width: 100%; height: 4rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
+        .desktop-only { display: inline-block; }
+        @media (max-width: 640px) { .desktop-only { display: none !important; } }
+        
+        .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
+        .nav-btn { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: color 0.2s; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-light); cursor: pointer; }
+        .nav-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.1); border-color: var(--border-highlight); }
+        .lang-toggle { padding: 0.5rem 0.75rem; }
+
+        /* Buttons */
+        .action-group { display: flex; flex-direction: column; gap: 0.75rem; width: 100%; margin-top: 2rem; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0 1.5rem; min-height: 3rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; text-align: center; width: 100%; }
+        @media (min-width: 640px) { .action-group { flex-direction: row; } .btn { width: auto; } }
+
+        .btn-gradient { background: var(--gradient-admin); color: #fff; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4); filter: brightness(1.1); }
+        .btn-outline { background: rgba(255,255,255,0.02); color: var(--text-primary); border: 1px solid var(--border-highlight); }
+        .btn-outline:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
+        .btn-success { background: var(--gradient-success); color: #fff; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
+
+        /* Sections */
+        .section-hero { padding: 8rem 0 4rem 0; position: relative; }
+        .section { padding: 4rem 0; }
+        
+        .badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-radius: 999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1.5rem; border: 1px solid rgba(139, 92, 246, 0.3); letter-spacing: 1px; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 3rem; }
+        .feature-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 2rem; transition: transform 0.3s, border-color 0.3s; position: relative; overflow: hidden; }
+        .feature-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: background 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); border-color: var(--border-highlight); background: var(--bg-card-hover); }
+        .feature-card:hover::before { background: var(--gradient-hero); }
+        .feature-icon { width: 3rem; height: 3rem; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: var(--accent-primary); margin-bottom: 1.5rem; }
+
+        @media (min-width: 768px) { .feature-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; } }
+
+        /* Pricing (Web Packages) */
+        .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 1.5rem; max-width: 64rem; margin: 3rem auto 0; }
+        .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 2.5rem 2rem; display: flex; flex-direction: column; position: relative; }
+        .price-card.pro { border-color: rgba(139, 92, 246, 0.4); background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 50%), var(--bg-card); }
+        .pro-badge { position: absolute; top: -12px; right: 2rem; background: var(--gradient-admin); color: white; font-size: 0.7rem; font-weight: 800; padding: 0.3rem 0.8rem; border-radius: 999px; letter-spacing: 1px; }
+        
+        .price-title { font-family: 'Outfit'; font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+        .price-val { font-family: 'Outfit'; font-size: 2.5rem; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 1rem; letter-spacing: -0.02em; display: flex; align-items: baseline; gap: 0.3rem; }
+        .price-val .price-suffix { font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; font-family: 'Inter'; letter-spacing: normal; }
+        
+        .check-list { list-style: none; margin: 1.5rem 0 2rem 0; flex-grow: 1; border-top: 1px solid var(--border-light); padding-top: 1.5rem; }
+        .check-list li { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.85rem; }
+        .check-list i { color: #10b981; font-size: 0.85rem; margin-top: 0.25rem; flex-shrink: 0; }
+        .check-list i.fa-xmark { color: var(--border-highlight); }
+        .check-list i.fa-minus { color: var(--text-muted); font-size: 0.75rem; }
+
+        @media (min-width: 768px) { .pricing-wrap { grid-template-columns: repeat(2, 1fr); } }
+
+        /* Add-ons (Layanan Tambahan) */
+        .addon-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 64rem; margin: 2rem auto 0; }
+        @media (min-width: 768px) { .addon-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; } }
+        .addon-card { background: var(--bg-surface); border: 1px dashed var(--border-highlight); border-radius: 16px; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem; transition: all 0.3s ease; }
+        .addon-card:hover { border-color: var(--accent-primary); background: rgba(139, 92, 246, 0.05); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .addon-icon { width: 3.5rem; height: 3.5rem; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-light); color: var(--accent-primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; transition: all 0.3s ease; }
+        .addon-card:hover .addon-icon { background: var(--gradient-admin); color: #fff; border-color: transparent; }
+        .addon-info { flex-grow: 1; }
+        .addon-price { font-family: 'Outfit'; font-weight: 700; font-size: 1.15rem; color: #fff; margin-top: 0.3rem; display: flex; align-items: baseline; gap: 0.2rem; }
+
+        /* FAQ & TOS Styles */
+        .faq-wrap { max-width: 48rem; margin: 3rem auto 0; display: flex; flex-direction: column; gap: 0.75rem; text-align: left; }
+        .faq-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; transition: all 0.3s ease; }
+        .faq-item.active { border-color: var(--border-highlight); background: rgba(255,255,255,0.04); }
+        .faq-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; background: none; border: none; color: var(--text-primary); font-family: 'Outfit'; font-size: 1rem; font-weight: 600; cursor: pointer; text-align: left; gap: 1rem; }
+        .faq-btn i { color: var(--text-muted); transition: transform 0.3s ease; font-size: 0.85rem; }
+        .faq-item.active .faq-btn i { transform: rotate(180deg); color: var(--text-primary); }
+        .faq-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+        .faq-item.active .faq-content { grid-template-rows: 1fr; }
+        .faq-inner { overflow: hidden; }
+        .faq-inner p { padding: 0 1.5rem 1.5rem 1.5rem; font-size: 0.9rem; margin: 0; line-height: 1.6; color: var(--text-secondary); }
+
+        /* Workflow Steps */
+        .workflow-wrap { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 3rem; position: relative; }
+        .workflow-wrap::before { content: ''; position: absolute; left: 1.5rem; top: 0; bottom: 0; width: 2px; background: var(--border-light); z-index: 0; }
+        @media (min-width: 768px) { 
+            .workflow-wrap { flex-direction: row; gap: 2rem; } 
+            .workflow-wrap::before { left: 0; right: 0; top: 2rem; height: 2px; width: 100%; bottom: auto; }
+        }
+        
+        .step-item { position: relative; z-index: 1; display: flex; flex-direction: row; align-items: flex-start; gap: 1rem; }
+        @media (min-width: 768px) { .step-item { flex-direction: column; text-align: center; align-items: center; flex: 1; } }
+        
+        .step-number { width: 3rem; height: 3rem; border-radius: 50%; background: var(--bg-surface); border: 2px solid var(--accent-primary); display: flex; align-items: center; justify-content: center; font-family: 'Outfit'; font-weight: 800; font-size: 1.25rem; color: #fff; box-shadow: 0 0 0 6px var(--bg-base); flex-shrink: 0; }
+        .step-text h4 { font-family: 'Outfit'; font-size: 1.1rem; color: #fff; margin-bottom: 0.3rem; margin-top: 0.4rem; }
+        .step-text p { font-size: 0.85rem; }
+
+        /* CTA Section */
+        .cta-box { background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1), transparent 60%), var(--bg-card); border: 1px solid var(--border-light); border-radius: 20px; padding: 4rem 2rem; text-align: center; margin-top: 2rem; position: relative; overflow: hidden; }
+
+        footer { padding: 3rem 0 1.5rem 0; border-top: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.85rem; background: rgba(0,0,0,0.5); text-align: center; }
+
+        /* Animations */
+        .animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+        .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; } .delay-300 { transition-delay: 300ms; }
+
+        /* Interactive Icon Styles */
+        .feature-icon i, .addon-icon i, .step-icon, .price-title i { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .feature-card:hover .feature-icon i { transform: scale(1.35); color: #fff; }
+        .addon-card:hover .addon-icon i { transform: scale(1.3) rotate(15deg); }
+        .step-item:hover .step-icon { transform: scale(1.25) translateY(-3px); color: var(--accent-primary) !important; }
+        .price-card:hover .price-title i { transform: translateX(5px) scale(1.15); color: #fff !important; }
+        .btn i { transition: transform 0.3s ease; }
+        .btn:hover i { transform: scale(1.2); }
+    </style>
+</head>
+<body class="lang-id">
+
+    <div class="ambient-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+
+    <nav class="navbar" id="navbar">
+        <div class="container flex justify-between items-center w-full">
+            <a href="index.html" class="font-outfit" style="font-size: 1.2rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em;">
+                <i class="fa-solid fa-code text-gradient mr-2"></i> Heraclaus <span class="desktop-only" style="color: var(--text-muted); font-weight: 500; font-family: 'Inter'; font-size: 0.9rem; margin-left: 0.3rem;">| Web Studio</span>
+            </a>
+            
+            <div class="nav-actions">
+                <button onclick="toggleLang()" class="nav-btn lang-toggle" title="Change Language">
+                    <i class="fa-solid fa-globe"></i>
+                    <span class="lang-id">EN</span>
+                    <span class="lang-en">ID</span>
+                </button>
+                <a href="index.html" class="nav-btn">
+                    <i class="fa-solid fa-arrow-left"></i> 
+                    <span class="desktop-only">
+                        <span class="lang-id">Kembali ke Home</span>
+                        <span class="lang-en">Back to Home</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section-hero text-center">
+        <div class="container flex flex-col items-center animate-on-scroll">
+            <span class="badge">
+                <i class="fa-solid fa-laptop-code"></i> 
+                <span class="lang-id">Layanan Premium Heraclaus</span>
+                <span class="lang-en">Heraclaus Premium Service</span>
+            </span>
+            
+            <h1>
+                <span class="lang-id">Punya Website Keren <br><span class="text-gradient">Nggak Pake Ribet.</span></span>
+                <span class="lang-en">Get a Cool Website <br><span class="text-gradient">Without the Hassle.</span></span>
+            </h1>
+            
+            <p style="max-width: 42rem; margin: 1rem auto 0; line-height: 1.6;">
+                <span class="lang-id">Bikin server game kamu makin ramai atau bisnis kamu kelihatan profesional dengan website yang cepat, modern, dan gampang diakses di HP.</span>
+                <span class="lang-en">Make your game server more crowded or your business look professional with a fast, modern, and mobile-friendly website.</span>
+            </p>
+            
+            <div class="action-group justify-center">
+                <a href="#packages" class="btn btn-gradient">
+                    <span class="lang-id">Cek Pilihan Harga</span>
+                    <span class="lang-en">Check Pricing</span>
+                </a>
+                <a href="#portfolio" class="btn btn-outline">
+                    <span class="lang-id">Gimana Cara Pesannya?</span>
+                    <span class="lang-en">How to Order?</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FITUR UNGGULAN -->
+    <section id="features" class="section" style="border-top: 1px solid var(--border-light); background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);">
+        <div class="container">
+            <div class="text-center animate-on-scroll">
+                <h2>
+                    <span class="lang-id">Kenapa Buat Web di Kami?</span>
+                    <span class="lang-en">Why Build With Us?</span>
+                </h2>
+                <p style="margin-top: 0.5rem;">
+                    <span class="lang-id">Kami buatkan website kualitas terbaik yang siap bantu usahamu maju.</span>
+                    <span class="lang-en">We build top-quality websites ready to help your business grow.</span>
+                </p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <h3>
+                        <span class="lang-id">Desain Kece & Bebas Pilih Warna</span>
+                        <span class="lang-en">Cool Design & Custom Colors</span>
+                    </h3>
+                    <p>
+                        <span class="lang-id">Tampilan website yang modern, nggak kaku, dan warnanya bisa disesuaikan dengan kesukaan kamu atau warna brand bisnismu.</span>
+                        <span class="lang-en">A modern, non-rigid website look where colors can be matched to your personal taste or business brand.</span>
+                    </p>
+                </div>
+                <div class="feature-card animate-on-scroll delay-100">
+                    <div class="feature-icon" style="color: #10b981;"><i class="fa-solid fa-bolt"></i></div>
+                    <h3>
+                        <span class="lang-id">Buka Web Sekejap Mata</span>
+                        <span class="lang-en">Lightning Fast Loading</span>
+                    </h3>
+                    <p>
+                        <span class="lang-id">Kami ngoding langsung dari nol, nggak pakai template berat. Jadi saat website dibuka, loading-nya super cepat dan nggak bikin nunggu.</span>
+                        <span class="lang-en">We code from scratch, no heavy templates. So when your website is opened, it loads super fast without the wait.</span>
+                    </p>
+                </div>
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon" style="color: #f59e0b;"><i class="fa-solid fa-server"></i></div>
+                    <h3>
+                        <span class="lang-id">Sistem Data Gratis</span>
+                        <span class="lang-en">Free Data System</span>
+                    </h3>
+                    <p>
+                        <span class="lang-id">Kalau butuh simpan data member, kami sambungkan langsung pakai sistem Google secara gratis. Kamu nggak usah bayar sewa server mahal tiap bulan.</span>
+                        <span class="lang-en">If you need to store member data, we link it up using Google's free system. You don't have to pay expensive monthly server rentals.</span>
+                    </p>
+                </div>
+                <div class="feature-card animate-on-scroll delay-100">
+                    <div class="feature-icon" style="color: #f43f5e;"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                    <h3>
+                        <span class="lang-id">Pas & Rapi di Layar HP</span>
+                        <span class="lang-en">Looks Great on Mobile</span>
+                    </h3>
+                    <p>
+                        <span class="lang-id">Buka di komputer, tablet, ataupun HP, tampilan websitemu bakal otomatis menyesuaikan. Semuanya tetap rapi dan enak dibaca.</span>
+                        <span class="lang-en">Whether opened on a computer, tablet, or phone, your website will automatically adjust. Everything stays neat and readable.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WORKFLOW (CARA KERJA) -->
+    <section id="portfolio" class="section">
+        <div class="container">
+            <div class="text-center animate-on-scroll">
+                <span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.3);">
+                    <i class="fa-solid fa-shoe-prints"></i> 
+                    <span class="lang-id">Cara Pemesanan</span>
+                    <span class="lang-en">How to Order</span>
+                </span>
+                <h2>
+                    <span class="lang-id">Langkah Bikin Website Impianmu</span>
+                    <span class="lang-en">Steps to Your Dream Website</span>
+                </h2>
+            </div>
+            
+            <div class="workflow-wrap animate-on-scroll delay-100">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-text">
+                        <h4>
+                            <i class="fa-solid fa-comments step-icon" style="color: var(--accent-secondary); margin-right: 0.4rem;"></i>
+                            <span class="lang-id">Ngobrol & Diskusi</span>
+                            <span class="lang-en">Chat & Discuss</span>
+                        </h4>
+                        <p>
+                            <span class="lang-id">Ceritakan ide website kamu, fitur yang dimau, dan kita sepakati harga serta waktu pengerjaannya.</span>
+                            <span class="lang-en">Tell us your website idea, desired features, and we'll agree on the price and timeline.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-text">
+                        <h4>
+                            <i class="fa-solid fa-file-invoice-dollar step-icon" style="color: var(--accent-secondary); margin-right: 0.4rem;"></i>
+                            <span class="lang-id">Bayar DP 50%</span>
+                            <span class="lang-en">50% Down Payment</span>
+                        </h4>
+                        <p>
+                            <span class="lang-id">Bayar separuh dulu sebagai tanda jadi biar pesananmu langsung masuk antrean pembuatan.</span>
+                            <span class="lang-en">Pay half upfront to secure your spot so we can start making your website right away.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-text">
+                        <h4>
+                            <i class="fa-solid fa-code step-icon" style="color: var(--accent-secondary); margin-right: 0.4rem;"></i>
+                            <span class="lang-id">Proses Pembuatan</span>
+                            <span class="lang-en">Making Process</span>
+                        </h4>
+                        <p>
+                            <span class="lang-id">Kami akan buatkan desainnya dan mulai menulis kode programnya sampai semua fiturnya jalan.</span>
+                            <span class="lang-en">We will design the layout and start coding until all the features are working perfectly.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-text">
+                        <h4>
+                            <i class="fa-solid fa-list-check step-icon" style="color: var(--accent-secondary); margin-right: 0.4rem;"></i>
+                            <span class="lang-id">Cek Bareng & Pelunasan</span>
+                            <span class="lang-en">Check & Pay Off</span>
+                        </h4>
+                        <p>
+                            <span class="lang-id">Kita cek websitenya bareng-bareng. Kalau sudah pas dan oke, baru lunasi sisa pembayarannya.</span>
+                            <span class="lang-en">We'll review the website together. If everything is good to go, you pay the remaining balance.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">5</div>
+                    <div class="step-text">
+                        <h4>
+                            <i class="fa-solid fa-rocket step-icon" style="color: var(--accent-secondary); margin-right: 0.4rem;"></i>
+                            <span class="lang-id">Website Online!</span>
+                            <span class="lang-en">Website Goes Live!</span>
+                        </h4>
+                        <p>
+                            <span class="lang-id">Website kamu resmi diluncurkan ke internet dan siap dipamerkan ke semua orang!</span>
+                            <span class="lang-en">Your website is officially launched on the internet and ready to be shown off to everyone!</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING PACKAGES -->
+    <section id="packages" class="section" style="border-top: 1px solid var(--border-light); background: rgba(0,0,0,0.4);">
+        <div class="container animate-on-scroll">
+            <div class="text-center">
+                <h2>
+                    <span class="lang-id">Pilihan Harga Sesuai Kantong</span>
+                    <span class="lang-en">Pricing That Fits Your Budget</span>
+                </h2>
+                <p style="margin-top: 0.5rem;">
+                    <span class="lang-id">Cuma bayar sekali di awal. Silakan pilih paket yang kamu butuhkan.</span>
+                    <span class="lang-en">Just pay once upfront. Choose the package that fits your needs.</span>
+                </p>
+            </div>
+            
+            <div class="pricing-wrap">
+                <!-- Paket 1: Starter -->
+                <div class="price-card animate-on-scroll">
+                    <div class="price-title">
+                        <i class="fa-solid fa-paper-plane" style="color: var(--text-muted); font-size: 1.1rem; margin-right: 0.4rem;"></i>
+                        <span class="lang-id">Profil Starter <br><span style="font-size:0.9rem; color:#a1a1aa; font-weight:500;">(Khusus Minecraft)</span></span>
+                        <span class="lang-en">Starter Profile <br><span style="font-size:0.9rem; color:#a1a1aa; font-weight:500;">(Minecraft Only)</span></span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.4;">
+                        <span class="lang-id">Website 1 halaman khusus untuk pamerkan server Minecraft kamu. Cuma desain dan kode, kamu yang urus hostingnya.</span>
+                        <span class="lang-en">A 1-page website specifically to showcase your Minecraft server. Design and code only, you handle the hosting.</span>
+                    </p>
+                    <div class="price-val">
+                        <span class="dynamic-price" data-price="150000">Rp 150k</span>
+                        <span class="price-suffix"> / project</span>
+                    </div>
+                    
+                    <ul class="check-list">
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-id">1 Halaman Server Minecraft</span><span class="lang-en">1 Minecraft Server Page</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-id">Desain Keren Sesuai Selera</span><span class="lang-en">Cool Custom Design</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-id">Tombol Chat Biar Gampang Dihubungi</span><span class="lang-en">Chat Buttons Included</span></li>
+                        <li><i class="fa-solid fa-check" style="color: #f59e0b;"></i> <span class="lang-id">Gratis Domain .my.id (1 Tahun)</span><span class="lang-en">Free .my.id Domain (1 Year)</span></li>
+                        <li style="opacity: 0.6;"><i class="fa-solid fa-minus"></i> <span class="lang-id">Tanpa Hosting (Pasang Sendiri)</span><span class="lang-en">No Hosting (Setup Yourself)</span></li>
+                        <li style="opacity: 0.6;"><i class="fa-solid fa-xmark"></i> <span class="lang-id">Bukan Untuk Toko/Sistem Login</span><span class="lang-en">No Store/Login System</span></li>
+                    </ul>
+                    <a href="https://wa.me/6285183185998?text=Halo%20Heraclaus,%20saya%20tertarik%20pesan%20Paket%20Profil%20Starter%20Minecraft" target="_blank" class="btn btn-outline w-full mt-auto lang-id">Pilih Paket Ini</a>
+                    <a href="https://wa.me/6285183185998?text=Hello%20Heraclaus,%20I'm%20interested%20in%20the%20Starter%20Profile%20Package" target="_blank" class="btn btn-outline w-full mt-auto lang-en">Choose This</a>
+                </div>
+
+                <!-- Paket 2: Landing Page -->
+                <div class="price-card animate-on-scroll delay-100">
+                    <div class="price-title">
+                        <i class="fa-solid fa-pager" style="color: var(--text-muted); font-size: 1.1rem; margin-right: 0.4rem;"></i>
+                        <span class="lang-id">Landing Page <br><span style="font-size:0.9rem; color:#a1a1aa; font-weight:500;">(Praktis & Terima Beres)</span></span>
+                        <span class="lang-en">Landing Page <br><span style="font-size:0.9rem; color:#a1a1aa; font-weight:500;">(Done for You)</span></span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.4;">
+                        <span class="lang-id">Cocok buat promosi bisnis, portofolio, atau server game. Tinggal duduk manis, website langsung online dan siap pakai.</span>
+                        <span class="lang-en">Perfect for business promos, portfolios, or game servers. Just sit back, your website will be online and ready to use.</span>
+                    </p>
+                    <div class="price-val">
+                        <span class="dynamic-price" data-price="300000">Rp 300k</span>
+                        <span class="price-suffix"> / project</span>
+                    </div>
+                    
+                    <ul class="check-list">
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-id">1 Halaman Panjang (Bisa di-scroll)</span><span class="lang-en">1 Long Scrollable Page</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-id">Desain Mewah & Animasi Halus</span><span class="lang-en">Luxury Design & Smooth Animations</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-id">Bantuan Tulis Kata-kata Teksnya</span><span class="lang-en">Basic Text Writing Help</span></li>
+                        <li><i class="fa-solid fa-check" style="color: #f59e0b;"></i> <span class="lang-id">Gratis Domain .my.id (1 Tahun)</span><span class="lang-en">Free .my.id Domain (1 Year)</span></li>
+                        <li><i class="fa-solid fa-check" style="color: #f59e0b;"></i> <span class="lang-id">Gratis Hosting GitHub (1 Tahun)</span><span class="lang-en">Free GitHub Hosting (1 Year)</span></li>
+                        <li><i class="fa-solid fa-magic-wand-sparkles" style="color: #f59e0b;"></i> <span class="lang-id">Gratis Pemasangan (Langsung Online)</span><span class="lang-en">Free Setup (Live Instantly)</span></li>
+                        <li style="opacity: 0.6;"><i class="fa-solid fa-xmark"></i> <span class="lang-id">Belum Ada Sistem Login/Daftar</span><span class="lang-en">No Login/Register System Yet</span></li>
+                    </ul>
+                    <a href="https://wa.me/6285183185998?text=Halo%20Heraclaus,%20saya%20tertarik%20pesan%20Paket%20Landing%20Page" target="_blank" class="btn btn-outline w-full mt-auto lang-id" style="border-color: rgba(139, 92, 246, 0.4); color: #c4b5fd;">Pilih Paket Ini</a>
+                    <a href="https://wa.me/6285183185998?text=Hello%20Heraclaus,%20I'm%20interested%20in%20the%20Landing%20Page%20Package" target="_blank" class="btn btn-outline w-full mt-auto lang-en" style="border-color: rgba(139, 92, 246, 0.4); color: #c4b5fd;">Choose This</a>
+                </div>
+
+                <!-- Paket 3: Web App Dinamis -->
+                <div class="price-card pro animate-on-scroll delay-200">
+                    <div class="pro-badge">
+                        <span class="lang-id">PALING LARIS</span>
+                        <span class="lang-en">BEST SELLER</span>
+                    </div>
+                    <div class="price-title" style="color: #c4b5fd;">
+                        <i class="fa-solid fa-layer-group" style="color: var(--accent-primary); font-size: 1.1rem; margin-right: 0.4rem;"></i>
+                        <span class="lang-id">Web Lengkap <br><span style="font-size:0.9rem; color:#e4e4e7; font-weight:500;">(Sistem Canggih)</span></span>
+                        <span class="lang-en">Complete Web <br><span style="font-size:0.9rem; color:#e4e4e7; font-weight:500;">(Advanced System)</span></span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.4;">
+                        <span class="lang-id">Pilihan tepat kalau butuh website yang bisa buat daftar akun, jualan, atau punya halaman admin seperti web Heraclaus ini.</span>
+                        <span class="lang-en">The right choice if you need a website with user registration, store features, or an admin dashboard like this Heraclaus web.</span>
+                    </p>
+                    <div class="price-val">
+                        <span class="dynamic-price" data-price="750000">Rp 750k</span>
+                        <span class="price-suffix"> / project</span>
+                    </div>
+                    
+                    <ul class="check-list">
+                        <li><i class="fa-solid fa-check"></i> <strong style="color: white;"><span class="lang-id">Semua di paket Landing Page, plus:</span><span class="lang-en">Everything in Landing Page, plus:</span></strong></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-id">Isi Banyak Halaman Menu</span><span class="lang-en">Multiple Menus & Pages</span></li>
+                        <li><i class="fa-solid fa-check" style="color: #8b5cf6;"></i> <span class="lang-id">Bisa Bikin Akun (Login/Daftar)</span><span class="lang-en">Account System (Login/Register)</span></li>
+                        <li><i class="fa-solid fa-check" style="color: #8b5cf6;"></i> <span class="lang-id">Tempat Simpan Data (Database)</span><span class="lang-en">Data Storage (Database)</span></li>
+                        <li><i class="fa-solid fa-check" style="color: #8b5cf6;"></i> <span class="lang-id">Halaman Khusus Admin Pemilik Web</span><span class="lang-en">Special Admin Dashboard</span></li>
+                        <li><i class="fa-solid fa-check" style="color: #f59e0b;"></i> <span class="lang-id">Gratis Semua (Pemasangan & Hosting)</span><span class="lang-en">Free Everything (Setup & Hosting)</span></li>
+                    </ul>
+                    <a href="https://wa.me/6285183185998?text=Halo%20Heraclaus,%20saya%20tertarik%20pesan%20Paket%20Web%20Lengkap%20(Dinamis)" target="_blank" class="btn btn-gradient w-full mt-auto lang-id">Pilih Paket Canggih Ini</a>
+                    <a href="https://wa.me/6285183185998?text=Hello%20Heraclaus,%20I'm%20interested%20in%20the%20Complete%20Web%20Package" target="_blank" class="btn btn-gradient w-full mt-auto lang-en">Choose Advanced Package</a>
+                </div>
+
+                <!-- Paket 4: Custom -->
+                <div class="price-card animate-on-scroll delay-300">
+                    <div class="price-title">
+                        <i class="fa-solid fa-screwdriver-wrench" style="color: var(--text-muted); font-size: 1.1rem; margin-right: 0.4rem;"></i>
+                        <span class="lang-id">Custom <br><span style="font-size:0.9rem; color:#a1a1aa; font-weight:500;">(Bebas Request)</span></span>
+                        <span class="lang-en">Custom <br><span style="font-size:0.9rem; color:#a1a1aa; font-weight:500;">(Any Request)</span></span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.4;">
+                        <span class="lang-id">Butuh fitur super khusus? Mau tambah sistem langganan bulanan buat perbaikan & penambahan fitur rutin? Pilih ini.</span>
+                        <span class="lang-en">Need super specific features? Want a monthly subscription for routine fixes & feature additions? Choose this.</span>
+                    </p>
+                    <div class="price-val">
+                        <span class="lang-id">Bebas</span>
+                        <span class="lang-en">Custom</span>
+                        <span class="price-suffix"> / <span class="lang-id">Tanya Dulu</span><span class="lang-en">Ask Us</span></span>
+                    </div>
+                    
+                    <ul class="check-list">
+                        <li><i class="fa-solid fa-check"></i> <strong style="color: white;"><span class="lang-id">Semua fitur di Web Lengkap, plus:</span><span class="lang-en">Everything in Complete Web, plus:</span></strong></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-id">Bebas Minta Fitur Apa Saja</span><span class="lang-en">Request Any Feature</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-id">Sambung ke Sistem Pembayaran (QRIS)</span><span class="lang-en">Connect to Payment Systems (QRIS)</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-id">Perawatan & Update Rutin Bulanan</span><span class="lang-en">Monthly Routine Maintenance</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-id">Layanan Bantuan Paling Cepat (VIP)</span><span class="lang-en">Fastest VIP Support Service</span></li>
+                        <li><i class="fa-solid fa-check" style="color: #f59e0b;"></i> <span class="lang-id">Gratis Semua (Pemasangan & Hosting)</span><span class="lang-en">Free Everything (Setup & Hosting)</span></li>
+                    </ul>
+                    <a href="https://discord.gg/xQStZUvukS" target="_blank" class="btn btn-outline w-full mt-auto" style="border-color: rgba(88, 101, 242, 0.5); color: #a5b4fc;"><i class="fa-brands fa-discord"></i> Ngobrol di Discord</a>
+                </div>
+            </div>
+            
+            <!-- SECTION ADD-ON -->
+            <div class="animate-on-scroll" style="margin-top: 5rem;">
+                <div class="text-center">
+                    <span class="badge" style="background: rgba(139, 92, 246, 0.1); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.3);">
+                        <i class="fa-solid fa-puzzle-piece"></i> 
+                        <span class="lang-id">Layanan Tambahan Lainnya</span>
+                        <span class="lang-en">Other Optional Add-ons</span>
+                    </span>
+                    <h3 style="font-size: clamp(1.2rem, 3vw, 1.5rem); margin-top: 0.2rem;">
+                        <span class="lang-id">Bikin Web Kamu Makin Sempurna</span>
+                        <span class="lang-en">Make Your Web Even Better</span>
+                    </h3>
+                </div>
+                
+                <div class="addon-grid">
+                    <!-- Kartu Hosting GitHub -->
+                    <div class="addon-card">
+                        <div class="addon-icon"><i class="fa-brands fa-github"></i></div>
+                        <div class="addon-info">
+                            <h4 style="font-family: 'Outfit'; font-size: 1.1rem; color: #fff; margin-bottom: 0.3rem;">
+                                <span class="lang-id">Perpanjangan Hosting Web</span>
+                                <span class="lang-en">Web Hosting Renewal</span>
+                            </h4>
+                            <p style="font-size: 0.85rem; margin-bottom: 0.6rem; color: var(--text-secondary);">
+                                <span class="lang-id">Biaya sewa server tahunan biar website kamu tetap hidup, cepat, dan aman dibuka terus di internet.</span>
+                                <span class="lang-en">Annual server rental fee so your website stays alive, fast, and safe to access on the internet.</span>
+                            </p>
+                            <div class="addon-price">
+                                <span class="dynamic-price" data-price="100000">Rp 100k</span> 
+                                <span class="price-suffix">/ <span class="lang-id">tahun</span><span class="lang-en">year</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Kartu Desain Logo -->
+                    <div class="addon-card">
+                        <div class="addon-icon"><i class="fa-solid fa-palette"></i></div>
+                        <div class="addon-info">
+                            <h4 style="font-family: 'Outfit'; font-size: 1.1rem; color: #fff; margin-bottom: 0.3rem;">
+                                <span class="lang-id">Desain Logo Keren</span>
+                                <span class="lang-en">Cool Logo Design</span>
+                            </h4>
+                            <p style="font-size: 0.85rem; margin-bottom: 0.6rem; color: var(--text-secondary);">
+                                <span class="lang-id">Belum punya logo? Kami buatkan logo bagus biar website, bisnis, atau server kamu makin dipercaya orang.</span>
+                                <span class="lang-en">Don't have a logo yet? We'll create a great one so people trust your website, business, or server more.</span>
+                            </p>
+                            <div class="addon-price">
+                                <span class="dynamic-price" data-price="150000">Rp 150k</span> 
+                                <span class="price-suffix">/ <span class="lang-id">desain</span><span class="lang-en">design</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- SECTION FAQ & TERMS OF SERVICE -->
+    <section id="faq-tos" class="section" style="border-top: 1px solid var(--border-light); background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 100%);">
+        <div class="container animate-on-scroll">
+            <div class="text-center">
+                <span class="badge" style="background: rgba(244, 63, 94, 0.1); color: #fb7185; border-color: rgba(244, 63, 94, 0.3);">
+                    <i class="fa-solid fa-scale-balanced"></i> 
+                    <span class="lang-id">Informasi Penting</span>
+                    <span class="lang-en">Important Info</span>
+                </span>
+                <h2 style="margin-top: 0.5rem;">
+                    <span class="lang-id">FAQ & Syarat Ketentuan</span>
+                    <span class="lang-en">FAQ & Terms of Service</span>
+                </h2>
+                <p style="margin-top: 0.5rem; max-width: 40rem; margin-inline: auto;">
+                    <span class="lang-id">Mohon baca bagian ini dengan seksama sebelum Anda melakukan pemesanan agar transaksi berjalan lancar.</span>
+                    <span class="lang-en">Please read this section carefully before placing an order to ensure a smooth transaction.</span>
+                </p>
+            </div>
+            
+            <div class="faq-wrap">
+                <!-- Item 1 -->
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>
+                            <span class="lang-id">Berapa lama waktu pengerjaan websitenya?</span>
+                            <span class="lang-en">How long does the web development take?</span>
+                        </span> 
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>
+                                <span class="lang-id">Proses pengerjaan biasanya memakan waktu antara <b>3 hingga 7 hari kerja</b>, tergantung pada kompleksitas fitur paket yang Anda pilih dan antrean pesanan saat ini. Kami akan memberikan estimasi waktu yang pasti saat konsultasi awal.</span>
+                                <span class="lang-en">The development process usually takes between <b>3 to 7 business days</b>, depending on the complexity of the chosen package features and the current order queue. We will provide an exact time estimate during the initial consultation.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>
+                            <span class="lang-id">Bagaimana sistem revisi desainnya?</span>
+                            <span class="lang-en">How does the design revision system work?</span>
+                        </span> 
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>
+                                <span class="lang-id">Anda berhak mendapatkan <b>2x revisi minor</b> (seperti perubahan warna, penggantian gambar, atau perbaikan teks) setelah draf pertama selesai dibuat. Perombakan total struktur desain dari awal tidak termasuk dalam revisi gratis.</span>
+                                <span class="lang-en">You are entitled to <b>2x minor revisions</b> (such as color changes, image replacements, or text tweaks) after the first draft is completed. A complete overhaul of the design structure from scratch is not included in the free revisions.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>
+                            <span class="lang-id">Apakah uang DP bisa dikembalikan (Refund)?</span>
+                            <span class="lang-en">Can the down payment (DP) be refunded?</span>
+                        </span> 
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>
+                                <span class="lang-id">Uang muka (DP 50%) digunakan untuk mengamankan slot antrean dan komitmen waktu pengerjaan kami. Oleh karena itu, uang DP <b>tidak dapat dikembalikan (non-refundable)</b> apabila proyek sudah mulai kami kerjakan atau dibatalkan sepihak oleh klien.</span>
+                                <span class="lang-en">The down payment (50% DP) is used to secure your queue slot and our time commitment. Therefore, the DP is <b>strictly non-refundable</b> once the project has started or is unilaterally canceled by the client.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>
+                            <span class="lang-id">Apakah ada garansi jika website error/bug?</span>
+                            <span class="lang-en">Is there a warranty if the website has errors/bugs?</span>
+                        </span> 
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>
+                                <span class="lang-id">Ya! Kami memberikan garansi perbaikan bug dan error secara gratis selama <b>14 Hari</b> sejak website pertama kali diserahkan kepada Anda. Garansi hangus jika error disebabkan oleh klien yang mengutak-atik kode (*source code*) sendiri.</span>
+                                <span class="lang-en">Yes! We provide a free bug and error fixing warranty for <b>14 Days</b> from the day the website is first handed over to you. The warranty is void if the error is caused by the client tampering with the source code themselves.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="faq-item">
+                    <button class="faq-btn" onclick="toggleFaq(this)">
+                        <span>
+                            <span class="lang-id">Siapa pemilik hak atas source code dan domain?</span>
+                            <span class="lang-en">Who owns the rights to the source code and domain?</span>
+                        </span> 
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-inner">
+                            <p>
+                                <span class="lang-id">Setelah pelunasan selesai, <b>Anda adalah pemilik 100%</b> atas seluruh aset website, *source code*, dan domain. Kami hanya membantu merakit dan merawatnya untuk Anda.</span>
+                                <span class="lang-en">Once the final payment is cleared, <b>you are the 100% owner</b> of all website assets, source codes, and domains. We only assist in building and maintaining them for you.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section">
+        <div class="container animate-on-scroll">
+            <div class="cta-box">
+                <h2 style="margin-bottom: 0.5rem;">
+                    <span class="lang-id">Masih Bingung Pilih yang Mana?</span>
+                    <span class="lang-en">Still Confused Which One to Pick?</span>
+                </h2>
+                <p style="max-width: 36rem; margin: 0 auto 1.5rem; line-height: 1.6;">
+                    <span class="lang-id">Nggak usah sungkan buat nanya-nanya dulu. Ceritain aja ke kami kamu butuh web yang seperti apa, nanti kami bantu kasih solusi terbaiknya.</span>
+                    <span class="lang-en">Don't hesitate to ask us anything. Just tell us what kind of website you need, and we'll help find the best solution for you.</span>
+                </p>
+                <div class="action-group justify-center" style="margin-top: 0; flex-direction: row; flex-wrap: wrap;">
+                    <a href="https://wa.me/6285183185998" target="_blank" class="btn btn-success" style="padding: 0 2rem;"><i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> Chat via WhatsApp</a>
+                    <a href="https://discord.gg/xQStZUvukS" target="_blank" class="btn btn-outline" style="padding: 0 2rem; border-color: rgba(88, 101, 242, 0.5); color: #a5b4fc;"><i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord: heraclaus.</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="animate-on-scroll">
+        <div class="container">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 1rem;">
+                <i class="fa-solid fa-code text-gradient" style="font-size: 1.2rem;"></i>
+                <span class="font-outfit" style="color: #fff; font-size: 1.2rem; font-weight: 700;">Heraclaus Web Studio</span>
+            </div>
+            <p>© 2026 Heraclaus Web Studio. Crafted with precision.</p>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Toggle Logic
+        function toggleFaq(btn) {
+            const currentItem = btn.parentElement;
+            document.querySelectorAll('.faq-item').forEach(item => { 
+                if(item !== currentItem) item.classList.remove('active'); 
+            });
+            currentItem.classList.toggle('active');
+        }
+
+        // Currency Conversion Logic
+        function updatePrices(lang) {
+            const usdRate = 15000; // 1 USD = Rp 15.000
+            document.querySelectorAll('.dynamic-price').forEach(el => {
+                const idrValue = parseInt(el.getAttribute('data-price'));
+                if (lang === 'en') {
+                    // Konversi ke USD dan bulatkan ke atas
+                    const usdValue = Math.ceil(idrValue / usdRate);
+                    el.innerText = '$' + usdValue;
+                } else {
+                    // Format ke Rupiah (contoh: 250000 jadi Rp 250k)
+                    const idrFormatted = (idrValue / 1000) + 'k';
+                    el.innerText = 'Rp ' + idrFormatted;
+                }
+            });
+        }
+
+        // Multi-language Toggle Logic
+        function toggleLang() {
+            const body = document.body;
+            let currentLang = 'id';
+            
+            if (body.classList.contains('lang-id')) {
+                body.classList.remove('lang-id');
+                body.classList.add('lang-en');
+                localStorage.setItem('heraclaus_lang', 'en');
+                currentLang = 'en';
+            } else {
+                body.classList.remove('lang-en');
+                body.classList.add('lang-id');
+                localStorage.setItem('heraclaus_lang', 'id');
+                currentLang = 'id';
+            }
+            
+            // Update harga saat bahasa diganti
+            updatePrices(currentLang);
+        }
+
+        // Apply saved language on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('heraclaus_lang') || 'id';
+            document.body.className = `lang-${savedLang}`;
+            
+            // Terapkan perhitungan harga dinamis saat pertama dimuat
+            updatePrices(savedLang);
+            
+            // Animation Observer Setup
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.animate-on-scroll').forEach(el => { observer.observe(el); });
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) { 
+                nav.style.background = 'rgba(5, 5, 5, 0.9)'; 
+                nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.5)'; 
+            } else { 
+                nav.style.background = 'rgba(5, 5, 5, 0.75)'; 
+                nav.style.boxShadow = 'none'; 
+            }
+        });
+    </script>
+</body>
+</html>

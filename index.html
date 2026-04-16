@@ -24,6 +24,10 @@
         html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; }
         
+        /* --- MULTILANGUAGE CSS --- */
+        body.lang-en .lang-id { display: none !important; }
+        body.lang-id .lang-en { display: none !important; }
+        
         .container { max-width: 64rem; margin: 0 auto; padding: 0 1.25rem; }
         .flex { display: flex; } .flex-col { flex-direction: column; }
         .items-center { align-items: center; } .justify-between { justify-content: space-between; } .justify-center { justify-content: center; }
@@ -54,6 +58,8 @@
         .login-nav-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--border-highlight); }
         .btn-icon { width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; border: 1px solid var(--border-highlight); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; background: rgba(255,255,255,0.05); }
         .btn-icon:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: var(--border-highlight); }
+        .lang-toggle { background: rgba(255,255,255,0.04); color: var(--text-secondary); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-light); cursor: pointer; transition: all 0.2s; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .lang-toggle:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); border-color: var(--border-highlight); }
 
         .menu-btn { display: flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; font-size: 1.1rem; color: var(--text-primary); background: transparent; border: none; cursor: pointer; border-radius: 6px; margin-right: -0.5rem; }
         
@@ -63,6 +69,7 @@
         .mobile-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
         .mobile-menu a { color: var(--text-primary); text-decoration: none; font-size: 0.9rem; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 0.85rem 0; display: flex; align-items: center; gap: 0.75rem; }
         .mobile-menu .login-nav-btn { border-bottom: none; margin-top: 1rem; padding: 0.65rem; justify-content: center; }
+        .mobile-menu .lang-toggle { width: 100%; justify-content: center; margin-top: 0.5rem; }
 
         /* Buttons */
         .action-group { display: flex; flex-direction: column; gap: 0.6rem; width: 100%; }
@@ -79,6 +86,9 @@
         .yt-badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.75rem; background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1.25rem; color: var(--text-primary); text-decoration: none; transition: all 0.2s; }
         .yt-badge:hover { background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.4); }
         .yt-icon { color: #ff0000; font-size: 0.85rem; }
+
+        /* Badge Promo Baru */
+        .promo-badge:hover { background: rgba(139, 92, 246, 0.25) !important; border-color: rgba(139, 92, 246, 0.6) !important; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); }
 
         /* LIVE STATS BADGE (NEW DESIGN) */
         .stats-badge {
@@ -210,7 +220,7 @@
         .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; }
     </style>
 </head>
-<body>
+<body class="lang-en">
 
     <div class="ambient-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
 
@@ -219,11 +229,32 @@
             <a href="#" class="font-outfit" style="font-size: 1.15rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em;">
                 <i class="fa-solid fa-code text-gradient mr-2"></i> Heraclaus
             </a>
+            
             <button class="menu-btn" id="mobile-menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+            
             <div class="nav-links">
+                <button onclick="toggleLang()" class="lang-toggle" title="Change Language" style="margin-right: 0.5rem;">
+                    <i class="fa-solid fa-globe"></i>
+                    <span class="lang-en">ID</span>
+                    <span class="lang-id">EN</span>
+                </button>
+
                 <a href="#admin-suite" class="reg-link">Admin Suite</a>
-                <a href="#community-servers" class="reg-link">Servers</a>
-                <a href="#pricing" class="reg-link">Pricing</a>
+                <a href="#community-servers" class="reg-link">
+                    <span class="lang-en">Servers</span>
+                    <span class="lang-id">Server</span>
+                </a>
+                <a href="#pricing" class="reg-link">
+                    <span class="lang-en">Pricing</span>
+                    <span class="lang-id">Harga</span>
+                </a>
+                
+                <!-- NEW WEB STUDIO LINK -->
+                <a href="web-service.html" class="reg-link" style="color: #c4b5fd; display: flex; align-items: center; gap: 0.4rem;">
+                    Web Studio 
+                    <span style="background: var(--gradient-admin); color: white; font-size: 0.6rem; padding: 2px 5px; border-radius: 4px; font-weight: 800; letter-spacing: 0.5px;">NEW</span>
+                </a>
+                
                 <div class="nav-divider"></div>
                 <a href="https://discord.gg/xQStZUvukS" target="_blank" class="nav-icon-btn" title="Discord"><i class="fa-brands fa-discord"></i></a>
                 <a href="client.html" class="login-nav-btn"><i class="fa-solid fa-right-to-bracket text-gradient"></i> Portal</a>
@@ -232,34 +263,92 @@
     </nav>
 
     <div class="mobile-menu" id="mobile-menu">
+        <button onclick="toggleLang()" class="lang-toggle" style="margin-bottom: 0.5rem; justify-content: center; width: 100%;">
+            <i class="fa-solid fa-globe"></i>
+            <span class="lang-en">Change Language to Bahasa Indonesia</span>
+            <span class="lang-id">Change Language to English</span>
+        </button>
+
         <a href="#admin-suite" onclick="toggleMenu()"><i class="fa-solid fa-server"></i> Admin Suite</a>
-        <a href="#community-servers" onclick="toggleMenu()"><i class="fa-solid fa-network-wired"></i> Community Servers</a>
+        <a href="#community-servers" onclick="toggleMenu()"><i class="fa-solid fa-network-wired"></i> 
+            <span class="lang-en">Community Servers</span>
+            <span class="lang-id">Server Komunitas</span>
+        </a>
         <a href="#cinemato" onclick="toggleMenu()"><i class="fa-solid fa-film"></i> Cinemato Studio</a>
-        <a href="#pricing" onclick="toggleMenu()"><i class="fa-solid fa-tag"></i> Pricing</a>
-        <a href="#faq" onclick="toggleMenu()"><i class="fa-solid fa-circle-question"></i> FAQ & ToS</a>
-        <a href="changelog.html" target="_blank" onclick="toggleMenu()"><i class="fa-solid fa-clock-rotate-left"></i> System Changelog</a>
+        <a href="#pricing" onclick="toggleMenu()"><i class="fa-solid fa-tag"></i> 
+            <span class="lang-en">Pricing</span>
+            <span class="lang-id">Harga</span>
+        </a>
+        
+        <!-- NEW WEB STUDIO LINK MOBILE -->
+        <a href="web-service.html" onclick="toggleMenu()" style="color: #c4b5fd;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-laptop-code"></i> Web Studio</div>
+            <span style="background: var(--gradient-admin); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; letter-spacing: 1px; margin-left: auto;">NEW</span>
+        </a>
+        
+        <a href="#faq" onclick="toggleMenu()"><i class="fa-solid fa-circle-question"></i> 
+            <span class="lang-en">FAQ & ToS</span>
+            <span class="lang-id">FAQ & Aturan</span>
+        </a>
+        <a href="changelog.html" target="_blank" onclick="toggleMenu()"><i class="fa-solid fa-clock-rotate-left"></i> 
+            <span class="lang-en">System Changelog</span>
+            <span class="lang-id">Riwayat Update</span>
+        </a>
         <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 0.5rem 0;"></div>
-        <a href="https://discord.gg/xQStZUvukS" target="_blank" style="color: #a5b4fc;" onclick="toggleMenu()"><i class="fa-brands fa-discord"></i> Join Discord</a>
-        <a href="client.html" class="login-nav-btn" onclick="toggleMenu()"><i class="fa-solid fa-right-to-bracket text-gradient"></i> Login to Portal</a>
+        <a href="https://discord.gg/xQStZUvukS" target="_blank" style="color: #a5b4fc;" onclick="toggleMenu()"><i class="fa-brands fa-discord"></i> 
+            <span class="lang-en">Join Discord</span>
+            <span class="lang-id">Gabung Discord</span>
+        </a>
+        <a href="client.html" class="login-nav-btn" onclick="toggleMenu()"><i class="fa-solid fa-right-to-bracket text-gradient"></i> 
+            <span class="lang-en">Login to Portal</span>
+            <span class="lang-id">Login ke Portal</span>
+        </a>
     </div>
 
     <section class="section-hero text-center">
         <div class="container flex flex-col items-center animate-on-scroll">
-            <a href="https://www.youtube.com/@heraclaus" target="_blank" class="yt-badge">
-                <i class="fa-brands fa-youtube yt-icon"></i> Heraclaus <i class="fa-solid fa-circle-check yt-verified"></i>
-            </a>
-            <h1>Stop installing junk plugins.<br><span class="text-gradient">Build a legendary server.</span></h1>
+            
+            <!-- FLEX WRAPPER UNTUK BADGE PROMO & YOUTUBE -->
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.25rem;">
+                <a href="https://www.youtube.com/@heraclaus" target="_blank" class="yt-badge" style="margin-bottom: 0;">
+                    <i class="fa-brands fa-youtube yt-icon"></i> Heraclaus <i class="fa-solid fa-circle-check yt-verified"></i>
+                </a>
+                
+                <a href="web-service.html" class="badge promo-badge" style="margin-bottom: 0; text-decoration: none; border-color: rgba(139, 92, 246, 0.4); background: rgba(139, 92, 246, 0.15); transition: all 0.3s;">
+                    <i class="fa-solid fa-laptop-code" style="color: #c4b5fd;"></i>
+                    <span style="color: #fff; margin: 0 0.4rem; font-weight: 600; text-transform: none; font-size: 0.8rem; letter-spacing: normal;">
+                        <span class="lang-en">New: Web Studio Services</span>
+                        <span class="lang-id">Baru: Jasa Web Studio</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right" style="color: #a1a1aa;"></i>
+                </a>
+            </div>
+
+            <h1>
+                <span class="lang-en">Stop installing junk plugins.<br><span class="text-gradient">Build a legendary server.</span></span>
+                <span class="lang-id">Berhenti pasang plugin sampah.<br><span class="text-gradient">Bangun server legendaris.</span></span>
+            </h1>
             <p style="max-width: 36rem; margin: 1rem auto 0; line-height: 1.6;">
-                Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world's economy and progression.
+                <span class="lang-en">Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world's economy and progression.</span>
+                <span class="lang-id">Add-on Minecraft Bedrock premium all-in-one yang menghilangkan lag, memperbaiki konflik, dan memberi Anda kontrol penuh atas ekonomi dan progres server Anda.</span>
             </p>
             
             <div class="stats-badge" id="stats-badge">
                 <div class="pulse-dot"></div>
-                <span>Trusted by <strong id="pro-user-count">0</strong> Pro Servers</span>
+                <span>
+                    <span class="lang-en">Trusted by </span>
+                    <span class="lang-id">Dipercaya oleh </span>
+                    <strong id="pro-user-count">0</strong> 
+                    <span class="lang-en"> Pro Servers</span>
+                    <span class="lang-id"> Server Pro</span>
+                </span>
             </div>
 
             <div class="action-group justify-center">
-                <a href="#admin-suite" class="btn btn-primary">Explore Admin Suite</a>
+                <a href="#admin-suite" class="btn btn-primary">
+                    <span class="lang-en">Explore Admin Suite</span>
+                    <span class="lang-id">Jelajahi Admin Suite</span>
+                </a>
             </div>
         </div>
     </section>
@@ -269,45 +358,93 @@
             <div class="product-box animate-on-scroll">
                 <div class="product-header">
                     <div class="product-header-text">
-                        <span class="badge"><i class="fa-solid fa-crown"></i> Flagship Architecture</span>
+                        <span class="badge"><i class="fa-solid fa-crown"></i> 
+                            <span class="lang-en">Flagship Architecture</span>
+                            <span class="lang-id">Arsitektur Unggulan</span>
+                        </span>
                         <h2>Admin Suite</h2>
-                        <p class="mt-2">One suite to replace them all. Manage your economy, players, RPG progression, and world security through a single, highly-optimized core. Zero lag, pure performance.</p>
+                        <p class="mt-2">
+                            <span class="lang-en">One suite to replace them all. Manage your economy, players, RPG progression, and world security through a single, highly-optimized core. Zero lag, pure performance.</span>
+                            <span class="lang-id">Satu sistem untuk menggantikan semuanya. Kelola ekonomi, pemain, progres RPG, dan keamanan dunia melalui satu inti yang sangat dioptimalkan. Tanpa lag, performa maksimal.</span>
+                        </p>
                     </div>
                     <div class="product-header-actions action-group">
-                        <a href="#pricing" class="btn btn-gradient"><i class="fa-solid fa-arrow-down"></i> Pricing</a>
-                        <a href="changelog.html" target="_blank" class="btn btn-outline"><i class="fa-solid fa-code-branch"></i> Changelog</a>
+                        <a href="#pricing" class="btn btn-gradient"><i class="fa-solid fa-arrow-down"></i> 
+                            <span class="lang-en">Pricing</span>
+                            <span class="lang-id">Harga</span>
+                        </a>
+                        <a href="changelog.html" target="_blank" class="btn btn-outline"><i class="fa-solid fa-code-branch"></i> 
+                            <span class="lang-en">Changelog</span>
+                            <span class="lang-id">Pembaruan</span>
+                        </a>
                     </div>
                 </div>
                 <div class="feature-grid">
                     <div class="feature-cell animate-on-scroll">
                         <i class="fa-solid fa-sack-dollar" style="color: #f59e0b;"></i>
-                        <h3 style="margin-bottom: 0.2rem;">Economy & Auction House</h3>
-                        <p>Complete economy system to bypass limits with physical currencies, jobs, and a fully functional Auction House.</p>
+                        <h3 style="margin-bottom: 0.2rem;">
+                            <span class="lang-en">Economy & Auction House</span>
+                            <span class="lang-id">Ekonomi & Rumah Lelang</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Complete economy system to bypass limits with physical currencies, jobs, and a fully functional Auction House.</span>
+                            <span class="lang-id">Sistem ekonomi lengkap tanpa batas dengan mata uang fisik, pekerjaan, dan sistem Rumah Lelang yang fungsional.</span>
+                        </p>
                     </div>
                     <div class="feature-cell animate-on-scroll delay-100">
                         <i class="fa-solid fa-skull" style="color: #f43f5e;"></i>
-                        <h3 style="margin-bottom: 0.2rem;">RPG & Gravestone Feature</h3>
-                        <p>Keep retention high with skill leveling, PvP mechanics, and secure Player Gravestones to protect loot upon death.</p>
+                        <h3 style="margin-bottom: 0.2rem;">
+                            <span class="lang-en">RPG & Gravestone Feature</span>
+                            <span class="lang-id">Fitur RPG & Batu Nisan</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Keep retention high with skill leveling, PvP mechanics, and secure Player Gravestones to protect loot upon death.</span>
+                            <span class="lang-id">Pertahankan pemain dengan sistem level skill, mekanik PvP, dan Batu Nisan aman untuk melindungi barang saat mati.</span>
+                        </p>
                     </div>
                     <div class="feature-cell animate-on-scroll delay-200">
                         <i class="fa-solid fa-shield-halved" style="color: #3b82f6;"></i>
-                        <h3 style="margin-bottom: 0.2rem;">Security & Login Feature</h3>
-                        <p>Built-in native Login Feature to secure player accounts from offline spoofers and unauthorized access.</p>
+                        <h3 style="margin-bottom: 0.2rem;">
+                            <span class="lang-en">Security & Login Feature</span>
+                            <span class="lang-id">Keamanan & Fitur Login</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Built-in native Login Feature to secure player accounts from offline spoofers and unauthorized access.</span>
+                            <span class="lang-id">Fitur Login bawaan untuk mengamankan akun pemain dari pemalsuan nama saat server offline dan akses tidak sah.</span>
+                        </p>
                     </div>
                     <div class="feature-cell animate-on-scroll">
                         <i class="fa-solid fa-eye" style="color: #10b981;"></i>
-                        <h3 style="margin-bottom: 0.2rem;">X-Ray Feature & Moderation</h3>
-                        <p>Powerful moderation tools including an X-Ray feature to easily spot hidden ores, secret bases, or cheating players.</p>
+                        <h3 style="margin-bottom: 0.2rem;">
+                            <span class="lang-en">X-Ray Feature & Moderation</span>
+                            <span class="lang-id">Fitur X-Ray & Moderasi</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Powerful moderation tools including an X-Ray feature to easily spot hidden ores, secret bases, or cheating players.</span>
+                            <span class="lang-id">Alat moderasi kuat termasuk fitur X-Ray untuk dengan mudah menemukan bijih, markas rahasia, atau pemain curang.</span>
+                        </p>
                     </div>
                     <div class="feature-cell animate-on-scroll delay-100">
                         <i class="fa-solid fa-network-wired" style="color: #8b5cf6;"></i>
-                        <h3 style="margin-bottom: 0.2rem;">Free Server Promotion</h3>
-                        <p>Pro members get free server promotion directly on our high-traffic Community Servers page to grow their player base.</p>
+                        <h3 style="margin-bottom: 0.2rem;">
+                            <span class="lang-en">Free Server Promotion</span>
+                            <span class="lang-id">Promosi Server Gratis</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Pro members get free server promotion directly on our high-traffic Community Servers page to grow their player base.</span>
+                            <span class="lang-id">Anggota Pro mendapatkan promosi server gratis di halaman Server Komunitas kami yang ramai untuk menambah pemain.</span>
+                        </p>
                     </div>
                     <div class="feature-cell animate-on-scroll delay-200">
                         <i class="fa-solid fa-comments" style="color: #f87171;"></i>
-                        <h3 style="margin-bottom: 0.2rem;">Private Social Chat</h3>
-                        <p>Gain access to an exclusive Private Social Chat in the Client Portal to interact with other verified server owners.</p>
+                        <h3 style="margin-bottom: 0.2rem;">
+                            <span class="lang-en">Private Social Chat</span>
+                            <span class="lang-id">Grup Obrolan Pribadi</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Gain access to an exclusive Private Social Chat in the Client Portal to interact with other verified server owners.</span>
+                            <span class="lang-id">Akses ke Obrolan Grup eksklusif di Portal Klien untuk berinteraksi dan bertukar ilmu dengan pemilik server pro lainnya.</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -315,9 +452,15 @@
             <div id="cinemato" class="product-box animate-on-scroll" style="margin-bottom: 0; border-color: rgba(16, 185, 129, 0.2);">
                 <div class="product-header" style="background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent 50%); border-bottom: none; padding-bottom: 1.5rem;">
                     <div class="product-header-text">
-                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.25);"><i class="fa-solid fa-film"></i> Creator Tool</span>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.25);"><i class="fa-solid fa-film"></i> 
+                            <span class="lang-en">Creator Tool</span>
+                            <span class="lang-id">Alat Kreator</span>
+                        </span>
                         <h2>Cinemato Studio</h2>
-                        <p class="mt-2">The definitive camera tool for Bedrock creators. Execute smooth bezier camera paths and create stunning timelapses effortlessly.</p>
+                        <p class="mt-2">
+                            <span class="lang-en">The definitive camera tool for Bedrock creators. Execute smooth bezier camera paths and create stunning timelapses effortlessly.</span>
+                            <span class="lang-id">Alat kamera canggih untuk kreator Bedrock. Jalankan rute kamera yang mulus dan buat video sinematik dengan mudah.</span>
+                        </p>
                     </div>
                     <div class="product-header-actions action-group">
                         <a href="https://www.curseforge.com/minecraft-bedrock/addons/cinemato-studio" target="_blank" class="btn btn-outline" style="border-color: rgba(16, 185, 129, 0.3);">CurseForge <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>
@@ -331,52 +474,98 @@
     <section id="community-servers" class="section" style="border-top: 1px solid var(--border-light); background: radial-gradient(circle at left, rgba(139, 92, 246, 0.05), transparent 50%);">
         <div class="container">
             <div class="text-center animate-on-scroll">
-                <span class="badge" style="margin-bottom: 1rem;"><i class="fa-solid fa-network-wired"></i> Partner Servers</span>
-                <h2>Community Servers</h2>
-                <p style="margin-top: 0.5rem; max-width: 40rem; margin-inline: auto;">Join and play on incredible servers hosted directly by the Heraclaus Pro Member community.</p>
+                <span class="badge" style="margin-bottom: 1rem;"><i class="fa-solid fa-network-wired"></i> 
+                    <span class="lang-en">Partner Servers</span>
+                    <span class="lang-id">Server Mitra</span>
+                </span>
+                <h2>
+                    <span class="lang-en">Community Servers</span>
+                    <span class="lang-id">Server Komunitas</span>
+                </h2>
+                <p style="margin-top: 0.5rem; max-width: 40rem; margin-inline: auto;">
+                    <span class="lang-en">Join and play on incredible servers hosted directly by the Heraclaus Pro Member community.</span>
+                    <span class="lang-id">Bergabung dan mainkan di server luar biasa yang dikelola langsung oleh komunitas Anggota Pro Heraclaus.</span>
+                </p>
             </div>
             
             <div class="grid-cards animate-on-scroll" id="public-server-grid" style="margin-top: 2.5rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
-                <div style="text-align:center; padding: 2rem; color: var(--text-muted); grid-column: 1 / -1;"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading server list...</div>
+                <div style="text-align:center; padding: 2rem; color: var(--text-muted); grid-column: 1 / -1;">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i> 
+                    <span class="lang-en">Loading server list...</span>
+                    <span class="lang-id">Memuat daftar server...</span>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="pricing" class="section" style="border-top: 1px solid var(--border-light); background: rgba(0,0,0,0.4);">
         <div class="container text-center animate-on-scroll">
-            <h2>Simple Pricing. No Subscriptions.</h2>
-            <p style="margin-top: 0.25rem;">Pay once, dominate your server forever.</p>
+            <h2>
+                <span class="lang-en">Simple Pricing. No Subscriptions.</span>
+                <span class="lang-id">Harga Simpel. Tanpa Langganan.</span>
+            </h2>
+            <p style="margin-top: 0.25rem;">
+                <span class="lang-en">Pay once, dominate your server forever.</span>
+                <span class="lang-id">Bayar sekali, kuasai server Anda selamanya.</span>
+            </p>
             
             <div class="pricing-wrap text-left">
                 <div class="price-card animate-on-scroll">
-                    <h3>Starter</h3>
-                    <div class="price-val">$0 <span>/ trial</span></div>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1rem;">No license attached. May deactivate anytime.</p>
+                    <h3>
+                        <span class="lang-en">Starter</span>
+                        <span class="lang-id">Pemula</span>
+                    </h3>
+                    <div class="price-val">$0 <span>/ 
+                        <span class="lang-en">trial</span>
+                        <span class="lang-id">gratis</span>
+                    </span></div>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1rem;">
+                        <span class="lang-en">No license attached. May deactivate anytime.</span>
+                        <span class="lang-id">Tanpa lisensi akun. Berjalan dengan fitur terbatas.</span>
+                    </p>
                     <ul class="check-list">
-                        <li><i class="fa-solid fa-check"></i> Admin, Player, & World Management</li>
-                        <li><i class="fa-solid fa-check"></i> Economy, Money, Shop, & Rank System</li>
-                        <li><i class="fa-solid fa-check"></i> Clan, Land, Warp, & Lobby Protection</li>
-                        <li><i class="fa-solid fa-check"></i> UI & Tools (Sidebar, NPC, Healthbar, Spy Tools, Broadcast)</li>
-                        <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> No Multilanguage & Server Logs</li>
-                        <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> No Login, Advanced Regions, Grave, & X-Ray</li>
-                        <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> No VIP Services & Server Promo</li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Admin, Player, & World Management</span><span class="lang-id">Manajemen Admin, Pemain & Dunia</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Economy, Money, Shop, & Rank System</span><span class="lang-id">Sistem Ekonomi, Uang, Toko & Rank</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Clan, Land, Warp, & Lobby Protection</span><span class="lang-id">Sistem Klan, Tanah, Warp & Lobi</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">UI & Tools (Sidebar, NPC, Healthbar, Spy Tools, Broadcast)</span><span class="lang-id">UI & Alat (Sidebar, NPC, Nyawa, Broadcast)</span></li>
+                        <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> <span class="lang-en">No Multilanguage & Server Logs</span><span class="lang-id">Tidak Ada Multi-Bahasa & Log Server</span></li>
+                        <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> <span class="lang-en">No Login, Advanced Regions, Grave, & X-Ray</span><span class="lang-id">Tidak Ada Fitur Login, Wilayah Lanjutan & X-Ray</span></li>
+                        <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> <span class="lang-en">No VIP Services & Server Promo</span><span class="lang-id">Tidak Ada Akses VIP & Promo Server Gratis</span></li>
                     </ul>
-                    <a href="https://www.curseforge.com/minecraft-bedrock/scripts/admin-suite-server-tools" target="_blank" class="btn btn-outline w-full mt-auto">Download Trial</a>
+                    <a href="https://www.curseforge.com/minecraft-bedrock/scripts/admin-suite-server-tools" target="_blank" class="btn btn-outline w-full mt-auto">
+                        <span class="lang-en">Download Trial</span>
+                        <span class="lang-id">Unduh Versi Gratis</span>
+                    </a>
                 </div>
 
                 <div class="price-card pro animate-on-scroll delay-100">
-                    <h3 style="color: #c4b5fd;">Pro License</h3>
-                    <div class="price-val">$6 <span>/ one-time</span></div>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 1rem;">Equivalent to ~Rp99.000. Secure and Ad-Free.</p>
+                    <h3 style="color: #c4b5fd;">
+                        <span class="lang-en">Pro License</span>
+                        <span class="lang-id">Lisensi Pro</span>
+                    </h3>
+                    <div class="price-val">$6 <span>/ 
+                        <span class="lang-en">one-time</span>
+                        <span class="lang-id">sekali bayar</span>
+                    </span></div>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 1rem;">
+                        <span class="lang-en">Equivalent to ~Rp99.000. Secure and Ad-Free.</span>
+                        <span class="lang-id">Setara dengan ~Rp99.000. Aman dan Tanpa Iklan.</span>
+                    </p>
                     <ul class="check-list">
-                        <li><i class="fa-solid fa-check"></i> <strong style="color: white;">Everything in Starter, plus:</strong></li>
-                        <li><i class="fa-solid fa-check"></i> <b>Pro Features:</b> Multilanguage, Server Logs, Advanced Regions, Login System, Grave System, & X-Ray</li>
-                        <li><i class="fa-solid fa-check"></i> Free Server Promotion on Homepage</li>
-                        <li><i class="fa-solid fa-check"></i> VIP Discord Role & Private Social Chat</li>
-                        <li><i class="fa-solid fa-check"></i> Faster Support & Priority Updates</li>
-                        <li><i class="fa-solid fa-check"></i> Permanent Binding (Pay Once, Yours Forever)</li>
+                        <li><i class="fa-solid fa-check"></i> <strong style="color: white;">
+                            <span class="lang-en">Everything in Starter, plus:</span>
+                            <span class="lang-id">Semua di paket Pemula, ditambah:</span>
+                        </strong></li>
+                        <li><i class="fa-solid fa-check"></i> <b>Pro Features:</b> <span class="lang-en">Multilanguage, Server Logs, Advanced Regions, Login System, Grave System, & X-Ray</span><span class="lang-id">Multi-Bahasa, Log Server, Fitur Login, Wilayah Lanjutan & X-Ray</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Free Server Promotion on Homepage</span><span class="lang-id">Promosi Server Gratis di Halaman Utama</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">VIP Discord Role & Private Social Chat</span><span class="lang-id">Role Discord VIP & Chat Sosial Pribadi</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Faster Support & Priority Updates</span><span class="lang-id">Bantuan Tercepat & Prioritas Update</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Permanent Binding (Pay Once, Yours Forever)</span><span class="lang-id">Hak Permanen (Bayar Sekali, Milik Selamanya)</span></li>
                     </ul>
-                    <a href="payment.html" class="btn btn-gradient w-full mt-auto">Secure Checkout</a>
+                    <a href="payment.html" class="btn btn-gradient w-full mt-auto">
+                        <span class="lang-en">Secure Checkout</span>
+                        <span class="lang-id">Beli Sekarang</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -384,22 +573,64 @@
 
     <section id="faq" class="section" style="border-top: 1px solid var(--border-light);">
         <div class="container animate-on-scroll">
-            <h2 class="text-center">FAQ & Terms of Service</h2>
+            <h2 class="text-center">
+                <span class="lang-en">FAQ & Terms of Service</span>
+                <span class="lang-id">FAQ & Syarat Ketentuan</span>
+            </h2>
             <div class="faq-wrap">
-                <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>How do I get my files after payment?</span> <i class="fa-solid fa-chevron-down"></i></button><div class="faq-content"><div class="faq-inner"><p>After checkout, we will verify your payment and email your <strong>License Key</strong> to login to the <strong>Client Portal</strong>.</p></div></div></div>
-                <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>Will Admin Suite cause lag?</span> <i class="fa-solid fa-chevron-down"></i></button><div class="faq-content"><div class="faq-inner"><p>No. Replacing 10+ unoptimized plugins with our single core drastically improves TPS.</p></div></div></div>
-                <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>Do I need coding experience?</span> <i class="fa-solid fa-chevron-down"></i></button><div class="faq-content"><div class="faq-inner"><p>Zero. Everything is managed through intuitive in-game menus.</p></div></div></div>
-                <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>What happens when Minecraft updates?</span> <i class="fa-solid fa-chevron-down"></i></button><div class="faq-content"><div class="faq-inner"><p>We push compatibility patches rapidly. You can download updates directly from the Portal.</p></div></div></div>
-                <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>Can I use the Pro License on multiple accounts?</span> <i class="fa-solid fa-chevron-down"></i></button><div class="faq-content"><div class="faq-inner"><p>No. One license is strictly tied to one gamertag and cannot be transferred.</p></div></div></div>
+                <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>
+                    <span class="lang-en">How do I get my files after payment?</span>
+                    <span class="lang-id">Bagaimana cara mendapatkan file setelah membayar?</span>
+                </span> <i class="fa-solid fa-chevron-down"></i></button><div class="faq-content"><div class="faq-inner"><p>
+                    <span class="lang-en">After checkout, we will verify your payment and email your <strong>License Key</strong> to login to the <strong>Client Portal</strong>.</span>
+                    <span class="lang-id">Setelah checkout, kami akan memverifikasi struk Anda dan mengirimkan <strong>License Key</strong> ke email Anda untuk login ke <strong>Client Portal</strong>.</span>
+                </p></div></div></div>
+                <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>
+                    <span class="lang-en">Will Admin Suite cause lag?</span>
+                    <span class="lang-id">Apakah Admin Suite membuat lag?</span>
+                </span> <i class="fa-solid fa-chevron-down"></i></button><div class="faq-content"><div class="faq-inner"><p>
+                    <span class="lang-en">No. Replacing 10+ unoptimized plugins with our single core drastically improves TPS.</span>
+                    <span class="lang-id">Tidak. Mengganti lebih dari 10 plugin yang tidak efisien dengan sistem kami akan meningkatkan FPS dan TPS server secara drastis.</span>
+                </p></div></div></div>
+                <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>
+                    <span class="lang-en">Do I need coding experience?</span>
+                    <span class="lang-id">Apakah saya butuh pengalaman coding?</span>
+                </span> <i class="fa-solid fa-chevron-down"></i></button><div class="faq-content"><div class="faq-inner"><p>
+                    <span class="lang-en">Zero. Everything is managed through intuitive in-game menus.</span>
+                    <span class="lang-id">Sama sekali tidak. Semua hal bisa diatur langsung di dalam game melalui menu yang sangat mudah.</span>
+                </p></div></div></div>
+                <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>
+                    <span class="lang-en">What happens when Minecraft updates?</span>
+                    <span class="lang-id">Bagaimana kalau Minecraft diperbarui/update?</span>
+                </span> <i class="fa-solid fa-chevron-down"></i></button><div class="faq-content"><div class="faq-inner"><p>
+                    <span class="lang-en">We push compatibility patches rapidly. You can download updates directly from the Portal.</span>
+                    <span class="lang-id">Kami membagikan update dengan sangat cepat. Anda bisa mengunduh file terbarunya secara gratis di Portal.</span>
+                </p></div></div></div>
+                <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>
+                    <span class="lang-en">Can I use the Pro License on multiple accounts?</span>
+                    <span class="lang-id">Bolehkah saya pakai satu lisensi di banyak akun?</span>
+                </span> <i class="fa-solid fa-chevron-down"></i></button><div class="faq-content"><div class="faq-inner"><p>
+                    <span class="lang-en">No. One license is strictly tied to one gamertag and cannot be transferred.</span>
+                    <span class="lang-id">Tidak bisa. Satu lisensi terikat secara paten pada satu nametag Xbox dan tidak dapat dipindahtangankan.</span>
+                </p></div></div></div>
             </div>
         </div>
     </section>
 
     <section class="cta-section animate-on-scroll">
         <div class="container">
-            <h2 style="font-size: clamp(1.25rem, 3.5vw, 1.75rem); margin-bottom: 0.5rem;">Ready to level up your server?</h2>
-            <p style="margin-bottom: 1.5rem;">Join thousands of players and admins using Heraclaus Add-ons.</p>
-            <div class="action-group justify-center"><a href="#pricing" class="btn btn-gradient" style="padding: 0 1.5rem;">Get Pro License Now</a></div>
+            <h2 style="font-size: clamp(1.25rem, 3.5vw, 1.75rem); margin-bottom: 0.5rem;">
+                <span class="lang-en">Ready to level up your server?</span>
+                <span class="lang-id">Siap menaikkan level server Anda?</span>
+            </h2>
+            <p style="margin-bottom: 1.5rem;">
+                <span class="lang-en">Join thousands of players and admins using Heraclaus Add-ons.</span>
+                <span class="lang-id">Bergabunglah bersama ribuan pemain dan admin yang menggunakan sistem Heraclaus.</span>
+            </p>
+            <div class="action-group justify-center"><a href="#pricing" class="btn btn-gradient" style="padding: 0 1.5rem;">
+                <span class="lang-en">Get Pro License Now</span>
+                <span class="lang-id">Dapatkan Lisensi Pro Sekarang</span>
+            </a></div>
         </div>
     </section>
 
@@ -408,23 +639,45 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <h3><i class="fa-solid fa-code text-gradient"></i> Heraclaus</h3>
-                    <p style="max-width: 18rem;">Premium Minecraft Bedrock add-ons built for performance, security, and absolute control.</p>
+                    <p style="max-width: 18rem;">
+                        <span class="lang-en">Premium Minecraft Bedrock add-ons built for performance, security, and absolute control.</span>
+                        <span class="lang-id">Add-on Minecraft Bedrock premium yang diciptakan untuk performa, keamanan, dan kontrol absolut.</span>
+                    </p>
                 </div>
                 <div class="footer-links-col">
-                    <h4>Products</h4>
+                    <h4>
+                        <span class="lang-en">Products</span>
+                        <span class="lang-id">Produk Kami</span>
+                    </h4>
                     <a href="#admin-suite"><i class="fa-solid fa-angle-right"></i> Admin Suite</a>
                     <a href="#cinemato"><i class="fa-solid fa-angle-right"></i> Cinemato Studio</a>
-                    <a href="#pricing"><i class="fa-solid fa-angle-right"></i> Pricing & Trial</a>
+                    <a href="web-service.html"><i class="fa-solid fa-angle-right"></i> Web Studio <span style="font-size: 0.6rem; color: #a5b4fc; margin-left: 0.2rem;">(NEW)</span></a>
+                    <a href="#pricing"><i class="fa-solid fa-angle-right"></i> 
+                        <span class="lang-en">Pricing & Trial</span>
+                        <span class="lang-id">Harga & Versi Gratis</span>
+                    </a>
                 </div>
                 <div class="footer-links-col">
-                    <h4>Resources</h4>
+                    <h4>
+                        <span class="lang-en">Resources</span>
+                        <span class="lang-id">Bantuan Khusus</span>
+                    </h4>
                     <a href="client.html"><i class="fa-solid fa-angle-right"></i> Client Portal</a>
-                    <a href="changelog.html" target="_blank"><i class="fa-solid fa-angle-right"></i> Changelog</a>
-                    <a href="#faq"><i class="fa-solid fa-angle-right"></i> Terms</a>
+                    <a href="changelog.html" target="_blank"><i class="fa-solid fa-angle-right"></i> 
+                        <span class="lang-en">System Changelog</span>
+                        <span class="lang-id">Riwayat Update</span>
+                    </a>
+                    <a href="#faq"><i class="fa-solid fa-angle-right"></i> 
+                        <span class="lang-en">Terms & ToS</span>
+                        <span class="lang-id">Aturan Sistem</span>
+                    </a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 Heraclaus. Not associated with Mojang or Microsoft.</p>
+                <p>© 2026 Heraclaus. 
+                    <span class="lang-en">Not associated with Mojang or Microsoft.</span>
+                    <span class="lang-id">Tidak berafiliasi dengan Mojang atau Microsoft.</span>
+                </p>
                 <div class="social-row">
                     <a href="https://www.youtube.com/@heraclaus" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
                     <a href="https://discord.gg/xQStZUvukS" target="_blank" title="Discord Server"><i class="fa-brands fa-discord"></i></a>
@@ -436,7 +689,32 @@
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
 
+        // Multi-language Toggle Logic
+        function toggleLang() {
+            const body = document.body;
+            let currentLang = 'en';
+            
+            if (body.classList.contains('lang-id')) {
+                body.classList.remove('lang-id');
+                body.classList.add('lang-en');
+                localStorage.setItem('heraclaus_lang', 'en');
+                currentLang = 'en';
+            } else {
+                body.classList.remove('lang-en');
+                body.classList.add('lang-id');
+                localStorage.setItem('heraclaus_lang', 'id');
+                currentLang = 'id';
+            }
+            
+            // Reload server texts dynamically if needed
+            loadPublicServers();
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
+            // Apply saved language on load
+            const savedLang = localStorage.getItem('heraclaus_lang') || 'en';
+            document.body.className = `lang-${savedLang}`;
+
             const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
@@ -468,6 +746,7 @@
 
         function checkServerStatus(ip, port, elementId) {
             const apiPort = port ? port : '19132'; 
+            const isEnglish = document.body.classList.contains('lang-en');
             
             fetch(`https://api.mcsrvstat.us/bedrock/2/${ip}:${apiPort}`)
                 .then(res => res.json())
@@ -480,7 +759,7 @@
                         el.style.borderColor = 'rgba(16, 185, 129, 0.3)';
                         el.style.background = 'rgba(16, 185, 129, 0.1)';
                     } else {
-                        el.innerHTML = `<i class="fa-solid fa-circle" style="color: #f43f5e; font-size: 0.5rem; vertical-align: middle; margin-right: 0.3rem;"></i><span style="color: var(--text-muted);">Offline</span>`;
+                        el.innerHTML = `<i class="fa-solid fa-circle" style="color: #f43f5e; font-size: 0.5rem; vertical-align: middle; margin-right: 0.3rem;"></i><span style="color: var(--text-muted);">${isEnglish ? 'Offline' : 'Luar Jaringan'}</span>`;
                         el.style.borderColor = 'rgba(244, 63, 94, 0.3)';
                         el.style.background = 'rgba(244, 63, 94, 0.1)';
                     }
@@ -492,6 +771,8 @@
         }
 
         function loadPublicServers() {
+            const isEnglish = document.body.classList.contains('lang-en');
+
             fetch(GOOGLE_SCRIPT_URL + "?action=get_servers")
             .then(res => res.json())
             .then(data => {
@@ -499,7 +780,7 @@
                 if(data.status === "success") {
                     grid.innerHTML = "";
                     if(!data.servers || data.servers.length === 0) {
-                        grid.innerHTML = `<div style="text-align:center; color: var(--text-muted); grid-column: 1 / -1;">No servers registered yet. Be the first!</div>`;
+                        grid.innerHTML = `<div style="text-align:center; color: var(--text-muted); grid-column: 1 / -1;">${isEnglish ? 'No servers registered yet. Be the first!' : 'Belum ada server yang mendaftar. Jadilah yang pertama!'}</div>`;
                         return;
                     }
                     
@@ -509,20 +790,20 @@
                         const portText = portVal ? `<span style="color: var(--text-muted);">:${portVal}</span>` : '';
                         
                         let btnIcon = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
-                        let btnText = 'Join Server / Group';
+                        let btnText = isEnglish ? 'Join Server / Group' : 'Gabung Server / Grup';
                         
                         if (s.linkType === 'discord') {
                             btnIcon = '<i class="fa-brands fa-discord"></i>';
-                            btnText = 'Join Discord';
+                            btnText = isEnglish ? 'Join Discord' : 'Gabung Discord';
                         } else if (s.linkType === 'whatsapp') {
                             btnIcon = '<i class="fa-brands fa-whatsapp"></i>';
-                            btnText = 'Join WhatsApp';
+                            btnText = isEnglish ? 'Join WhatsApp' : 'Gabung WhatsApp';
                         } else if (s.linkType === 'website') {
                             btnIcon = '<i class="fa-solid fa-globe"></i>';
-                            btnText = 'Visit Website';
+                            btnText = isEnglish ? 'Visit Website' : 'Kunjungi Website';
                         } else {
-                            if (s.link && s.link.includes('discord')) { btnIcon = '<i class="fa-brands fa-discord"></i>'; btnText = 'Join Discord'; }
-                            else if (s.link && (s.link.includes('whatsapp') || s.link.includes('wa.me'))) { btnIcon = '<i class="fa-brands fa-whatsapp"></i>'; btnText = 'Join WhatsApp'; }
+                            if (s.link && s.link.includes('discord')) { btnIcon = '<i class="fa-brands fa-discord"></i>'; btnText = isEnglish ? 'Join Discord' : 'Gabung Discord'; }
+                            else if (s.link && (s.link.includes('whatsapp') || s.link.includes('wa.me'))) { btnIcon = '<i class="fa-brands fa-whatsapp"></i>'; btnText = isEnglish ? 'Join WhatsApp' : 'Gabung WhatsApp'; }
                         }
                         
                         grid.innerHTML += `
@@ -530,7 +811,7 @@
                                 <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-light); flex-grow: 1;">
                                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; gap: 0.5rem;">
                                         <h3 style="font-family: 'Outfit'; font-size: 1.25rem; color: #fff; line-height: 1.2; margin: 0; word-break: break-word;">${s.name}</h3>
-                                        <div id="status-${s.id}" style="font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-light); color: var(--text-muted); flex-shrink: 0; display: flex; align-items: center;"><i class="fa-solid fa-spinner fa-spin" style="margin-right: 0.3rem;"></i> Pinging...</div>
+                                        <div id="status-${s.id}" style="font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-light); color: var(--text-muted); flex-shrink: 0; display: flex; align-items: center;"><i class="fa-solid fa-spinner fa-spin" style="margin-right: 0.3rem;"></i> ${isEnglish ? 'Pinging...' : 'Memeriksa...'}</div>
                                     </div>
                                     <p class="server-desc" onclick="this.classList.toggle('expanded')" title="Click to expand/collapse">${s.desc}</p>
                                 </div>
