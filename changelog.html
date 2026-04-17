@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* * PURE VANILLA CSS - COMPACT SAAS THEME * */
         :root {
             --bg-base: #050505; --bg-surface: #0a0a0a; --bg-card: rgba(255, 255, 255, 0.03); --bg-card-hover: rgba(255, 255, 255, 0.05);
             --border-light: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.15);
@@ -21,11 +20,9 @@
         
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
-        /* Anti-Copy Protection */
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         input, textarea, select { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
         
-        /* --- MULTILANGUAGE CSS --- */
         body.lang-en .lang-id { display: none !important; }
         body.lang-id .lang-en { display: none !important; }
 
@@ -45,17 +42,14 @@
         .app-bar { background-color: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); position: fixed; top: 0; width: 100%; height: 3.5rem; z-index: 50; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; }
         .main-content { padding-top: 5.5rem; padding-bottom: 2.5rem; flex-grow: 1; }
 
-        /* Language Toggle Style */
         .lang-toggle { background: rgba(255,255,255,0.04); color: var(--text-secondary); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-light); cursor: pointer; transition: all 0.2s; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; }
         .lang-toggle:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); border-color: var(--border-highlight); }
 
-        /* Compact Search */
         .search-wrapper { position: relative; margin-bottom: 1.5rem; max-width: 32rem; margin-left: auto; margin-right: auto; }
         .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.9rem; }
         .search-input { width: 100%; padding: 0.75rem 1rem 0.75rem 2.25rem; background-color: var(--bg-card); border: 1px solid var(--border-light); border-radius: 10px; color: var(--text-primary); font-size: 0.85rem; outline: none; transition: all 0.3s; font-family: inherit; }
         .search-input:focus { border-color: var(--accent-primary); background-color: rgba(0,0,0,0.6); box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15); }
         
-        /* Compact List Cards */
         .list-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 10px; margin-bottom: 0.75rem; overflow: hidden; transition: all 0.2s; }
         .list-card:hover { border-color: var(--border-highlight); background: var(--bg-card-hover); }
         .list-card.active { border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05); }
@@ -74,7 +68,6 @@
         .expand-icon { transition: transform 0.3s; color: var(--text-muted); font-size: 0.8rem; }
         .list-card.active .expand-icon { transform: rotate(180deg); color: var(--text-primary); }
 
-        /* Compact Badges & Lists */
         .badge { display: inline-flex; align-items: center; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; border: 1px solid transparent; }
         .badge-primary { background: var(--gradient-admin); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
         .badge-lg { padding: 0.25rem 0.5rem; font-size: 0.7rem; gap: 0.3rem; text-transform: none; border-radius: 6px; margin-bottom: 0.4rem; font-weight: 600; }
@@ -159,68 +152,49 @@
     </footer>
 
     <script>
-        // Security & Clean URL Logic
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'x')) e.preventDefault(); });
-        if (window.location.pathname.endsWith('.html')) window.history.replaceState(null, '', window.location.pathname.replace(/index\.html$/, '').replace(/\.html$/, '') + window.location.search + window.location.hash);
-        document.querySelectorAll('a').forEach(a => { let h = a.getAttribute('href'); if(h && h.includes('.html')) a.setAttribute('href', h.replace('index.html', '/').replace(/\.html$/, '')); });
+        if (window.location.protocol.startsWith('http')) {
+            if (window.location.pathname.endsWith('.html')) window.history.replaceState(null, '', window.location.pathname.replace(/index\.html$/, '').replace(/\.html$/, '') + window.location.search + window.location.hash);
+            document.querySelectorAll('a').forEach(a => { let h = a.getAttribute('href'); if(h && h.includes('.html') && !h.startsWith('http')) a.setAttribute('href', h.replace('index.html', '/').replace(/\.html$/, '')); });
+        }
 
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
         let allLogs = [];
 
-        // Language Helper function for UI strings
         function t(en, id) { return document.body.classList.contains('lang-en') ? en : id; }
 
-        // --- NEW: Database Parsing Helper for Bilingual content ---
-        // Fungsi ini yang bertugas menerjemahkan isi database yang digabung dengan '|||'
         function parseLangDB(text) {
             if (!text) return "";
             let parts = text.split("|||");
             let isEn = document.body.classList.contains('lang-en');
-            
-            if (isEn) {
-                return parts[0] ? parts[0].trim() : "";
-            } else {
-                // Jika bahasa Indonesia ditekan tapi di database hanya ada 1 bahasa (data lama), 
-                // tampilkan bahasa aslinya (Inggris) agar tidak kosong.
-                return (parts.length > 1 && parts[1].trim() !== "") ? parts[1].trim() : parts[0].trim();
-            }
+            if (isEn) return parts[0] ? parts[0].trim() : "";
+            return (parts.length > 1 && parts[1].trim() !== "") ? parts[1].trim() : parts[0].trim();
         }
 
         function updateDynamicTexts() {
             document.title = t("Heraclaus | System Changelog", "Heraclaus | Riwayat Sistem");
-            
             const searchInput = document.getElementById('search-input');
             if(searchInput) searchInput.placeholder = t("Search versions, features, or fixes...", "Cari versi, fitur, atau perbaikan...");
-            
             const loadingText = document.getElementById('loading-text');
-            if (loadingText && loadingText.innerText !== t('Failed to load database.', 'Gagal memuat database.')) {
-                loadingText.innerText = t("Connecting to database...", "Menghubungkan ke database...");
-            }
-
+            if (loadingText && loadingText.innerText !== t('Failed to load database.', 'Gagal memuat database.')) { loadingText.innerText = t("Connecting to database...", "Menghubungkan ke database..."); }
             const emptyTitle = document.getElementById('empty-title');
             if (emptyTitle) emptyTitle.innerText = t("No history found", "Riwayat tidak ditemukan");
-            
-            // Render ulang isi daftar riwayat agar diterjemahkan secara real-time
             if(allLogs.length > 0) render();
         }
 
         function toggleLang() {
             const body = document.body;
-            if (body.classList.contains('lang-id')) {
-                body.classList.remove('lang-id');
-                body.classList.add('lang-en');
-                localStorage.setItem('heraclaus_lang', 'en');
-            } else {
-                body.classList.remove('lang-en');
-                body.classList.add('lang-id');
-                localStorage.setItem('heraclaus_lang', 'id');
-            }
+            let currentLang = body.classList.contains('lang-id') ? 'en' : 'id';
+            body.classList.remove('lang-id', 'lang-en');
+            body.classList.add(`lang-${currentLang}`);
+            try { localStorage.setItem('heraclaus_lang', currentLang); } catch(e) {}
             updateDynamicTexts();
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            const savedLang = localStorage.getItem('heraclaus_lang') || 'en';
+            let savedLang = 'en';
+            try { savedLang = localStorage.getItem('heraclaus_lang') || 'en'; } catch(e) {}
             document.body.className = `lang-${savedLang}`;
             updateDynamicTexts();
 
@@ -248,8 +222,6 @@
 
         function render() {
             const container = document.getElementById('changelog-container'), search = document.getElementById('search-input').value.toLowerCase();
-            
-            // Filter berdasarkan input teks (bahasa apapun yang muncul di db)
             let filtered = search ? allLogs.filter(log => log.versionName.toLowerCase().includes(search) || (log.added||'').toLowerCase().includes(search) || (log.fixed||'').toLowerCase().includes(search) || (log.removed||'').toLowerCase().includes(search)) : allLogs;
 
             if (filtered.length === 0) {
@@ -263,22 +235,15 @@
             
             filtered.forEach((log, index) => {
                 const isActive = index === 0 && !search ? 'active' : '';
-                
-                // Format tanggal otomatis (English atau Indonesia)
                 const langCode = t('en-US', 'id-ID');
                 const dateStr = new Date(log.date).toLocaleDateString(langCode, { year: 'numeric', month: 'short', day: 'numeric' });
                 
-                // PROSES TRANSLASI DATABASE (Memotong string "Inggris|||Indonesia")
-                const addedText = parseLangDB(log.added);
-                const fixedText = parseLangDB(log.fixed);
-                const removedText = parseLangDB(log.removed);
-
+                const addedText = parseLangDB(log.added), fixedText = parseLangDB(log.fixed), removedText = parseLangDB(log.removed);
                 const addedHtml = renderList(addedText, 'fa-rocket', t('New Features', 'Fitur Tambahan'), 'badge-emerald', 'dot-emerald');
                 const fixedHtml = renderList(fixedText, 'fa-bug', t('Bug Fixes', 'Perbaikan Bug'), 'badge-blue', 'dot-blue');
                 const removedHtml = renderList(removedText, 'fa-trash-can', t('Removed', 'Dihapus'), 'badge-rose', 'dot-rose');
                 
                 const content = (addedHtml || fixedHtml || removedHtml) ? (addedHtml + fixedHtml + removedHtml) : `<p style='color: var(--text-muted); margin-top: 0.5rem; font-style: italic; font-size: 0.8rem;'>${t('No specific notes provided for this release.', 'Tidak ada catatan pembaruan khusus untuk rilis ini.')}</p>`;
-                
                 const animDelay = (index * 0.05) > 0.5 ? 0 : (index * 0.05);
                 const mcBadge = log.mcVersion ? `<span class="badge badge-blue" style="margin: 0 0.3rem; font-size: 0.6rem;"><i class="fa-solid fa-gamepad" style="margin-right:3px;"></i> MC ${log.mcVersion}</span>` : '';
                 const latestBadge = index === 0 && !search ? `<span class="badge badge-primary" style="margin: 0 0.3rem;"><i class="fa-solid fa-star" style="margin-right:3px;"></i> ${t('Latest', 'Terbaru')}</span>` : '';

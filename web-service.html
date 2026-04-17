@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        /* --- CORE STYLES --- */
         :root {
             --bg-base: #050505; --bg-surface: #0a0a0a; --bg-card: rgba(255, 255, 255, 0.03); --bg-card-hover: rgba(255, 255, 255, 0.05);
             --border-light: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.15);
@@ -27,7 +26,6 @@
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         input, textarea, select { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
         
-        /* --- MULTILANGUAGE CSS --- */
         body.lang-en .lang-id { display: none !important; }
         body.lang-id .lang-en { display: none !important; }
 
@@ -48,7 +46,6 @@
         .blob-1 { top: -20%; left: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
         .blob-2 { bottom: -20%; right: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
 
-        /* Navbar */
         .navbar { position: fixed; top: 0; width: 100%; height: 4rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
         .desktop-only { display: inline-block; }
         @media (max-width: 640px) { .desktop-only { display: none !important; } }
@@ -58,7 +55,6 @@
         .nav-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.1); border-color: var(--border-highlight); }
         .lang-toggle { padding: 0.5rem 0.75rem; }
 
-        /* Buttons */
         .action-group { display: flex; flex-direction: column; gap: 0.75rem; width: 100%; margin-top: 2rem; }
         .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0 1.5rem; min-height: 3rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; text-align: center; width: 100%; }
         @media (min-width: 640px) { .action-group { flex-direction: row; } .btn { width: auto; } }
@@ -70,13 +66,11 @@
         .btn-success { background: var(--gradient-success); color: #fff; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25); border: 1px solid rgba(255,255,255,0.1); }
         .btn-success:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
 
-        /* Sections */
         .section-hero { padding: 8rem 0 4rem 0; position: relative; }
         .section { padding: 4rem 0; }
         
         .badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-radius: 999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1.5rem; border: 1px solid rgba(139, 92, 246, 0.3); letter-spacing: 1px; }
 
-        /* Feature Grid */
         .feature-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 3rem; }
         .feature-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 2rem; transition: transform 0.3s, border-color 0.3s; position: relative; overflow: hidden; }
         .feature-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: background 0.3s; }
@@ -86,7 +80,6 @@
 
         @media (min-width: 768px) { .feature-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; } }
 
-        /* Pricing (Web Packages) */
         .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 1.5rem; max-width: 64rem; margin: 3rem auto 0; }
         .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 2.5rem 2rem; display: flex; flex-direction: column; position: relative; }
         .price-card.pro { border-color: rgba(139, 92, 246, 0.4); background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 50%), var(--bg-card); }
@@ -104,7 +97,6 @@
 
         @media (min-width: 768px) { .pricing-wrap { grid-template-columns: repeat(2, 1fr); } }
 
-        /* Add-ons (Layanan Tambahan) */
         .addon-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 64rem; margin: 2rem auto 0; }
         @media (min-width: 768px) { .addon-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; } }
         .addon-card { background: var(--bg-surface); border: 1px dashed var(--border-highlight); border-radius: 16px; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem; transition: all 0.3s ease; }
@@ -114,7 +106,6 @@
         .addon-info { flex-grow: 1; }
         .addon-price { font-family: 'Outfit'; font-weight: 700; font-size: 1.15rem; color: #fff; margin-top: 0.3rem; display: flex; align-items: baseline; gap: 0.2rem; }
 
-        /* FAQ & TOS Styles */
         .faq-wrap { max-width: 48rem; margin: 3rem auto 0; display: flex; flex-direction: column; gap: 0.75rem; text-align: left; }
         .faq-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; transition: all 0.3s ease; }
         .faq-item.active { border-color: var(--border-highlight); background: rgba(255,255,255,0.04); }
@@ -126,7 +117,6 @@
         .faq-inner { overflow: hidden; }
         .faq-inner p { padding: 0 1.5rem 1.5rem 1.5rem; font-size: 0.9rem; margin: 0; line-height: 1.6; color: var(--text-secondary); }
 
-        /* Workflow Steps */
         .workflow-wrap { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 3rem; position: relative; }
         .workflow-wrap::before { content: ''; position: absolute; left: 1.5rem; top: 0; bottom: 0; width: 2px; background: var(--border-light); z-index: 0; }
         @media (min-width: 768px) { 
@@ -141,17 +131,14 @@
         .step-text h4 { font-family: 'Outfit'; font-size: 1.1rem; color: #fff; margin-bottom: 0.3rem; margin-top: 0.4rem; }
         .step-text p { font-size: 0.85rem; }
 
-        /* CTA Section */
         .cta-box { background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1), transparent 60%), var(--bg-card); border: 1px solid var(--border-light); border-radius: 20px; padding: 4rem 2rem; text-align: center; margin-top: 2rem; position: relative; overflow: hidden; }
 
         footer { padding: 3rem 0 1.5rem 0; border-top: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.85rem; background: rgba(0,0,0,0.5); text-align: center; }
 
-        /* Animations */
         .animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
         .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
         .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; } .delay-300 { transition-delay: 300ms; }
 
-        /* Interactive Icon Styles */
         .feature-icon i, .addon-icon i, .step-icon, .price-title i { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .feature-card:hover .feature-icon i { transform: scale(1.35); color: #fff; }
         .addon-card:hover .addon-icon i { transform: scale(1.3) rotate(15deg); }
@@ -224,7 +211,6 @@
         </div>
     </section>
 
-    <!-- FITUR UNGGULAN -->
     <section id="features" class="section" style="border-top: 1px solid var(--border-light); background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);">
         <div class="container">
             <div class="text-center animate-on-scroll">
@@ -287,7 +273,6 @@
         </div>
     </section>
 
-    <!-- WORKFLOW (CARA KERJA) -->
     <section id="portfolio" class="section">
         <div class="container">
             <div class="text-center animate-on-scroll">
@@ -377,7 +362,6 @@
         </div>
     </section>
 
-    <!-- PRICING PACKAGES -->
     <section id="packages" class="section" style="border-top: 1px solid var(--border-light); background: rgba(0,0,0,0.4);">
         <div class="container animate-on-scroll">
             <div class="text-center">
@@ -392,7 +376,6 @@
             </div>
             
             <div class="pricing-wrap">
-                <!-- Paket 1: Starter -->
                 <div class="price-card animate-on-scroll">
                     <div class="price-title">
                         <i class="fa-solid fa-paper-plane" style="color: var(--text-muted); font-size: 1.1rem; margin-right: 0.4rem;"></i>
@@ -420,7 +403,6 @@
                     <a href="https://wa.me/6285183185998?text=Hello%20Heraclaus,%20I'm%20interested%20in%20the%20Starter%20Profile%20Package" target="_blank" class="btn btn-outline w-full mt-auto lang-en">Choose This</a>
                 </div>
 
-                <!-- Paket 2: Landing Page -->
                 <div class="price-card animate-on-scroll delay-100">
                     <div class="price-title">
                         <i class="fa-solid fa-pager" style="color: var(--text-muted); font-size: 1.1rem; margin-right: 0.4rem;"></i>
@@ -449,7 +431,6 @@
                     <a href="https://wa.me/6285183185998?text=Hello%20Heraclaus,%20I'm%20interested%20in%20the%20Landing%20Page%20Package" target="_blank" class="btn btn-outline w-full mt-auto lang-en" style="border-color: rgba(139, 92, 246, 0.4); color: #c4b5fd;">Choose This</a>
                 </div>
 
-                <!-- Paket 3: Web App Dinamis -->
                 <div class="price-card pro animate-on-scroll delay-200">
                     <div class="pro-badge">
                         <span class="lang-id">PALING LARIS</span>
@@ -481,7 +462,6 @@
                     <a href="https://wa.me/6285183185998?text=Hello%20Heraclaus,%20I'm%20interested%20in%20the%20Complete%20Web%20Package" target="_blank" class="btn btn-gradient w-full mt-auto lang-en">Choose Advanced Package</a>
                 </div>
 
-                <!-- Paket 4: Custom -->
                 <div class="price-card animate-on-scroll delay-300">
                     <div class="price-title">
                         <i class="fa-solid fa-screwdriver-wrench" style="color: var(--text-muted); font-size: 1.1rem; margin-right: 0.4rem;"></i>
@@ -510,7 +490,6 @@
                 </div>
             </div>
             
-            <!-- SECTION ADD-ON -->
             <div class="animate-on-scroll" style="margin-top: 5rem;">
                 <div class="text-center">
                     <span class="badge" style="background: rgba(139, 92, 246, 0.1); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.3);">
@@ -525,7 +504,6 @@
                 </div>
                 
                 <div class="addon-grid">
-                    <!-- Kartu Hosting GitHub -->
                     <div class="addon-card">
                         <div class="addon-icon"><i class="fa-brands fa-github"></i></div>
                         <div class="addon-info">
@@ -544,7 +522,6 @@
                         </div>
                     </div>
                     
-                    <!-- Kartu Desain Logo -->
                     <div class="addon-card">
                         <div class="addon-icon"><i class="fa-solid fa-palette"></i></div>
                         <div class="addon-info">
@@ -568,7 +545,6 @@
         </div>
     </section>
 
-    <!-- SECTION FAQ & TERMS OF SERVICE -->
     <section id="faq-tos" class="section" style="border-top: 1px solid var(--border-light); background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 100%);">
         <div class="container animate-on-scroll">
             <div class="text-center">
@@ -588,7 +564,6 @@
             </div>
             
             <div class="faq-wrap">
-                <!-- Item 1 -->
                 <div class="faq-item">
                     <button class="faq-btn" onclick="toggleFaq(this)">
                         <span>
@@ -607,7 +582,6 @@
                     </div>
                 </div>
 
-                <!-- Item 2 -->
                 <div class="faq-item">
                     <button class="faq-btn" onclick="toggleFaq(this)">
                         <span>
@@ -626,7 +600,6 @@
                     </div>
                 </div>
 
-                <!-- Item 3 -->
                 <div class="faq-item">
                     <button class="faq-btn" onclick="toggleFaq(this)">
                         <span>
@@ -645,7 +618,6 @@
                     </div>
                 </div>
 
-                <!-- Item 4 -->
                 <div class="faq-item">
                     <button class="faq-btn" onclick="toggleFaq(this)">
                         <span>
@@ -664,7 +636,6 @@
                     </div>
                 </div>
 
-                <!-- Item 5 -->
                 <div class="faq-item">
                     <button class="faq-btn" onclick="toggleFaq(this)">
                         <span>
@@ -686,7 +657,6 @@
         </div>
     </section>
 
-    <!-- CTA -->
     <section class="section">
         <div class="container animate-on-scroll">
             <div class="cta-box">
@@ -717,13 +687,21 @@
     </footer>
 
     <script>
-        // Security & Clean URL Logic
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'x')) e.preventDefault(); });
-        if (window.location.pathname.endsWith('.html')) window.history.replaceState(null, '', window.location.pathname.replace(/index\.html$/, '').replace(/\.html$/, '') + window.location.search + window.location.hash);
-        document.querySelectorAll('a').forEach(a => { let h = a.getAttribute('href'); if(h && h.includes('.html')) a.setAttribute('href', h.replace('index.html', '/').replace(/\.html$/, '')); });
+        
+        if (window.location.protocol.startsWith('http')) {
+            if (window.location.pathname.endsWith('.html')) {
+                window.history.replaceState(null, '', window.location.pathname.replace(/index\.html$/, '').replace(/\.html$/, '') + window.location.search + window.location.hash);
+            }
+            document.querySelectorAll('a').forEach(a => { 
+                let h = a.getAttribute('href'); 
+                if(h && h.includes('.html') && !h.startsWith('http')) { 
+                    a.setAttribute('href', h.replace('index.html', '/').replace(/\.html$/, '')); 
+                } 
+            });
+        }
 
-        // FAQ Toggle Logic
         function toggleFaq(btn) {
             const currentItem = btn.parentElement;
             document.querySelectorAll('.faq-item').forEach(item => { 
@@ -732,53 +710,36 @@
             currentItem.classList.toggle('active');
         }
 
-        // Currency Conversion Logic
         function updatePrices(lang) {
-            const usdRate = 15000; // 1 USD = Rp 15.000
+            const usdRate = 15000;
             document.querySelectorAll('.dynamic-price').forEach(el => {
                 const idrValue = parseInt(el.getAttribute('data-price'));
                 if (lang === 'en') {
-                    // Konversi ke USD dan bulatkan ke atas
                     const usdValue = Math.ceil(idrValue / usdRate);
                     el.innerText = '$' + usdValue;
                 } else {
-                    // Format ke Rupiah (contoh: 250000 jadi Rp 250k)
                     const idrFormatted = (idrValue / 1000) + 'k';
                     el.innerText = 'Rp ' + idrFormatted;
                 }
             });
         }
 
-        // Multi-language Toggle Logic
         function toggleLang() {
             const body = document.body;
-            let currentLang = 'id';
-            
-            if (body.classList.contains('lang-id')) {
-                body.classList.remove('lang-id');
-                body.classList.add('lang-en');
-                localStorage.setItem('heraclaus_lang', 'en');
-                currentLang = 'en';
-            } else {
-                body.classList.remove('lang-en');
-                body.classList.add('lang-id');
-                localStorage.setItem('heraclaus_lang', 'id');
-                currentLang = 'id';
-            }
-            
-            // Update harga saat bahasa diganti
+            let currentLang = body.classList.contains('lang-id') ? 'en' : 'id';
+            body.classList.remove('lang-id', 'lang-en');
+            body.classList.add(`lang-${currentLang}`);
+            try { localStorage.setItem('heraclaus_lang', currentLang); } catch(e) {}
             updatePrices(currentLang);
         }
 
-        // Apply saved language on load
         document.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('heraclaus_lang') || 'id';
+            let savedLang = 'id';
+            try { savedLang = localStorage.getItem('heraclaus_lang') || 'id'; } catch(e) {}
             document.body.className = `lang-${savedLang}`;
             
-            // Terapkan perhitungan harga dinamis saat pertama dimuat
             updatePrices(savedLang);
             
-            // Animation Observer Setup
             const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
@@ -786,9 +747,12 @@
                 });
             }, observerOptions);
             document.querySelectorAll('.animate-on-scroll').forEach(el => { observer.observe(el); });
+
+            setTimeout(() => {
+                document.querySelectorAll('.animate-on-scroll').forEach(el => el.classList.add('is-visible'));
+            }, 1000);
         });
 
-        // Navbar Scroll Effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 20) { 

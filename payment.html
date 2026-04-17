@@ -11,11 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        /* * THEME UPDATE - Solid Dark UI * */
         :root {
             --bg-base: #000000; 
             --bg-surface: #0a0a0a;
-            --bg-card: #121214; /* Solid, no glass effect */
+            --bg-card: #121214; 
             --bg-input: #18181b;
             --border-light: #27272a;
             --border-highlight: #3f3f46;
@@ -35,7 +34,6 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         input, textarea, select { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
         
-        /* --- MULTILANGUAGE CSS --- */
         body.lang-en .lang-id { display: none !important; }
         body.lang-id .lang-en { display: none !important; }
 
@@ -52,7 +50,6 @@
 
         .navbar { position: fixed; top: 0; width: 100%; height: 4rem; z-index: 100; background: var(--bg-base); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; }
 
-        /* Language Toggle Style */
         .lang-toggle { background: var(--bg-input); color: var(--text-secondary); padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--border-light); cursor: pointer; transition: all 0.2s; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'Plus Jakarta Sans', sans-serif; }
         .lang-toggle:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); border-color: var(--border-highlight); }
 
@@ -63,18 +60,15 @@
         .back-link { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; margin-bottom: 1.25rem; transition: color 0.2s; font-weight: 600; }
         .back-link:hover { color: var(--text-primary); }
 
-        /* Alert Warning Box */
         .alert-warning { background: var(--warning-bg); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 4px solid var(--warning-border); border-radius: 8px; padding: 1rem; margin-bottom: 1.75rem; display: flex; gap: 0.75rem; align-items: flex-start; }
         .alert-warning i { color: var(--warning-border); font-size: 1.25rem; margin-top: 0.1rem; }
         .alert-warning .alert-text h4 { color: var(--warning-border); font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; margin-bottom: 0.25rem; }
         .alert-warning .alert-text p { color: #fde68a; font-size: 0.8rem; line-height: 1.4; margin: 0; }
 
-        /* Step Headers */
         .step-header { display: flex; align-items: center; gap: 0.75rem; font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary); }
         .step-badge { background: var(--accent-primary); color: white; width: 1.75rem; height: 1.75rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; font-family: 'Plus Jakarta Sans', sans-serif; }
         .step-divider { width: 100%; height: 1px; background: var(--border-light); margin: 2rem 0 1.5rem 0; }
 
-        /* Region Cards */
         .region-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
         .region-card { background: var(--bg-input); border: 1px solid var(--border-light); border-radius: 12px; padding: 1.25rem 0.75rem; text-align: center; cursor: pointer; transition: all 0.2s; }
         .region-card:hover { border-color: var(--border-highlight); background: #202024; }
@@ -83,13 +77,11 @@
         .region-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; color: #fff; }
         .region-card p { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.15rem; }
 
-        /* Payment Methods */
         .payment-method-box { margin-bottom: 1.5rem; padding: 1.25rem; background: var(--bg-input); border-radius: 12px; border: 1px solid var(--border-light); }
         .qris-box { background: #fff; padding: 0.75rem; border-radius: 12px; margin: 0 auto 1rem auto; display: flex; justify-content: center; max-width: 250px; }
         .qris-box img { max-width: 100%; height: auto; border-radius: 6px; display: block; }
         .price-tag { text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 0.25rem; color: #c4b5fd; line-height: 1; }
         
-        /* Forms */
         .form-group { margin-bottom: 1.25rem; }
         label { display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; font-weight: 600; }
         
@@ -104,7 +96,6 @@
         .file-upload:hover i { color: var(--accent-primary); }
         .file-upload span { font-size: 0.85rem; font-weight: 500; text-align: center; padding: 0 1rem; }
         
-        /* Submit Button */
         .btn-submit { width: 100%; padding: 0.9rem; background: var(--gradient-admin); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; margin-top: 0.5rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; justify-content: center; align-items: center; gap: 0.5rem; font-family: 'Plus Jakarta Sans', sans-serif; }
         .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4); }
         .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
@@ -129,7 +120,7 @@
         <div class="container flex justify-between items-center w-full">
             <a href="index.html" class="font-display" style="font-size: 1.2rem; font-weight: 800; color: #fff; text-decoration: none;">
                 <i class="fa-solid fa-code text-gradient mr-1"></i> Heraclaus 
-                <span class="desktop-only" style="color: var(--text-muted); font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; margin-left: 0.25rem;">
+                <span style="color: var(--text-muted); font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; margin-left: 0.25rem;">
                     | <span class="lang-en">Secure Checkout</span><span class="lang-id">Checkout Aman</span>
                 </span>
             </a>
@@ -306,50 +297,51 @@
     </footer>
 
     <script>
-        // Security & Clean URL Logic
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'x')) e.preventDefault(); });
-        if (window.location.pathname.endsWith('.html')) window.history.replaceState(null, '', window.location.pathname.replace(/index\.html$/, '').replace(/\.html$/, '') + window.location.search + window.location.hash);
-        document.querySelectorAll('a').forEach(a => { let h = a.getAttribute('href'); if(h && h.includes('.html')) a.setAttribute('href', h.replace('index.html', '/').replace(/\.html$/, '')); });
+        
+        if (window.location.protocol.startsWith('http')) {
+            if (window.location.pathname.endsWith('.html')) {
+                window.history.replaceState(null, '', window.location.pathname.replace(/index\.html$/, '').replace(/\.html$/, '') + window.location.search + window.location.hash);
+            }
+            document.querySelectorAll('a').forEach(a => { 
+                let h = a.getAttribute('href'); 
+                if(h && h.includes('.html') && !h.startsWith('http')) { 
+                    a.setAttribute('href', h.replace('index.html', '/').replace(/\.html$/, '')); 
+                } 
+            });
+        }
 
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
-
         let base64File = null;
 
-        // Language Helper function for JavaScript strings
         function t(en, id) {
             return document.body.classList.contains('lang-en') ? en : id;
         }
 
-        // Multi-language Toggle Logic
         function toggleLang() {
             const body = document.body;
-            if (body.classList.contains('lang-id')) {
-                body.classList.remove('lang-id');
-                body.classList.add('lang-en');
-                localStorage.setItem('heraclaus_lang', 'en');
-            } else {
-                body.classList.remove('lang-en');
-                body.classList.add('lang-id');
-                localStorage.setItem('heraclaus_lang', 'id');
-            }
+            let currentLang = body.classList.contains('lang-id') ? 'en' : 'id';
+            body.classList.remove('lang-id', 'lang-en');
+            body.classList.add(`lang-${currentLang}`);
+            try { localStorage.setItem('heraclaus_lang', currentLang); } catch(e) {}
             updateDynamicTexts();
         }
 
-        // Update JavaScript text when language changes
         function updateDynamicTexts() {
-            document.getElementById('gamertag').placeholder = t("e.g. HeraclausReal", "contoh: HeraclausReal");
-            document.getElementById('email').placeholder = t("your@email.com", "email@anda.com");
-            document.getElementById('discord').placeholder = t("For VIP Role (e.g. username#1234)", "Untuk Role VIP (contoh: username#1234)");
-            
+            const setPh = (id, en, idLang) => { const el = document.getElementById(id); if(el) el.placeholder = t(en, idLang); };
+            setPh('gamertag', 'e.g. HeraclausReal', 'contoh: HeraclausReal');
+            setPh('email', 'your@email.com', 'email@anda.com');
+            setPh('discord', 'For VIP Role (e.g. username#1234)', 'Untuk Role VIP (contoh: username#1234)');
             if (!base64File) {
-                document.getElementById('file-name-text').innerText = t("Click to browse or drag image here", "Klik untuk memilih atau tarik gambar ke sini");
+                const fText = document.getElementById('file-name-text');
+                if(fText) fText.innerText = t("Click to browse or drag image here", "Klik untuk memilih atau tarik gambar ke sini");
             }
         }
 
-        // Apply saved language on load
         document.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('heraclaus_lang') || 'en';
+            let savedLang = 'en';
+            try { savedLang = localStorage.getItem('heraclaus_lang') || 'en'; } catch(e) {}
             document.body.className = `lang-${savedLang}`;
             updateDynamicTexts();
         });
@@ -357,7 +349,6 @@
         function selectRegion(region) {
             document.getElementById('btn-id').classList.remove('active');
             document.getElementById('btn-intl').classList.remove('active');
-            
             document.getElementById('payment-details').style.display = 'block';
 
             if (region === 'id') {
@@ -374,68 +365,43 @@
         document.getElementById('file').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                // Maximum 2MB for security
                 if (file.size > 2 * 1024 * 1024) { 
                     alert(t("File is too large! Maximum 2MB.", "Ukuran file terlalu besar! Maksimal 2MB.")); 
-                    this.value = ""; 
-                    return; 
+                    this.value = ""; return; 
                 }
                 document.getElementById('file-name-text').innerText = file.name;
                 const reader = new FileReader();
-                reader.onload = function(event) {
-                    base64File = event.target.result;
-                };
+                reader.onload = function(event) { base64File = event.target.result; };
                 reader.readAsDataURL(file);
             }
         });
 
         document.getElementById('payment-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            if (!base64File) {
-                alert(t("Please upload your payment proof!", "Harap unggah bukti pembayaran Anda!"));
-                return;
-            }
+            if (!base64File) { alert(t("Please upload your payment proof!", "Harap unggah bukti pembayaran Anda!")); return; }
 
-            const btn = document.getElementById('submit-btn');
-            const btnText = document.getElementById('btn-text');
-            const spinner = document.getElementById('spinner');
-            const statusMsg = document.getElementById('status-msg');
-
-            btn.disabled = true;
-            btnText.innerText = t("Uploading...", "Mengunggah...");
-            spinner.style.display = "block";
-            statusMsg.style.display = "none";
+            const btn = document.getElementById('submit-btn'), btnText = document.getElementById('btn-text'), spinner = document.getElementById('spinner'), statusMsg = document.getElementById('status-msg');
+            btn.disabled = true; btnText.innerText = t("Uploading...", "Mengunggah..."); spinner.style.display = "block"; statusMsg.style.display = "none";
 
             const payload = {
-                action: "checkout",
-                gamertag: document.getElementById('gamertag').value.trim(),
-                discord: document.getElementById('discord').value.trim(),
-                email: document.getElementById('email').value.trim(),
+                action: "checkout", gamertag: document.getElementById('gamertag').value.trim(),
+                discord: document.getElementById('discord').value.trim(), email: document.getElementById('email').value.trim(),
                 fileBase64: base64File
             };
 
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            })
+            fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
             .then(response => response.json())
             .then(data => {
                 if(data.status === "success") {
                     document.getElementById('form-section').style.display = "none";
                     document.getElementById('success-section').style.display = "block";
-                } else {
-                    throw new Error(data.message);
-                }
+                } else { throw new Error(data.message); }
             })
             .catch(error => {
                 statusMsg.className = "msg-box status-error";
                 statusMsg.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + t('Submission failed: ', 'Pengiriman gagal: ') + error.message;
                 statusMsg.style.display = "block";
-                
-                btn.disabled = false;
-                btnText.innerHTML = '<i class="fa-solid fa-paper-plane"></i> ' + t('Submit Verification', 'Kirim Verifikasi');
-                spinner.style.display = "none";
+                btn.disabled = false; btnText.innerHTML = '<i class="fa-solid fa-paper-plane"></i> ' + t('Submit Verification', 'Kirim Verifikasi'); spinner.style.display = "none";
             });
         });
     </script>

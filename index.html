@@ -25,7 +25,6 @@
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         input, textarea, select { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
         
-        /* --- MULTILANGUAGE CSS --- */
         body.lang-en .lang-id { display: none !important; }
         body.lang-id .lang-en { display: none !important; }
         
@@ -34,7 +33,6 @@
         .items-center { align-items: center; } .justify-between { justify-content: space-between; } .justify-center { justify-content: center; }
         .w-full { width: 100%; } .text-center { text-align: center; } .text-left { text-align: left; }
         
-        /* Typography Scaled Down */
         h1, h2, h3, h4, .font-outfit { font-family: 'Outfit', sans-serif; }
         h1 { font-size: clamp(1.75rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; }
         h2 { font-size: clamp(1.25rem, 3.5vw, 1.875rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
@@ -47,7 +45,6 @@
         .blob-1 { top: -20%; left: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
         .blob-2 { bottom: -20%; right: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
 
-        /* Navbar */
         .navbar { position: fixed; top: 0; width: 100%; height: 3.5rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
         .nav-links { display: none; } 
         .nav-links a.reg-link { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.8rem; transition: color 0.2s; }
@@ -72,7 +69,6 @@
         .mobile-menu .login-nav-btn { border-bottom: none; margin-top: 1rem; padding: 0.65rem; justify-content: center; }
         .mobile-menu .lang-toggle { width: 100%; justify-content: center; margin-top: 0.5rem; }
 
-        /* Buttons */
         .action-group { display: flex; flex-direction: column; gap: 0.6rem; width: 100%; }
         .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1.25rem; min-height: 2.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; text-align: center; width: 100%; }
         @media (min-width: 640px) { .action-group { flex-direction: row; } .btn { width: auto; } }
@@ -88,10 +84,8 @@
         .yt-badge:hover { background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.4); }
         .yt-icon { color: #ff0000; font-size: 0.85rem; }
 
-        /* Badge Promo Baru */
         .promo-badge:hover { background: rgba(139, 92, 246, 0.25) !important; border-color: rgba(139, 92, 246, 0.6) !important; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); }
 
-        /* LIVE STATS BADGE (NEW DESIGN) */
         .stats-badge {
             display: inline-flex;
             align-items: center;
@@ -102,10 +96,10 @@
             border-radius: 9999px;
             font-size: 0.85rem;
             color: var(--text-secondary);
-            margin: 1.5rem 0 2rem 0; /* Jarak pas antara deskripsi dan tombol */
+            margin: 1.5rem 0 2rem 0; 
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            opacity: 0; /* Default invisible before load */
+            opacity: 0; 
             transform: translateY(10px);
             transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
         }
@@ -133,7 +127,6 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        /* Sections */
         .section-hero { padding: 6rem 0 2.5rem 0; }
         .section { padding: 3rem 0; }
         
@@ -149,7 +142,6 @@
         .feature-cell p { font-size: 0.85rem; margin-top: 0.2rem; line-height: 1.5; }
         .grid-cards { display: grid; gap: 1rem; }
 
-        /* Server Description Clamp */
         .server-desc {
             font-size: 0.85rem;
             color: var(--text-secondary);
@@ -176,7 +168,6 @@
         }
         @media (min-width: 1024px) { .feature-grid { grid-template-columns: repeat(3, 1fr); } }
 
-        /* Pricing Details */
         .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 52rem; margin: 2rem auto 0; }
         .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; transition: transform 0.2s; text-align: left; }
         .price-card.pro { border-color: rgba(139, 92, 246, 0.4); background: linear-gradient(180deg, rgba(139, 92, 246, 0.05), transparent); position: relative; overflow: hidden; }
@@ -188,7 +179,6 @@
         
         @media (min-width: 768px) { .pricing-wrap { grid-template-columns: 1fr 1fr; } .price-card { padding: 2rem; } }
 
-        /* FAQ */
         .faq-wrap { max-width: 42rem; margin: 2rem auto 0; display: flex; flex-direction: column; gap: 0.5rem; }
         .faq-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 10px; }
         .faq-item.active { border-color: var(--border-highlight); background: rgba(255,255,255,0.04); }
@@ -250,7 +240,6 @@
                     <span class="lang-id">Harga</span>
                 </a>
                 
-                <!-- NEW WEB STUDIO LINK -->
                 <a href="web-service.html" class="reg-link" style="color: #c4b5fd; display: flex; align-items: center; gap: 0.4rem;">
                     Web Studio 
                     <span style="background: var(--gradient-admin); color: white; font-size: 0.6rem; padding: 2px 5px; border-radius: 4px; font-weight: 800; letter-spacing: 0.5px;">NEW</span>
@@ -281,7 +270,6 @@
             <span class="lang-id">Harga</span>
         </a>
         
-        <!-- NEW WEB STUDIO LINK MOBILE -->
         <a href="web-service.html" onclick="toggleMenu()" style="color: #c4b5fd;">
             <div style="display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-laptop-code"></i> Web Studio</div>
             <span style="background: var(--gradient-admin); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; letter-spacing: 1px; margin-left: auto;">NEW</span>
@@ -309,7 +297,6 @@
     <section class="section-hero text-center">
         <div class="container flex flex-col items-center animate-on-scroll">
             
-            <!-- FLEX WRAPPER UNTUK BADGE PROMO & YOUTUBE -->
             <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.25rem;">
                 <a href="https://www.youtube.com/@heraclaus" target="_blank" class="yt-badge" style="margin-bottom: 0;">
                     <i class="fa-brands fa-youtube yt-icon"></i> Heraclaus <i class="fa-solid fa-circle-check yt-verified"></i>
@@ -471,7 +458,6 @@
         </div>
     </section>
 
-    <!-- SECTION: COMMUNITY SERVERS -->
     <section id="community-servers" class="section" style="border-top: 1px solid var(--border-light); background: radial-gradient(circle at left, rgba(139, 92, 246, 0.05), transparent 50%);">
         <div class="container">
             <div class="text-center animate-on-scroll">
@@ -688,15 +674,21 @@
     </footer>
 
     <script>
-        // Security & Clean URL Logic
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'x')) e.preventDefault(); });
-        if (window.location.pathname.endsWith('.html')) window.history.replaceState(null, '', window.location.pathname.replace(/index\.html$/, '').replace(/\.html$/, '') + window.location.search + window.location.hash);
-        document.querySelectorAll('a').forEach(a => { let h = a.getAttribute('href'); if(h && h.includes('.html')) a.setAttribute('href', h.replace('index.html', '/').replace(/\.html$/, '')); });
+        
+        if (window.location.protocol.startsWith('http')) {
+            if (window.location.pathname.endsWith('.html')) {
+                window.history.replaceState(null, '', window.location.pathname.replace(/index\.html$/, '').replace(/\.html$/, '') + window.location.search + window.location.hash);
+            }
+            document.querySelectorAll('a').forEach(a => { 
+                let h = a.getAttribute('href'); 
+                if(h && h.includes('.html') && !h.startsWith('http')) { 
+                    a.setAttribute('href', h.replace('index.html', '/').replace(/\.html$/, '')); 
+                } 
+            });
+        }
 
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
-
-        // Multi-language Toggle Logic
         function toggleLang() {
             const body = document.body;
             let currentLang = 'en';
@@ -713,12 +705,10 @@
                 currentLang = 'id';
             }
             
-            // Reload server texts dynamically if needed
             loadPublicServers();
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            // Apply saved language on load
             const savedLang = localStorage.getItem('heraclaus_lang') || 'en';
             document.body.className = `lang-${savedLang}`;
 
@@ -730,7 +720,7 @@
             }, observerOptions);
             document.querySelectorAll('.animate-on-scroll').forEach(el => { observer.observe(el); });
 
-            // Fetch Active User Stats
+            const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
             fetch(GOOGLE_SCRIPT_URL + "?action=get_stats")
                 .then(res => res.json())
                 .then(data => {
@@ -747,7 +737,6 @@
                     }
                 }).catch(err => console.log("Stats error:", err));
 
-            // LOAD DAFTAR SERVER
             loadPublicServers();
         });
 
@@ -779,6 +768,7 @@
 
         function loadPublicServers() {
             const isEnglish = document.body.classList.contains('lang-en');
+            const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
 
             fetch(GOOGLE_SCRIPT_URL + "?action=get_servers")
             .then(res => res.json())
@@ -832,7 +822,6 @@
                             </div>
                         `;
 
-                        // Trigger API ping setelah elemen dibuat
                         checkServerStatus(s.ip, s.port, s.id);
                     });
                 }
