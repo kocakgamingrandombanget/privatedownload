@@ -146,6 +146,12 @@
         .price-card:hover .price-title i { transform: translateX(5px) scale(1.15); color: #fff !important; }
         .btn i { transition: transform 0.3s ease; }
         .btn:hover i { transform: scale(1.2); }
+
+        /* Form Group Specifics */
+        .form-group { margin-bottom: 1rem; position: relative; text-align: left; }
+        .form-group label { display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; font-weight: 600; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.8rem 1rem; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 8px; color: var(--text-primary); font-size: 0.9rem; outline: none; transition: all 0.3s; font-family: inherit; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--accent-primary); background: rgba(0,0,0,0.4); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); }
     </style>
 </head>
 <body class="lang-id">
@@ -545,6 +551,49 @@
         </div>
     </section>
 
+    <!-- NEW NEGOTIATION SECTION -->
+    <section id="negotiation" class="section">
+        <div class="container animate-on-scroll">
+            <div class="text-center">
+                <span class="badge" style="background: rgba(245, 158, 11, 0.1); color: #fcd34d; border-color: rgba(245, 158, 11, 0.3);">
+                    <i class="fa-solid fa-handshake"></i> 
+                    <span class="lang-id">Nego Harga</span>
+                    <span class="lang-en">Price Negotiation</span>
+                </span>
+                <h2>
+                    <span class="lang-id">Punya Budget Sendiri? Ayo Nego!</span>
+                    <span class="lang-en">Have Your Own Budget? Let's Negotiate!</span>
+                </h2>
+                <p style="margin-top: 0.5rem; max-width: 40rem; margin-inline: auto;">
+                    <span class="lang-id">Ceritakan kebutuhan website Anda dan ajukan penawaran harga. Kami siap memberikan solusi terbaik yang pas di kantong.</span>
+                    <span class="lang-en">Tell us your website needs and propose a price. We are ready to provide the best solution that fits your pocket.</span>
+                </p>
+            </div>
+
+            <div style="background: var(--bg-surface); border: 1px dashed var(--border-highlight); border-radius: 16px; padding: 2rem; max-width: 42rem; margin: 3rem auto 0; text-align: left;">
+                <form id="nego-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label><span class="lang-id">Nama Anda</span><span class="lang-en">Your Name</span></label>
+                        <input type="text" id="nego-name" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label><span class="lang-id">Jelaskan Kebutuhan Website Anda</span><span class="lang-en">Describe Your Website Needs</span></label>
+                        <textarea id="nego-needs" required rows="3" placeholder="Saya butuh website untuk..."></textarea>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label><span class="lang-id">Penawaran Harga (Anggaran)</span><span class="lang-en">Proposed Price (Budget)</span></label>
+                        <input type="text" id="nego-budget" required placeholder="Rp 500.000">
+                    </div>
+                    <button type="submit" class="btn btn-gradient w-full" style="margin-top: 0.5rem;">
+                        <i class="fa-brands fa-whatsapp" style="font-size: 1.1rem;"></i>
+                        <span class="lang-id">Kirim Penawaran ke WhatsApp</span>
+                        <span class="lang-en">Send Offer to WhatsApp</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
     <section id="faq-tos" class="section" style="border-top: 1px solid var(--border-light); background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 100%);">
         <div class="container animate-on-scroll">
             <div class="text-center">
@@ -724,13 +773,25 @@
             });
         }
 
+        function t(en, id) {
+            return document.body.classList.contains('lang-en') ? en : id;
+        }
+
+        function updateDynamicTexts() {
+            const setPh = (id, en, idLang) => { const el = document.getElementById(id); if(el) el.placeholder = t(en, idLang); };
+            setPh('nego-needs', 'I need a website for...', 'Saya butuh website untuk...');
+            setPh('nego-budget', '$50', 'Rp 500.000');
+        }
+
         function toggleLang() {
             const body = document.body;
             let currentLang = body.classList.contains('lang-id') ? 'en' : 'id';
             body.classList.remove('lang-id', 'lang-en');
             body.classList.add(`lang-${currentLang}`);
             try { localStorage.setItem('heraclaus_lang', currentLang); } catch(e) {}
+            
             updatePrices(currentLang);
+            updateDynamicTexts();
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -739,6 +800,7 @@
             document.body.className = `lang-${savedLang}`;
             
             updatePrices(savedLang);
+            updateDynamicTexts();
             
             const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
             const observer = new IntersectionObserver((entries, observer) => {
@@ -751,6 +813,24 @@
             setTimeout(() => {
                 document.querySelectorAll('.animate-on-scroll').forEach(el => el.classList.add('is-visible'));
             }, 1000);
+
+            // LOGIKA FORM NEGO
+            document.getElementById('nego-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const isEn = document.body.classList.contains('lang-en');
+                const name = document.getElementById('nego-name').value.trim();
+                const needs = document.getElementById('nego-needs').value.trim();
+                const budget = document.getElementById('nego-budget').value.trim();
+                
+                let waText = "";
+                if (isEn) {
+                    waText = `Hello Heraclaus, I would like to negotiate for a website project.\n\n*Name:* ${name}\n*Project Needs:* ${needs}\n*Proposed Budget:* ${budget}\n\nCould we discuss this further?`;
+                } else {
+                    waText = `Halo Heraclaus, saya ingin bernegosiasi untuk pembuatan website.\n\n*Nama:* ${name}\n*Kebutuhan:* ${needs}\n*Penawaran Anggaran:* ${budget}\n\nApakah kita bisa diskusi lebih lanjut?`;
+                }
+                
+                window.open(`https://wa.me/6285183185998?text=${encodeURIComponent(waText)}`, '_blank');
+            });
         });
 
         window.addEventListener('scroll', () => {
