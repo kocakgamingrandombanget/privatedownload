@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Heraclaus Web Studio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* --- CORE STYLES --- */
+        :root {
+            --bg-base: #050505; --bg-surface: #0a0a0a; --bg-card: rgba(255, 255, 255, 0.03); --bg-card-hover: rgba(255, 255, 255, 0.05);
+            --border-light: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff; --text-secondary: #a1a1aa; --text-muted: #71717a;
+            --accent-primary: #8b5cf6; --accent-secondary: #3b82f6; --accent-danger: #f43f5e; --accent-success: #10b981;
+            --gradient-hero: linear-gradient(135deg, #e879f9 0%, #8b5cf6 50%, #3b82f6 100%);
+            --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+        
+        /* Keamanan Anti-Copy */
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        input, textarea, select { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
+        
+        /* --- MULTILANGUAGE CSS --- */
+        body.lang-en .lang-id { display: none !important; }
+        body.lang-id .lang-en { display: none !important; }
+
+        .container { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem; width: 100%; }
+        .flex { display: flex; } .flex-col { flex-direction: column; }
+        .items-center { align-items: center; } .justify-between { justify-content: space-between; } .justify-center { justify-content: center; }
+        .w-full { width: 100%; } .text-center { text-align: center; }
+        
+        h1, h2, h3, h4, .font-outfit { font-family: 'Outfit', sans-serif; }
+        h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; }
+        h2 { font-size: clamp(1.25rem, 3.5vw, 1.875rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+        h3 { font-size: 1.15rem; font-weight: 700; color: var(--text-primary); line-height: 1.3; margin-bottom: 0.3rem; letter-spacing: -0.01em; }
+        p { color: var(--text-secondary); font-size: clamp(0.85rem, 1.5vw, 0.95rem); }
+        .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .desktop-only { display: inline-block; }
+        @media (max-width: 640px) { .desktop-only { display: none !important; } }
+
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; }
+        .blob-1 { top: -20%; left: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
+        .blob-2 { bottom: -20%; right: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
+
+        /* Navbar */
+        .navbar { position: fixed; top: 0; width: 100%; height: 4rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
+        
+        .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
+        .nav-btn { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: color 0.2s; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-light); cursor: pointer; }
+        .nav-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.1); border-color: var(--border-highlight); }
+        .lang-toggle { padding: 0.5rem 0.75rem; }
+
+        .main-content { flex-grow: 1; padding-top: 7rem; padding-bottom: 4rem; }
+
+        .badge-hero { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-radius: 999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1rem; border: 1px solid rgba(139, 92, 246, 0.3); letter-spacing: 1px; }
+
+        /* Filters */
+        .filter-container { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 3rem; margin-bottom: 2.5rem; }
+        .filter-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--border-light); color: var(--text-secondary); padding: 0.5rem 1.25rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-family: 'Inter', sans-serif; }
+        .filter-btn:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+        .filter-btn.active { background: var(--gradient-admin); color: #fff; border-color: transparent; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); }
+
+        /* Portfolio Grid */
+        .portfolio-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media (min-width: 640px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .portfolio-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        .portfolio-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; transform: translateY(20px); animation: slideUp 0.5s ease forwards; }
+        .portfolio-card:hover { transform: translateY(-6px); border-color: rgba(139, 92, 246, 0.4); box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(139, 92, 246, 0.1); background: rgba(255,255,255,0.04); }
+        
+        .card-img-wrap { width: 100%; height: 200px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border-light); }
+        .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .portfolio-card:hover .card-img { transform: scale(1.08); }
+        
+        .card-cat-badge { position: absolute; top: 1rem; right: 1rem; background: rgba(5,5,5,0.8); backdrop-filter: blur(8px); border: 1px solid var(--border-light); color: #fff; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2; }
+
+        .card-content { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; }
+        
+        .tags-wrap { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+        .tag { font-size: 0.65rem; font-weight: 600; color: var(--accent-secondary); background: rgba(59, 130, 246, 0.1); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.2); }
+        
+        .card-link-btn { margin-top: auto; padding-top: 1.25rem; display: inline-flex; align-items: center; gap: 0.5rem; color: #fff; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: color 0.2s; }
+        .card-link-btn i { transition: transform 0.3s ease; color: var(--accent-primary); }
+        .portfolio-card:hover .card-link-btn { color: #c4b5fd; }
+        .portfolio-card:hover .card-link-btn i { transform: translateX(5px); }
+
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: var(--text-muted); }
+        .empty-state i { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+
+        footer { padding: 2rem 0; border-top: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.85rem; background: rgba(0,0,0,0.5); text-align: center; margin-top: auto; }
+
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* --- ADMIN MODAL STYLES --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 5, 5, 0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(8px); padding: 1.25rem; }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; width: 100%; max-width: 26rem; padding: 1.75rem; box-shadow: 0 10px 40px rgba(0,0,0,0.5); transform: translateY(20px); transition: transform 0.3s ease; display: flex; flex-direction: column; max-height: 90vh; }
+        .modal-card.large { max-width: 56rem; }
+        .modal-overlay.show .modal-card { transform: translateY(0); }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1rem; flex-shrink: 0; }
+        .modal-body { overflow-y: auto; padding-right: 0.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .modal-body::-webkit-scrollbar { width: 6px; }
+        .modal-body::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 10px; }
+        
+        .btn-icon { width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; border: 1px solid var(--border-highlight); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; background: transparent; }
+        .btn-icon:hover { background: rgba(244,63,94,0.1); color: var(--accent-danger); border-color: rgba(244,63,94,0.5); }
+        
+        .form-group { margin-bottom: 1rem; position: relative; text-align: left; }
+        .form-group label { display: block; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.3rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.6rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border-light); border-radius: 8px; color: var(--text-primary); font-size: 0.85rem; outline: none; transition: all 0.3s; font-family: inherit; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15); }
+        
+        .pwd-wrapper { position: relative; width: 100%; }
+        .pwd-toggle { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 0.9rem; }
+        .pwd-toggle:hover { color: var(--text-primary); }
+
+        .btn-admin { width: 100%; padding: 0.8rem; background: var(--gradient-admin); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 0.5rem; }
+        .btn-admin:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
+        .btn-admin:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        .msg-box { margin-top: 1rem; padding: 0.75rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; text-align: center; display: none; background: rgba(244, 63, 94, 0.1); color: var(--accent-danger); border: 1px solid rgba(244, 63, 94, 0.3); }
+
+        /* Admin Layout Grid */
+        .admin-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        @media (min-width: 768px) { .admin-grid { grid-template-columns: 1.2fr 1fr; } }
+        
+        .admin-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .admin-table th { color: var(--text-muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; padding: 0.85rem; border-bottom: 1px solid var(--border-light); }
+        .admin-table td { padding: 0.85rem; border-bottom: 1px solid var(--border-light); color: var(--text-secondary); font-size: 0.85rem; vertical-align: middle; }
+        .admin-table tr:last-child td { border-bottom: none; }
+
+        /* Toast */
+        #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 10000; display: flex; flex-direction: column; gap: 0.5rem; }
+        .toast { background: rgba(16, 185, 129, 0.95); color: #fff; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500; box-shadow: 0 4px 15px rgba(0,0,0,0.2); backdrop-filter: blur(10px); transform: translateY(50px); opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(255,255,255,0.2); }
+        .toast.error { background: rgba(244, 63, 94, 0.95); }
+        .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body class="lang-en">
+
+    <div class="ambient-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+    <div id="toast-container"></div>
+
+    <nav class="navbar" id="navbar">
+        <div class="container flex justify-between items-center w-full">
+            <a href="web-service.html" class="font-outfit" style="font-size: 1.2rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em;">
+                <i class="fa-solid fa-code text-gradient mr-2"></i> Heraclaus <span class="desktop-only" style="color: var(--text-muted); font-weight: 500; font-family: 'Inter'; font-size: 0.9rem; margin-left: 0.3rem;">| Web Studio</span>
+            </a>
+            
+            <div class="nav-actions">
+                <button onclick="toggleLang()" class="nav-btn lang-toggle" title="Change Language">
+                    <i class="fa-solid fa-globe"></i>
+                    <span class="lang-en">ID</span>
+                    <span class="lang-id">EN</span>
+                </button>
+                <a href="web-service.html" class="nav-btn">
+                    <i class="fa-solid fa-arrow-left"></i> 
+                    <span class="desktop-only">
+                        <span class="lang-en">Back to Services</span>
+                        <span class="lang-id">Kembali ke Layanan</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="text-center">
+                <span class="badge-hero">
+                    <i class="fa-solid fa-images"></i> 
+                    <span class="lang-en">Project Showcase</span>
+                    <span class="lang-id">Etalase Proyek</span>
+                </span>
+                <h1>
+                    <span class="lang-en">Our <span class="text-gradient">Portfolio.</span></span>
+                    <span class="lang-id">Katalog <span class="text-gradient">Portofolio.</span></span>
+                </h1>
+                <p style="max-width: 36rem; margin: 1rem auto 0;">
+                    <span class="lang-en">Explore a collection of premium websites and dynamic web applications we have crafted with passion and precision.</span>
+                    <span class="lang-id">Jelajahi koleksi website premium dan aplikasi web dinamis yang telah kami rancang dengan penuh dedikasi.</span>
+                </p>
+            </div>
+
+            <!-- Bagian Filter -->
+            <div class="filter-container" id="filter-buttons">
+                <button class="filter-btn active" data-filter="all">
+                    <span class="lang-en">All Projects</span><span class="lang-id">Semua Proyek</span>
+                </button>
+                <button class="filter-btn" data-filter="landingpage">Landing Page</button>
+                <button class="filter-btn" data-filter="webapp">Web App</button>
+                <button class="filter-btn" data-filter="custom">Enterprise / Custom</button>
+            </div>
+
+            <!-- Wadah Grid Portofolio -->
+            <div class="portfolio-grid" id="portfolio-grid">
+                <div class="empty-state">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    <p style="margin-top: 1rem;" class="lang-en">Connecting to database...</p>
+                    <p style="margin-top: 1rem;" class="lang-id">Menghubungkan ke database...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <i class="fa-solid fa-code text-gradient" style="font-size: 1rem;"></i>
+                <span class="font-outfit" style="color: #fff; font-size: 1rem; font-weight: 700;">Heraclaus Web Studio</span>
+            </div>
+            <p>© 2026 Heraclaus. Crafted with precision.</p>
+            <div style="margin-top: 1.5rem;">
+                <a href="#" id="open-admin-btn" style="color: var(--border-light); text-decoration: none; font-size: 0.7rem; transition: color 0.2s;"><i class="fa-solid fa-lock"></i> Admin Login</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div class="modal-overlay" id="login-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 class="font-outfit" style="margin: 0; font-size: 1.35rem; color: #fff;">
+                    <i class="fa-solid fa-shield-halved text-gradient" style="margin-right: 0.5rem;"></i> 
+                    <span class="lang-en">Master Panel</span><span class="lang-id">Panel Master</span>
+                </h2>
+                <button class="btn-icon danger" onclick="closeModal('login-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:center; color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.85rem;">
+                    <span class="lang-en">Restricted access. Authentication required.</span>
+                    <span class="lang-id">Akses terbatas. Otentikasi keamanan diperlukan.</span>
+                </p>
+                <form id="admin-login-form">
+                    <div class="form-group">
+                        <label><span class="lang-en">Master Password</span><span class="lang-id">Kata Sandi Master</span></label>
+                        <div class="pwd-wrapper">
+                            <input type="password" id="admin-key" required placeholder="Enter password...">
+                            <i class="fa-solid fa-eye pwd-toggle" onclick="togglePassword('admin-key', this)"></i>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-admin" id="btn-admin-login">
+                        <i class="fa-solid fa-unlock-keyhole"></i> 
+                        <span class="lang-en">Authenticate</span><span class="lang-id">Otentikasi</span>
+                    </button>
+                    <div id="admin-login-msg" class="msg-box"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD MODAL -->
+    <div class="modal-overlay" id="dashboard-modal">
+        <div class="modal-card large">
+            <div class="modal-header">
+                <h2 class="font-outfit" style="margin: 0; font-size: 1.35rem; color: #fff;">
+                    <i class="fa-solid fa-laptop-code text-gradient" style="margin-right: 0.5rem;"></i> 
+                    <span class="lang-en">Manage Portfolio</span><span class="lang-id">Kelola Portofolio</span>
+                </h2>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn-icon" onclick="adminLogout()" title="Logout" style="border-color: rgba(244,63,94,0.3); color: var(--accent-danger);"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    <button class="btn-icon danger" onclick="closeModal('dashboard-modal')"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="admin-grid">
+                    <!-- Kolom Kiri: Form Tambah -->
+                    <div style="background: rgba(255,255,255,0.02); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-light);">
+                        <h3 class="font-outfit" style="font-size: 1.1rem; color: #fff; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-plus text-gradient" style="margin-right: 0.4rem;"></i> 
+                            <span class="lang-en">Add New Project</span><span class="lang-id">Tambah Proyek Baru</span>
+                        </h3>
+                        <form id="add-project-form">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                                <div class="form-group">
+                                    <label><span class="lang-en">Category</span><span class="lang-id">Kategori</span></label>
+                                    <select id="p-category" required>
+                                        <option value="landingpage" style="color:#000;">Landing Page</option>
+                                        <option value="webapp" style="color:#000;">Web App</option>
+                                        <option value="custom" style="color:#000;">Enterprise / Custom</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label><span class="lang-en">Target Link</span><span class="lang-id">Tautan Web</span></label>
+                                    <input type="url" id="p-link" required placeholder="https://...">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><span class="lang-en">Image URL (Cover)</span><span class="lang-id">URL Gambar (Cover)</span></label>
+                                <input type="url" id="p-image" required placeholder="https://images.unsplash.com/...">
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                                <div class="form-group">
+                                    <label><span class="lang-en">Title (English)</span><span class="lang-id">Judul (Inggris)</span></label>
+                                    <input type="text" id="p-title-en" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><span class="lang-en">Title (Indonesia)</span><span class="lang-id">Judul (Indo)</span></label>
+                                    <input type="text" id="p-title-id" required>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                                <div class="form-group">
+                                    <label><span class="lang-en">Desc (English)</span><span class="lang-id">Deskripsi (Inggris)</span></label>
+                                    <textarea id="p-desc-en" required rows="2"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label><span class="lang-en">Desc (Indonesia)</span><span class="lang-id">Deskripsi (Indo)</span></label>
+                                    <textarea id="p-desc-id" required rows="2"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label><span class="lang-en">Tags (Comma Separated)</span><span class="lang-id">Tags (Pisahkan Koma)</span></label>
+                                <input type="text" id="p-tags" required placeholder="e.g., Web App, Database, React">
+                            </div>
+
+                            <button type="submit" class="btn-admin" id="btn-save-project">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> 
+                                <span class="lang-en">Upload Project</span><span class="lang-id">Unggah Proyek</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Kolom Kanan: Tabel Data -->
+                    <div style="background: rgba(255,255,255,0.02); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-light); display: flex; flex-direction: column;">
+                        <h3 class="font-outfit" style="font-size: 1.1rem; color: #fff; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-list-check text-gradient" style="margin-right: 0.4rem;"></i> 
+                            <span class="lang-en">Existing Projects</span><span class="lang-id">Daftar Proyek</span>
+                        </h3>
+                        <div style="overflow-y: auto; flex-grow: 1; max-height: 400px; padding-right: 0.5rem;">
+                            <table class="admin-table" id="admin-portfolio-table">
+                                <thead>
+                                    <tr>
+                                        <th><span class="lang-en">Project Name</span><span class="lang-id">Nama Proyek</span></th>
+                                        <th>Kategori</th>
+                                        <th style="text-align: right;"><span class="lang-en">Action</span><span class="lang-id">Aksi</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Diisi oleh JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Security & Clean URL Logic
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'x')) e.preventDefault(); });
+        if (window.location.pathname.endsWith('.html')) window.history.replaceState(null, '', window.location.pathname.replace(/index\.html$/, '').replace(/\.html$/, '') + window.location.search + window.location.hash);
+        document.querySelectorAll('a').forEach(a => { let h = a.getAttribute('href'); if(h && h.includes('.html')) a.setAttribute('href', h.replace('index.html', '/').replace(/\.html$/, '')); });
+
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
+
+        // Language Helper function
+        function t(en, id) {
+            return document.body.classList.contains('lang-en') ? en : id;
+        }
+
+        // ==========================================
+        // DATA FALLBACK (DUMMY DATA JIKA DATABASE KOSONG)
+        // ==========================================
+        const fallbackData = [
+            {
+                id: "dummy-1", category: 'webapp',
+                image: 'https://images.unsplash.com/photo-1555421689-d68471e189f2?q=80&w=2070&auto=format&fit=crop',
+                titleEn: 'Nexus Store Dashboard', titleId: 'Dashboard Toko Nexus',
+                descEn: 'Dynamic e-commerce dashboard with user authentication, analytics, and real-time database.',
+                descId: 'Dashboard toko dinamis dengan sistem login, analitik, dan database real-time.',
+                tags: 'Web App, Auth, Google DB', link: '#'
+            },
+            {
+                id: "dummy-2", category: 'landingpage',
+                image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop',
+                titleEn: 'Aetheria SMP Website', titleId: 'Website Aetheria SMP',
+                descEn: 'A dark-themed scrollable landing page with interactive animations for a Minecraft server.',
+                descId: 'Landing page tema gelap dengan animasi gulir interaktif untuk server Minecraft.',
+                tags: 'HTML/CSS, JS Animations, Responsive', link: '#'
+            }
+        ];
+
+        let portfolioData = [];
+
+        const categoryLabels = {
+            'landingpage': 'Landing Page',
+            'webapp': 'Web App',
+            'custom': 'Enterprise'
+        };
+
+        // --- TOAST HELPER ---
+        function showToast(message, isError = false) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${isError ? 'error' : ''}`;
+            toast.innerHTML = isError ? `<i class="fa-solid fa-circle-exclamation"></i> ${message}` : `<i class="fa-solid fa-circle-check"></i> ${message}`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.add('show'); }, 10);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => { container.removeChild(toast); }, 300); }, 3000);
+        }
+
+        // --- FETCH DATA DARI GOOGLE SCRIPT ---
+        function fetchPortfolioData() {
+            // Menggunakan POST agar konsisten dengan endpoint admin lainnya dan menghindari sebagian masalah CORS cache
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "get_portfolio" })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Network response was not ok");
+                return res.json();
+            })
+            .then(data => {
+                if(data.status === "success" && data.portfolio && data.portfolio.length > 0) {
+                    portfolioData = data.portfolio;
+                } else {
+                    portfolioData = fallbackData;
+                }
+                renderPortfolio('all');
+                renderAdminTable();
+            })
+            .catch(err => {
+                // Jangan gunakan console.error agar tidak memunculkan peringatan merah di browser klien
+                console.log("Sistem: Database belum siap atau terjadi kendala jaringan. Menampilkan data fallback...");
+                portfolioData = fallbackData;
+                renderPortfolio('all');
+                renderAdminTable(); // Pastikan admin table juga dirender dengan data fallback
+            });
+        }
+
+        // --- RENDER GRID PORTOFOLIO (PUBLIC) ---
+        function renderPortfolio(filter = 'all') {
+            const grid = document.getElementById('portfolio-grid');
+            grid.innerHTML = ''; 
+
+            const filteredData = filter === 'all' ? portfolioData : portfolioData.filter(item => item.category === filter);
+
+            if (filteredData.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <h3 class="font-outfit" style="color: #fff; margin-bottom: 0.5rem;">${t('No projects found.', 'Tidak ada proyek ditemukan.')}</h3>
+                        <p>${t('We are currently updating our portfolio in this category.', 'Kami sedang memperbarui portofolio di kategori ini.')}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredData.forEach((item, index) => {
+                const animDelay = index * 0.1;
+                const title = t(item.titleEn, item.titleId) || item.titleEn;
+                const desc = t(item.descEn, item.descId) || item.descEn;
+                const btnText = t('Live Preview', 'Lihat Website');
+                const catText = categoryLabels[item.category] || item.category;
+
+                // Handle Tags string from DB (e.g. "React, Taildwind, Web App")
+                let tagsHtml = '';
+                if(item.tags) {
+                    const tagArray = item.tags.split(',').map(tag => tag.trim());
+                    tagsHtml = tagArray.map(tag => `<span class="tag">${tag}</span>`).join('');
+                }
+
+                grid.innerHTML += `
+                    <div class="portfolio-card" style="animation-delay: ${animDelay}s;">
+                        <div class="card-img-wrap">
+                            <div class="card-cat-badge">${catText}</div>
+                            <img src="${item.image}" alt="${title}" class="card-img" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <div class="tags-wrap">${tagsHtml}</div>
+                            <h3>${title}</h3>
+                            <p style="margin-bottom: 0;">${desc}</p>
+                            
+                            <a href="${item.link}" target="_blank" class="card-link-btn">
+                                ${btnText} <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Logic Klik Filter UI
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderPortfolio(this.getAttribute('data-filter'));
+            });
+        });
+
+        // --- MULTILANGUAGE LOGIC ---
+        function toggleLang() {
+            const body = document.body;
+            if (body.classList.contains('lang-id')) {
+                body.classList.remove('lang-id');
+                body.classList.add('lang-en');
+                localStorage.setItem('heraclaus_lang', 'en');
+            } else {
+                body.classList.remove('lang-en');
+                body.classList.add('lang-id');
+                localStorage.setItem('heraclaus_lang', 'id');
+            }
+            
+            const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+            renderPortfolio(activeFilter);
+            renderAdminTable();
+        }
+
+        // --- ADMIN PANEL LOGIC ---
+        function openModal(id) { document.getElementById(id).classList.add('show'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+        function togglePassword(inputId, icon) { const input = document.getElementById(inputId); if(input.type === 'password') { input.type = 'text'; icon.classList.replace('fa-eye', 'fa-eye-slash'); } else { input.type = 'password'; icon.classList.replace('fa-eye-slash', 'fa-eye'); } }
+
+        document.getElementById('open-admin-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            const session = sessionStorage.getItem('port_admin');
+            if (session) { openModal('dashboard-modal'); } 
+            else { openModal('login-modal'); }
+        });
+
+        function adminLogout() {
+            sessionStorage.removeItem('port_admin');
+            closeModal('dashboard-modal');
+            showToast(t("Logged out securely.", "Berhasil keluar dari sesi admin."));
+        }
+
+        // Admin Login
+        document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const pwd = document.getElementById('admin-key').value;
+            const btn = document.getElementById('btn-admin-login');
+            const msgBox = document.getElementById('admin-login-msg');
+            
+            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>'; msgBox.style.display = 'none';
+
+            fetch(GOOGLE_SCRIPT_URL, { 
+                method: "POST", 
+                body: JSON.stringify({ action: "admin_login", adminPassword: pwd }) 
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "success") {
+                    sessionStorage.setItem('port_admin', pwd);
+                    closeModal('login-modal');
+                    document.getElementById('admin-key').value = '';
+                    openModal('dashboard-modal');
+                    showToast(t("Access Granted!", "Akses Master diizinkan!"));
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(err => {
+                msgBox.innerHTML = err.message; msgBox.style.display = "block";
+            })
+            .finally(() => {
+                btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-unlock-keyhole"></i> <span class="lang-en">Authenticate</span><span class="lang-id">Otentikasi</span>`;
+            });
+        });
+
+        // Render Tabel Admin
+        function renderAdminTable() {
+            const tbody = document.querySelector("#admin-portfolio-table tbody");
+            if (!tbody) return;
+            tbody.innerHTML = "";
+            if (portfolioData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">${t("Database is empty.", "Daftar portofolio masih kosong.")}</td></tr>`;
+                return;
+            }
+            
+            portfolioData.forEach(item => {
+                const title = t(item.titleEn, item.titleId) || item.titleEn;
+                const catText = categoryLabels[item.category] || item.category;
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>
+                            <div style="font-weight: 600; color: #fff;">${title}</div>
+                            <div style="font-size: 0.7rem; margin-top: 0.2rem;"><a href="${item.link}" target="_blank" style="color: var(--accent-primary); text-decoration: none;">Lihat Link <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+                        </td>
+                        <td><span class="tag">${catText}</span></td>
+                        <td style="text-align: right;">
+                            <button onclick="adminDeleteProject('${item.id}')" class="btn-icon danger" title="Hapus"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Tambah Project Baru (POST ke Backend)
+        document.getElementById('add-project-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const pwd = sessionStorage.getItem('port_admin');
+            if(!pwd) { alert("Sesi admin telah habis!"); return closeModal('dashboard-modal'); }
+
+            const btn = document.getElementById('btn-save-project');
+            const originalBtnHtml = btn.innerHTML;
+            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Uploading...';
+
+            const payload = {
+                action: "admin_add_portfolio",
+                adminPassword: pwd,
+                project: {
+                    category: document.getElementById('p-category').value,
+                    image: document.getElementById('p-image').value.trim(),
+                    link: document.getElementById('p-link').value.trim(),
+                    titleEn: document.getElementById('p-title-en').value.trim(),
+                    titleId: document.getElementById('p-title-id').value.trim(),
+                    descEn: document.getElementById('p-desc-en').value.trim(),
+                    descId: document.getElementById('p-desc-id').value.trim(),
+                    tags: document.getElementById('p-tags').value.trim()
+                }
+            };
+
+            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "success") {
+                    showToast(t("Project successfully published!", "Proyek berhasil diunggah ke database!"));
+                    document.getElementById('add-project-form').reset();
+                    // Refetch data
+                    fetchPortfolioData();
+                } else {
+                    showToast(data.message, true);
+                }
+            })
+            .catch(err => { showToast(err.message, true); })
+            .finally(() => { btn.disabled = false; btn.innerHTML = originalBtnHtml; });
+        });
+
+        // Hapus Project
+        window.adminDeleteProject = function(id) {
+            if(!confirm(t("Are you sure you want to permanently delete this project?", "Yakin ingin menghapus proyek ini secara permanen dari portofolio?"))) return;
+            const pwd = sessionStorage.getItem('port_admin');
+            
+            fetch(GOOGLE_SCRIPT_URL, { 
+                method: "POST", 
+                body: JSON.stringify({ action: "admin_delete_portfolio", adminPassword: pwd, projectId: id }) 
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "success") {
+                    showToast(t("Project deleted.", "Proyek berhasil dihapus."));
+                    fetchPortfolioData();
+                } else {
+                    showToast(data.message, true);
+                }
+            });
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('heraclaus_lang') || 'en';
+            document.body.className = `lang-${savedLang}`;
+            fetchPortfolioData(); // Ambil data dari server
+            
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 20) { 
+                    nav.style.background = 'rgba(5, 5, 5, 0.9)'; nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.5)'; 
+                } else { 
+                    nav.style.background = 'rgba(5, 5, 5, 0.75)'; nav.style.boxShadow = 'none'; 
+                }
+            });
+        });
+    </script>
+</body>
+</html>
