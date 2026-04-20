@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth scroll-pt-20">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumière Skin | Reveal Your Natural Glow</title>
+    <meta name="description" content="Brand skincare modern dengan bahan alami dan solusi perawatan kulit minimalis.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        beige: '#F5EDE4',
+                        pink: '#E8CFC1',
+                        charcoal: '#2B2B2B',
+                        gold: '#D4AF37',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(43, 43, 43, 0.08)',
+                        'glow': '0 0 20px rgba(212, 175, 55, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <style>
+        body { background-color: #F5EDE4; color: #2B2B2B; overflow-x: hidden; }
+        .bg-soft-gradient { background: linear-gradient(135deg, #F5EDE4 0%, #E8CFC1 100%); }
+        .bg-hero-gradient { background: radial-gradient(circle at top right, rgba(232, 207, 193, 0.5), transparent 40%), radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.1), transparent 40%); }
+
+        /* Glassmorphism Utilities */
+        .glass-nav { background: rgba(245, 237, 228, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.3); transition: all 0.4s ease; }
+        .glass-nav.scrolled { background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); }
+        .glass-card { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.6); transition: transform 0.4s ease, box-shadow 0.4s ease; }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05); background: rgba(255, 255, 255, 0.8); }
+
+        .text-gradient-gold { background: linear-gradient(to right, #D4AF37, #b88a44); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        /* Buttons */
+        .btn-primary { background-color: #2B2B2B; color: #ffffff; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-primary:hover { background-color: #404040; transform: scale(1.02); box-shadow: 0 10px 20px rgba(43, 43, 43, 0.15); }
+        .btn-secondary { border: 1px solid #2B2B2B; color: #2B2B2B; transition: all 0.3s ease; }
+        .btn-secondary:hover { background-color: #2B2B2B; color: #F5EDE4; }
+
+        .product-card img { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .product-card:hover img { transform: scale(1.05); }
+
+        /* Quick View Button Hover */
+        .quick-view-btn { opacity: 0; transform: translateY(10px); transition: all 0.3s ease; }
+        .product-card:hover .quick-view-btn { opacity: 1; transform: translateY(0); }
+
+        /* Scroll Reveal */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; } .delay-300 { transition-delay: 300ms; }
+
+        ::selection { background: #E8CFC1; color: #2B2B2B; }
+        .lang-toggle.active { font-weight: 600; color: #D4AF37; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F5EDE4; }
+        ::-webkit-scrollbar-thumb { background: #E8CFC1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+
+        /* Preloader */
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #F5EDE4; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        .loader-text { font-family: 'Playfair Display', serif; font-size: 2rem; color: #D4AF37; letter-spacing: 4px; animation: pulse 1.5s infinite alternate; }
+        @keyframes pulse { 0% { opacity: 0.4; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1.05); } }
+
+        /* Infinite Marquee */
+        .marquee-container { overflow: hidden; white-space: nowrap; background: #2B2B2B; color: #F5EDE4; padding: 1rem 0; display: flex; align-items: center; }
+        .marquee-content { display: inline-block; animation: marquee 20s linear infinite; font-size: 0.875rem; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Before/After Slider */
+        .ba-slider input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; }
+        .ba-slider input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 40px; width: 40px; border-radius: 50%; background: white; cursor: ew-resize; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
+
+        /* FAQ Accordion */
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .faq-item.active .faq-answer { max-height: 200px; } /* Adjust if content is very long */
+        .faq-item i { transition: transform 0.3s ease; }
+        .faq-item.active i { transform: rotate(180deg); }
+
+        /* Modal Transitions */
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body class="antialiased font-sans flex flex-col min-h-screen relative">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-text text-charcoal font-bold">Lumière<span class="text-gold">.</span></div>
+    </div>
+
+    <!-- Floating Actions (WhatsApp & Back to Top) -->
+    <a href="https://wa.me/6281234567890" target="_blank" class="fixed bottom-6 left-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-xl hover:scale-110 transition-transform duration-300" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 right-6 z-40 bg-charcoal text-white w-12 h-12 rounded-full flex items-center justify-center text-lg shadow-xl translate-y-20 opacity-0 transition-all duration-300 hover:bg-gold" aria-label="Back to Top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 py-4 glass-nav">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="font-serif text-2xl font-bold tracking-wide text-charcoal">Lumière Skin.</a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                <a href="#home" class="hover:text-gold transition-colors duration-300" data-i18n="navHome">Home</a>
+                <a href="#about" class="hover:text-gold transition-colors duration-300" data-i18n="navAbout">About</a>
+                <a href="#products" class="hover:text-gold transition-colors duration-300" data-i18n="navProducts">Products</a>
+                <a href="#reviews" class="hover:text-gold transition-colors duration-300" data-i18n="navReviews">Reviews</a>
+                <a href="#faq" class="hover:text-gold transition-colors duration-300" data-i18n="navFaq">FAQ</a>
+            </div>
+
+            <!-- Actions -->
+            <div class="hidden md:flex items-center space-x-6">
+                <!-- Lang Toggle -->
+                <div class="flex items-center space-x-2 text-xs">
+                    <button onclick="setLanguage('id')" id="btn-id" class="lang-toggle active hover:text-gold transition-colors">ID</button>
+                    <span class="text-gray-400">|</span>
+                    <button onclick="setLanguage('en')" id="btn-en" class="lang-toggle hover:text-gold transition-colors">EN</button>
+                </div>
+                <!-- CTA -->
+                <a href="#products" class="btn-primary px-6 py-2.5 rounded-full text-sm font-medium" data-i18n="btnShopNow">Shop Now</a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden text-charcoal text-2xl focus:outline-none"><i class="fas fa-bars"></i></button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-md shadow-lg py-4 px-6 flex flex-col space-y-4 text-center">
+            <a href="#home" class="mobile-link block text-charcoal hover:text-gold" data-i18n="navHome">Home</a>
+            <a href="#about" class="mobile-link block text-charcoal hover:text-gold" data-i18n="navAbout">About</a>
+            <a href="#products" class="mobile-link block text-charcoal hover:text-gold" data-i18n="navProducts">Products</a>
+            <a href="#reviews" class="mobile-link block text-charcoal hover:text-gold" data-i18n="navReviews">Reviews</a>
+            <a href="#faq" class="mobile-link block text-charcoal hover:text-gold" data-i18n="navFaq">FAQ</a>
+            <div class="flex justify-center space-x-4 pt-2 border-t border-gray-100">
+                <button onclick="setLanguage('id')" class="text-sm font-medium">ID</button>
+                <button onclick="setLanguage('en')" class="text-sm font-medium">EN</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-hero-gradient">
+        <div class="container mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center justify-between gap-12">
+            <div class="w-full lg:w-1/2 z-10 reveal">
+                <h1 class="font-serif text-5xl lg:text-7xl leading-tight mb-6 text-charcoal">
+                    <span data-i18n="heroTitleStart">Healthy Skin Starts With</span> <br/>
+                    <span class="text-gradient-gold italic" data-i18n="heroTitleEnd">Gentle Care</span>
+                </h1>
+                <p class="text-gray-600 text-lg md:text-xl mb-10 max-w-lg leading-relaxed" data-i18n="heroSub">
+                    Discover clean, effective skincare crafted for your everyday glow.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#products" class="btn-primary text-center px-8 py-3.5 rounded-full font-medium shadow-soft" data-i18n="btnShopProducts">Shop Products</a>
+                    <a href="#about" class="btn-secondary text-center px-8 py-3.5 rounded-full font-medium" data-i18n="btnLearnMore">Learn More</a>
+                </div>
+                <div class="mt-12 flex items-center space-x-6 text-sm text-gray-500 font-medium">
+                    <div class="flex items-center"><i class="fas fa-check-circle text-gold mr-2"></i> <span data-i18n="badgeVegan">100% Vegan</span></div>
+                    <div class="flex items-center"><i class="fas fa-check-circle text-gold mr-2"></i> <span data-i18n="badgeCrueltyFree">Cruelty-Free</span></div>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-1/2 relative reveal delay-200">
+                <div class="absolute inset-0 bg-gold rounded-full blur-3xl opacity-20 transform translate-x-10 translate-y-10"></div>
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl w-full h-[500px] lg:h-[600px] bg-gray-200">
+                    <img src="https://images.unsplash.com/photo-1615397323938-2329bd22ab65?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         onerror="this.onerror=null; this.src='https://placehold.co/800x600/F5EDE4/2B2B2B?text=Lumi%C3%A8re+Skin';" alt="Aesthetic" loading="lazy" class="object-cover w-full h-full transform hover:scale-105 transition-transform duration-700">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Infinite Marquee -->
+    <div class="marquee-container border-y border-white/10">
+        <div class="marquee-content" id="marquee-text">
+            <span class="mx-8 text-gold">✦</span> 100% Vegan <span class="mx-8 text-gold">✦</span> Cruelty-Free <span class="mx-8 text-gold">✦</span> Dermatologically Tested <span class="mx-8 text-gold">✦</span> No Parabens <span class="mx-8 text-gold">✦</span> Eco-Friendly Packaging
+            <span class="mx-8 text-gold">✦</span> 100% Vegan <span class="mx-8 text-gold">✦</span> Cruelty-Free <span class="mx-8 text-gold">✦</span> Dermatologically Tested <span class="mx-8 text-gold">✦</span> No Parabens <span class="mx-8 text-gold">✦</span> Eco-Friendly Packaging
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-white relative">
+        <div class="container mx-auto px-6 md:px-12 text-center">
+            <div class="max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="font-serif text-3xl md:text-4xl text-charcoal mb-6" data-i18n="aboutTitle">Purity in Every Drop</h2>
+                <p class="text-gray-600 text-lg leading-relaxed" data-i18n="aboutDesc">Kami percaya bahwa kulit sehat tidak membutuhkan rutinitas yang rumit. Produk kami diformulasikan dengan bahan alami berkualitas tinggi.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Cards -->
+                <div class="glass-card p-8 rounded-2xl reveal"><div class="w-14 h-14 mx-auto bg-beige text-gold rounded-full flex items-center justify-center text-2xl mb-6 shadow-sm"><i class="fas fa-leaf"></i></div><h3 class="font-serif text-xl font-semibold mb-3 text-charcoal" data-i18n="val1Title">Natural Ingredients</h3><p class="text-sm text-gray-500 leading-relaxed" data-i18n="val1Desc">Tanpa paraben, sulfat, maupun pewarna buatan.</p></div>
+                <div class="glass-card p-8 rounded-2xl reveal delay-100"><div class="w-14 h-14 mx-auto bg-beige text-gold rounded-full flex items-center justify-center text-2xl mb-6 shadow-sm"><i class="fas fa-vial"></i></div><h3 class="font-serif text-xl font-semibold mb-3 text-charcoal" data-i18n="val2Title">Dermatologically Tested</h3><p class="text-sm text-gray-500 leading-relaxed" data-i18n="val2Desc">Aman dan teruji secara klinis untuk kulit sensitif.</p></div>
+                <div class="glass-card p-8 rounded-2xl reveal delay-200"><div class="w-14 h-14 mx-auto bg-beige text-gold rounded-full flex items-center justify-center text-2xl mb-6 shadow-sm"><i class="fas fa-recycle"></i></div><h3 class="font-serif text-xl font-semibold mb-3 text-charcoal" data-i18n="val3Title">Eco-Friendly</h3><p class="text-sm text-gray-500 leading-relaxed" data-i18n="val3Desc">Kemasan yang dapat didaur ulang 100%.</p></div>
+                <div class="glass-card p-8 rounded-2xl reveal delay-300"><div class="w-14 h-14 mx-auto bg-beige text-gold rounded-full flex items-center justify-center text-2xl mb-6 shadow-sm"><i class="fas fa-tint"></i></div><h3 class="font-serif text-xl font-semibold mb-3 text-charcoal" data-i18n="val4Title">Hydration Focus</h3><p class="text-sm text-gray-500 leading-relaxed" data-i18n="val4Desc">Menjaga skin barrier dan kelembapan kulit Anda.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Before & After Section -->
+    <section class="py-24 bg-beige relative overflow-hidden">
+        <div class="container mx-auto px-6 md:px-12 text-center reveal">
+            <h2 class="font-serif text-3xl md:text-4xl text-charcoal mb-4" data-i18n="baTitle">Real Results</h2>
+            <p class="text-gray-600 mb-12" data-i18n="baSub">See the difference after 4 weeks of consistent use.</p>
+            
+            <!-- Slider Container -->
+            <div class="ba-slider relative w-full max-w-3xl mx-auto h-[300px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl select-none group">
+                <!-- After Image (Background) -->
+                <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="After" class="absolute inset-0 w-full h-full object-cover">
+                <!-- Before Image (Foreground overlay) -->
+                <img id="ba-img" src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Before" class="absolute inset-0 w-full h-full object-cover" style="clip-path: inset(0 50% 0 0);">
+                
+                <!-- Range Input -->
+                <input type="range" min="0" max="100" value="50" class="absolute inset-0 w-full h-full opacity-0 z-20 cursor-ew-resize" oninput="document.getElementById('ba-img').style.clipPath = 'inset(0 ' + (100 - this.value) + '% 0 0)'; document.getElementById('slider-line').style.left = this.value + '%';">
+                
+                <!-- Visual Divider -->
+                <div id="slider-line" class="absolute top-0 bottom-0 left-[50%] w-1 bg-white pointer-events-none z-10 transform -translate-x-1/2">
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex justify-center items-center text-charcoal text-sm group-hover:scale-110 transition-transform">
+                        <i class="fas fa-arrows-alt-h"></i>
+                    </div>
+                </div>
+                
+                <!-- Labels -->
+                <span class="absolute top-4 left-4 bg-charcoal/50 backdrop-blur text-white px-3 py-1 text-xs rounded-full z-10 pointer-events-none">Before</span>
+                <span class="absolute top-4 right-4 bg-charcoal/50 backdrop-blur text-white px-3 py-1 text-xs rounded-full z-10 pointer-events-none">After</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Gallery -->
+    <section id="products" class="py-24 bg-white relative">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+                <div class="max-w-2xl">
+                    <span class="text-gold font-semibold tracking-wider text-sm uppercase mb-2 block" data-i18n="prodSubtitle">Our Collection</span>
+                    <h2 class="font-serif text-4xl text-charcoal" data-i18n="prodTitle">Curated For Your Glow</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-soft group reveal border border-gray-100">
+                    <div class="relative h-72 overflow-hidden bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Serum" class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4"><span class="bg-white/90 backdrop-blur text-xs font-semibold px-3 py-1 rounded-full text-charcoal">Best Seller</span></div>
+                        <!-- Quick View Button -->
+                        <div class="absolute inset-0 bg-charcoal/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button onclick="openModal('Hydra Glow Serum', 'Rp 249.000', 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'descProd1')" class="quick-view-btn bg-white text-charcoal px-6 py-2 rounded-full text-sm font-semibold hover:bg-gold hover:text-white" data-i18n="quickViewBtn">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-xs text-gold font-medium mb-1">Hyaluronic Acid, Brightening</p>
+                        <h3 class="font-serif text-xl font-semibold text-charcoal mb-2">Hydra Glow Serum</h3>
+                        <p class="text-sm text-gray-500 mb-4 line-clamp-2" data-i18n="descProd1">Serum ringan untuk hidrasi maksimal.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-charcoal">Rp 249.000</span>
+                            <button onclick="addToCart()" class="w-10 h-10 rounded-full bg-beige text-charcoal hover:bg-charcoal hover:text-white transition-colors flex items-center justify-center"><i class="fas fa-shopping-bag"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-soft group reveal delay-100 border border-gray-100">
+                    <div class="relative h-72 overflow-hidden bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Cleanser" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-charcoal/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button onclick="openModal('Gentle Foaming Cleanser', 'Rp 159.000', 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'descProd2')" class="quick-view-btn bg-white text-charcoal px-6 py-2 rounded-full text-sm font-semibold hover:bg-gold hover:text-white" data-i18n="quickViewBtn">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-xs text-gold font-medium mb-1">Cleanser, Sensitive Skin</p>
+                        <h3 class="font-serif text-xl font-semibold text-charcoal mb-2">Gentle Foaming Cleanser</h3>
+                        <p class="text-sm text-gray-500 mb-4 line-clamp-2" data-i18n="descProd2">Membersihkan tanpa membuat kulit kering.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-charcoal">Rp 159.000</span>
+                            <button onclick="addToCart()" class="w-10 h-10 rounded-full bg-beige text-charcoal hover:bg-charcoal hover:text-white transition-colors flex items-center justify-center"><i class="fas fa-shopping-bag"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-soft group reveal delay-200 border border-gray-100">
+                    <div class="relative h-72 overflow-hidden bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Cream" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-charcoal/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button onclick="openModal('Radiance Day Cream', 'Rp 199.000', 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'descProd3')" class="quick-view-btn bg-white text-charcoal px-6 py-2 rounded-full text-sm font-semibold hover:bg-gold hover:text-white" data-i18n="quickViewBtn">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-xs text-gold font-medium mb-1">Moisturizer, SPF 30</p>
+                        <h3 class="font-serif text-xl font-semibold text-charcoal mb-2">Radiance Day Cream</h3>
+                        <p class="text-sm text-gray-500 mb-4 line-clamp-2" data-i18n="descProd3">Melembapkan & melindungi dari UV.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-charcoal">Rp 199.000</span>
+                            <button onclick="addToCart()" class="w-10 h-10 rounded-full bg-beige text-charcoal hover:bg-charcoal hover:text-white transition-colors flex items-center justify-center"><i class="fas fa-shopping-bag"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-soft group reveal delay-300 border border-gray-100">
+                    <div class="relative h-72 overflow-hidden bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1570194065650-d99fb4b8ccb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Essence" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-charcoal/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button onclick="openModal('Night Repair Essence', 'Rp 289.000', 'https://images.unsplash.com/photo-1570194065650-d99fb4b8ccb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'descProd4')" class="quick-view-btn bg-white text-charcoal px-6 py-2 rounded-full text-sm font-semibold hover:bg-gold hover:text-white" data-i18n="quickViewBtn">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-xs text-gold font-medium mb-1">Anti-aging, Repair</p>
+                        <h3 class="font-serif text-xl font-semibold text-charcoal mb-2">Night Repair Essence</h3>
+                        <p class="text-sm text-gray-500 mb-4 line-clamp-2" data-i18n="descProd4">Memperbaiki kulit saat tidur.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-charcoal">Rp 289.000</span>
+                            <button onclick="addToCart()" class="w-10 h-10 rounded-full bg-beige text-charcoal hover:bg-charcoal hover:text-white transition-colors flex items-center justify-center"><i class="fas fa-shopping-bag"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews -->
+    <section id="reviews" class="py-24 bg-soft-gradient">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-serif text-3xl md:text-4xl text-charcoal mb-4" data-i18n="reviewTitle">Loved by Our Community</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white/60 backdrop-blur p-8 rounded-2xl relative reveal shadow-soft border border-white">
+                    <i class="fas fa-quote-left text-4xl text-pink/50 absolute top-6 left-6"></i>
+                    <div class="relative z-10">
+                        <div class="flex text-gold text-sm mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="text-charcoal font-medium text-lg italic mb-6" data-i18n="review1Text">"Kulitku jadi jauh lebih lembap, kenyal, dan glowing!"</p>
+                        <div class="flex items-center">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" class="w-10 h-10 rounded-full mr-3 object-cover">
+                            <div><h4 class="font-semibold text-sm text-charcoal">Amanda S.</h4><p class="text-xs text-gray-500">Verified Buyer</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white/60 backdrop-blur p-8 rounded-2xl relative reveal delay-100 shadow-soft border border-white">
+                    <i class="fas fa-quote-left text-4xl text-pink/50 absolute top-6 left-6"></i>
+                    <div class="relative z-10">
+                        <div class="flex text-gold text-sm mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="text-charcoal font-medium text-lg italic mb-6" data-i18n="review2Text">"Penyelamat buat kulit sensitifku! Perfectly gentle."</p>
+                        <div class="flex items-center">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" class="w-10 h-10 rounded-full mr-3 object-cover">
+                            <div><h4 class="font-semibold text-sm text-charcoal">Sarah M.</h4><p class="text-xs text-gray-500">Verified Buyer</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 bg-white">
+        <div class="container mx-auto px-6 md:px-12 max-w-3xl reveal">
+            <div class="text-center mb-12">
+                <h2 class="font-serif text-3xl md:text-4xl text-charcoal mb-4" data-i18n="faqTitle">Frequently Asked Questions</h2>
+                <p class="text-gray-500" data-i18n="faqSub">Everything you need to know about Lumière Skin.</p>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden cursor-pointer" onclick="this.classList.toggle('active')">
+                    <div class="px-6 py-4 bg-gray-50 flex justify-between items-center hover:bg-beige/30 transition-colors">
+                        <h4 class="font-medium text-charcoal" data-i18n="faq1Q">Apakah produk ini aman untuk ibu hamil?</h4>
+                        <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
+                    </div>
+                    <div class="faq-answer px-6 bg-white"><p class="py-4 text-gray-600 text-sm leading-relaxed" data-i18n="faq1A">Ya! Semua produk kami diformulasikan tanpa Retinol dan BHA dosis tinggi, sehingga aman untuk bumil & busui.</p></div>
+                </div>
+                <!-- FAQ 2 -->
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden cursor-pointer" onclick="this.classList.toggle('active')">
+                    <div class="px-6 py-4 bg-gray-50 flex justify-between items-center hover:bg-beige/30 transition-colors">
+                        <h4 class="font-medium text-charcoal" data-i18n="faq2Q">Berapa lama waktu pengirimannya?</h4>
+                        <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
+                    </div>
+                    <div class="faq-answer px-6 bg-white"><p class="py-4 text-gray-600 text-sm leading-relaxed" data-i18n="faq2A">Pengiriman reguler memakan waktu 2-3 hari kerja untuk Jabodetabek, dan 3-5 hari untuk luar daerah.</p></div>
+                </div>
+                <!-- FAQ 3 -->
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden cursor-pointer" onclick="this.classList.toggle('active')">
+                    <div class="px-6 py-4 bg-gray-50 flex justify-between items-center hover:bg-beige/30 transition-colors">
+                        <h4 class="font-medium text-charcoal" data-i18n="faq3Q">Apakah cocok untuk kulit berjerawat?</h4>
+                        <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
+                    </div>
+                    <div class="faq-answer px-6 bg-white"><p class="py-4 text-gray-600 text-sm leading-relaxed" data-i18n="faq3A">Sangat cocok. Pembersih dan Serum kami bersifat non-comedogenic dan membantu menenangkan peradangan.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallax CTA Section -->
+    <section id="contact" class="py-32 text-white text-center relative overflow-hidden bg-charcoal bg-[url('https://images.unsplash.com/photo-1556228578-0d85b1a4d571?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-fixed bg-cover bg-center">
+        <!-- Dark Overlay -->
+        <div class="absolute inset-0 bg-charcoal/80 z-0"></div>
+
+        <div class="container mx-auto px-6 relative z-10 reveal">
+            <h2 class="font-serif text-4xl md:text-5xl mb-6" data-i18n="ctaTitle">Ready to Transform Your Skin?</h2>
+            <p class="text-gray-300 text-lg mb-10 max-w-2xl mx-auto" data-i18n="ctaSub">Join thousands of happy customers who trust Lumière Skin for their daily radiance.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+                <a href="#products" class="bg-white text-charcoal px-8 py-3.5 rounded-full font-medium hover:bg-beige transition-colors shadow-glow" data-i18n="btnShopNowCta">Shop Now</a>
+                <a href="mailto:hello@lumiereskin.com" class="border border-white/30 text-white px-8 py-3.5 rounded-full font-medium hover:bg-white/20 transition-colors backdrop-blur" data-i18n="btnContactUs">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Feed Mockup -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6 md:px-12 text-center reveal">
+            <h3 class="font-serif text-2xl text-charcoal mb-8" data-i18n="igTitle">Follow Our Journey</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-8">
+                <img src="https://images.unsplash.com/photo-1615397323938-2329bd22ab65?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" class="w-full h-40 md:h-64 object-cover rounded-lg hover:opacity-80 transition cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" class="w-full h-40 md:h-64 object-cover rounded-lg hover:opacity-80 transition cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" class="w-full h-40 md:h-64 object-cover rounded-lg hover:opacity-80 transition cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" class="w-full h-40 md:h-64 object-cover rounded-lg hover:opacity-80 transition cursor-pointer">
+            </div>
+            <a href="#" class="inline-flex items-center text-sm font-medium text-charcoal hover:text-gold transition"><i class="fab fa-instagram mr-2 text-lg"></i> <span data-i18n="btnFollow">@lumiereskin</span></a>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-20 bg-pink/20">
+        <div class="container mx-auto px-6 md:px-12 text-center reveal">
+            <h3 class="font-serif text-3xl text-charcoal mb-4" data-i18n="newsTitle">Join The Lumière Club</h3>
+            <p class="text-gray-600 mb-8 max-w-lg mx-auto text-sm" data-i18n="newsSub">Dapatkan diskon 10% untuk pesanan pertama Anda.</p>
+            <form onsubmit="event.preventDefault(); addToCart(document.documentElement.lang === 'en' ? 'Successfully Subscribed!' : 'Berhasil Berlangganan!'); this.reset();" class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+                <input type="email" placeholder="Email Address" required class="flex-1 px-6 py-3.5 rounded-full border border-white/60 bg-white/50 backdrop-blur-sm focus:outline-none focus:border-gold focus:bg-white text-sm shadow-sm" data-i18n-placeholder="newsPlaceholder">
+                <button type="submit" class="btn-primary px-8 py-3.5 rounded-full text-sm font-medium shadow-soft" data-i18n="btnSubscribe">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white py-12 border-t border-gray-100">
+        <div class="container mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="font-serif text-2xl font-bold text-charcoal">Lumière Skin.</div>
+            <p class="text-gray-500 text-sm">&copy; <span id="year">2026</span> Lumière Skin. All rights reserved.</p>
+            <div class="flex space-x-6 text-gray-400">
+                <a href="#" class="hover:text-pink transition"><i class="fab fa-instagram text-xl"></i></a>
+                <a href="#" class="hover:text-pink transition"><i class="fab fa-tiktok text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Product Quick View Modal -->
+    <div id="product-modal" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center bg-charcoal/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 px-4">
+        <div class="modal-content bg-white w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl transform scale-95 translate-y-4 transition-all duration-300 flex flex-col md:flex-row relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-charcoal z-10 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow"><i class="fas fa-times"></i></button>
+            <div class="w-full md:w-1/2 h-64 md:h-[500px] bg-gray-100">
+                <img id="modal-img" src="" class="w-full h-full object-cover">
+            </div>
+            <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+                <h3 id="modal-title" class="font-serif text-3xl font-semibold text-charcoal mb-2">Product Name</h3>
+                <span id="modal-price" class="text-xl text-gold font-medium mb-6 border-b border-gray-100 pb-4 inline-block">Rp 0</span>
+                <p id="modal-desc" class="text-gray-600 mb-8 leading-relaxed text-sm">Description goes here.</p>
+                <div class="flex space-x-4">
+                    <button onclick="addToCart(); closeModal();" class="flex-1 btn-primary py-3.5 rounded-full font-medium" data-i18n="btnShopNowCta">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-24 md:bottom-6 right-6 bg-charcoal text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-32 opacity-0 transition-all duration-300 z-[110] flex items-center pointer-events-none">
+        <i class="fas fa-check-circle text-gold mr-3 text-lg"></i>
+        <span id="toast-message" class="text-sm font-medium tracking-wide">Produk ditambahkan ke keranjang!</span>
+    </div>
+
+    <!-- JavaScript Interactions -->
+    <script>
+        // Set Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Navbar & Back to Top Scroll Logic
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+            
+            if (window.scrollY > 300) { backToTop.classList.remove('translate-y-20', 'opacity-0'); } 
+            else { backToTop.classList.add('translate-y-20', 'opacity-0'); }
+        });
+
+        // Mobile Menu
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => menu.classList.add('hidden'));
+        });
+
+        // Scroll Reveal
+        const revealOnScroll = new IntersectionObserver((entries, obs) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) { e.target.classList.add('active'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+        document.querySelectorAll('.reveal').forEach(el => revealOnScroll.observe(el));
+
+        // Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').style.opacity = '0';
+                document.getElementById('preloader').style.visibility = 'hidden';
+            }, 800);
+        });
+
+        // Anti Copy
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Quick View Modal Logic
+        const modal = document.getElementById('product-modal');
+        function openModal(title, price, img, descKey) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-price').innerText = price;
+            document.getElementById('modal-img').src = img;
+            // Get translation for desc
+            const lang = document.documentElement.lang || 'id';
+            document.getElementById('modal-desc').innerText = translations[lang][descKey];
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // prevent scrolling
+        }
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        // Close on outside click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Toast
+        function addToCart(customMessage = null) {
+            const lang = document.documentElement.lang || 'id';
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = customMessage || translations[lang].toastCart;
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-32', 'opacity-0'), 3000);
+        }
+
+        // Translations Map
+        const translations = {
+            id: {
+                navHome: "Beranda", navAbout: "Tentang", navProducts: "Produk", navReviews: "Ulasan", navFaq: "FAQ",
+                btnShopNow: "Belanja", btnShopProducts: "Lihat Produk", btnLearnMore: "Pelajari",
+                heroTitleStart: "Kulit Sehat Berawal dari", heroTitleEnd: "Perawatan Lembut",
+                heroSub: "Temukan perawatan kulit bersih dan efektif untuk kilau alami Anda setiap hari.",
+                badgeVegan: "100% Vegan", badgeCrueltyFree: "Bebas Uji Hewan",
+                aboutTitle: "Kemurnian dalam Setiap Tetes", aboutDesc: "Kami percaya bahwa kulit sehat tidak membutuhkan rutinitas yang rumit. Produk diformulasikan alami & aman.",
+                val1Title: "Bahan Alami", val1Desc: "Tanpa paraben, sulfat, maupun pewarna buatan.",
+                val2Title: "Teruji Klinis", val2Desc: "Aman dan teruji untuk kulit sensitif.",
+                val3Title: "Ramah Lingkungan", val3Desc: "Kemasan yang dapat didaur ulang 100%.",
+                val4Title: "Fokus Hidrasi", val4Desc: "Menjaga skin barrier dan kelembapan kulit.",
+                baTitle: "Hasil Nyata", baSub: "Lihat perbedaan setelah 4 minggu pemakaian rutin.",
+                prodSubtitle: "Koleksi Kami", prodTitle: "Diciptakan untuk Kilau Anda", quickViewBtn: "Lihat Cepat",
+                descProd1: "Serum ringan untuk hidrasi maksimal & mencerahkan.", descProd2: "Membersihkan lembut tanpa membuat kulit tertarik.", descProd3: "Melembapkan sekaligus melindungi dari paparan sinar UV.", descProd4: "Memperbaiki tekstur kulit secara intensif saat Anda tidur.",
+                reviewTitle: "Dicintai Komunitas", review1Text: "\"Kulitku jadi jauh lebih lembap, kenyal, dan glowing!\"", review2Text: "\"Penyelamat buat kulit sensitifku! Perfectly gentle.\"",
+                faqTitle: "Pertanyaan Populer", faqSub: "Semua info penting tentang Lumière Skin.",
+                faq1Q: "Apakah produk ini aman untuk ibu hamil?", faq1A: "Ya! Semua diformulasikan tanpa Retinol dan BHA dosis tinggi, sangat aman untuk bumil & busui.",
+                faq2Q: "Berapa lama pengirimannya?", faq2A: "Pengiriman reguler 2-3 hari kerja untuk Jabodetabek, dan 3-5 hari untuk luar daerah.",
+                faq3Q: "Apakah cocok untuk kulit berjerawat?", faq3A: "Sangat cocok. Pembersih dan Serum kami *non-comedogenic* dan menenangkan peradangan.",
+                ctaTitle: "Siap Mengubah Kulit Anda?", ctaSub: "Bergabung dengan ribuan pelanggan setia Lumière Skin.",
+                btnShopNowCta: "Mulai Belanja", btnContactUs: "Hubungi Kami",
+                igTitle: "Ikuti Perjalanan Kami", btnFollow: "Ikuti @lumiereskin",
+                newsTitle: "Klub Eksklusif", newsSub: "Dapatkan diskon 10% untuk pesanan pertama Anda.", btnSubscribe: "Berlangganan", newsPlaceholder: "Alamat Email Anda",
+                toastCart: "Produk ditambahkan ke keranjang!"
+            },
+            en: {
+                navHome: "Home", navAbout: "About", navProducts: "Products", navReviews: "Reviews", navFaq: "FAQ",
+                btnShopNow: "Shop Now", btnShopProducts: "Shop Products", btnLearnMore: "Learn More",
+                heroTitleStart: "Healthy Skin Starts With", heroTitleEnd: "Gentle Care",
+                heroSub: "Discover clean, effective skincare crafted for your everyday glow.",
+                badgeVegan: "100% Vegan", badgeCrueltyFree: "Cruelty-Free",
+                aboutTitle: "Purity in Every Drop", aboutDesc: "We believe healthy skin doesn't need a complicated routine. Formulated naturally and safely.",
+                val1Title: "Natural Ingredients", val1Desc: "No parabens, sulfates, or artificial colors.",
+                val2Title: "Clinically Tested", val2Desc: "Safe and tested for sensitive skin.",
+                val3Title: "Eco-Friendly", val3Desc: "100% recyclable packaging.",
+                val4Title: "Hydration Focus", val4Desc: "Maintains your skin barrier and moisture.",
+                baTitle: "Real Results", baSub: "See the difference after 4 weeks of consistent use.",
+                prodSubtitle: "Our Collection", prodTitle: "Curated For Your Glow", quickViewBtn: "Quick View",
+                descProd1: "Lightweight serum for maximum hydration & brightening.", descProd2: "Gently cleanses without making skin feel tight.", descProd3: "Moisturizes while protecting from UV rays.", descProd4: "Intensively repairs skin texture while you sleep.",
+                reviewTitle: "Loved by Community", review1Text: "\"My skin is much more moisturized, plump, and glowing!\"", review2Text: "\"A lifesaver for my sensitive skin! Perfectly gentle.\"",
+                faqTitle: "Frequently Asked Questions", faqSub: "Everything you need to know about Lumière Skin.",
+                faq1Q: "Is it safe for pregnant women?", faq1A: "Yes! Formulated without Retinol and high-dose BHA, perfectly safe for pregnant & nursing moms.",
+                faq2Q: "How long does shipping take?", faq2A: "Regular shipping takes 2-3 business days domestically.",
+                faq3Q: "Is it suitable for acne-prone skin?", faq3A: "Absolutely. Our Cleanser and Serum are non-comedogenic and soothe inflammation.",
+                ctaTitle: "Ready to Transform Your Skin?", ctaSub: "Join thousands of happy customers who trust Lumière Skin.",
+                btnShopNowCta: "Shop Now", btnContactUs: "Contact Us",
+                igTitle: "Follow Our Journey", btnFollow: "Follow @lumiereskin",
+                newsTitle: "Join The Club", newsSub: "Get 10% off your first order.", btnSubscribe: "Subscribe", newsPlaceholder: "Your Email Address",
+                toastCart: "Item added to cart!"
+            }
+        };
+
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.innerHTML = translations[lang][key]; 
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) el.placeholder = translations[lang][key];
+            });
+            document.getElementById('btn-id').classList.toggle('active', lang === 'id');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.documentElement.lang = lang;
+        }
+
+        setLanguage('id'); // Init
+    </script>
+</body>
+</html>
