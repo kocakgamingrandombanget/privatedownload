@@ -199,7 +199,6 @@
         .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
         .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; }
 
-        /* --- MEMBERS MODAL --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 5, 5, 0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(8px); padding: 1.25rem; }
         .modal-overlay.show { opacity: 1; pointer-events: auto; }
         .modal-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; width: 100%; max-width: 28rem; padding: 1.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.5); transform: translateY(20px); transition: transform 0.3s ease; display: flex; flex-direction: column; max-height: 85vh; }
@@ -222,7 +221,6 @@
 
     <div class="ambient-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
 
-    <!-- PRO MEMBERS MODAL -->
     <div class="modal-overlay" id="members-modal">
         <div class="modal-card">
             <div class="modal-header">
@@ -253,7 +251,10 @@
                     <span class="lang-id">EN</span>
                 </button>
 
-                <a href="#admin-suite" class="reg-link">Admin Suite</a>
+                <a href="#addons" class="reg-link">
+                    <span class="lang-en">Add-ons</span>
+                    <span class="lang-id">Add-on</span>
+                </a>
                 <a href="#community-servers" class="reg-link">
                     <span class="lang-en">Servers</span>
                     <span class="lang-id">Server</span>
@@ -282,12 +283,14 @@
             <span class="lang-id">Change Language to English</span>
         </button>
 
-        <a href="#admin-suite" onclick="toggleMenu()"><i class="fa-solid fa-server"></i> Admin Suite</a>
+        <a href="#addons" onclick="toggleMenu()"><i class="fa-solid fa-puzzle-piece"></i> 
+            <span class="lang-en">Our Add-ons</span>
+            <span class="lang-id">Daftar Add-on</span>
+        </a>
         <a href="#community-servers" onclick="toggleMenu()"><i class="fa-solid fa-network-wired"></i> 
             <span class="lang-en">Community Servers</span>
             <span class="lang-id">Server Komunitas</span>
         </a>
-        <a href="#cinemato" onclick="toggleMenu()"><i class="fa-solid fa-film"></i> Cinemato Studio</a>
         <a href="#pricing" onclick="toggleMenu()"><i class="fa-solid fa-tag"></i> 
             <span class="lang-en">Pricing</span>
             <span class="lang-id">Harga</span>
@@ -357,17 +360,32 @@
             </div>
 
             <div class="action-group justify-center">
-                <a href="#admin-suite" class="btn btn-primary">
-                    <span class="lang-en">Explore Admin Suite</span>
-                    <span class="lang-id">Jelajahi Admin Suite</span>
+                <a href="#addons" class="btn btn-primary">
+                    <span class="lang-en">Explore Our Add-ons</span>
+                    <span class="lang-id">Jelajahi Add-on Kami</span>
                 </a>
             </div>
         </div>
     </section>
 
-    <section id="admin-suite" class="section" style="padding-top: 0;">
+    <section id="addons" class="section" style="padding-top: 0;">
         <div class="container">
-            <div class="product-box animate-on-scroll">
+            <div class="text-center animate-on-scroll" style="margin-bottom: 3rem;">
+                <span class="badge" style="margin-bottom: 1rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.25);"><i class="fa-solid fa-puzzle-piece"></i> 
+                    <span class="lang-en">Product Catalog</span>
+                    <span class="lang-id">Katalog Produk</span>
+                </span>
+                <h2>
+                    <span class="lang-en">Our Premium Add-ons</span>
+                    <span class="lang-id">Daftar Add-on Kami</span>
+                </h2>
+                <p style="margin-top: 0.5rem; max-width: 40rem; margin-inline: auto;">
+                    <span class="lang-en">Discover our collection of highly-optimized, feature-rich modifications for your server.</span>
+                    <span class="lang-id">Temukan koleksi modifikasi kami yang sangat dioptimalkan dan kaya fitur untuk server Anda.</span>
+                </p>
+            </div>
+
+            <div class="product-box animate-on-scroll" id="admin-suite">
                 <div class="product-header">
                     <div class="product-header-text">
                         <span class="badge"><i class="fa-solid fa-crown"></i> 
@@ -461,7 +479,7 @@
                 </div>
             </div>
 
-            <div id="cinemato" class="product-box animate-on-scroll" style="margin-bottom: 0; border-color: rgba(16, 185, 129, 0.2);">
+            <div id="cinemato" class="product-box animate-on-scroll" style="margin-bottom: 1.5rem; border-color: rgba(16, 185, 129, 0.2);">
                 <div class="product-header" style="background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent 50%); border-bottom: none; padding-bottom: 1.5rem;">
                     <div class="product-header-text">
                         <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.25);"><i class="fa-solid fa-film"></i> 
@@ -479,6 +497,26 @@
                     </div>
                 </div>
             </div>
+
+            <div id="requiem" class="product-box animate-on-scroll" style="margin-bottom: 0; border-color: rgba(244, 63, 94, 0.2);">
+                <div class="product-header" style="background: radial-gradient(circle at top right, rgba(244, 63, 94, 0.05), transparent 50%); border-bottom: none; padding-bottom: 1.5rem;">
+                    <div class="product-header-text">
+                        <span class="badge" style="background: rgba(244, 63, 94, 0.15); color: #fda4af; border-color: rgba(244, 63, 94, 0.25);"><i class="fa-solid fa-skull"></i> 
+                            <span class="lang-en">Atmosphere Add-on</span>
+                            <span class="lang-id">Add-on Atmosfer</span>
+                        </span>
+                        <h2>Hera's Requiem</h2>
+                        <p class="mt-2">
+                            <span class="lang-en">A chilling horror-themed backsound addon designed to provide a terrifying and immersive atmosphere to your Minecraft world.</span>
+                            <span class="lang-id">Add-on backsound bertema horor yang dirancang untuk memberikan suasana mencekam dan imersif di dunia Minecraft Anda.</span>
+                        </p>
+                    </div>
+                    <div class="product-header-actions action-group">
+                        <a href="https://www.curseforge.com/minecraft-bedrock/addons/heras-requiem" target="_blank" class="btn btn-outline" style="border-color: rgba(244, 63, 94, 0.3);">CurseForge <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -662,6 +700,7 @@
                     </h4>
                     <a href="#admin-suite"><i class="fa-solid fa-angle-right"></i> Admin Suite</a>
                     <a href="#cinemato"><i class="fa-solid fa-angle-right"></i> Cinemato Studio</a>
+                    <a href="#requiem"><i class="fa-solid fa-angle-right"></i> Hera's Requiem</a>
                     <a href="web-service.html"><i class="fa-solid fa-angle-right"></i> Web Studio <span style="font-size: 0.6rem; color: #a5b4fc; margin-left: 0.2rem;">(NEW)</span></a>
                     <a href="#pricing"><i class="fa-solid fa-angle-right"></i> 
                         <span class="lang-en">Pricing & Trial</span>
@@ -708,7 +747,7 @@
             document.querySelectorAll('a').forEach(a => { 
                 let h = a.getAttribute('href'); 
                 if(h && h.includes('.html') && !h.startsWith('http')) { 
-                    a.setAttribute('href', h.replace('index.html', '/').replace(/\\.html$/, '')); 
+                    a.setAttribute('href', h.replace('index.html', '/').replace(/\.html$/, '')); 
                 } 
             });
         }
@@ -733,7 +772,6 @@
             }
             try { localStorage.setItem('heraclaus_lang', currentLang); } catch(e) {}
             
-            // Re-render members modal if open
             if(document.getElementById('members-modal').classList.contains('show')) {
                 renderMembersList();
             }
@@ -742,7 +780,7 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             let savedLang = 'en';
-            try { savedLang = localStorage.getItem('heraclaus_lang') || 'en'; } catch(e) { console.warn("Local storage blocked."); }
+            try { savedLang = localStorage.getItem('heraclaus_lang') || 'en'; } catch(e) {}
             document.body.className = `lang-${savedLang}`;
 
             const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
@@ -780,7 +818,7 @@
                         }
                         if(data.members) cachedMembers = data.members;
                     }
-                }).catch(err => console.log("Stats API offline atau diblokir lokal."));
+                }).catch(err => console.log(err));
 
             loadPublicServers();
         });
@@ -906,7 +944,7 @@
                         });
                     }
                 }
-            }).catch(e => console.log("API Servers offline atau diblokir lokal."));
+            }).catch(e => console.log(e));
         }
         
         window.copyIp = function(ip, port, btn) {
