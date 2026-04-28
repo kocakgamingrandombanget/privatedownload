@@ -753,6 +753,7 @@
                 <a class="nav-item" onclick="switchTab('admin', 'members', this)"><i class="fa-solid fa-users"></i> <span class="lang-en">Manage Members</span><span class="lang-id">Manajemen Klien</span></a>
                 <a class="nav-item" onclick="switchTab('admin', 'servers', this)"><i class="fa-solid fa-network-wired"></i> <span class="lang-en">Manage Servers</span><span class="lang-id">Manajemen Server</span></a>
                 <a class="nav-item" onclick="switchTab('admin', 'social', this)"><i class="fa-solid fa-comments"></i> <span class="lang-en">Global Chat Mod</span><span class="lang-id">Moderasi Obrolan</span></a>
+                <a class="nav-item" onclick="switchTab('admin', 'generator', this)"><i class="fa-solid fa-key"></i> <span class="lang-en">License Generator</span><span class="lang-id">Generator Lisensi</span></a>
             </nav>
             <div class="sidebar-footer"><a class="nav-item logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> <span class="lang-en">Lock Console</span><span class="lang-id">Kunci Konsol</span></a></div>
         </aside>
@@ -928,6 +929,39 @@
                         </form>
                     </div>
                 </div>
+
+                <div id="tab-admin-generator" class="tab-content">
+                    <h2 class="section-title font-outfit">
+                        <span class="lang-en">Manual License Generator</span><span class="lang-id">Generator Lisensi Manual</span>
+                    </h2>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                        <span class="lang-en">Generate a license key for a specific gamertag for validation or manual distribution.</span>
+                        <span class="lang-id">Buat kunci lisensi untuk gamertag tertentu untuk kebutuhan validasi atau distribusi manual.</span>
+                    </p>
+                    
+                    <div class="profile-field" style="max-width: 36rem;">
+                        <form id="admin-generator-form">
+                            <div class="form-group">
+                                <label><span class="lang-en">Target Gamertag</span><span class="lang-id">Gamertag Tujuan</span></label>
+                                <input type="text" id="gen-gamertag" required placeholder="Enter player gamertag...">
+                            </div>
+                            <button type="submit" class="btn btn-master w-full" id="btn-generate-lic" style="margin-top: 0.5rem;">
+                                <i class="fa-solid fa-gears"></i> 
+                                <span class="lang-en">Generate License</span><span class="lang-id">Generate Lisensi</span>
+                            </button>
+                            <div id="gen-msg" class="msg-box"></div>
+                        </form>
+                        
+                        <div id="gen-result-box" style="display:none; margin-top: 1.5rem; border-top: 1px dashed var(--border-light); padding-top: 1.5rem;">
+                            <label><span class="lang-en">Generated License Key</span><span class="lang-id">Kunci Lisensi yang Dihasilkan</span></label>
+                            <div style="display: flex; gap: 0.4rem; align-items: stretch; width: 100%; margin-top: 0.5rem;">
+                                <div class="key-text" id="gen-display-key" style="margin: 0; width: 100%;"></div>
+                                <button type="button" onclick="copyGeneratedKey()" class="btn-icon" title="Copy License Key" style="height: auto; width: 3rem;"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </main>
     </div>
@@ -1264,6 +1298,44 @@
                 .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
                 .finally(() => { btn.disabled = false; btn.innerHTML = t('Update Password', 'Perbarui Kata Sandi'); });
             });
+
+            safelyAttachListener("admin-generator-form", "submit", function(e) {
+                e.preventDefault();
+                const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+                if(!session || session.role !== 'admin') return;
+                
+                const btn = document.getElementById("btn-generate-lic"), msgBox = document.getElementById("gen-msg");
+                btn.disabled = true; 
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + t('Processing...', 'Memproses...'); 
+                msgBox.style.display = "none";
+                
+                const gt = document.getElementById("gen-gamertag").value.trim();
+
+                fetch(GOOGLE_SCRIPT_URL, { 
+                    method: "POST", 
+                    headers: {"Content-Type": "text/plain;charset=utf-8"}, 
+                    redirect: "follow", 
+                    body: JSON.stringify({ 
+                        action: "admin_generate_license", adminPassword: session.adminPassword, gamertag: gt
+                    }) 
+                })
+                .then(res => res.json()).then(data => { 
+                    if(data.status === "success") { 
+                        document.getElementById("gen-result-box").style.display = "block";
+                        document.getElementById("gen-display-key").innerText = data.license;
+                        showToast(t('License generated successfully!', 'Lisensi berhasil dibuat!')); 
+                    } else throw new Error(data.message); 
+                })
+                .catch(err => { 
+                    msgBox.className = "msg-box msg-error"; 
+                    msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; 
+                    msgBox.style.display = "block"; 
+                })
+                .finally(() => { 
+                    btn.disabled = false; 
+                    btn.innerHTML = '<i class="fa-solid fa-gears"></i> ' + t('Generate License', 'Generate Lisensi'); 
+                });
+            });
         });
 
         function showToast(message, isError = false) {
@@ -1281,6 +1353,19 @@
             const keyText = document.getElementById("display-key").innerText;
             if(keyText && keyText !== t("Loading...", "Memuat...") && keyText !== t("License pending generation...", "Lisensi sedang menunggu dibuat...")) {
                 const el = document.createElement('textarea'); el.value = keyText; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); showToast(t('License Key copied to clipboard!', 'Kunci Lisensi berhasil disalin!'));
+            }
+        }
+
+        window.copyGeneratedKey = function() {
+            const keyText = document.getElementById("gen-display-key").innerText;
+            if(keyText) {
+                const el = document.createElement('textarea'); 
+                el.value = keyText; 
+                document.body.appendChild(el); 
+                el.select(); 
+                document.execCommand('copy'); 
+                document.body.removeChild(el); 
+                showToast(t('License Key copied to clipboard!', 'Kunci Lisensi berhasil disalin!'));
             }
         }
 
