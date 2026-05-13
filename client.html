@@ -749,6 +749,7 @@
             </div>
             <nav class="sidebar-nav">
                 <a class="nav-item admin-active" onclick="switchTab('admin', 'publish', this)"><i class="fa-solid fa-cloud-arrow-up"></i> <span class="lang-en">Publish Release</span><span class="lang-id">Rilis Update Baru</span></a>
+                <a class="nav-item" onclick="switchTab('admin', 'freerelease', this)"><i class="fa-solid fa-gift"></i> <span class="lang-en">Free Release</span><span class="lang-id">Rilis Gratis</span></a>
                 <a class="nav-item" onclick="switchTab('admin', 'database', this)"><i class="fa-solid fa-database"></i> <span class="lang-en">Release Database</span><span class="lang-id">Database Update</span></a>
                 <a class="nav-item" onclick="switchTab('admin', 'members', this)"><i class="fa-solid fa-users"></i> <span class="lang-en">Manage Members</span><span class="lang-id">Manajemen Klien</span></a>
                 <a class="nav-item" onclick="switchTab('admin', 'servers', this)"><i class="fa-solid fa-network-wired"></i> <span class="lang-en">Manage Servers</span><span class="lang-id">Manajemen Server</span></a>
@@ -841,6 +842,40 @@
                                 <span class="lang-en">Publish & Update All</span><span class="lang-id">Terbitkan & Perbarui Semua</span>
                             </button>
                             <div id="publish-msg" class="msg-box"></div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="tab-admin-freerelease" class="tab-content">
+                    <h2 class="section-title font-outfit">
+                        <span class="lang-en">Update Free Version</span><span class="lang-id">Perbarui Versi Gratis</span>
+                    </h2>
+                    <div class="profile-field" style="max-width: 36rem;">
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                            <span class="lang-en">Update the download link and version for the free tier on the public homepage.</span>
+                            <span class="lang-id">Perbarui tautan unduhan dan versi untuk pengguna gratis di halaman utama.</span>
+                        </p>
+                        <form id="admin-free-form">
+                            <div class="form-group">
+                                <label><span class="lang-en">Version Name</span><span class="lang-id">Nama Versi</span></label>
+                                <input type="text" id="f-version" required placeholder="e.g. v2.1.0 (Free)">
+                            </div>
+                            <div class="form-group">
+                                <label><span class="lang-en">Download Link</span><span class="lang-id">Tautan Unduhan</span></label>
+                                <input type="url" id="f-link" required placeholder="Direct Link / MediaFire / CurseForge">
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1.5rem; background: rgba(16, 185, 129, 0.1); padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2);">
+                                <input type="checkbox" id="f-send-email" style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
+                                <label for="f-send-email" style="margin: 0; text-transform: none; font-size: 0.85rem; color: #fff; cursor: pointer; letter-spacing: normal;">
+                                    <span class="lang-en">Notify all Subscribers & Members via Email</span>
+                                    <span class="lang-id">Kirim notifikasi ke semua pelanggan via Email</span>
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-master w-full" id="btn-update-free">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> 
+                                <span class="lang-en">Update Free Version</span><span class="lang-id">Perbarui Versi Gratis</span>
+                            </button>
+                            <div id="free-msg" class="msg-box"></div>
                         </form>
                     </div>
                 </div>
@@ -1085,6 +1120,9 @@
             
             setPh('e-version', 'e.g. v6.2.0', 'contoh: v6.2.0');
             setPh('e-mcversion', 'e.g. 1.20.70+', 'contoh: 1.20.70+');
+
+            setPh('f-version', 'e.g. v2.1.0 (Free)', 'contoh: v2.1.0 (Gratis)');
+            setPh('f-link', 'Direct Link / MediaFire / CurseForge', 'Tautan Langsung / MediaFire / CurseForge');
         }
 
         function safelyAttachListener(elementId, eventType, callback) {
@@ -1258,6 +1296,39 @@
                 .then(res => res.json()).then(data => { if(data.status === "success") { document.getElementById("admin-publish-form").reset(); document.getElementById('p-date').valueAsDate = new Date(); session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast(t('Published to all users!', 'Pembaruan berhasil dikirim ke semua Klien!')); } else throw new Error(data.message); })
                 .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
                 .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> ' + t('Publish & Update All', 'Terbitkan & Perbarui Semua'); });
+            });
+
+            safelyAttachListener("admin-free-form", "submit", function(e) {
+                e.preventDefault();
+                const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+                if(!session || session.role !== 'admin') return logout();
+                
+                const btn = document.getElementById("btn-update-free"), msgBox = document.getElementById("free-msg");
+                btn.disabled = true; 
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + t('Processing...', 'Memproses...'); 
+                msgBox.style.display = "none";
+                
+                fetch(GOOGLE_SCRIPT_URL, { 
+                    method: "POST", headers: {"Content-Type": "text/plain;charset=utf-8"}, redirect: "follow", 
+                    body: JSON.stringify({ 
+                        action: "admin_update_free_version", adminPassword: session.adminPassword, 
+                        version: document.getElementById("f-version").value.trim(), 
+                        link: document.getElementById("f-link").value.trim(),
+                        sendEmail: document.getElementById("f-send-email").checked
+                    }) 
+                })
+                .then(res => res.json()).then(data => { 
+                    if(data.status === "success") { 
+                        document.getElementById("admin-free-form").reset();
+                        showToast(t('Free version updated & published!', 'Versi gratis berhasil diperbarui!')); 
+                    } else throw new Error(data.message); 
+                })
+                .catch(err => { 
+                    msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; 
+                })
+                .finally(() => { 
+                    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> ' + t('Update Free Version', 'Perbarui Versi Gratis'); 
+                });
             });
 
             safelyAttachListener("edit-release-form", "submit", function(e) {

@@ -631,8 +631,11 @@
                         <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> <span class="lang-en">No Login, Advanced Regions, Grave, & X-Ray</span><span class="lang-id">Tidak Ada Fitur Login, Wilayah Lanjutan & X-Ray</span></li>
                         <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> <span class="lang-en">No VIP Services & Server Promo</span><span class="lang-id">Tidak Ada Akses VIP & Promo Server Gratis</span></li>
                     </ul>
-                    <a href="https://www.curseforge.com/minecraft-bedrock/scripts/admin-suite-server-tools" target="_blank" class="btn btn-outline w-full mt-auto">
-                        <span class="lang-en">Download Trial</span>
+                    <div style="font-size: 0.8rem; color: var(--accent-success); margin-bottom: 0.5rem; font-weight: 600; text-align: center;">
+                        <i class="fa-solid fa-bolt"></i> <span class="lang-en">Latest:</span><span class="lang-id">Terbaru:</span> <span id="free-version-tag">Loading...</span>
+                    </div>
+                    <a href="#" id="btn-free-dl" target="_blank" class="btn btn-outline w-full mt-auto">
+                        <span class="lang-en">Download Free Version</span>
                         <span class="lang-id">Unduh Versi Gratis</span>
                     </a>
                 </div>
@@ -730,6 +733,24 @@
                 <span class="lang-en">Get Pro License Now</span>
                 <span class="lang-id">Dapatkan Lisensi Pro Sekarang</span>
             </a></div>
+        </div>
+    </section>
+
+    <section class="section" style="border-top: 1px solid var(--border-light); background: rgba(59, 130, 246, 0.03);">
+        <div class="container text-center animate-on-scroll">
+            <span class="badge" style="margin-bottom: 1rem; background: rgba(59, 130, 246, 0.15); color: #93c5fd; border-color: rgba(59, 130, 246, 0.25);"><i class="fa-solid fa-envelope-open-text"></i> Newsletter</span>
+            <h2>
+                <span class="lang-en">Stay in the Loop</span>
+                <span class="lang-id">Dapatkan Info Terbaru</span>
+            </h2>
+            <p style="margin-top: 0.5rem;">
+                <span class="lang-en">Subscribe to our newsletter to get notified when new Free and Pro updates drop!</span>
+                <span class="lang-id">Berlangganan untuk mendapat notifikasi email saat update Gratis & Pro dirilis!</span>
+            </p>
+            <form id="subscribe-form" style="max-width: 400px; margin: 1.5rem auto 0; display: flex; gap: 0.5rem;">
+                <input type="email" id="sub-email" required placeholder="Enter your email address" style="flex-grow: 1; border-radius: 8px; padding: 0.8rem 1rem; border: 1px solid var(--border-highlight); background: rgba(0,0,0,0.5); color: white; outline: none;">
+                <button type="submit" class="btn btn-gradient" id="btn-subscribe" style="padding: 0 1.5rem;"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
         </div>
     </section>
 
@@ -869,6 +890,45 @@
                         if(data.members) cachedMembers = data.members;
                     }
                 }).catch(err => console.log(err));
+
+            fetch(GOOGLE_SCRIPT_URL + "?action=get_free_version")
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === 'success' && data.data) {
+                        const freeVerTag = document.getElementById('free-version-tag');
+                        const btnFreeDl = document.getElementById('btn-free-dl');
+                        if (freeVerTag) freeVerTag.innerText = data.data.version;
+                        if (btnFreeDl) btnFreeDl.href = data.data.link;
+                    }
+                }).catch(err => console.log(err));
+
+            const subForm = document.getElementById("subscribe-form");
+            if (subForm) {
+                subForm.addEventListener("submit", function(e) {
+                    e.preventDefault();
+                    const btn = document.getElementById("btn-subscribe");
+                    const email = document.getElementById("sub-email").value;
+                    const originalIcon = btn.innerHTML;
+                    btn.disabled = true; 
+                    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+                    
+                    fetch(GOOGLE_SCRIPT_URL, {
+                        method: "POST", headers: {"Content-Type": "text/plain;charset=utf-8"},
+                        body: JSON.stringify({ action: "subscribe", email: email })
+                    }).then(res=>res.json()).then(data=>{
+                        if(data.status === "success") {
+                            btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                            btn.style.background = "#10b981";
+                            document.getElementById("sub-email").value = "";
+                            setTimeout(() => { 
+                                btn.innerHTML = originalIcon; 
+                                btn.disabled = false; 
+                                btn.style.background = ""; 
+                            }, 3000);
+                        }
+                    });
+                });
+            }
 
             loadPublicServers();
         });
