@@ -722,7 +722,7 @@
                     <div class="profile-field" style="max-width: 36rem;">
                         <form id="change-pwd-form" style="display: flex; flex-direction: column; align-items: stretch; width: 100%;">
                             <div class="form-group">
-                                <label><span class="lang-en">Current Portal Password</span><span class="lang-id">Sandi Portal Saat Ini</span></label>
+                                <label><span class="lang-en">Current Portal Password</span><span class="lang-id">Sandi Portal Saat Saat Ini</span></label>
                                 <div class="pwd-wrapper"><input type="password" id="cp-old" required placeholder="HRC-XXXXX"><i class="fa-solid fa-eye pwd-toggle" onclick="togglePassword('cp-old', this)"></i></div>
                             </div>
                             <div class="form-group">
@@ -749,6 +749,7 @@
             </div>
             <nav class="sidebar-nav">
                 <a class="nav-item admin-active" onclick="switchTab('admin', 'publish', this)"><i class="fa-solid fa-cloud-arrow-up"></i> <span class="lang-en">Publish Release</span><span class="lang-id">Rilis Update Baru</span></a>
+                <a class="nav-item" onclick="switchTab('admin', 'announcement', this)"><i class="fa-solid fa-bullhorn"></i> <span class="lang-en">Announcement</span><span class="lang-id">Pengumuman</span></a>
                 <a class="nav-item" onclick="switchTab('admin', 'freerelease', this)"><i class="fa-solid fa-gift"></i> <span class="lang-en">Free Release</span><span class="lang-id">Rilis Gratis</span></a>
                 <a class="nav-item" onclick="switchTab('admin', 'database', this)"><i class="fa-solid fa-database"></i> <span class="lang-en">Release Database</span><span class="lang-id">Database Update</span></a>
                 <a class="nav-item" onclick="switchTab('admin', 'members', this)"><i class="fa-solid fa-users"></i> <span class="lang-en">Manage Members</span><span class="lang-id">Manajemen Klien</span></a>
@@ -842,6 +843,33 @@
                                 <span class="lang-en">Publish & Update All</span><span class="lang-id">Terbitkan & Perbarui Semua</span>
                             </button>
                             <div id="publish-msg" class="msg-box"></div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="tab-admin-announcement" class="tab-content">
+                    <h2 class="section-title font-outfit">
+                        <span class="lang-en">Global Announcement</span><span class="lang-id">Pengumuman Global</span>
+                    </h2>
+                    <div class="profile-field" style="max-width: 48rem;">
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                            <span class="lang-en">Send an official announcement email to all Pro members and Subscribers without pushing an Add-on update.</span>
+                            <span class="lang-id">Kirim email pengumuman resmi ke seluruh anggota Pro dan Subscriber tanpa memperbarui rilis Add-on.</span>
+                        </p>
+                        <form id="admin-announcement-form">
+                            <div class="form-group">
+                                <label><span class="lang-en">Email Subject</span><span class="lang-id">Subjek Email</span></label>
+                                <input type="text" id="announce-subject" required placeholder="Contoh: Info Penting Terkait Update Mendatang">
+                            </div>
+                            <div class="form-group">
+                                <label><span class="lang-en">Message Body</span><span class="lang-id">Isi Pesan (Email Body)</span></label>
+                                <textarea id="announce-body" required placeholder="Tulis pengumuman di sini..." style="min-height: 150px;"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-master w-full" id="btn-send-announce">
+                                <i class="fa-solid fa-paper-plane"></i> 
+                                <span class="lang-en">Send Announcement</span><span class="lang-id">Kirim Pengumuman</span>
+                            </button>
+                            <div id="announce-msg" class="msg-box"></div>
                         </form>
                     </div>
                 </div>
@@ -994,6 +1022,25 @@
                                 <button type="button" onclick="copyGeneratedKey()" class="btn-icon" title="Copy License Key" style="height: auto; width: 3rem;"><i class="fa-regular fa-copy"></i></button>
                             </div>
                         </div>
+                    </div>
+                    
+                    <h3 class="font-outfit" style="margin-top: 2.5rem; margin-bottom: 1rem; font-size: 1.25rem; color: #f43f5e; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem; max-width: 36rem;">
+                        <i class="fa-solid fa-skull-crossbones mr-1"></i> <span class="lang-en">Global Key Reset (Nuke)</span><span class="lang-id">Reset Kunci Global (Nuke)</span>
+                    </h3>
+                    <div class="profile-field" style="max-width: 36rem; border-color: rgba(244, 63, 94, 0.3); background: rgba(244, 63, 94, 0.05);">
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
+                            <span class="lang-en">Reset all players' license keys globally. You must upload your latest <code>validation.js</code> file. The system will modify the <b>SECRET_SALT</b> inside it and download the ready-to-use version for your Add-on.</span>
+                            <span class="lang-id">Reset seluruh kunci lisensi pemain secara global. Anda harus mengunggah file <code>validation.js</code> terbaru Anda. Sistem akan memodifikasi <b>SECRET_SALT</b> di dalamnya dan mengunduh versi yang sudah siap dipasang ke Add-on.</span>
+                        </p>
+                        <form id="admin-regen-global-form">
+                            <div class="form-group">
+                                <label>Upload validation.js</label>
+                                <input type="file" id="val-file-upload" accept=".js" required style="padding: 0.5rem; background: rgba(0,0,0,0.5); width: 100%; border: 1px dashed rgba(244, 63, 94, 0.5); border-radius: 8px;">
+                            </div>
+                            <button type="submit" class="btn w-full" id="btn-regen-global" style="background: var(--accent-danger); color: white; margin-top: 0.5rem;">
+                                <i class="fa-solid fa-rotate-right"></i> <span class="lang-en">Reset Database & Modify File</span><span class="lang-id">Reset Database & Modifikasi File</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
 
@@ -1296,6 +1343,76 @@
                 .then(res => res.json()).then(data => { if(data.status === "success") { document.getElementById("admin-publish-form").reset(); document.getElementById('p-date').valueAsDate = new Date(); session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast(t('Published to all users!', 'Pembaruan berhasil dikirim ke semua Klien!')); } else throw new Error(data.message); })
                 .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
                 .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> ' + t('Publish & Update All', 'Terbitkan & Perbarui Semua'); });
+            });
+
+            safelyAttachListener("admin-announcement-form", "submit", function(e) {
+                e.preventDefault();
+                const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+                const btn = document.getElementById("btn-send-announce"), msgBox = document.getElementById("announce-msg");
+                btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + t('Processing...', 'Memproses...'); msgBox.style.display = "none";
+                
+                fetch(GOOGLE_SCRIPT_URL, { 
+                    method: "POST", headers: {"Content-Type": "text/plain;charset=utf-8"}, redirect: "follow", 
+                    body: JSON.stringify({ 
+                        action: "admin_send_announcement", adminPassword: session.adminPassword, 
+                        subject: document.getElementById("announce-subject").value,
+                        body: document.getElementById("announce-body").value
+                    }) 
+                })
+                .then(res => res.json()).then(data => { 
+                    if(data.status === "success") { 
+                        document.getElementById("admin-announcement-form").reset();
+                        showToast(t("Announcement sent to all emails!", "Pengumuman berhasil dikirim ke semua email!")); 
+                    } else throw new Error(data.message); 
+                })
+                .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
+                .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> ' + t('Send Announcement', 'Kirim Pengumuman'); });
+            });
+
+            safelyAttachListener("admin-regen-global-form", "submit", function(e) {
+                e.preventDefault();
+                if(!confirm(t("WARNING! This will reset all players' licenses. Proceed?", "PERINGATAN! Ini akan mereset lisensi semua pemain secara global. Lanjutkan?"))) return;
+                
+                const fileInput = document.getElementById('val-file-upload');
+                if (!fileInput.files.length) return alert(t("Please select validation.js file first.", "Pilih file validation.js terlebih dahulu."));
+                
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(evt) {
+                    let fileContent = evt.target.result;
+                    
+                    const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
+                    const btn = document.getElementById("btn-regen-global");
+                    btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + t('Resetting Database...', 'Mereset Database...');
+                    
+                    fetch(GOOGLE_SCRIPT_URL, { 
+                        method: "POST", headers: {"Content-Type": "text/plain;charset=utf-8"}, redirect: "follow", 
+                        body: JSON.stringify({ action: "admin_regenerate_global_keys", adminPassword: session.adminPassword }) 
+                    })
+                    .then(res => res.json()).then(data => { 
+                        if(data.status === "success") { 
+                            fileContent = fileContent.replace(/const\s+SECRET_SALT\s*=\s*["'].*?["']\s*;/g, `const SECRET_SALT = "${data.newSalt}";`);
+                            
+                            const blob = new Blob([fileContent], { type: 'text/javascript' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = "validation.js";
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                            
+                            showToast(t("Database reset & File downloaded successfully!", "Database direset & File berhasil diunduh!"));
+                            fileInput.value = ""; 
+                            if (window.fetchAdminMembers) fetchAdminMembers(); 
+                        } else throw new Error(data.message); 
+                    })
+                    .catch(err => alert("Error: " + err.message))
+                    .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> ' + t('Reset Database & Modify File', 'Reset Database & Modifikasi File'); });
+                };
+                reader.readAsText(file);
             });
 
             safelyAttachListener("admin-free-form", "submit", function(e) {
