@@ -272,6 +272,13 @@
                         <div class="form-group" style="margin-bottom: 0;"><label>BDS Link</label><input type="url" id="e-link-bds" required></div>
                     </div>
                     <div class="form-group">
+                        <label style="color: #f59e0b;"><i class="fa-solid fa-star" style="margin-right: 0.3rem;"></i> <span class="lang-en">Special Note</span><span class="lang-id">Catatan Khusus</span></label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <textarea id="e-special-en" placeholder="English text..."></textarea>
+                            <textarea id="e-special-id" placeholder="Teks Indonesia..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label style="color: #10b981;"><i class="fa-solid fa-rocket" style="margin-right: 0.3rem;"></i> <span class="lang-en">New Features</span><span class="lang-id">Fitur Baru</span></label>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
                             <textarea id="e-added-en" placeholder="English text..."></textarea>
@@ -809,6 +816,14 @@
                             </div>
 
                             <div class="form-group">
+                                <label style="color: #f59e0b;"><i class="fa-solid fa-star" style="margin-right: 0.3rem;"></i> <span class="lang-en">Special Note</span><span class="lang-id">Catatan Khusus</span></label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                    <textarea id="p-special-en" class="focus-amber" placeholder="English text..."></textarea>
+                                    <textarea id="p-special-id" class="focus-amber" placeholder="Teks Indonesia..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label style="color: #10b981;"><i class="fa-solid fa-rocket" style="margin-right: 0.3rem;"></i> <span class="lang-en">New Features</span><span class="lang-id">Fitur Baru</span></label>
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
                                     <textarea id="p-added-en" class="focus-emerald" placeholder="English text..."></textarea>
@@ -891,6 +906,13 @@
                             <div class="form-group">
                                 <label><span class="lang-en">Download Link</span><span class="lang-id">Tautan Unduhan</span></label>
                                 <input type="url" id="f-link" required placeholder="Direct Link / MediaFire / CurseForge">
+                            </div>
+                            <div class="form-group">
+                                <label style="color: #f59e0b;"><i class="fa-solid fa-star" style="margin-right: 0.3rem;"></i> <span class="lang-en">Special Note</span><span class="lang-id">Catatan Khusus</span></label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                    <textarea id="f-special-en" placeholder="English text..."></textarea>
+                                    <textarea id="f-special-id" placeholder="Teks Indonesia..."></textarea>
+                                </div>
                             </div>
                             <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1.5rem; background: rgba(16, 185, 129, 0.1); padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2);">
                                 <input type="checkbox" id="f-send-email" style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
@@ -1324,6 +1346,7 @@
                 
                 const linkObj = { realms: convertDriveLink(document.getElementById("p-link-realms").value.trim()), bds: convertDriveLink(document.getElementById("p-link-bds").value.trim()) };
 
+                const packedSpecial = document.getElementById("p-special-en").value.trim() + "|||" + document.getElementById("p-special-id").value.trim();
                 const packedAdded = document.getElementById("p-added-en").value.trim() + "|||" + document.getElementById("p-added-id").value.trim();
                 const packedFixed = document.getElementById("p-fixed-en").value.trim() + "|||" + document.getElementById("p-fixed-id").value.trim();
                 const packedRemoved = document.getElementById("p-removed-en").value.trim() + "|||" + document.getElementById("p-removed-id").value.trim();
@@ -1336,6 +1359,7 @@
                         action: "admin_publish_release", adminPassword: session.adminPassword, 
                         versionName: document.getElementById("p-version").value.trim(), mcVersion: document.getElementById("p-mcversion").value.trim(),
                         date: document.getElementById("p-date").value, link: JSON.stringify(linkObj), 
+                        special: packedSpecial,
                         added: packedAdded, fixed: packedFixed, 
                         removed: packedRemoved, sendEmail: document.getElementById("p-send-email").checked 
                     }) 
@@ -1424,6 +1448,8 @@
                 btn.disabled = true; 
                 btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + t('Processing...', 'Memproses...'); 
                 msgBox.style.display = "none";
+
+                const packedSpecial = document.getElementById("f-special-en").value.trim() + "|||" + document.getElementById("f-special-id").value.trim();
                 
                 fetch(GOOGLE_SCRIPT_URL, { 
                     method: "POST", headers: {"Content-Type": "text/plain;charset=utf-8"}, redirect: "follow", 
@@ -1431,6 +1457,7 @@
                         action: "admin_update_free_version", adminPassword: session.adminPassword, 
                         version: document.getElementById("f-version").value.trim(), 
                         link: document.getElementById("f-link").value.trim(),
+                        special: packedSpecial,
                         sendEmail: document.getElementById("f-send-email").checked
                     }) 
                 })
@@ -1457,6 +1484,7 @@
                 
                 const linkObj = { realms: convertDriveLink(document.getElementById("e-link-realms").value.trim()), bds: convertDriveLink(document.getElementById("e-link-bds").value.trim()) };
 
+                const packedSpecial = document.getElementById("e-special-en").value.trim() + "|||" + document.getElementById("e-special-id").value.trim();
                 const packedAdded = document.getElementById("e-added-en").value.trim() + "|||" + document.getElementById("e-added-id").value.trim();
                 const packedFixed = document.getElementById("e-fixed-en").value.trim() + "|||" + document.getElementById("e-fixed-id").value.trim();
                 const packedRemoved = document.getElementById("e-removed-en").value.trim() + "|||" + document.getElementById("e-removed-id").value.trim();
@@ -1469,7 +1497,7 @@
                         action: "admin_edit_release", adminPassword: session.adminPassword, logId: document.getElementById("e-logid").value,
                         versionName: document.getElementById("e-version").value.trim(), mcVersion: document.getElementById("e-mcversion").value.trim(),
                         date: document.getElementById("e-date").value, link: JSON.stringify(linkObj),
-                        added: packedAdded, fixed: packedFixed, removed: packedRemoved
+                        special: packedSpecial, added: packedAdded, fixed: packedFixed, removed: packedRemoved
                     })
                 })
                 .then(res => res.json()).then(data => { if(data.status === "success") { session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); closeEditReleaseModal(); showToast(t('Release updated successfully!', 'Riwayat rilis berhasil diubah!')); } else throw new Error(data.message); })
@@ -1576,6 +1604,9 @@
             }
             tbody.innerHTML = "";
             history.forEach((h, index) => {
+                const specialText = parseLangDB(h.special);
+                const specialBadge = specialText ? `<div style="color: #f59e0b; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.2rem;"><i class="fa-solid fa-star"></i> ${specialText}</div>` : '';
+                
                 const addedText = parseLangDB(h.added) || parseLangDB(h.fixed) || parseLangDB(h.removed);
                 const noteStr = addedText ? addedText.split('\n')[0].substring(0, 50) + "..." : t("System patch.", "Patch Sistem.");
                 const mcBadge = h.mcVersion ? `<span style="font-size: 0.6rem; color: var(--accent-secondary); background: rgba(59, 130, 246, 0.1); padding: 0.1rem 0.3rem; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.2); margin-left: 0.3rem;">MC ${h.mcVersion}</span>` : '';
@@ -1583,7 +1614,8 @@
                 
                 tbody.innerHTML += `<tr>
                     <td><span class="version-badge">${h.versionName}</span> ${mcBadge} ${index === 0 ? `<span style="color:var(--accent-success); font-size:0.65rem; margin-left:0.3rem; font-weight:700;">${t('LATEST', 'TERBARU')}</span>` : ''}</td>
-                    <td>${new Date(h.date).toLocaleDateString(t('en-US', 'id-ID'), {year: 'numeric', month: 'short', day: 'numeric'})}</td><td style="font-size: 0.8rem;"><span style="opacity:0.8">${noteStr}</span></td>
+                    <td>${new Date(h.date).toLocaleDateString(t('en-US', 'id-ID'), {year: 'numeric', month: 'short', day: 'numeric'})}</td>
+                    <td style="font-size: 0.8rem;">${specialBadge}<span style="opacity:0.8">${noteStr}</span></td>
                     <td style="text-align:right;">
                         <div style="display: flex; gap: 0.4rem; justify-content: flex-end; align-items: center; height: 100%;">
                             <button onclick="triggerDownload('${linkData.realms}', '${h.versionName}')" class="btn btn-sm btn-outline" title="${t('Download Realms', 'Unduh Realms')}" style="padding: 0 0.5rem;"><i class="fa-solid fa-cube"></i></button>
@@ -1795,6 +1827,10 @@
             
             const splitText = (text) => { if(!text) return ["", ""]; let p = text.split("|||"); return [p[0]||"", p[1]||""]; };
             
+            const [spEn, spId] = splitText(release.special);
+            document.getElementById("e-special-en").value = spEn.trim();
+            document.getElementById("e-special-id").value = spId.trim();
+
             const [addEn, addId] = splitText(release.added);
             document.getElementById("e-added-en").value = addEn.trim();
             document.getElementById("e-added-id").value = addId.trim();
