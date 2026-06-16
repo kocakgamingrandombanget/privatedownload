@@ -7,238 +7,296 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
+        /* MATURE PASTEL & MODERN SAAS THEME */
         :root {
-            --bg-base: #050505; --bg-surface: #0a0a0a; --bg-card: rgba(255, 255, 255, 0.03); --bg-card-hover: rgba(255, 255, 255, 0.05);
-            --border-light: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.15);
-            --text-primary: #ffffff; --text-secondary: #a1a1aa; --text-muted: #71717a;
-            --accent-primary: #8b5cf6; --accent-secondary: #3b82f6; --accent-success: #10b981; --accent-danger: #f43f5e;
-            --gradient-hero: linear-gradient(135deg, #e879f9 0%, #8b5cf6 50%, #3b82f6 100%);
-            --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            /* Backgrounds */
+            --bg-base: #f8fafc; /* Light slate for modern feel */
+            --bg-surface: #ffffff; 
+            --bg-card: #ffffff; 
+            --bg-card-hover: #f1f5f9;
+            /* Borders */
+            --border-light: #e2e8f0; 
+            --border-highlight: #cbd5e1;
+            /* Typography - High Contrast for Readability */
+            --text-primary: #0f172a; /* Slate 900 */
+            --text-secondary: #475569; /* Slate 600 */
+            --text-muted: #94a3b8; /* Slate 400 */
+            /* Accents (Muted Pastels) */
+            --accent-primary: #818cf8; /* Muted Indigo */
+            --accent-secondary: #94a3b8; 
+            --accent-success: #34d399; /* Emerald */
+            --accent-danger: #fb7185; /* Rose */
+            /* Gradients */
+            --gradient-hero: linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 50%, #fbcfe8 100%);
+            --gradient-admin: linear-gradient(135deg, #818cf8 0%, #a855f7 100%);
+            /* Premium Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            --shadow-glow: 0 0 20px rgba(129, 140, 248, 0.2);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
-        input, textarea, select { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
+        html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        input, textarea, select { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; font-family: 'Inter', sans-serif; }
         
         body.lang-en .lang-id { display: none !important; }
         body.lang-id .lang-en { display: none !important; }
         
-        .container { max-width: 64rem; margin: 0 auto; padding: 0 1.25rem; }
+        .container { max-width: 68rem; margin: 0 auto; padding: 0 1.5rem; }
         .flex { display: flex; } .flex-col { flex-direction: column; }
         .items-center { align-items: center; } .justify-between { justify-content: space-between; } .justify-center { justify-content: center; }
         .w-full { width: 100%; } .text-center { text-align: center; } .text-left { text-align: left; }
         
         h1, h2, h3, h4, .font-outfit { font-family: 'Outfit', sans-serif; }
-        h1 { font-size: clamp(1.75rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; }
-        h2 { font-size: clamp(1.25rem, 3.5vw, 1.875rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
-        h3 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
-        p { color: var(--text-secondary); font-size: clamp(0.85rem, 1.5vw, 0.9rem); }
-        .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; color: var(--text-primary); }
+        h2 { font-size: clamp(1.5rem, 3.5vw, 2.25rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--text-primary); }
+        h3 { font-size: 1.15rem; font-weight: 600; color: var(--text-primary); line-height: 1.3; letter-spacing: -0.01em; }
+        p { color: var(--text-secondary); font-size: clamp(0.95rem, 1.5vw, 1rem); }
+        .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
 
-        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
-        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; }
-        .blob-1 { top: -20%; left: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
-        .blob-2 { bottom: -20%; right: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
+        /* Elegant Floating Blobs */
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.3; animation: float 15s infinite alternate ease-in-out; }
+        .blob-1 { top: -10%; left: -5%; width: 50vw; height: 50vw; background: rgba(129, 140, 248, 0.4); }
+        .blob-2 { bottom: -10%; right: -5%; width: 45vw; height: 45vw; background: rgba(192, 132, 252, 0.3); animation-delay: -7s; }
+        
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(40px) scale(1.05); }
+        }
 
-        .navbar { position: fixed; top: 0; width: 100%; height: 3.5rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
+        /* Glassmorphism Navbar */
+        .navbar { position: fixed; top: 0; width: 100%; height: 4.5rem; z-index: 100; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(226, 232, 240, 0.8); display: flex; align-items: center; transition: all 0.3s ease; box-shadow: var(--shadow-sm); }
         .nav-links { display: none; } 
-        .nav-links a.reg-link { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.8rem; transition: color 0.2s; }
+        .nav-links a.reg-link { color: var(--text-secondary); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.2s ease; }
         .nav-links a.reg-link:hover { color: var(--text-primary); }
-        .nav-icon-btn { color: var(--text-secondary); font-size: 1rem; transition: all 0.2s; display: flex; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; border-radius: 6px; }
+        .nav-icon-btn { color: var(--text-secondary); font-size: 1.15rem; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border-radius: 10px; }
         .nav-icon-btn:hover { color: #5865F2; background: rgba(88, 101, 242, 0.1); }
-        .nav-divider { width: 1px; height: 0.8rem; background: var(--border-light); margin: 0 0.5rem; }
-        .login-nav-btn { background: rgba(255,255,255,0.04); color: #fff; padding: 0.35rem 0.85rem; border-radius: 6px; border: 1px solid var(--border-light); text-decoration: none; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.2s; }
-        .login-nav-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--border-highlight); }
-        .btn-icon { width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; border: 1px solid var(--border-highlight); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; background: rgba(255,255,255,0.05); }
-        .btn-icon:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: var(--border-highlight); }
-        .btn-icon.danger:hover { background: rgba(244,63,94,0.1); color: var(--accent-danger); border-color: rgba(244,63,94,0.5); }
+        .nav-divider { width: 1px; height: 1.25rem; background: var(--border-light); margin: 0 0.5rem; }
         
-        .lang-toggle { background: rgba(255,255,255,0.04); color: var(--text-secondary); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-light); cursor: pointer; transition: all 0.2s; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; }
-        .lang-toggle:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); border-color: var(--border-highlight); }
-
-        .menu-btn { display: flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; font-size: 1.1rem; color: var(--text-primary); background: transparent; border: none; cursor: pointer; border-radius: 6px; margin-right: -0.5rem; }
+        /* Premium Buttons */
+        .login-nav-btn { background: var(--bg-surface); color: var(--text-primary); padding: 0.5rem 1.25rem; border-radius: 12px; border: 1px solid var(--border-light); text-decoration: none; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-sm); }
+        .login-nav-btn:hover { border-color: var(--border-highlight); box-shadow: var(--shadow-soft); transform: translateY(-1px); }
         
-        @media (min-width: 768px) { .nav-links { display: flex; align-items: center; gap: 1rem; } .menu-btn { display: none; } }
+        .btn-icon { width: 2.5rem; height: 2.5rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--border-light); color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; background: var(--bg-surface); box-shadow: var(--shadow-sm); }
+        .btn-icon:hover { background: var(--bg-card-hover); color: var(--text-primary); border-color: var(--border-highlight); transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+        
+        .lang-toggle { background: transparent; color: var(--text-secondary); padding: 0.5rem 0.75rem; border-radius: 10px; border: 1px solid transparent; cursor: pointer; transition: all 0.2s ease; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .lang-toggle:hover { color: var(--text-primary); background: var(--bg-card-hover); border-color: var(--border-light); }
 
-        .mobile-menu { position: fixed; top: 3.5rem; left: 0; width: 100%; height: calc(100vh - 3.5rem); overflow-y: auto; background: var(--bg-surface); padding: 1.25rem; display: flex; flex-direction: column; gap: 0.25rem; transform: translateY(-100%); opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 90; border-bottom: 1px solid var(--border-light); }
+        .menu-btn { display: flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; font-size: 1.25rem; color: var(--text-primary); background: transparent; border: none; cursor: pointer; border-radius: 10px; margin-right: -0.5rem; transition: 0.2s; }
+        .menu-btn:hover { background: var(--bg-card-hover); }
+        
+        @media (min-width: 860px) { .nav-links { display: flex; align-items: center; gap: 1.5rem; } .menu-btn { display: none; } }
+
+        /* Mobile Menu */
+        .mobile-menu { position: fixed; top: 4.5rem; left: 0; width: 100%; height: calc(100vh - 4.5rem); overflow-y: auto; background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; transform: translateY(-10px); opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 90; border-bottom: 1px solid var(--border-light); }
         .mobile-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
-        .mobile-menu a { color: var(--text-primary); text-decoration: none; font-size: 0.9rem; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 0.85rem 0; display: flex; align-items: center; gap: 0.75rem; }
-        .mobile-menu .login-nav-btn { border-bottom: none; margin-top: 1rem; padding: 0.65rem; justify-content: center; }
-        .mobile-menu .lang-toggle { width: 100%; justify-content: center; margin-top: 0.5rem; }
+        .mobile-menu a { color: var(--text-primary); text-decoration: none; font-size: 1.05rem; font-weight: 600; border-bottom: 1px solid var(--border-light); padding: 1.25rem 0; display: flex; align-items: center; gap: 1rem; transition: 0.2s; }
+        .mobile-menu a:hover { color: var(--accent-primary); padding-left: 0.5rem; }
+        .mobile-menu .login-nav-btn { border-bottom: none; margin-top: 1.5rem; padding: 1rem; justify-content: center; background: var(--gradient-admin); color: white; border: none; font-size: 1rem; }
+        .mobile-menu .login-nav-btn:hover { color: white; opacity: 0.9; }
 
-        .action-group { display: flex; flex-direction: column; gap: 0.6rem; width: 100%; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1.25rem; min-height: 2.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; text-align: center; width: 100%; }
+        /* Buttons globally */
+        .action-group { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 0 1.75rem; min-height: 3.25rem; border-radius: 14px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: none; cursor: pointer; text-align: center; width: 100%; }
         @media (min-width: 640px) { .action-group { flex-direction: row; } .btn { width: auto; } }
 
-        .btn-primary { background: var(--text-primary); color: var(--bg-base); }
-        .btn-primary:hover { background: #e4e4e7; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,255,255,0.15); }
-        .btn-gradient { background: var(--gradient-admin); color: #fff; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.2); border: 1px solid rgba(255,255,255,0.1); }
-        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); filter: brightness(1.1); }
-        .btn-outline { background: rgba(255,255,255,0.02); color: var(--text-primary); border: 1px solid var(--border-highlight); }
-        .btn-outline:hover { background: rgba(255,255,255,0.06); }
+        .btn-primary { background: var(--text-primary); color: white; box-shadow: var(--shadow-soft); }
+        .btn-primary:hover { background: #1e293b; transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+        
+        .btn-gradient { background: var(--gradient-admin); color: #fff; box-shadow: var(--shadow-glow); border: none; }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(129, 140, 248, 0.4); filter: brightness(1.05); color: white; }
+        
+        .btn-outline { background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border-highlight); box-shadow: var(--shadow-sm); }
+        .btn-outline:hover { background: var(--bg-card-hover); border-color: var(--text-primary); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
 
-        .yt-badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.75rem; background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1.25rem; color: var(--text-primary); text-decoration: none; transition: all 0.2s; }
-        .yt-badge:hover { background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.4); }
-        .yt-icon { color: #ff0000; font-size: 0.85rem; }
+        /* Badges */
+        .yt-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 9999px; font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary); text-decoration: none; transition: all 0.3s ease; box-shadow: var(--shadow-sm); }
+        .yt-badge:hover { border-color: #ff0000; box-shadow: 0 4px 12px rgba(255, 0, 0, 0.1); transform: translateY(-2px); }
+        .yt-icon { color: #ff0000; font-size: 1.1rem; }
 
-        .promo-badge:hover { background: rgba(139, 92, 246, 0.25) !important; border-color: rgba(139, 92, 246, 0.6) !important; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); }
+        .promo-badge { background: #f0fdfa !important; border-color: #99f6e4 !important; }
+        .promo-badge:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.2) !important; border-color: #2dd4bf !important; }
 
         .stats-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.6rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1.25rem;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border-light);
+            padding: 0.75rem 1.75rem;
             border-radius: 9999px;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             color: var(--text-secondary);
-            margin: 1.5rem 0 2rem 0; 
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 2.5rem 0; 
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-soft);
             opacity: 0; 
-            transform: translateY(10px);
-            transition: all 0.3s ease;
+            transform: translateY(15px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
         }
         .stats-badge:hover {
-            border-color: rgba(139, 92, 246, 0.4);
-            background: rgba(139, 92, 246, 0.08);
-            transform: translateY(8px);
+            border-color: var(--accent-primary);
+            transform: translateY(10px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+            color: var(--text-primary);
         }
         .stats-badge strong {
-            color: #fff;
+            color: var(--text-primary);
             font-family: 'Outfit', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
+            font-weight: 800;
+            font-size: 1.15rem;
         }
         .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #10b981;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-success);
             border-radius: 50%;
-            box-shadow: 0 0 10px #10b981;
+            box-shadow: 0 0 12px var(--accent-success);
             animation: pulse-glow 2s infinite;
         }
         @keyframes pulse-glow {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
         }
 
-        .section-hero { padding: 6rem 0 2.5rem 0; }
-        .section { padding: 3rem 0; }
+        /* Layout & Spacing */
+        .section-hero { padding: 9rem 0 5rem 0; }
+        .section { padding: 5rem 0; }
         
-        .product-box { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
-        .product-header { padding: 1.5rem; border-bottom: 1px solid var(--border-light); background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.05), transparent 60%); display: flex; flex-direction: column; gap: 1rem; }
-        .product-header-actions { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
-        .badge { display: inline-block; padding: 0.2rem 0.5rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; border: 1px solid rgba(139, 92, 246, 0.25); }
+        /* Product Cards */
+        .product-box { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 24px; overflow: hidden; margin-bottom: 2.5rem; box-shadow: var(--shadow-soft); transition: all 0.4s ease; }
+        .product-box:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); border-color: var(--border-highlight); }
+        .product-header { padding: 2.5rem; border-bottom: 1px solid var(--border-light); background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); display: flex; flex-direction: column; gap: 1.5rem; }
+        .product-header-actions { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
         
-        .feature-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; padding: 1rem; }
-        .feature-cell { background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); border-radius: 8px; padding: 1.25rem; transition: background 0.3s; }
-        .feature-cell:hover { background: rgba(255,255,255,0.04); border-color: var(--border-highlight); }
-        .feature-cell i { font-size: 1.25rem; margin-bottom: 0.75rem; display: block; }
-        .feature-cell p { font-size: 0.85rem; margin-top: 0.2rem; line-height: 1.5; }
-        .grid-cards { display: grid; gap: 1rem; }
+        .badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.85rem; background: #eef2ff; color: #4f46e5; border-radius: 8px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.5px; border: 1px solid #e0e7ff; }
+        
+        /* Feature Grid inside Product Box */
+        .feature-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; padding: 2rem; background: var(--bg-surface); }
+        .feature-cell { background: var(--bg-base); border: 1px solid var(--border-light); border-radius: 16px; padding: 2rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .feature-cell:hover { background: var(--bg-surface); border-color: var(--accent-primary); transform: translateY(-4px); box-shadow: var(--shadow-soft); }
+        
+        /* Icon styling to look modern */
+        .feature-cell i { display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; border-radius: 12px; font-size: 1.25rem; margin-bottom: 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); }
+        
+        .feature-cell h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+        .feature-cell p { font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary); }
+        .grid-cards { display: grid; gap: 2rem; }
 
-        .server-desc { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; transition: color 0.2s; white-space: pre-wrap; }
-        .server-desc:hover { color: #d4d4d8; }
+        .server-desc { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; transition: color 0.2s; white-space: pre-wrap; }
+        .server-desc:hover { color: var(--text-primary); }
         .server-desc.expanded { -webkit-line-clamp: unset; }
 
         @media (min-width: 768px) {
-            .product-header { padding: 2rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.5rem; }
+            .product-header { padding: 3rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 3rem; }
             .product-header-actions { width: auto; flex-direction: row; }
-            .feature-grid { grid-template-columns: repeat(2, 1fr); padding: 1.5rem; gap: 1rem; }
+            .feature-grid { grid-template-columns: repeat(2, 1fr); padding: 2.5rem; gap: 1.5rem; }
         }
         @media (min-width: 1024px) { .feature-grid { grid-template-columns: repeat(3, 1fr); } }
 
-        .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 52rem; margin: 2rem auto 0; }
-        .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; transition: transform 0.2s; text-align: left; }
-        .price-card.pro { border-color: rgba(139, 92, 246, 0.4); background: linear-gradient(180deg, rgba(139, 92, 246, 0.05), transparent); position: relative; overflow: hidden; }
-        .price-val { font-family: 'Outfit'; font-size: 2.25rem; font-weight: 700; color: #fff; line-height: 1; margin: 0.5rem 0; letter-spacing: -0.02em; }
-        .price-val span { font-size: 0.85rem; color: var(--text-secondary); font-weight: 400; font-family: 'Inter'; }
-        .check-list { list-style: none; margin: 1rem 0 1.5rem 0; flex-grow: 1; }
-        .check-list li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.6rem; }
-        .check-list i { color: #10b981; font-size: 0.75rem; margin-top: 0.25rem; flex-shrink: 0; }
+        /* Pricing Section */
+        .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 2rem; max-width: 60rem; margin: 4rem auto 0; }
+        .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 24px; padding: 2.5rem; display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); text-align: left; box-shadow: var(--shadow-soft); }
+        .price-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); border-color: var(--border-highlight); }
+        .price-card.pro { border: 2px solid #a5b4fc; background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%); position: relative; overflow: hidden; }
+        .price-val { font-family: 'Outfit'; font-size: 3.5rem; font-weight: 800; color: var(--text-primary); line-height: 1; margin: 1rem 0; letter-spacing: -0.03em; }
+        .price-val span { font-size: 1.1rem; color: var(--text-secondary); font-weight: 500; font-family: 'Inter'; letter-spacing: normal; }
+        .check-list { list-style: none; margin: 1.5rem 0 2.5rem 0; flex-grow: 1; }
+        .check-list li { display: flex; align-items: flex-start; gap: 0.85rem; font-size: 1rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5; }
+        .check-list i { color: var(--accent-success); font-size: 1rem; margin-top: 0.25rem; flex-shrink: 0; }
         
-        @media (min-width: 768px) { .pricing-wrap { grid-template-columns: 1fr 1fr; } .price-card { padding: 2rem; } }
+        @media (min-width: 768px) { .pricing-wrap { grid-template-columns: 1fr 1fr; } .price-card { padding: 3rem; } }
 
-        .faq-wrap { max-width: 42rem; margin: 2rem auto 0; display: flex; flex-direction: column; gap: 0.5rem; }
-        .faq-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 10px; }
-        .faq-item.active { border-color: var(--border-highlight); background: rgba(255,255,255,0.04); }
-        .faq-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background: none; border: none; color: var(--text-primary); font-family: 'Outfit'; font-size: 0.95rem; font-weight: 600; cursor: pointer; text-align: left; gap: 0.75rem; }
-        .faq-btn i { color: var(--text-muted); transition: transform 0.2s ease; font-size: 0.8rem; }
-        .faq-item.active .faq-btn i { transform: rotate(180deg); color: var(--text-primary); }
-        .faq-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+        /* FAQ Section */
+        .faq-wrap { max-width: 50rem; margin: 3rem auto 0; display: flex; flex-direction: column; gap: 1rem; }
+        .faq-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; box-shadow: var(--shadow-sm); transition: all 0.3s ease; }
+        .faq-item:hover { border-color: var(--border-highlight); box-shadow: var(--shadow-soft); }
+        .faq-item.active { border-color: var(--accent-primary); background: #f8fafc; }
+        .faq-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; background: none; border: none; color: var(--text-primary); font-family: 'Outfit'; font-size: 1.1rem; font-weight: 700; cursor: pointer; text-align: left; gap: 1rem; transition: color 0.2s; }
+        .faq-btn:hover { color: var(--accent-primary); }
+        .faq-btn i { color: var(--text-muted); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 0.9rem; }
+        .faq-item.active .faq-btn i { transform: rotate(180deg); color: var(--accent-primary); }
+        .faq-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .faq-item.active .faq-content { grid-template-rows: 1fr; }
         .faq-inner { overflow: hidden; }
-        .faq-inner p { padding: 0 1.25rem 1.25rem 1.25rem; font-size: 0.85rem; margin: 0; line-height: 1.6; }
+        .faq-inner p { padding: 0 1.5rem 1.5rem 1.5rem; font-size: 1rem; margin: 0; line-height: 1.7; color: var(--text-secondary); }
 
-        .cta-section { padding: 4rem 0; border-top: 1px solid var(--border-light); background: radial-gradient(circle at center, rgba(139, 92, 246, 0.05), transparent 60%); text-align: center; }
+        /* CTA Section */
+        .cta-section { padding: 6rem 0; border-top: 1px solid var(--border-light); background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); text-align: center; }
 
-        footer { padding: 3rem 0 1.5rem 0; border-top: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.8rem; background: rgba(0,0,0,0.5); }
-        .footer-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem; text-align: left; }
+        /* Footer */
+        footer { padding: 5rem 0 2rem 0; border-top: 1px solid var(--border-light); color: var(--text-secondary); font-size: 0.95rem; background: var(--bg-base); }
+        .footer-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 4rem; text-align: left; }
         @media (min-width: 768px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr; } }
-        .footer-brand h3 { font-family: 'Outfit'; font-size: 1.2rem; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
-        .footer-links-col { display: flex; flex-direction: column; gap: 0.5rem; }
-        .footer-links-col h4 { color: #fff; font-family: 'Outfit'; font-size: 0.9rem; margin-bottom: 0.25rem; }
-        .footer-links-col a { color: var(--text-secondary); text-decoration: none; transition: all 0.2s; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem; }
-        .footer-links-col a:hover { color: var(--accent-primary); }
-        .footer-bottom { padding-top: 1.5rem; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .footer-brand h3 { font-family: 'Outfit'; font-size: 1.5rem; color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 800; }
+        .footer-links-col { display: flex; flex-direction: column; gap: 1rem; }
+        .footer-links-col h4 { color: var(--text-primary); font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .footer-links-col a { color: var(--text-secondary); text-decoration: none; transition: all 0.2s; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .footer-links-col a:hover { color: var(--accent-primary); transform: translateX(4px); }
+        .footer-bottom { padding-top: 2rem; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
         @media (min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; } }
-        .social-row { display: flex; gap: 0.5rem; }
-        .social-row a { width: 2rem; height: 2rem; border-radius: 6px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.2s; font-size: 0.9rem; border: 1px solid transparent; }
-        .social-row a:hover { background: rgba(139, 92, 246, 0.1); color: #fff; border-color: rgba(139, 92, 246, 0.3); transform: translateY(-2px); }
+        .social-row { display: flex; gap: 1rem; }
+        .social-row a { width: 2.75rem; height: 2.75rem; border-radius: 12px; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 1.15rem; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); }
+        .social-row a:hover { background: var(--bg-card-hover); color: var(--accent-primary); border-color: var(--border-highlight); transform: translateY(-3px); box-shadow: var(--shadow-soft); }
 
-        .animate-on-scroll { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        /* Animations */
+        .animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
         .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
-        .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; }
+        .delay-100 { transition-delay: 150ms; } .delay-200 { transition-delay: 300ms; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 5, 5, 0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(8px); padding: 1.25rem; }
+        /* Modal Directory */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.4); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 1.5rem; }
         .modal-overlay.show { opacity: 1; pointer-events: auto; }
-        .modal-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; width: 100%; max-width: 28rem; padding: 1.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.5); transform: translateY(20px); transition: transform 0.3s ease; display: flex; flex-direction: column; max-height: 85vh; }
-        .modal-overlay.show .modal-card { transform: translateY(0); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1rem; flex-shrink: 0; }
-        .modal-body { overflow-y: auto; padding-right: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .modal-card { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 24px; width: 100%; max-width: 32rem; padding: 2.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); transform: translateY(20px) scale(0.98); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; max-height: 85vh; }
+        .modal-overlay.show .modal-card { transform: translateY(0) scale(1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1.5rem; flex-shrink: 0; }
+        .modal-body { overflow-y: auto; padding-right: 0.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
         .modal-body::-webkit-scrollbar { width: 6px; }
         .modal-body::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 10px; }
 
-        .member-list-item { display: flex; align-items: center; gap: 1rem; padding: 0.85rem; border: 1px solid var(--border-light); border-radius: 10px; background: rgba(255,255,255,0.02); transition: background 0.2s; }
-        .member-list-item:hover { background: rgba(255,255,255,0.05); }
-        .member-avatar { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--gradient-admin); display: flex; align-items: center; justify-content: center; font-weight: 700; font-family: 'Outfit'; font-size: 1rem; color: #fff; flex-shrink: 0; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.2); }
+        .member-list-item { display: flex; align-items: center; gap: 1.25rem; padding: 1rem 1.25rem; border: 1px solid var(--border-light); border-radius: 16px; background: var(--bg-base); transition: all 0.2s ease; }
+        .member-list-item:hover { background: var(--bg-surface); border-color: var(--border-highlight); box-shadow: var(--shadow-sm); }
+        .member-avatar { width: 3rem; height: 3rem; border-radius: 50%; background: var(--gradient-admin); display: flex; align-items: center; justify-content: center; font-weight: 800; font-family: 'Outfit'; font-size: 1.2rem; color: #fff; flex-shrink: 0; box-shadow: var(--shadow-sm); }
         .member-info { flex-grow: 1; overflow: hidden; text-align: left; }
-        .member-name { color: #fff; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .member-email { color: var(--text-muted); font-size: 0.75rem; font-family: monospace; }
-        .member-badge { font-size: 0.65rem; background: rgba(16, 185, 129, 0.15); color: var(--accent-success); padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.25); }
+        .member-name { color: var(--text-primary); font-weight: 700; font-size: 1.05rem; margin-bottom: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .member-email { color: var(--text-muted); font-size: 0.85rem; font-family: monospace; }
+        .member-badge { font-size: 0.7rem; background: #ecfdf5; color: #059669; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 800; border: 1px solid #a7f3d0; }
     </style>
 </head>
 <body class="lang-en">
 
     <div class="ambient-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
 
+    <!-- Modal for Pro Members -->
     <div class="modal-overlay" id="members-modal">
         <div class="modal-card">
             <div class="modal-header">
-                <h2 class="font-outfit" style="margin: 0; font-size: 1.25rem; color: #fff;">
+                <h2 class="font-outfit" style="margin: 0; font-size: 1.5rem; color: var(--text-primary);">
                     <i class="fa-solid fa-crown text-gradient" style="margin-right: 0.5rem;"></i> 
-                    <span class="lang-en">Pro Members Directory</span><span class="lang-id">Daftar Pengguna Pro</span>
+                    <span class="lang-en">Pro Directory</span><span class="lang-id">Daftar Pro</span>
                 </h2>
-                <button class="btn-icon danger" onclick="closeMembersModal()" style="border: none; background: transparent;"><i class="fa-solid fa-xmark"></i></button>
+                <button class="btn-icon danger" onclick="closeMembersModal()" style="border: none; background: transparent; box-shadow: none;"><i class="fa-solid fa-xmark" style="font-size: 1.25rem;"></i></button>
             </div>
             <div class="modal-body" id="members-list-content">
-                <div style="text-align:center; padding: 2rem; color: var(--text-muted);"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading data...</div>
+                <div style="text-align:center; padding: 3rem; color: var(--text-muted);"><i class="fa-solid fa-circle-notch fa-spin" style="font-size: 1.5rem;"></i></div>
             </div>
         </div>
     </div>
 
+    <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="container flex justify-between items-center w-full">
-            <a href="#" class="font-outfit" style="font-size: 1.15rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em;">
+            <a href="#" class="font-outfit" style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); text-decoration: none; letter-spacing: -0.02em;">
                 <i class="fa-solid fa-code text-gradient mr-2"></i> Heraclaus
             </a>
             
@@ -268,9 +326,9 @@
                     <span class="lang-id">Harga</span>
                 </a>
                 
-                <a href="web-service.html" class="reg-link" style="color: #c4b5fd; display: flex; align-items: center; gap: 0.4rem;">
+                <a href="web-service.html" class="reg-link" style="color: var(--accent-primary); display: flex; align-items: center; gap: 0.5rem;">
                     Web Studio 
-                    <span style="background: var(--gradient-admin); color: white; font-size: 0.6rem; padding: 2px 5px; border-radius: 4px; font-weight: 800; letter-spacing: 0.5px;">NEW</span>
+                    <span style="background: var(--gradient-admin); color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 6px; font-weight: 800; letter-spacing: 0.5px;">NEW</span>
                 </a>
                 
                 <div class="nav-divider"></div>
@@ -280,69 +338,71 @@
         </div>
     </nav>
 
+    <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobile-menu">
-        <button onclick="toggleLang()" class="lang-toggle" style="margin-bottom: 0.5rem; justify-content: center; width: 100%;">
+        <button onclick="toggleLang()" class="lang-toggle" style="margin-bottom: 1rem; justify-content: center; width: 100%; padding: 0.85rem; border-color: var(--border-light);">
             <i class="fa-solid fa-globe"></i>
             <span class="lang-en">Change Language to Bahasa Indonesia</span>
             <span class="lang-id">Change Language to English</span>
         </button>
 
-        <a href="#addons" onclick="toggleMenu()"><i class="fa-solid fa-puzzle-piece"></i> 
+        <a href="#addons" onclick="toggleMenu()"><i class="fa-solid fa-puzzle-piece" style="color: var(--text-muted); width: 20px;"></i> 
             <span class="lang-en">Our Add-ons</span>
             <span class="lang-id">Daftar Add-on</span>
         </a>
-        <a href="#web-tools" onclick="toggleMenu()"><i class="fa-solid fa-laptop-code"></i> 
+        <a href="#web-tools" onclick="toggleMenu()"><i class="fa-solid fa-laptop-code" style="color: var(--text-muted); width: 20px;"></i> 
             <span class="lang-en">Web Tools</span>
             <span class="lang-id">Alat Web</span>
         </a>
-        <a href="#community-servers" onclick="toggleMenu()"><i class="fa-solid fa-network-wired"></i> 
+        <a href="#community-servers" onclick="toggleMenu()"><i class="fa-solid fa-network-wired" style="color: var(--text-muted); width: 20px;"></i> 
             <span class="lang-en">Community Servers</span>
             <span class="lang-id">Server Komunitas</span>
         </a>
-        <a href="#pricing" onclick="toggleMenu()"><i class="fa-solid fa-tag"></i> 
+        <a href="#pricing" onclick="toggleMenu()"><i class="fa-solid fa-tag" style="color: var(--text-muted); width: 20px;"></i> 
             <span class="lang-en">Pricing</span>
             <span class="lang-id">Harga</span>
         </a>
         
-        <a href="web-service.html" onclick="toggleMenu()" style="color: #c4b5fd;">
-            <div style="display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-laptop-code"></i> Web Studio</div>
-            <span style="background: var(--gradient-admin); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; letter-spacing: 1px; margin-left: auto;">NEW</span>
+        <a href="web-service.html" onclick="toggleMenu()" style="color: var(--accent-primary);">
+            <div style="display: flex; align-items: center; gap: 1rem;"><i class="fa-solid fa-laptop-code" style="width: 20px;"></i> Web Studio</div>
+            <span style="background: var(--gradient-admin); color: white; font-size: 0.65rem; padding: 3px 8px; border-radius: 6px; font-weight: 800; letter-spacing: 1px; margin-left: auto;">NEW</span>
         </a>
         
-        <a href="#faq" onclick="toggleMenu()"><i class="fa-solid fa-circle-question"></i> 
+        <a href="#faq" onclick="toggleMenu()"><i class="fa-solid fa-circle-question" style="color: var(--text-muted); width: 20px;"></i> 
             <span class="lang-en">FAQ & ToS</span>
             <span class="lang-id">FAQ & Aturan</span>
         </a>
-        <a href="changelog.html" target="_blank" onclick="toggleMenu()"><i class="fa-solid fa-clock-rotate-left"></i> 
+        <a href="changelog.html" target="_blank" onclick="toggleMenu()"><i class="fa-solid fa-clock-rotate-left" style="color: var(--text-muted); width: 20px;"></i> 
             <span class="lang-en">System Changelog</span>
             <span class="lang-id">Riwayat Update</span>
         </a>
-        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 0.5rem 0;"></div>
-        <a href="https://discord.gg/xQStZUvukS" target="_blank" style="color: #a5b4fc;" onclick="toggleMenu()"><i class="fa-brands fa-discord"></i> 
+        <div style="height: 1px; background: var(--border-light); margin: 0.5rem 0;"></div>
+        <a href="https://discord.gg/xQStZUvukS" target="_blank" style="color: #5865F2;" onclick="toggleMenu()"><i class="fa-brands fa-discord" style="width: 20px;"></i> 
             <span class="lang-en">Join Discord</span>
             <span class="lang-id">Gabung Discord</span>
         </a>
-        <a href="client.html" class="login-nav-btn" onclick="toggleMenu()"><i class="fa-solid fa-right-to-bracket text-gradient"></i> 
+        <a href="client.html" class="login-nav-btn" onclick="toggleMenu()"><i class="fa-solid fa-right-to-bracket"></i> 
             <span class="lang-en">Login to Portal</span>
             <span class="lang-id">Login ke Portal</span>
         </a>
     </div>
 
+    <!-- Hero Section -->
     <section class="section-hero text-center">
         <div class="container flex flex-col items-center animate-on-scroll">
             
-            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.25rem;">
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2rem;">
                 <a href="https://www.youtube.com/@heraclaus" target="_blank" class="yt-badge" style="margin-bottom: 0;">
-                    <i class="fa-brands fa-youtube yt-icon"></i> Heraclaus <i class="fa-solid fa-circle-check yt-verified"></i>
+                    <i class="fa-brands fa-youtube yt-icon"></i> Heraclaus <i class="fa-solid fa-circle-check" style="color: var(--text-muted); font-size: 0.9rem;"></i>
                 </a>
                 
-                <a href="web-service.html" class="badge promo-badge" style="margin-bottom: 0; text-decoration: none; border-color: rgba(139, 92, 246, 0.4); background: rgba(139, 92, 246, 0.15); transition: all 0.3s;">
-                    <i class="fa-solid fa-laptop-code" style="color: #c4b5fd;"></i>
-                    <span style="color: #fff; margin: 0 0.4rem; font-weight: 600; text-transform: none; font-size: 0.8rem; letter-spacing: normal;">
+                <a href="web-service.html" class="badge promo-badge" style="margin-bottom: 0; text-decoration: none; padding: 0.4rem 1.25rem; border-radius: 9999px;">
+                    <i class="fa-solid fa-laptop-code" style="color: #0d9488;"></i>
+                    <span style="color: #0f766e; margin: 0 0.5rem; font-weight: 700; text-transform: none; font-size: 0.85rem; letter-spacing: normal;">
                         <span class="lang-en">New: Web Studio Services</span>
                         <span class="lang-id">Baru: Jasa Web Studio</span>
                     </span>
-                    <i class="fa-solid fa-arrow-right" style="color: #a1a1aa;"></i>
+                    <i class="fa-solid fa-arrow-right" style="color: #14b8a6;"></i>
                 </a>
             </div>
 
@@ -350,7 +410,7 @@
                 <span class="lang-en">Stop installing junk plugins.<br><span class="text-gradient">Build a legendary server.</span></span>
                 <span class="lang-id">Berhenti pasang plugin sampah.<br><span class="text-gradient">Bangun server legendaris.</span></span>
             </h1>
-            <p style="max-width: 36rem; margin: 1rem auto 0; line-height: 1.6;">
+            <p style="max-width: 42rem; margin: 1.5rem auto 0; line-height: 1.7; font-size: 1.1rem;">
                 <span class="lang-en">Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world's economy and progression.</span>
                 <span class="lang-id">Add-on Minecraft Bedrock premium all-in-one yang menghilangkan lag, memperbaiki konflik, dan memberi Anda kontrol penuh atas ekonomi dan progres server Anda.</span>
             </p>
@@ -364,22 +424,27 @@
                     <span class="lang-en"> Pro Servers</span>
                     <span class="lang-id"> Server Pro</span>
                 </span>
-                <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; color: var(--text-muted); margin-left: 0.3rem;"></i>
+                <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: var(--text-muted); margin-left: 0.2rem;"></i>
             </div>
 
-            <div class="action-group justify-center">
-                <a href="#addons" class="btn btn-primary">
+            <div class="action-group justify-center" style="margin-top: 1rem;">
+                <a href="#addons" class="btn btn-primary" style="padding: 0 2.5rem;">
                     <span class="lang-en">Explore Our Add-ons</span>
                     <span class="lang-id">Jelajahi Add-on Kami</span>
+                </a>
+                <a href="#pricing" class="btn btn-outline" style="padding: 0 2.5rem; background: transparent;">
+                    <span class="lang-en">View Pricing</span>
+                    <span class="lang-id">Lihat Harga</span>
                 </a>
             </div>
         </div>
     </section>
 
+    <!-- Product Catalog Section -->
     <section id="addons" class="section" style="padding-top: 0;">
         <div class="container">
-            <div class="text-center animate-on-scroll" style="margin-bottom: 3rem;">
-                <span class="badge" style="margin-bottom: 1rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.25);"><i class="fa-solid fa-puzzle-piece"></i> 
+            <div class="text-center animate-on-scroll" style="margin-bottom: 4rem;">
+                <span class="badge" style="margin-bottom: 1.25rem; background: #f1f5f9; color: var(--text-secondary); border-color: var(--border-light); padding: 0.4rem 1rem; border-radius: 9999px;"><i class="fa-solid fa-puzzle-piece"></i> 
                     <span class="lang-en">Product Catalog</span>
                     <span class="lang-id">Katalog Produk</span>
                 </span>
@@ -387,12 +452,13 @@
                     <span class="lang-en">Our Premium Add-ons</span>
                     <span class="lang-id">Daftar Add-on Kami</span>
                 </h2>
-                <p style="margin-top: 0.5rem; max-width: 40rem; margin-inline: auto;">
+                <p style="margin-top: 0.75rem; max-width: 44rem; margin-inline: auto;">
                     <span class="lang-en">Discover our collection of highly-optimized, feature-rich modifications for your server.</span>
                     <span class="lang-id">Temukan koleksi modifikasi kami yang sangat dioptimalkan dan kaya fitur untuk server Anda.</span>
                 </p>
             </div>
 
+            <!-- Admin Suite -->
             <div class="product-box animate-on-scroll" id="admin-suite">
                 <div class="product-header">
                     <div class="product-header-text">
@@ -401,7 +467,7 @@
                             <span class="lang-id">Arsitektur Unggulan</span>
                         </span>
                         <h2>Admin Suite</h2>
-                        <p class="mt-2">
+                        <p class="mt-2" style="font-size: 1.05rem; color: var(--text-secondary);">
                             <span class="lang-en">One suite to replace them all. Manage your economy, players, RPG progression, and world security through a single, highly-optimized core. Zero lag, pure performance.</span>
                             <span class="lang-id">Satu sistem untuk menggantikan semuanya. Kelola ekonomi, pemain, progres RPG, dan keamanan dunia melalui satu inti yang sangat dioptimalkan. Tanpa lag, performa maksimal.</span>
                         </p>
@@ -419,7 +485,7 @@
                 </div>
                 <div class="feature-grid">
                     <div class="feature-cell animate-on-scroll">
-                        <i class="fa-solid fa-sack-dollar" style="color: #f59e0b;"></i>
+                        <i class="fa-solid fa-sack-dollar" style="color: #f59e0b; border-color: #fde68a; background: #fffbeb;"></i>
                         <h3 style="margin-bottom: 0.2rem;">
                             <span class="lang-en">Economy & Auction House</span>
                             <span class="lang-id">Ekonomi & Rumah Lelang</span>
@@ -430,7 +496,7 @@
                         </p>
                     </div>
                     <div class="feature-cell animate-on-scroll delay-100">
-                        <i class="fa-solid fa-skull" style="color: #f43f5e;"></i>
+                        <i class="fa-solid fa-skull" style="color: #f43f5e; border-color: #fecdd3; background: #fff1f2;"></i>
                         <h3 style="margin-bottom: 0.2rem;">
                             <span class="lang-en">RPG & Gravestone Feature</span>
                             <span class="lang-id">Fitur RPG & Batu Nisan</span>
@@ -441,7 +507,7 @@
                         </p>
                     </div>
                     <div class="feature-cell animate-on-scroll delay-200">
-                        <i class="fa-solid fa-shield-halved" style="color: #3b82f6;"></i>
+                        <i class="fa-solid fa-shield-halved" style="color: #3b82f6; border-color: #bfdbfe; background: #eff6ff;"></i>
                         <h3 style="margin-bottom: 0.2rem;">
                             <span class="lang-en">Security & Login Feature</span>
                             <span class="lang-id">Keamanan & Fitur Login</span>
@@ -452,7 +518,7 @@
                         </p>
                     </div>
                     <div class="feature-cell animate-on-scroll">
-                        <i class="fa-solid fa-eye" style="color: #10b981;"></i>
+                        <i class="fa-solid fa-eye" style="color: #10b981; border-color: #a7f3d0; background: #ecfdf5;"></i>
                         <h3 style="margin-bottom: 0.2rem;">
                             <span class="lang-en">X-Ray Feature & Moderation</span>
                             <span class="lang-id">Fitur X-Ray & Moderasi</span>
@@ -463,7 +529,7 @@
                         </p>
                     </div>
                     <div class="feature-cell animate-on-scroll delay-100">
-                        <i class="fa-solid fa-network-wired" style="color: #8b5cf6;"></i>
+                        <i class="fa-solid fa-network-wired" style="color: #8b5cf6; border-color: #ddd6fe; background: #f5f3ff;"></i>
                         <h3 style="margin-bottom: 0.2rem;">
                             <span class="lang-en">Free Server Promotion</span>
                             <span class="lang-id">Promosi Server Gratis</span>
@@ -474,7 +540,7 @@
                         </p>
                     </div>
                     <div class="feature-cell animate-on-scroll delay-200">
-                        <i class="fa-solid fa-comments" style="color: #f87171;"></i>
+                        <i class="fa-solid fa-comments" style="color: #ec4899; border-color: #fbcfe8; background: #fdf2f8;"></i>
                         <h3 style="margin-bottom: 0.2rem;">
                             <span class="lang-en">Private Social Chat</span>
                             <span class="lang-id">Grup Obrolan Pribadi</span>
@@ -487,40 +553,42 @@
                 </div>
             </div>
 
-            <div id="cinemato" class="product-box animate-on-scroll" style="margin-bottom: 1.5rem; border-color: rgba(16, 185, 129, 0.2);">
-                <div class="product-header" style="background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent 50%); border-bottom: none; padding-bottom: 1.5rem;">
+            <!-- Cinemato -->
+            <div id="cinemato" class="product-box animate-on-scroll" style="margin-bottom: 2.5rem;">
+                <div class="product-header" style="border-bottom: none; padding-bottom: 2.5rem;">
                     <div class="product-header-text">
-                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.25);"><i class="fa-solid fa-film"></i> 
+                        <span class="badge" style="background: #ecfdf5; color: #059669; border-color: #d1fae5;"><i class="fa-solid fa-film"></i> 
                             <span class="lang-en">Creator Tool</span>
                             <span class="lang-id">Alat Kreator</span>
                         </span>
                         <h2>Cinemato Studio</h2>
-                        <p class="mt-2">
+                        <p class="mt-2" style="font-size: 1.05rem;">
                             <span class="lang-en">The definitive camera tool for Bedrock creators. Execute smooth bezier camera paths and create stunning timelapses effortlessly.</span>
                             <span class="lang-id">Alat kamera canggih untuk kreator Bedrock. Jalankan rute kamera yang mulus dan buat video sinematik dengan mudah.</span>
                         </p>
                     </div>
                     <div class="product-header-actions action-group">
-                        <a href="https://www.curseforge.com/minecraft-bedrock/addons/cinemato-studio" target="_blank" class="btn btn-outline" style="border-color: rgba(16, 185, 129, 0.3);">CurseForge <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>
+                        <a href="https://www.curseforge.com/minecraft-bedrock/addons/cinemato-studio" target="_blank" class="btn btn-outline" style="border-color: #10b981; color: #059669;">CurseForge <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.8rem;"></i></a>
                     </div>
                 </div>
             </div>
 
-            <div id="requiem" class="product-box animate-on-scroll" style="margin-bottom: 0; border-color: rgba(244, 63, 94, 0.2);">
-                <div class="product-header" style="background: radial-gradient(circle at top right, rgba(244, 63, 94, 0.05), transparent 50%); border-bottom: none; padding-bottom: 1.5rem;">
+            <!-- Requiem -->
+            <div id="requiem" class="product-box animate-on-scroll" style="margin-bottom: 0;">
+                <div class="product-header" style="border-bottom: none; padding-bottom: 2.5rem;">
                     <div class="product-header-text">
-                        <span class="badge" style="background: rgba(244, 63, 94, 0.15); color: #fda4af; border-color: rgba(244, 63, 94, 0.25);"><i class="fa-solid fa-skull"></i> 
+                        <span class="badge" style="background: #fff1f2; color: #e11d48; border-color: #ffe4e6;"><i class="fa-solid fa-skull"></i> 
                             <span class="lang-en">Atmosphere Add-on</span>
                             <span class="lang-id">Add-on Atmosfer</span>
                         </span>
                         <h2>Hera's Requiem</h2>
-                        <p class="mt-2">
+                        <p class="mt-2" style="font-size: 1.05rem;">
                             <span class="lang-en">A chilling horror-themed backsound addon designed to provide a terrifying and immersive atmosphere to your Minecraft world.</span>
                             <span class="lang-id">Add-on backsound bertema horor yang dirancang untuk memberikan suasana mencekam dan imersif di dunia Minecraft Anda.</span>
                         </p>
                     </div>
                     <div class="product-header-actions action-group">
-                        <a href="https://www.curseforge.com/minecraft-bedrock/addons/heras-requiem" target="_blank" class="btn btn-outline" style="border-color: rgba(244, 63, 94, 0.3);">CurseForge <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>
+                        <a href="https://www.curseforge.com/minecraft-bedrock/addons/heras-requiem" target="_blank" class="btn btn-outline" style="border-color: #e11d48; color: #be123c;">CurseForge <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.8rem;"></i></a>
                     </div>
                 </div>
             </div>
@@ -528,10 +596,11 @@
         </div>
     </section>
 
-    <section id="web-tools" class="section" style="border-top: 1px solid var(--border-light); background: radial-gradient(circle at right, rgba(59, 130, 246, 0.05), transparent 50%);">
+    <!-- Web Tools Section -->
+    <section id="web-tools" class="section" style="border-top: 1px solid var(--border-light); background: #f8fafc;">
         <div class="container">
-            <div class="text-center animate-on-scroll" style="margin-bottom: 3rem;">
-                <span class="badge" style="margin-bottom: 1rem; background: rgba(59, 130, 246, 0.15); color: #93c5fd; border-color: rgba(59, 130, 246, 0.25);"><i class="fa-solid fa-laptop-code"></i> 
+            <div class="text-center animate-on-scroll" style="margin-bottom: 4rem;">
+                <span class="badge" style="margin-bottom: 1.25rem; background: #eff6ff; color: #2563eb; border-color: #dbeafe; padding: 0.4rem 1rem; border-radius: 9999px;"><i class="fa-solid fa-laptop-code"></i> 
                     <span class="lang-en">Web Ecosystem</span>
                     <span class="lang-id">Ekosistem Web</span>
                 </span>
@@ -539,28 +608,28 @@
                     <span class="lang-en">Web Tools & Services</span>
                     <span class="lang-id">Alat & Layanan Web</span>
                 </h2>
-                <p style="margin-top: 0.5rem; max-width: 40rem; margin-inline: auto;">
+                <p style="margin-top: 0.75rem; max-width: 44rem; margin-inline: auto;">
                     <span class="lang-en">Powerful web-based utilities designed to boost your productivity.</span>
                     <span class="lang-id">Utilitas berbasis web yang dirancang untuk mendukung produktivitas proyek Anda.</span>
                 </p>
             </div>
 
-            <div id="glyph-studio" class="product-box animate-on-scroll" style="margin-bottom: 0; border-color: rgba(59, 130, 246, 0.2);">
-                <div class="product-header" style="background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.05), transparent 50%); border-bottom: none; padding-bottom: 1.5rem;">
+            <div id="glyph-studio" class="product-box animate-on-scroll" style="margin-bottom: 0;">
+                <div class="product-header" style="border-bottom: none; padding-bottom: 2.5rem;">
                     <div class="product-header-text">
-                        <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #93c5fd; border-color: rgba(59, 130, 246, 0.25);"><i class="fa-solid fa-layer-group"></i> 
+                        <span class="badge" style="background: #eff6ff; color: #2563eb; border-color: #dbeafe;"><i class="fa-solid fa-layer-group"></i> 
                             <span class="lang-en">Web Tool</span>
                             <span class="lang-id">Alat Web</span>
                         </span>
                         <h2>Glyph Studio</h2>
-                        <p class="mt-2">
+                        <p class="mt-2" style="font-size: 1.05rem;">
                             <span class="lang-en">A powerful, pixel-perfect web tool. Merge spritesheets, split images, and extract UI characters flawlessly without losing quality.</span>
                             <span class="lang-id">Alat gambar berbasis web pixel-perfect. Gabungkan spritesheet, potong gambar, dan ekstrak karakter UI dengan sempurna tanpa merusak kualitas.</span>
                         </p>
                     </div>
                     <div class="product-header-actions action-group">
-                        <a href="glyph.html" target="_blank" class="btn btn-outline" style="border-color: rgba(59, 130, 246, 0.3); color: #93c5fd;">
-                            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.8rem;"></i>
+                        <a href="glyph.html" target="_blank" class="btn btn-outline" style="border-color: #2563eb; color: #1d4ed8;">
+                            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.9rem;"></i>
                             <span class="lang-en">Open Studio</span>
                             <span class="lang-id">Buka Studio</span>
                         </a>
@@ -570,10 +639,11 @@
         </div>
     </section>
 
-    <section id="community-servers" class="section" style="border-top: 1px solid var(--border-light); background: radial-gradient(circle at left, rgba(139, 92, 246, 0.05), transparent 50%);">
+    <!-- Community Servers Section -->
+    <section id="community-servers" class="section" style="border-top: 1px solid var(--border-light); background: #ffffff;">
         <div class="container">
             <div class="text-center animate-on-scroll">
-                <span class="badge" style="margin-bottom: 1rem;"><i class="fa-solid fa-network-wired"></i> 
+                <span class="badge" style="margin-bottom: 1.25rem; background: #f5f3ff; color: #7c3aed; border-color: #ede9fe; padding: 0.4rem 1rem; border-radius: 9999px;"><i class="fa-solid fa-network-wired"></i> 
                     <span class="lang-en">Partner Servers</span>
                     <span class="lang-id">Server Mitra</span>
                 </span>
@@ -581,34 +651,37 @@
                     <span class="lang-en">Community Servers</span>
                     <span class="lang-id">Server Komunitas</span>
                 </h2>
-                <p style="margin-top: 0.5rem; max-width: 40rem; margin-inline: auto;">
+                <p style="margin-top: 0.75rem; max-width: 44rem; margin-inline: auto;">
                     <span class="lang-en">Join and play on incredible servers hosted directly by the Heraclaus Pro Member community.</span>
                     <span class="lang-id">Bergabung dan mainkan di server luar biasa yang dikelola langsung oleh komunitas Anggota Pro Heraclaus.</span>
                 </p>
             </div>
             
-            <div class="grid-cards animate-on-scroll" id="public-server-grid" style="margin-top: 2.5rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
-                <div style="text-align:center; padding: 2rem; color: var(--text-muted); grid-column: 1 / -1;">
-                    <i class="fa-solid fa-circle-notch fa-spin"></i> 
-                    <span class="lang-en">Loading server list...</span>
-                    <span class="lang-id">Memuat daftar server...</span>
+            <div class="grid-cards animate-on-scroll" id="public-server-grid" style="margin-top: 3.5rem; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;">
+                <!-- Loading State -->
+                <div style="text-align:center; padding: 4rem; color: var(--text-muted); grid-column: 1 / -1; background: var(--bg-base); border-radius: 24px; border: 1px dashed var(--border-highlight);">
+                    <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i> <br>
+                    <span class="lang-en" style="font-size: 1.1rem; font-weight: 500;">Loading server list...</span>
+                    <span class="lang-id" style="font-size: 1.1rem; font-weight: 500;">Memuat daftar server...</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="pricing" class="section" style="border-top: 1px solid var(--border-light); background: rgba(0,0,0,0.4);">
+    <!-- Pricing Section -->
+    <section id="pricing" class="section" style="border-top: 1px solid var(--border-light); background: #f8fafc;">
         <div class="container text-center animate-on-scroll">
             <h2>
                 <span class="lang-en">Simple Pricing. No Subscriptions.</span>
                 <span class="lang-id">Harga Simpel. Tanpa Langganan.</span>
             </h2>
-            <p style="margin-top: 0.25rem;">
+            <p style="margin-top: 0.75rem; font-size: 1.1rem;">
                 <span class="lang-en">Pay once, dominate your server forever.</span>
                 <span class="lang-id">Bayar sekali, kuasai server Anda selamanya.</span>
             </p>
             
             <div class="pricing-wrap text-left">
+                <!-- Free Tier -->
                 <div class="price-card animate-on-scroll">
                     <h3>
                         <span class="lang-en">Starter</span>
@@ -618,20 +691,20 @@
                         <span class="lang-en">trial</span>
                         <span class="lang-id">gratis</span>
                     </span></div>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1rem;">
+                    <p style="color: var(--text-secondary); font-size: 1rem; margin-top: 0.2rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1.5rem;">
                         <span class="lang-en">No license attached. May deactivate anytime.</span>
                         <span class="lang-id">Tanpa lisensi akun. Berjalan dengan fitur terbatas.</span>
                     </p>
                     <ul class="check-list">
-                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Admin, Player, & World Management</span><span class="lang-id">Manajemen Admin, Pemain & Dunia</span></li>
-                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Economy, Money, Shop, & Rank System</span><span class="lang-id">Sistem Ekonomi, Uang, Toko & Rank</span></li>
-                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Clan, Land, Warp, & Lobby Protection</span><span class="lang-id">Sistem Klan, Tanah, Warp & Lobi</span></li>
-                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">UI & Tools (Sidebar, NPC, Healthbar, Spy Tools, Broadcast)</span><span class="lang-id">UI & Alat (Sidebar, NPC, Nyawa, Broadcast)</span></li>
-                        <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> <span class="lang-en">No Multilanguage & Server Logs</span><span class="lang-id">Tidak Ada Multi-Bahasa & Log Server</span></li>
-                        <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> <span class="lang-en">No Login, Advanced Regions, Grave, & X-Ray</span><span class="lang-id">Tidak Ada Fitur Login, Wilayah Lanjutan & X-Ray</span></li>
-                        <li style="opacity: 0.5;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> <span class="lang-en">No VIP Services & Server Promo</span><span class="lang-id">Tidak Ada Akses VIP & Promo Server Gratis</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span><span class="lang-en">Admin, Player, & World Management</span><span class="lang-id">Manajemen Admin, Pemain & Dunia</span></span></li>
+                        <li><i class="fa-solid fa-check"></i> <span><span class="lang-en">Economy, Money, Shop, & Rank System</span><span class="lang-id">Sistem Ekonomi, Uang, Toko & Rank</span></span></li>
+                        <li><i class="fa-solid fa-check"></i> <span><span class="lang-en">Clan, Land, Warp, & Lobby Protection</span><span class="lang-id">Sistem Klan, Tanah, Warp & Lobi</span></span></li>
+                        <li><i class="fa-solid fa-check"></i> <span><span class="lang-en">UI & Tools (Sidebar, NPC, Healthbar, Spy Tools, Broadcast)</span><span class="lang-id">UI & Alat (Sidebar, NPC, Nyawa, Broadcast)</span></span></li>
+                        <li style="opacity: 0.6;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> <span><span class="lang-en">No Multilanguage & Server Logs</span><span class="lang-id">Tidak Ada Multi-Bahasa & Log Server</span></span></li>
+                        <li style="opacity: 0.6;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> <span><span class="lang-en">No Login, Advanced Regions, Grave, & X-Ray</span><span class="lang-id">Tidak Ada Fitur Login, Wilayah Lanjutan & X-Ray</span></span></li>
+                        <li style="opacity: 0.6;"><i class="fa-solid fa-xmark" style="color: var(--text-muted);"></i> <span><span class="lang-en">No VIP Services & Server Promo</span><span class="lang-id">Tidak Ada Akses VIP & Promo Server Gratis</span></span></li>
                     </ul>
-                    <div style="font-size: 0.8rem; color: var(--accent-success); margin-bottom: 0.5rem; font-weight: 600; text-align: center;">
+                    <div style="font-size: 0.9rem; color: #059669; margin-bottom: 1rem; font-weight: 700; text-align: center; background: #ecfdf5; padding: 0.6rem; border-radius: 10px; border: 1px solid #a7f3d0;">
                         <i class="fa-solid fa-bolt"></i> <span class="lang-en">Latest:</span><span class="lang-id">Terbaru:</span> <span id="free-version-tag">Loading...</span>
                     </div>
                     <a href="#" id="btn-free-dl" target="_blank" class="btn btn-outline w-full mt-auto">
@@ -640,8 +713,9 @@
                     </a>
                 </div>
 
+                <!-- Pro Tier -->
                 <div class="price-card pro animate-on-scroll delay-100">
-                    <h3 style="color: #c4b5fd;">
+                    <h3 style="color: #6366f1; font-size: 1.4rem;">
                         <span class="lang-en">Pro License</span>
                         <span class="lang-id">Lisensi Pro</span>
                     </h3>
@@ -649,22 +723,22 @@
                         <span class="lang-en">one-time</span>
                         <span class="lang-id">sekali bayar</span>
                     </span></div>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: -0.2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 1rem;">
+                    <p style="color: var(--text-secondary); font-size: 1rem; margin-top: 0.2rem; margin-bottom: 1.5rem; border-bottom: 1px solid #e0e7ff; padding-bottom: 1.5rem;">
                         <span class="lang-en">Equivalent to ~Rp99.000. Secure and Ad-Free.</span>
                         <span class="lang-id">Setara dengan ~Rp99.000. Aman dan Tanpa Iklan.</span>
                     </p>
                     <ul class="check-list">
-                        <li><i class="fa-solid fa-check"></i> <strong style="color: white;">
+                        <li><i class="fa-solid fa-check"></i> <strong style="color: var(--text-primary);">
                             <span class="lang-en">Everything in Starter, plus:</span>
                             <span class="lang-id">Semua di paket Pemula, ditambah:</span>
                         </strong></li>
-                        <li><i class="fa-solid fa-check"></i> <b>Pro Features:</b> <span class="lang-en">Multilanguage, Server Logs, Advanced Regions, Login System, Grave System, & X-Ray</span><span class="lang-id">Multi-Bahasa, Log Server, Fitur Login, Wilayah Lanjutan & X-Ray</span></li>
-                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Free Server Promotion on Homepage</span><span class="lang-id">Promosi Server Gratis di Halaman Utama</span></li>
-                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">VIP Discord Role & Private Social Chat</span><span class="lang-id">Role Discord VIP & Chat Sosial Pribadi</span></li>
-                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Faster Support & Priority Updates</span><span class="lang-id">Bantuan Tercepat & Prioritas Update</span></li>
-                        <li><i class="fa-solid fa-check"></i> <span class="lang-en">Permanent Binding (Pay Once, Yours Forever)</span><span class="lang-id">Hak Permanen (Bayar Sekali, Milik Selamanya)</span></li>
+                        <li><i class="fa-solid fa-check"></i> <span><b>Pro Features:</b> <span class="lang-en">Multilanguage, Server Logs, Advanced Regions, Login System, Grave System, & X-Ray</span><span class="lang-id">Multi-Bahasa, Log Server, Fitur Login, Wilayah Lanjutan & X-Ray</span></span></li>
+                        <li><i class="fa-solid fa-check"></i> <span><span class="lang-en">Free Server Promotion on Homepage</span><span class="lang-id">Promosi Server Gratis di Halaman Utama</span></span></li>
+                        <li><i class="fa-solid fa-check"></i> <span><span class="lang-en">VIP Discord Role & Private Social Chat</span><span class="lang-id">Role Discord VIP & Chat Sosial Pribadi</span></span></li>
+                        <li><i class="fa-solid fa-check"></i> <span><span class="lang-en">Faster Support & Priority Updates</span><span class="lang-id">Bantuan Tercepat & Prioritas Update</span></span></li>
+                        <li><i class="fa-solid fa-check"></i> <span><span class="lang-en">Permanent Binding (Pay Once, Yours Forever)</span><span class="lang-id">Hak Permanen (Bayar Sekali, Milik Selamanya)</span></span></li>
                     </ul>
-                    <a href="payment.html" class="btn btn-gradient w-full mt-auto">
+                    <a href="payment.html" class="btn btn-gradient w-full mt-auto" style="font-size: 1.05rem; padding: 1.25rem;">
                         <span class="lang-en">Secure Checkout</span>
                         <span class="lang-id">Beli Sekarang</span>
                     </a>
@@ -673,7 +747,8 @@
         </div>
     </section>
 
-    <section id="faq" class="section" style="border-top: 1px solid var(--border-light);">
+    <!-- FAQ Section -->
+    <section id="faq" class="section" style="border-top: 1px solid var(--border-light); background: #ffffff;">
         <div class="container animate-on-scroll">
             <h2 class="text-center">
                 <span class="lang-en">FAQ & Terms of Service</span>
@@ -684,8 +759,8 @@
                     <span class="lang-en">How do I get my files after payment?</span>
                     <span class="lang-id">Bagaimana cara mendapatkan file setelah membayar?</span>
                 </span> <i class="fa-solid fa-chevron-down"></i></button><div class="faq-content"><div class="faq-inner"><p>
-                    <span class="lang-en">After checkout, we will verify your payment and email your <strong>License Key</strong> to login to the <strong>Client Portal</strong>.</span>
-                    <span class="lang-id">Setelah checkout, kami akan memverifikasi struk Anda dan mengirimkan <strong>License Key</strong> ke email Anda untuk login ke <strong>Client Portal</strong>.</span>
+                    <span class="lang-en">After checkout, we will verify your payment and email your <strong style="color:var(--text-primary);">License Key</strong> to login to the <strong style="color:var(--text-primary);">Client Portal</strong>.</span>
+                    <span class="lang-id">Setelah checkout, kami akan memverifikasi struk Anda dan mengirimkan <strong style="color:var(--text-primary);">License Key</strong> ke email Anda untuk login ke <strong style="color:var(--text-primary);">Client Portal</strong>.</span>
                 </p></div></div></div>
                 <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>
                     <span class="lang-en">Will Admin Suite cause lag?</span>
@@ -719,47 +794,50 @@
         </div>
     </section>
 
+    <!-- CTA Section -->
     <section class="cta-section animate-on-scroll">
         <div class="container">
-            <h2 style="font-size: clamp(1.25rem, 3.5vw, 1.75rem); margin-bottom: 0.5rem;">
+            <h2 style="font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 1.25rem; color: var(--text-primary);">
                 <span class="lang-en">Ready to level up your server?</span>
                 <span class="lang-id">Siap menaikkan level server Anda?</span>
             </h2>
-            <p style="margin-bottom: 1.5rem;">
+            <p style="margin-bottom: 2.5rem; font-size: 1.15rem;">
                 <span class="lang-en">Join thousands of players and admins using Heraclaus Add-ons.</span>
                 <span class="lang-id">Bergabunglah bersama ribuan pemain dan admin yang menggunakan sistem Heraclaus.</span>
             </p>
-            <div class="action-group justify-center"><a href="#pricing" class="btn btn-gradient" style="padding: 0 1.5rem;">
+            <div class="action-group justify-center"><a href="#pricing" class="btn btn-gradient" style="padding: 0 3rem; font-size: 1.1rem;">
                 <span class="lang-en">Get Pro License Now</span>
                 <span class="lang-id">Dapatkan Lisensi Pro Sekarang</span>
             </a></div>
         </div>
     </section>
 
-    <section class="section" style="border-top: 1px solid var(--border-light); background: rgba(59, 130, 246, 0.03);">
+    <!-- Newsletter Section -->
+    <section class="section" style="border-top: 1px solid var(--border-light); background: #f8fafc;">
         <div class="container text-center animate-on-scroll">
-            <span class="badge" style="margin-bottom: 1rem; background: rgba(59, 130, 246, 0.15); color: #93c5fd; border-color: rgba(59, 130, 246, 0.25);"><i class="fa-solid fa-envelope-open-text"></i> Newsletter</span>
+            <span class="badge" style="margin-bottom: 1.25rem; background: #e0f2fe; color: #0284c7; border-color: #bae6fd; padding: 0.4rem 1rem; border-radius: 9999px;"><i class="fa-solid fa-envelope-open-text"></i> Newsletter</span>
             <h2>
                 <span class="lang-en">Stay in the Loop</span>
                 <span class="lang-id">Dapatkan Info Terbaru</span>
             </h2>
-            <p style="margin-top: 0.5rem;">
+            <p style="margin-top: 0.75rem; font-size: 1.05rem;">
                 <span class="lang-en">Subscribe to our newsletter to get notified when new Free and Pro updates drop!</span>
                 <span class="lang-id">Berlangganan untuk mendapat notifikasi email saat update Gratis & Pro dirilis!</span>
             </p>
-            <form id="subscribe-form" style="max-width: 400px; margin: 1.5rem auto 0; display: flex; gap: 0.5rem;">
-                <input type="email" id="sub-email" required placeholder="Enter your email address" style="flex-grow: 1; border-radius: 8px; padding: 0.8rem 1rem; border: 1px solid var(--border-highlight); background: rgba(0,0,0,0.5); color: white; outline: none;">
-                <button type="submit" class="btn btn-gradient" id="btn-subscribe" style="padding: 0 1.5rem;"><i class="fa-solid fa-paper-plane"></i></button>
+            <form id="subscribe-form" style="max-width: 480px; margin: 2.5rem auto 0; display: flex; gap: 0.75rem; background: var(--bg-surface); padding: 0.5rem; border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light);">
+                <input type="email" id="sub-email" required placeholder="Enter your email address" style="flex-grow: 1; border-radius: 12px; padding: 0.85rem 1.25rem; border: none; background: transparent; color: var(--text-primary); outline: none; font-size: 1rem;">
+                <button type="submit" class="btn btn-gradient" id="btn-subscribe" style="padding: 0 1.75rem; border-radius: 12px;"><i class="fa-solid fa-paper-plane"></i></button>
             </form>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="animate-on-scroll">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
                     <h3><i class="fa-solid fa-code text-gradient"></i> Heraclaus</h3>
-                    <p style="max-width: 18rem;">
+                    <p style="max-width: 22rem;">
                         <span class="lang-en">Premium Minecraft Bedrock add-ons built for performance, security, and absolute control.</span>
                         <span class="lang-id">Add-on Minecraft Bedrock premium yang diciptakan untuk performa, keamanan, dan kontrol absolut.</span>
                     </p>
@@ -769,11 +847,11 @@
                         <span class="lang-en">Products</span>
                         <span class="lang-id">Produk Kami</span>
                     </h4>
-                    <a href="#admin-suite"><i class="fa-solid fa-angle-right"></i> Admin Suite</a>
-                    <a href="#cinemato"><i class="fa-solid fa-angle-right"></i> Cinemato Studio</a>
-                    <a href="#requiem"><i class="fa-solid fa-angle-right"></i> Hera's Requiem</a>
-                    <a href="web-service.html"><i class="fa-solid fa-angle-right"></i> Web Studio <span style="font-size: 0.6rem; color: #a5b4fc; margin-left: 0.2rem;">(NEW)</span></a>
-                    <a href="#pricing"><i class="fa-solid fa-angle-right"></i> 
+                    <a href="#admin-suite"><i class="fa-solid fa-angle-right" style="font-size: 0.8rem; color: var(--border-highlight);"></i> Admin Suite</a>
+                    <a href="#cinemato"><i class="fa-solid fa-angle-right" style="font-size: 0.8rem; color: var(--border-highlight);"></i> Cinemato Studio</a>
+                    <a href="#requiem"><i class="fa-solid fa-angle-right" style="font-size: 0.8rem; color: var(--border-highlight);"></i> Hera's Requiem</a>
+                    <a href="web-service.html"><i class="fa-solid fa-angle-right" style="font-size: 0.8rem; color: var(--border-highlight);"></i> Web Studio <span style="font-size: 0.65rem; color: var(--accent-primary); margin-left: 0.3rem; font-weight: 800;">(NEW)</span></a>
+                    <a href="#pricing"><i class="fa-solid fa-angle-right" style="font-size: 0.8rem; color: var(--border-highlight);"></i> 
                         <span class="lang-en">Pricing & Trial</span>
                         <span class="lang-id">Harga & Versi Gratis</span>
                     </a>
@@ -783,12 +861,12 @@
                         <span class="lang-en">Resources</span>
                         <span class="lang-id">Bantuan Khusus</span>
                     </h4>
-                    <a href="client.html"><i class="fa-solid fa-angle-right"></i> Client Portal</a>
-                    <a href="changelog.html" target="_blank"><i class="fa-solid fa-angle-right"></i> 
+                    <a href="client.html"><i class="fa-solid fa-angle-right" style="font-size: 0.8rem; color: var(--border-highlight);"></i> Client Portal</a>
+                    <a href="changelog.html" target="_blank"><i class="fa-solid fa-angle-right" style="font-size: 0.8rem; color: var(--border-highlight);"></i> 
                         <span class="lang-en">System Changelog</span>
                         <span class="lang-id">Riwayat Update</span>
                     </a>
-                    <a href="#faq"><i class="fa-solid fa-angle-right"></i> 
+                    <a href="#faq"><i class="fa-solid fa-angle-right" style="font-size: 0.8rem; color: var(--border-highlight);"></i> 
                         <span class="lang-en">Terms & ToS</span>
                         <span class="lang-id">Aturan Sistem</span>
                     </a>
@@ -807,6 +885,7 @@
         </div>
     </footer>
 
+    <!-- JS Logic Remains Exactly the Same -->
     <script>
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'x')) e.preventDefault(); });
@@ -946,7 +1025,7 @@
         function renderMembersList() {
             const listContainer = document.getElementById('members-list-content');
             if (cachedMembers.length === 0) {
-                listContainer.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-muted);"><i class="fa-solid fa-circle-exclamation" style="margin-bottom:0.5rem; display:block; font-size:1.5rem; opacity:0.5;"></i> ${t("No members found.", "Belum ada pengguna.")}</div>`;
+                listContainer.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-muted);"><i class="fa-solid fa-circle-exclamation" style="margin-bottom:0.75rem; display:block; font-size:2rem; opacity:0.3;"></i> ${t("No members found.", "Belum ada pengguna.")}</div>`;
                 return;
             }
             
@@ -978,13 +1057,13 @@
                     if (!el) return;
                     
                     if (data.online) {
-                        el.innerHTML = `<i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle; margin-right: 0.3rem;"></i><span style="color: #fff; font-weight: 600;">${data.players.online}</span><span style="color: var(--text-muted);">/${data.players.max}</span>`;
-                        el.style.borderColor = 'rgba(16, 185, 129, 0.3)';
-                        el.style.background = 'rgba(16, 185, 129, 0.1)';
+                        el.innerHTML = `<i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle; margin-right: 0.4rem;"></i><span style="color: var(--text-primary); font-weight: 700;">${data.players.online}</span><span style="color: var(--text-muted);">/${data.players.max}</span>`;
+                        el.style.borderColor = '#a7f3d0';
+                        el.style.background = '#ecfdf5';
                     } else {
-                        el.innerHTML = `<i class="fa-solid fa-circle" style="color: #f43f5e; font-size: 0.5rem; vertical-align: middle; margin-right: 0.3rem;"></i><span style="color: var(--text-muted);">${isEnglish ? 'Offline' : 'Luar Jaringan'}</span>`;
-                        el.style.borderColor = 'rgba(244, 63, 94, 0.3)';
-                        el.style.background = 'rgba(244, 63, 94, 0.1)';
+                        el.innerHTML = `<i class="fa-solid fa-circle" style="color: #f43f5e; font-size: 0.5rem; vertical-align: middle; margin-right: 0.4rem;"></i><span style="color: var(--text-secondary); font-weight: 600;">${isEnglish ? 'Offline' : 'Luar Jaringan'}</span>`;
+                        el.style.borderColor = '#fecdd3';
+                        el.style.background = '#fff1f2';
                     }
                 })
                 .catch(err => {
@@ -1005,7 +1084,7 @@
                     if(data.status === "success") {
                         grid.innerHTML = "";
                         if(!data.servers || data.servers.length === 0) {
-                            grid.innerHTML = `<div style="text-align:center; color: var(--text-muted); grid-column: 1 / -1;">${isEnglish ? 'No servers registered yet. Be the first!' : 'Belum ada server yang mendaftar. Jadilah yang pertama!'}</div>`;
+                            grid.innerHTML = `<div style="text-align:center; padding: 4rem; color: var(--text-muted); grid-column: 1 / -1; background: var(--bg-base); border-radius: 24px; border: 1px dashed var(--border-highlight);"><i class="fa-solid fa-server" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--border-highlight);"></i><br><span style="font-size: 1.1rem;">${isEnglish ? 'No servers registered yet. Be the first!' : 'Belum ada server yang mendaftar. Jadilah yang pertama!'}</span></div>`;
                             return;
                         }
                         
@@ -1032,18 +1111,18 @@
                             }
                             
                             grid.innerHTML += `
-                                <div class="product-box" style="margin-bottom: 0; display: flex; flex-direction: column;">
-                                    <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-light); flex-grow: 1;">
-                                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; gap: 0.5rem;">
-                                            <h3 style="font-family: 'Outfit'; font-size: 1.25rem; color: #fff; line-height: 1.2; margin: 0; word-break: break-word;">${s.name}</h3>
-                                            <div id="status-${s.id}" style="font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-light); color: var(--text-muted); flex-shrink: 0; display: flex; align-items: center;"><i class="fa-solid fa-spinner fa-spin" style="margin-right: 0.3rem;"></i> ${isEnglish ? 'Pinging...' : 'Memeriksa...'}</div>
+                                <div class="product-box" style="margin-bottom: 0; display: flex; flex-direction: column; overflow: hidden; border-radius: 20px;">
+                                    <div style="padding: 2rem; border-bottom: 1px solid var(--border-light); flex-grow: 1; background: var(--bg-surface);">
+                                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; gap: 0.5rem;">
+                                            <h3 style="font-family: 'Outfit'; font-size: 1.35rem; color: var(--text-primary); line-height: 1.3; margin: 0; word-break: break-word;">${s.name}</h3>
+                                            <div id="status-${s.id}" style="font-size: 0.8rem; background: var(--bg-base); padding: 0.35rem 0.75rem; border-radius: 8px; border: 1px solid var(--border-light); color: var(--text-muted); flex-shrink: 0; display: flex; align-items: center; font-weight: 600;"><i class="fa-solid fa-spinner fa-spin" style="margin-right: 0.4rem;"></i> ${isEnglish ? 'Pinging...' : 'Memeriksa...'}</div>
                                         </div>
                                         <p class="server-desc" onclick="this.classList.toggle('expanded')" title="Click to expand/collapse">${s.desc}</p>
                                     </div>
-                                    <div style="padding: 1rem 1.5rem; background: rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 0.75rem;">
-                                        <div style="background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 8px; border: 1px dashed var(--border-highlight); display: flex; justify-content: space-between; align-items: center;">
-                                            <div style="font-family: monospace; color: var(--accent-primary); font-size: 0.9rem;">${s.ip}${portText}</div>
-                                            <button class="btn-icon" style="width: 2rem; height: 2rem; background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.3); color: var(--accent-primary);" onclick="copyIp('${s.ip}', '${portVal}', this)" title="Copy IP"><i class="fa-regular fa-copy"></i></button>
+                                    <div style="padding: 1.5rem; background: var(--bg-base); display: flex; flex-direction: column; gap: 1rem;">
+                                        <div style="background: var(--bg-surface); padding: 0.85rem 1.25rem; border-radius: 12px; border: 1px dashed var(--border-highlight); display: flex; justify-content: space-between; align-items: center;">
+                                            <div style="font-family: monospace; color: var(--text-primary); font-size: 1rem; font-weight: 600;">${s.ip}${portText}</div>
+                                            <button class="btn-icon" style="width: 2.5rem; height: 2.5rem; background: #eef2ff; border-color: #c7d2fe; color: #4f46e5; box-shadow: none;" onclick="copyIp('${s.ip}', '${portVal}', this)" title="Copy IP"><i class="fa-regular fa-copy"></i></button>
                                         </div>
                                         <a href="${s.link}" target="_blank" class="btn btn-outline w-full">${btnIcon} ${btnText}</a>
                                     </div>
