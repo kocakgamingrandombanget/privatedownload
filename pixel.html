@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glyph Studio | Heraclaus Web Tools</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-base: #050505; 
+            --bg-surface: #0a0a0a; 
+            --bg-card: rgba(255, 255, 255, 0.03); 
+            --border-light: rgba(255, 255, 255, 0.08); 
+            --border-highlight: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff; 
+            --text-secondary: #a1a1aa; 
+            --text-muted: #71717a;
+            --accent-primary: #8b5cf6; 
+            --accent-secondary: #3b82f6; 
+            --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --gradient-hero: linear-gradient(135deg, #e879f9 0%, #8b5cf6 50%, #3b82f6 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 2rem 1.25rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Backgrounds from Heraclaus */
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; }
+        .blob-1 { top: -20%; left: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
+        .blob-2 { bottom: -20%; right: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
+
+        .font-outfit { font-family: 'Outfit', sans-serif; }
+        .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            width: 100%;
+            max-width: 850px;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+        }
+
+        .header-title {
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .header-title h2 {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0.5rem 0 0 0;
+        }
+
+        label { 
+            font-size: 0.85rem; 
+            font-weight: 600; 
+            margin-top: 1rem; 
+            display: block; 
+            color: var(--text-secondary); 
+            margin-bottom: 0.4rem;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--border-highlight);
+            color: white;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.2s;
+        }
+        input:focus, select:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+        }
+        input[disabled], select[disabled] { 
+            background: rgba(255,255,255,0.02); 
+            color: var(--text-muted); 
+            cursor: not-allowed; 
+            border-color: var(--border-light); 
+        }
+
+        input[type="color"] {
+            width: 100%;
+            height: 46px;
+            padding: 0;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--border-highlight);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 4px; }
+        input[type="color"]::-webkit-color-swatch { border-radius: 4px; border: none; }
+
+        .row { display: flex; gap: 1.5rem; align-items: flex-start; }
+        .row > div { flex: 1; }
+        
+        .canvas-container {
+            margin-top: 2rem;
+            width: 100%;
+            height: 280px; 
+            padding: 1rem;
+            box-sizing: border-box;
+            background: #ffffff; 
+            background-image: 
+                linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee),
+                linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; 
+            border: 1px solid var(--border-highlight);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        canvas {
+            image-rendering: pixelated; 
+            width: 100%;  
+            height: 100%; 
+            object-fit: contain; 
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));
+        }
+        
+        .btn-gradient { 
+            width: 100%;
+            padding: 1rem;
+            margin-top: 2rem;
+            background: var(--gradient-admin); 
+            color: #fff; 
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Outfit', sans-serif;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-gradient:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4); 
+            filter: brightness(1.1); 
+        }
+
+        .dynamic-bg-panel {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 0.8rem;
+            border: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 768px) {
+            .row { flex-direction: column; gap: 0; }
+            .container { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+
+<div class="container">
+    <div class="header-title">
+        <h2 class="font-outfit"><i class="fa-solid fa-layer-group text-gradient"></i> Glyph Studio</h2>
+        <p>Pixel-Perfect Generator Tool by Heraclaus</p>
+    </div>
+    
+    <label>Teks Karakter / Glyph</label>
+    <input type="text" id="textInput" value="PIXEL">
+
+    <div class="row">
+        <div>
+            <label>Resolusi Export (Tinggi Pixel Final)</label>
+            <select id="targetHeightSelect">
+                <option value="16">16px Height (Retro)</option>
+                <option value="32">32px Height (Standard)</option>
+                <option value="64" selected>64px Height (HD)</option>
+                <option value="custom">Custom Height...</option>
+            </select>
+        </div>
+        <div>
+            <label>Custom Resolusi (px)</label>
+            <input type="number" id="customHeight" value="12" disabled min="5">
+        </div>
+    </div>
+
+    <div class="row">
+        <div>
+            <label>Background Ekspor</label>
+            <select id="bgTemplate">
+                <optgroup label="Warna Dasar">
+                    <option value="transparent">Transparan (Bolong)</option>
+                    <option value="dark">Solid Hitam</option>
+                    <option value="light">Solid Putih</option>
+                    <option value="solid-custom">Solid Custom...</option>
+                    <option value="grid">Grid Editor (Garis)</option>
+                </optgroup>
+                <optgroup label="Preset Gradasi Premium">
+                    <option value="grad-admin">Heraclaus Admin (Blue to Purple)</option>
+                    <option value="grad-hero">Heraclaus Hero (Pink to Blue)</option>
+                    <option value="grad-sunset">Sunset (Orange to Pink)</option>
+                    <option value="grad-ocean">Ocean (Cyan to Blue)</option>
+                    <option value="grad-forest">Forest (Green to Dark)</option>
+                    <option value="grad-cyberpunk">Cyberpunk (Pink to Purple)</option>
+                    <option value="grad-gold">Luxury Gold (Light to Dark Gold)</option>
+                    <option value="grad-custom">Custom Gradasi...</option>
+                </optgroup>
+                <optgroup label="Pola Geometris">
+                    <option value="pattern-dots">Polka Dots (Titik)</option>
+                    <option value="pattern-checker">Checkerboard (Papan Catur)</option>
+                </optgroup>
+            </select>
+
+            <div id="solidCustomSettings" class="dynamic-bg-panel" style="display: none;">
+                <label style="margin-top: 0;">Pilih Warna Solid</label>
+                <input type="color" id="solidCustomColor" value="#0a0a0a">
+            </div>
+
+            <div id="gradCustomSettings" class="dynamic-bg-panel" style="display: none;">
+                <label style="margin-top: 0;">Jumlah Warna Gradasi</label>
+                <select id="gradColorCount">
+                    <option value="2" selected>2 Warna</option>
+                    <option value="3">3 Warna</option>
+                    <option value="4">4 Warna</option>
+                </select>
+                
+                <label>Atur Palet Warna</label>
+                <div id="gradColorPickers" style="display: flex; gap: 8px; margin-top: 5px;"></div>
+            </div>
+
+        </div>
+        <div>
+            <label>Warna Pixel (Teks)</label>
+            <input type="color" id="textColor" value="#ffffff">
+        </div>
+    </div>
+
+    <div class="row">
+        <div>
+            <label>Bingkai (Border)</label>
+            <select id="borderToggle">
+                <option value="none" selected>Tanpa Border</option>
+                <option value="solid">Gunakan Border (Auto Gap)</option>
+            </select>
+        </div>
+        <div>
+            <label>Warna Border</label>
+            <input type="color" id="borderColor" value="#8b5cf6" disabled>
+        </div>
+        <div>
+            <label>Tebal Border (px)</label>
+            <input type="number" id="borderThickness" value="1" min="1" disabled>
+        </div>
+    </div>
+
+    <div class="canvas-container">
+        <canvas id="previewCanvas"></canvas>
+    </div>
+
+    <button class="btn-gradient" onclick="downloadPNG()">
+        <i class="fa-solid fa-download"></i> Ekspor Pixel Art
+    </button>
+</div>
+
+<script>
+    // Kamus Font Murni 5x5
+    const fontDict = {
+        ' ': ['00', '00', '00', '00', '00'],
+        'A': ['0110', '1001', '1111', '1001', '1001'],
+        'B': ['1110', '1001', '1110', '1001', '1110'],
+        'C': ['111', '100', '100', '100', '111'],
+        'D': ['1110', '1001', '1001', '1001', '1110'],
+        'E': ['111', '100', '111', '100', '111'],
+        'F': ['111', '100', '111', '100', '100'],
+        'G': ['1111', '1000', '1011', '1001', '1111'],
+        'H': ['1001', '1001', '1111', '1001', '1001'],
+        'I': ['1', '1', '1', '1', '1'],
+        'J': ['001', '001', '001', '001', '111'],
+        'K': ['1001', '1010', '1100', '1010', '1001'],
+        'L': ['100', '100', '100', '100', '111'],
+        'M': ['10001', '11011', '10101', '10001', '10001'],
+        'N': ['1001', '1101', '1011', '1001', '1001'],
+        'O': ['1111', '1001', '1001', '1001', '1111'],
+        'P': ['111', '101', '111', '100', '100'],
+        'Q': ['1111', '1001', '1001', '1010', '1101'],
+        'R': ['1110', '1001', '1110', '1001', '1001'],
+        'S': ['111', '100', '111', '001', '111'],
+        'T': ['11111', '00100', '00100', '00100', '00100'],
+        'U': ['1001', '1001', '1001', '1001', '1111'],
+        'V': ['1001', '1001', '1001', '1001', '0110'],
+        'W': ['10001', '10001', '10101', '11011', '10001'],
+        'X': ['10001', '01010', '00100', '01010', '10001'],
+        'Y': ['101', '101', '111', '010', '010'],
+        'Z': ['1111', '0001', '0110', '1000', '1111'],
+        '?': ['0110', '1001', '0010', '0000', '0010'] 
+    };
+
+    const textInput = document.getElementById('textInput');
+    const targetHeightSelect = document.getElementById('targetHeightSelect');
+    const customHeight = document.getElementById('customHeight');
+    const bgTemplate = document.getElementById('bgTemplate');
+    const textColor = document.getElementById('textColor');
+    const canvas = document.getElementById('previewCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const solidCustomSettings = document.getElementById('solidCustomSettings');
+    const gradCustomSettings = document.getElementById('gradCustomSettings');
+    const solidCustomColor = document.getElementById('solidCustomColor');
+    const gradColorCount = document.getElementById('gradColorCount');
+    const gradColorPickers = document.getElementById('gradColorPickers');
+
+    const borderToggle = document.getElementById('borderToggle');
+    const borderColor = document.getElementById('borderColor');
+    const borderThickness = document.getElementById('borderThickness');
+
+    [textInput, targetHeightSelect, customHeight, bgTemplate, textColor, solidCustomColor, borderToggle, borderColor, borderThickness].forEach(el => {
+        el.addEventListener('input', () => {
+            if (targetHeightSelect.value === 'custom') {
+                customHeight.disabled = false;
+            } else {
+                customHeight.disabled = true;
+            }
+
+            if (borderToggle.value === 'none') {
+                borderColor.disabled = true;
+                borderThickness.disabled = true;
+            } else {
+                borderColor.disabled = false;
+                borderThickness.disabled = false;
+            }
+            
+            solidCustomSettings.style.display = (bgTemplate.value === 'solid-custom') ? 'block' : 'none';
+            gradCustomSettings.style.display = (bgTemplate.value === 'grad-custom') ? 'block' : 'none';
+            
+            renderCanvas();
+        });
+    });
+
+    function generateGradPickers() {
+        let currentColors = Array.from(gradColorPickers.querySelectorAll('input[type="color"]')).map(inp => inp.value);
+        let defaultColors = ['#8b5cf6', '#3b82f6', '#10b981', '#f43f5e'];
+        
+        gradColorPickers.innerHTML = ''; 
+        let count = parseInt(gradColorCount.value);
+        
+        for(let i = 0; i < count; i++) {
+            let inp = document.createElement('input');
+            inp.type = 'color';
+            inp.value = currentColors[i] || defaultColors[i]; 
+            inp.addEventListener('input', renderCanvas); 
+            gradColorPickers.appendChild(inp);
+        }
+    }
+
+    gradColorCount.addEventListener('input', () => {
+        generateGradPickers();
+        renderCanvas();
+    });
+
+    generateGradPickers();
+
+    function getTargetHeight() {
+        return targetHeightSelect.value === 'custom' ? Math.max(5, parseInt(customHeight.value) || 16) : parseInt(targetHeightSelect.value);
+    }
+
+    function renderCanvas() {
+        const text = textInput.value.toUpperCase();
+        const targetHeight = getTargetHeight();
+        const bg = bgTemplate.value;
+        const color = textColor.value;
+        const spacing = 1; 
+
+        let totalGridWidth = 0;
+        let glyphsToDraw = [];
+
+        for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+            const glyph = fontDict[char] || fontDict['?'];
+            glyphsToDraw.push(glyph);
+            totalGridWidth += glyph[0].length; 
+            if (i < text.length - 1) totalGridWidth += spacing;
+        }
+
+        if (text.length === 0) {
+            canvas.width = 10; canvas.height = 10;
+            ctx.clearRect(0, 0, 10, 10);
+            return;
+        }
+
+        const baseTextHeight = 5; 
+        const hasBorder = borderToggle.value === 'solid';
+        const borderThick = hasBorder ? (parseInt(borderThickness.value) || 1) : 0;
+        
+        // Logika Jarak (Gap) 1 kotak jika pakai border
+        const gapBase = hasBorder ? 1 : 0; 
+        const minGridNeeded = baseTextHeight + (gapBase * 2); 
+        
+        let pixelScale = Math.floor((targetHeight - (borderThick * 2)) / minGridNeeded);
+        if (pixelScale < 1) pixelScale = 1; 
+
+        const contentHeight = (baseTextHeight * pixelScale) + (gapBase * 2 * pixelScale) + (borderThick * 2);
+        
+        const remainingY = Math.max(0, targetHeight - contentHeight);
+        const pad = Math.floor(remainingY / 2);
+        const padOdd = remainingY % 2; 
+
+        const margin = borderThick + pad + (gapBase * pixelScale);
+        
+        canvas.width = (totalGridWidth * pixelScale) + (margin * 2) + padOdd;
+        canvas.height = targetHeight;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // --- GRADIENT & BACKGROUND HERACLAUS STYLE ---
+        if (bg === 'dark') {
+            ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        } else if (bg === 'light') {
+            ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        } else if (bg === 'solid-custom') {
+            ctx.fillStyle = solidCustomColor.value; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        } else if (bg === 'grid') {
+            ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#1e1e1e'; ctx.lineWidth = 1;
+            for(let y = 0; y <= canvas.height; y += pixelScale) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
+            for(let x = 0; x <= canvas.width; x += pixelScale) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+            }
+        } else if (bg.startsWith('grad-')) {
+            let grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            if (bg === 'grad-admin') {
+                grad.addColorStop(0, '#3b82f6'); grad.addColorStop(1, '#8b5cf6');
+            } else if (bg === 'grad-hero') {
+                grad.addColorStop(0, '#e879f9'); grad.addColorStop(0.5, '#8b5cf6'); grad.addColorStop(1, '#3b82f6');
+            } else if (bg === 'grad-sunset') {
+                grad.addColorStop(0, '#ff512f'); grad.addColorStop(1, '#dd2476');
+            } else if (bg === 'grad-ocean') {
+                grad.addColorStop(0, '#00c6ff'); grad.addColorStop(1, '#0072ff');
+            } else if (bg === 'grad-forest') {
+                grad.addColorStop(0, '#11998e'); grad.addColorStop(1, '#38ef7d');
+            } else if (bg === 'grad-cyberpunk') {
+                grad.addColorStop(0, '#ff00cc'); grad.addColorStop(1, '#333399');
+            } else if (bg === 'grad-gold') {
+                grad.addColorStop(0, '#BF953F'); grad.addColorStop(0.5, '#FCF6BA'); grad.addColorStop(1, '#B38728');
+            } else if (bg === 'grad-custom') {
+                let pickers = document.querySelectorAll('#gradColorPickers input[type="color"]');
+                let count = pickers.length;
+                pickers.forEach((picker, index) => {
+                    let stop = count > 1 ? index / (count - 1) : 0;
+                    grad.addColorStop(stop, picker.value);
+                });
+            }
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        } else if (bg === 'pattern-dots') {
+            ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#1e1e1e';
+            let dotSize = Math.max(1, pixelScale / 4);
+            for(let y = pixelScale/2; y < canvas.height; y += pixelScale) {
+                for(let x = pixelScale/2; x < canvas.width; x += pixelScale) {
+                    ctx.beginPath(); ctx.arc(x, y, dotSize, 0, Math.PI*2); ctx.fill();
+                }
+            }
+        } else if (bg === 'pattern-checker') {
+            for(let y = 0; y < canvas.height; y += pixelScale) {
+                for(let x = 0; x < canvas.width; x += pixelScale) {
+                    ctx.fillStyle = ((Math.floor(x/pixelScale) + Math.floor(y/pixelScale)) % 2 === 0) ? '#0a0a0a' : '#111111';
+                    ctx.fillRect(x, y, pixelScale, pixelScale);
+                }
+            }
+        }
+
+        // --- RENDER TEXT ---
+        ctx.fillStyle = color;
+        let currentX = margin; 
+        let currentY = margin; 
+
+        for (let i = 0; i < glyphsToDraw.length; i++) {
+            const glyph = glyphsToDraw[i];
+            for (let y = 0; y < glyph.length; y++) {
+                for (let x = 0; x < glyph[y].length; x++) {
+                    if (glyph[y][x] === '1') {
+                        ctx.fillRect(currentX + (x * pixelScale), currentY + (y * pixelScale), pixelScale, pixelScale);
+                    }
+                }
+            }
+            currentX += (glyph[0].length + spacing) * pixelScale;
+        }
+
+        // --- RENDER BORDER ---
+        if (hasBorder) {
+            ctx.fillStyle = borderColor.value;
+            ctx.fillRect(0, 0, canvas.width, borderThick); 
+            ctx.fillRect(0, canvas.height - borderThick, canvas.width, borderThick); 
+            ctx.fillRect(0, 0, borderThick, canvas.height); 
+            ctx.fillRect(canvas.width - borderThick, 0, borderThick, canvas.height); 
+        }
+    }
+
+    function downloadPNG() {
+        if (!textInput.value) return;
+        const link = document.createElement('a');
+        link.download = `heraclaus-glyph-${textInput.value}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+
+    renderCanvas();
+</script>
+
+</body>
+</html>
