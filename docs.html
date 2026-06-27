@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Documentation | Heraclaus Admin Suite</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-base: #050505; --bg-surface: #0a0a0a; --bg-card: rgba(255, 255, 255, 0.03); 
+            --border-light: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff; --text-secondary: #a1a1aa; --text-muted: #71717a;
+            --accent-primary: #8b5cf6; --gradient-hero: linear-gradient(135deg, #e879f9 0%, #8b5cf6 50%, #3b82f6 100%);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.6; }
+        
+        body.lang-en .lang-id { display: none !important; }
+        body.lang-id .lang-en { display: none !important; }
+
+        .navbar { position: fixed; top: 0; width: 100%; height: 4rem; z-index: 100; background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; }
+        .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Outfit'; font-weight: 800; font-size: 1.25rem; text-decoration: none;}
+        
+        .lang-toggle { background: rgba(255,255,255,0.05); color: var(--text-secondary); padding: 0.4rem 0.75rem; border-radius: 8px; border: 1px solid var(--border-light); cursor: pointer; transition: all 0.2s; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .lang-toggle:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); border-color: var(--border-highlight); }
+
+        .docs-container { display: flex; max-width: 90rem; margin: 4rem auto 0; min-height: calc(100vh - 4rem); }
+        
+        /* SIDEBAR KIRI */
+        .sidebar { width: 300px; flex-shrink: 0; border-right: 1px solid var(--border-light); height: calc(100vh - 4rem); position: sticky; top: 4rem; overflow-y: auto; padding: 2rem 1rem; }
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 10px; }
+        
+        .cat-title { font-family: 'Outfit'; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700; margin: 1.5rem 0 0.5rem 1rem; }
+        .sidebar-link { display: block; padding: 0.6rem 1rem; color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; border-radius: 6px; transition: all 0.2s; margin-bottom: 0.2rem; }
+        .sidebar-link:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+        .sidebar-link.active { color: #fff; background: rgba(139, 92, 246, 0.15); font-weight: 600; border-left: 3px solid var(--accent-primary); }
+
+        /* KONTEN UTAMA */
+        .main-content { flex-grow: 1; padding: 3rem 4rem; max-width: 800px; }
+        .main-content h1 { font-family: 'Outfit'; font-size: 2.5rem; margin-bottom: 1rem; letter-spacing: -0.02em; }
+        .main-content h2 { font-family: 'Outfit'; font-size: 1.5rem; margin: 2.5rem 0 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem; }
+        .main-content h3 { font-family: 'Outfit'; font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: #c4b5fd; }
+        .main-content p { color: var(--text-secondary); margin-bottom: 1.2rem; }
+        
+        .main-content ul, .main-content ol { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-secondary); }
+        .main-content li { margin-bottom: 0.5rem; }
+        .main-content li::marker { color: var(--accent-primary); font-weight: bold; }
+        
+        .main-content code { background: rgba(255,255,255,0.1); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; color: #e879f9; }
+        .main-content pre { background: var(--bg-surface); border: 1px solid var(--border-light); padding: 1.5rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1.5rem; }
+        .main-content pre code { background: transparent; padding: 0; color: var(--text-secondary); }
+        
+        .loading { display: flex; justify-content: center; align-items: center; height: 50vh; color: var(--text-muted); gap: 1rem; font-size: 1.2rem; }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 0 1.25rem; }
+            .docs-container { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border-light); padding: 1rem; }
+            .main-content { padding: 2rem 1.5rem; }
+            .main-content h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body class="lang-en">
+
+    <nav class="navbar">
+        <a href="index.html" class="text-gradient"><i class="fa-solid fa-book-open"></i> Heraclaus Docs</a>
+        <button onclick="toggleLang()" class="lang-toggle" title="Change Language">
+            <i class="fa-solid fa-globe"></i>
+            <span class="lang-en">ID</span>
+            <span class="lang-id">EN</span>
+        </button>
+    </nav>
+
+    <div class="docs-container">
+        <aside class="sidebar" id="sidebar">
+            <div style="text-align: center; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i></div>
+        </aside>
+
+        <main class="main-content" id="content-area">
+            <div class="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> <span class="lang-en">Loading Documentation...</span><span class="lang-id">Memuat Dokumentasi...</span></div>
+        </main>
+    </div>
+
+    <script>
+        // GANTI DENGAN URL WEB APP KAMU
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
+        let allDocs = [];
+
+        function toggleLang() {
+            const body = document.body;
+            if (body.classList.contains('lang-id')) {
+                body.classList.remove('lang-id');
+                body.classList.add('lang-en');
+                localStorage.setItem('heraclaus_lang', 'en');
+            } else {
+                body.classList.remove('lang-en');
+                body.classList.add('lang-id');
+                localStorage.setItem('heraclaus_lang', 'id');
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem('heraclaus_lang') || 'en';
+            document.body.className = `lang-${savedLang}`;
+            fetchDocs();
+        });
+
+        function fetchDocs() {
+            fetch(WEB_APP_URL, {
+                method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "get_docs" })
+            }).then(res => res.json()).then(data => {
+                if(data.status === "success") {
+                    allDocs = data.docs;
+                    renderSidebar();
+                    if(allDocs.length > 0) loadDoc(allDocs[0].id);
+                    else document.getElementById('content-area').innerHTML = "<div class='loading'>No documentation available.</div>";
+                }
+            }).catch(err => {
+                document.getElementById('content-area').innerHTML = `<p style='color:#f43f5e;'>Failed to load docs. Error: ${err.message}</p>`;
+            });
+        }
+
+        function renderSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.innerHTML = "";
+            
+            // Get unique pairs of categories
+            const cats = [];
+            allDocs.forEach(d => {
+                if (!cats.some(c => c.en === d.catEn && c.id === d.catId)) {
+                    cats.push({ en: d.catEn, id: d.catId });
+                }
+            });
+            
+            cats.forEach(cat => {
+                let catHtml = `<div class="cat-title"><span class="lang-en">${cat.en}</span><span class="lang-id">${cat.id}</span></div>`;
+                let docsInCat = allDocs.filter(d => d.catEn === cat.en && d.catId === cat.id);
+                
+                docsInCat.forEach(doc => {
+                    catHtml += `<a href="#${doc.id}" class="sidebar-link" id="link-${doc.id}" onclick="loadDoc('${doc.id}')">
+                        <span class="lang-en">${doc.titleEn}</span>
+                        <span class="lang-id">${doc.titleId}</span>
+                    </a>`;
+                });
+                sidebar.innerHTML += catHtml;
+            });
+        }
+
+        function loadDoc(docId) {
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+            const activeLink = document.getElementById(`link-${docId}`);
+            if(activeLink) activeLink.classList.add('active');
+
+            const doc = allDocs.find(d => d.id === docId);
+            const contentArea = document.getElementById('content-area');
+            
+            if(doc) {
+                contentArea.innerHTML = `
+                    <div style="color: var(--accent-primary); font-weight: 600; font-size: 0.9rem; margin-bottom: 1rem;">
+                        <span class="lang-en">${doc.catEn}</span><span class="lang-id">${doc.catId}</span>
+                    </div>
+                    <h1>
+                        <span class="lang-en">${doc.titleEn}</span><span class="lang-id">${doc.titleId}</span>
+                    </h1>
+                    <div class="doc-body lang-en">${doc.contentEn}</div>
+                    <div class="doc-body lang-id">${doc.contentId}</div>
+                `;
+                window.scrollTo(0,0);
+            }
+        }
+    </script>
+</body>
+</html>
