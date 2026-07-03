@@ -877,6 +877,10 @@
                                 <input type="text" id="announce-subject" required placeholder="Contoh: Info Penting Terkait Update Mendatang">
                             </div>
                             <div class="form-group">
+                                <label><span class="lang-en">Image URL (Optional)</span><span class="lang-id">Link URL Gambar (Opsional)</span></label>
+                                <input type="url" id="announce-image" placeholder="https://... (Direct image link / Opsional)">
+                            </div>
+                            <div class="form-group">
                                 <label><span class="lang-en">Message Body</span><span class="lang-id">Isi Pesan (Email Body)</span></label>
                                 <textarea id="announce-body" required placeholder="Tulis pengumuman di sini..." style="min-height: 150px;"></textarea>
                             </div>
@@ -1103,7 +1107,6 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'x')) e.preventDefault(); });
@@ -1378,9 +1381,11 @@
                 fetch(GOOGLE_SCRIPT_URL, { 
                     method: "POST", headers: {"Content-Type": "text/plain;charset=utf-8"}, redirect: "follow", 
                     body: JSON.stringify({ 
-                        action: "admin_send_announcement", adminPassword: session.adminPassword, 
+                        action: "admin_send_announcement", 
+                        adminPassword: session.adminPassword, 
                         subject: document.getElementById("announce-subject").value,
-                        body: document.getElementById("announce-body").value
+                        body: document.getElementById("announce-body").value,
+                        imageUrl: document.getElementById("announce-image").value.trim()
                     }) 
                 })
                 .then(res => res.json()).then(data => { 
