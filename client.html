@@ -1347,6 +1347,15 @@
                             <textarea id="e-removed-id" placeholder="Teks Indonesia..."></textarea>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label style="color: #a855f7;"><i class="fa-solid fa-person-digging" style="margin-right: 0.3rem;"></i> 
+                            <span class="lang-en">Maintenance / Beta</span><span class="lang-id">Pemeliharaan / Beta</span>
+                        </label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <textarea id="e-maintenance-en" placeholder="English text..."></textarea>
+                            <textarea id="e-maintenance-id" placeholder="Teks Indonesia..."></textarea>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-master w-full" id="btn-save-edit" style="margin-top: 0.5rem;">
                         <i class="fa-solid fa-floppy-disk"></i>
                         <span class="lang-en">Save Changes</span><span class="lang-id">Simpan Perubahan</span>
@@ -2073,6 +2082,15 @@
                                         placeholder="Teks Indonesia..."></textarea>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label style="color: #a855f7;"><i class="fa-solid fa-person-digging" style="margin-right: 0.3rem;"></i> 
+                                    <span class="lang-en">Maintenance / Beta</span><span class="lang-id">Pemeliharaan / Beta</span>
+                                </label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                    <textarea id="p-maintenance-en" placeholder="English text..."></textarea>
+                                    <textarea id="p-maintenance-id" placeholder="Teks Indonesia..."></textarea>
+                                </div>
+                            </div>
 
                             <div class="form-group"
                                 style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1.5rem; background: rgba(139, 92, 246, 0.1); padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.2);">
@@ -2688,6 +2706,7 @@
                 const packedAdded = document.getElementById("p-added-en").value.trim() + "|||" + document.getElementById("p-added-id").value.trim();
                 const packedFixed = document.getElementById("p-fixed-en").value.trim() + "|||" + document.getElementById("p-fixed-id").value.trim();
                 const packedRemoved = document.getElementById("p-removed-en").value.trim() + "|||" + document.getElementById("p-removed-id").value.trim();
+                const packedMaintenance = document.getElementById("p-maintenance-en").value.trim() + "|||" + document.getElementById("p-maintenance-id").value.trim();
 
                 fetch(GOOGLE_SCRIPT_URL, {
                     method: "POST",
@@ -2699,7 +2718,7 @@
                         date: document.getElementById("p-date").value, link: JSON.stringify(linkObj),
                         special: packedSpecial,
                         added: packedAdded, fixed: packedFixed,
-                        removed: packedRemoved, sendEmail: document.getElementById("p-send-email").checked
+                        removed: packedRemoved, maintenance: packedMaintenance, sendEmail: document.getElementById("p-send-email").checked
                     })
                 })
                     .then(res => res.json()).then(data => { if (data.status === "success") { document.getElementById("admin-publish-form").reset(); document.getElementById('p-date').valueAsDate = new Date(); session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast(t('Published to all users!', 'Pembaruan berhasil dikirim ke semua Klien!')); } else throw new Error(data.message); })
@@ -2828,6 +2847,7 @@
                 const packedAdded = document.getElementById("e-added-en").value.trim() + "|||" + document.getElementById("e-added-id").value.trim();
                 const packedFixed = document.getElementById("e-fixed-en").value.trim() + "|||" + document.getElementById("e-fixed-id").value.trim();
                 const packedRemoved = document.getElementById("e-removed-en").value.trim() + "|||" + document.getElementById("e-removed-id").value.trim();
+                const packedMaintenance = document.getElementById("e-maintenance-en").value.trim() + "|||" + document.getElementById("e-maintenance-id").value.trim();
 
                 fetch(GOOGLE_SCRIPT_URL, {
                     method: "POST",
@@ -2837,7 +2857,7 @@
                         action: "admin_edit_release", adminPassword: session.adminPassword, logId: document.getElementById("e-logid").value,
                         versionName: document.getElementById("e-version").value.trim(), mcVersion: document.getElementById("e-mcversion").value.trim(),
                         date: document.getElementById("e-date").value, link: JSON.stringify(linkObj),
-                        special: packedSpecial, added: packedAdded, fixed: packedFixed, removed: packedRemoved
+                        special: packedSpecial, added: packedAdded, fixed: packedFixed, removed: packedRemoved, maintenance: packedMaintenance
                     })
                 })
                     .then(res => res.json()).then(data => { if (data.status === "success") { session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); closeEditReleaseModal(); showToast(t('Release updated successfully!', 'Riwayat rilis berhasil diubah!')); } else throw new Error(data.message); })
@@ -2947,7 +2967,10 @@
                 const specialText = parseLangDB(h.special);
                 const specialBadge = specialText ? `<div style="color: #f59e0b; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.2rem;"><i class="fa-solid fa-star"></i> ${specialText}</div>` : '';
 
-                const addedText = parseLangDB(h.added) || parseLangDB(h.fixed) || parseLangDB(h.removed);
+                const maintText = parseLangDB(h.maintenance);
+                const maintBadge = maintText ? `<div style="color: #a855f7; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.2rem;"><i class="fa-solid fa-person-digging"></i> ${maintText}</div>` : '';
+
+                const addedText = parseLangDB(h.added) || parseLangDB(h.fixed) || parseLangDB(h.removed) || maintText;
                 const noteStr = addedText ? addedText.split('\n')[0].substring(0, 50) + "..." : t("System patch.", "Patch Sistem.");
                 const mcBadge = h.mcVersion ? `<span style="font-size: 0.6rem; color: var(--accent-secondary); background: rgba(59, 130, 246, 0.1); padding: 0.1rem 0.3rem; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.2); margin-left: 0.3rem;">MC ${h.mcVersion}</span>` : '';
                 let linkData = { realms: '#', bds: '#' }; try { linkData = JSON.parse(h.link); } catch (e) { linkData = { realms: h.link, bds: h.link }; }
@@ -2955,7 +2978,7 @@
                 tbody.innerHTML += `<tr>
                     <td><span class="version-badge">${h.versionName}</span> ${mcBadge} ${index === 0 ? `<span style="color:var(--accent-success); font-size:0.65rem; margin-left:0.3rem; font-weight:700;">${t('LATEST', 'TERBARU')}</span>` : ''}</td>
                     <td>${new Date(h.date).toLocaleDateString(t('en-US', 'id-ID'), { year: 'numeric', month: 'short', day: 'numeric' })}</td>
-                    <td style="font-size: 0.8rem;">${specialBadge}<span style="opacity:0.8">${noteStr}</span></td>
+                    <td style="font-size: 0.8rem;">${specialBadge}${maintBadge}<span style="opacity:0.8">${noteStr}</span></td>
                     <td style="text-align:right;">
                         <div style="display: flex; gap: 0.4rem; justify-content: flex-end; align-items: center; height: 100%;">
                             <button onclick="triggerDownload('${linkData.realms}', '${h.versionName}')" class="btn btn-sm btn-outline" title="${t('Download Realms', 'Unduh Realms')}" style="padding: 0 0.5rem;"><i class="fa-solid fa-cube"></i></button>
@@ -3182,6 +3205,10 @@
             const [rmEn, rmId] = splitText(release.removed);
             document.getElementById("e-removed-en").value = rmEn.trim();
             document.getElementById("e-removed-id").value = rmId.trim();
+
+            const [maintEn, maintId] = splitText(release.maintenance);
+            document.getElementById("e-maintenance-en").value = maintEn.trim();
+            document.getElementById("e-maintenance-id").value = maintId.trim();
 
             document.getElementById("edit-release-modal").classList.add("show");
         }
