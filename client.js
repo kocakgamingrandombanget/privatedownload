@@ -265,6 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> ' + t('Publish & Update All', 'Terbitkan & Perbarui Semua'); });
     });
 
+    // UPDATED: Fitur Admin Announcement dengan penangkapan checkbox sendEmail
     safelyAttachListener("admin-announcement-form", "submit", function (e) {
         e.preventDefault();
         const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
@@ -278,13 +279,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 adminPassword: session.adminPassword,
                 subject: document.getElementById("announce-subject").value,
                 body: document.getElementById("announce-body").value,
-                imageUrl: document.getElementById("announce-image").value.trim()
+                imageUrl: document.getElementById("announce-image").value.trim(),
+                sendEmail: document.getElementById("announce-send-email").checked // Menangkap nilai checkbox
             })
         })
             .then(res => res.json()).then(data => {
                 if (data.status === "success") {
                     document.getElementById("admin-announcement-form").reset();
-                    showToast(t("Announcement sent to all emails!", "Pengumuman berhasil dikirim ke semua email!"));
+                    showToast(t("Announcement sent successfully!", "Pengumuman berhasil dikirim!"));
                 } else throw new Error(data.message);
             })
             .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })

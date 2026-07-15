@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
+    <!-- Link to external CSS -->
     <link rel="stylesheet" href="client.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -919,6 +920,15 @@
                                 <textarea id="announce-body" required placeholder="Tulis pengumuman di sini..."
                                     style="min-height: 150px;"></textarea>
                             </div>
+                            
+                            <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1.5rem; background: rgba(139, 92, 246, 0.1); padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.2);">
+                                <input type="checkbox" id="announce-send-email" checked style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
+                                <label for="announce-send-email" style="margin: 0; text-transform: none; letter-spacing: normal; font-size: 0.85rem; color: #fff; cursor: pointer;">
+                                    <span class="lang-en">Send email notification to all members</span>
+                                    <span class="lang-id">Kirim notifikasi ke semua email klien</span>
+                                </label>
+                            </div>
+
                             <button type="submit" class="btn btn-master w-full" id="btn-send-announce">
                                 <i class="fa-solid fa-paper-plane"></i>
                                 <span class="lang-en">Send Announcement</span><span class="lang-id">Kirim
@@ -995,7 +1005,7 @@
                                                 class="lang-id">Versi</span></th>
                                         <th style="width: 20%;"><span class="lang-en">Date</span><span
                                                 class="lang-id">Tanggal</span></th>
-                                        <th><span class="lang-en">Link Data</span><span class="lang-id">Data Link</span>
+                                        <th><span class="langen">Link Data</span><span class="lang-id">Data Link</span>
                                         </th>
                                         <th style="text-align: center; width: 10%;"><span
                                                 class="lang-en">DLs</span><span class="lang-id">Unduhan</span></th>
@@ -1236,6 +1246,7 @@
         </div>
     </div>
     
+    <!-- Link to external JS -->
     <script src="client.js"></script>
 
 </body>
