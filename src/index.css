@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './client.css';
+
+/* Core App Behavior */
+* { -webkit-tap-highlight-color: transparent; }
+body { 
+    background-color: #F5F6F9; 
+    color: #1C1D22; 
+    -webkit-user-select: none; user-select: none;
+    overflow-x: hidden;
+    font-family: 'Inter', sans-serif;
+}
+input, textarea { -webkit-user-select: auto; user-select: auto; }
+html { scroll-behavior: smooth; }
+
+/* Hide scrollbar for clean app UI */
+::-webkit-scrollbar { width: 0px; height: 0px; display: none; }
+
+.pb-safe { padding-bottom: calc(env(safe-area-inset-bottom) + 6rem); }
+.pt-safe { padding-top: calc(env(safe-area-inset-top) + 1rem); }
+
+/* Animations */
+.animate-fade-up { opacity: 0; transform: translateY(15px); transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-fade-up.is-visible { opacity: 1; transform: translateY(0); }
+
+/* Glass Overlay for Folder Cards to mimic the reference image */
+.folder-glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 100%);
+    backdrop-filter: blur(4px);
+}
+
+/* Clean List Item Hover */
+.list-item-app { transition: transform 0.2s, background-color 0.2s; cursor: pointer; }
+.list-item-app:active { transform: scale(0.98); background-color: #F9FAFB; }
