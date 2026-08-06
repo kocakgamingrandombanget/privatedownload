@@ -184,31 +184,31 @@ function App() {
 
       <main className="pb-safe px-6 max-w-2xl mx-auto flex flex-col gap-6 mt-2">
         {/* Hero Section */}
-        <section className="animate-fade-up py-4 flex flex-col items-center text-center">
-          <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 mb-4 shadow-lg shadow-purple-200/50">
-            <i className="fa-solid fa-rocket text-2xl animate-bounce"></i>
+        <section className="animate-fade-up py-2 flex flex-col items-center text-center">
+          <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 mb-3 shadow-md shadow-purple-200/50">
+            <i className="fa-solid fa-rocket text-xl animate-bounce"></i>
           </div>
           
-          <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest border border-purple-200 flex items-center gap-1.5 shadow-sm mb-4">
+          <div className="bg-purple-100 text-purple-700 px-2.5 py-1 rounded-full text-[9px] font-bold tracking-widest border border-purple-200 flex items-center gap-1.5 shadow-sm mb-3">
             <i className="fa-solid fa-bolt text-yellow-500"></i>
             {lang === 'en' ? 'FLAGSHIP ADD-ON' : 'ADD-ON UNGGULAN'}
           </div>
           
-          <h2 className="font-outfit text-4xl sm:text-5xl font-extrabold text-app-textMain leading-tight tracking-tight mb-3">
+          <h2 className="font-outfit text-3xl sm:text-4xl font-extrabold text-app-textMain leading-tight tracking-tight mb-2">
             {lang === 'en' ? 'Boost Your Server' : 'Tingkatkan Server'}<br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 inline-block min-w-[200px] transition-opacity duration-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 inline-block transition-opacity duration-500">
               {lang === 'en' ? animatedWordsEn[animatedWordIndex] : animatedWordsId[animatedWordIndex]}
             </span>
           </h2>
           
-          <p className="text-app-textSub text-sm sm:text-base leading-relaxed mb-6 max-w-sm px-4">
+          <p className="text-app-textSub text-xs sm:text-sm leading-relaxed mb-5 max-w-[18rem] px-2">
             {lang === 'en'
               ? 'Admin Suite gives you native login, anti-cheat, and an all-in-one economy system to rule them all.'
               : 'Admin Suite hadir dengan sistem ekonomi canggih, fitur login native, dan anti-cheat tangguh untuk server Bedrock Anda.'}
           </p>
           
           <div className="flex gap-3">
-            <button onClick={() => setIsAdminModalOpen(true)} className="bg-purple-600 text-white font-bold px-6 py-3.5 rounded-full shadow-lg shadow-purple-600/30 hover:shadow-xl hover:-translate-y-1 transition-all active:translate-y-0 text-sm flex items-center gap-2">
+            <button onClick={() => setIsAdminModalOpen(true)} className="bg-purple-600 text-white font-bold px-5 py-3 rounded-full shadow-md shadow-purple-600/30 hover:shadow-lg hover:-translate-y-0.5 transition-all active:translate-y-0 text-[13px] flex items-center gap-2">
               <i className="fa-solid fa-bolt"></i>
               {lang === 'en' ? 'Explore Features' : 'Lihat Keunggulan'}
             </button>
