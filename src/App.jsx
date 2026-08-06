@@ -586,11 +586,26 @@ function App() {
               <p className="text-sm text-app-textSub mb-4">
                 {lang === 'en' ? 'Get the ultimate management tools for your Minecraft Bedrock server.' : 'Dapatkan alat manajemen terbaik untuk server Minecraft Bedrock Anda.'}
               </p>
-              <ul className="flex flex-col gap-3 text-sm text-app-textMain">
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Full Admin Suite Features' : 'Fitur Admin Suite Lengkap'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Native Login & X-Ray' : 'Fitur Login & X-Ray'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Homepage Server Promo' : 'Promo Server di Aplikasi'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Permanent Binding' : 'Akses Permanen Selamanya'}</li>
+              <ul className="flex flex-col gap-3 text-sm text-app-textMain max-h-[35vh] overflow-y-auto pr-2 show-scrollbar">
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Admin management with roles' : 'Manajemen Admin dengan Role'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Player management' : 'Manajemen Pemain'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'World management' : 'Manajemen Dunia/World'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Registration system' : 'Sistem Registrasi'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Repeated broadcast system' : 'Sistem Siaran Otomatis'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Set home' : 'Set Home'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Land claims' : 'Klaim Tanah'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Complex economic system' : 'Sistem Ekonomi Kompleks'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'NPC management system' : 'Sistem Manajemen NPC'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Teleport between players' : 'Teleportasi Antar Pemain'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Buying and selling system' : 'Sistem Jual Beli'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Several slash commands are available' : 'Beragam Slash Commands'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Skill and rank system' : 'Sistem Skill dan Rank'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Custom chat and custom nametag' : 'Chat dan Nametag Custom'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Sidebar' : 'Sidebar'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Hologram + Leaderboard' : 'Hologram + Leaderboard'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Clan system' : 'Sistem Klan'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Battle System' : 'Sistem Pertarungan'}</li>
+                <li className="flex items-start gap-3"><i className="fa-solid fa-circle-check text-green-500 mt-1"></i> {lang === 'en' ? 'Redeem, Daily Reward, Starterkit, Job, Quest, and many more.' : 'Redeem, Hadiah Harian, Starterkit, Pekerjaan, Quest, dan banyak lagi.'}</li>
               </ul>
             </div>
             
