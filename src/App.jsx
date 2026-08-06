@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ClientPortal from './ClientPortal';
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
 
@@ -182,6 +183,11 @@ function App() {
         </div>
       </header>
 
+      {activeNav === 'portal' ? (
+        <div className="mt-4">
+          <ClientPortal lang={lang} />
+        </div>
+      ) : (
       <main className="pb-safe px-6 max-w-2xl mx-auto flex flex-col gap-6 mt-2">
         {/* Hero Section */}
         <section className="animate-fade-up py-2 flex flex-col items-center text-center">
@@ -461,6 +467,7 @@ function App() {
         </section>
 
       </main>
+      )}
 
       {/* Bottom Nav */}
       <nav className="fixed bottom-0 w-full z-50 bg-white/90 backdrop-blur-md border-t border-app-border px-6 py-3 flex justify-around items-center pb-[max(env(safe-area-inset-bottom),0.75rem)] shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
@@ -476,10 +483,10 @@ function App() {
           <i className="fa-solid fa-laptop-code text-lg"></i>
           <span className="text-[10px] font-semibold">Tools</span>
         </a>
-        <a href="client.html" className="flex flex-col items-center gap-1 text-app-textSub hover:text-purple-600 transition-colors">
+        <button onClick={() => { setActiveNav('portal'); window.scrollTo(0,0); }} className={`flex flex-col items-center gap-1 transition-colors ${activeNav === 'portal' ? 'text-purple-600' : 'text-app-textSub hover:text-purple-600'}`}>
           <i className="fa-regular fa-user text-lg"></i>
           <span className="text-[10px] font-semibold">Portal</span>
-        </a>
+        </button>
       </nav>
 
       {/* Bottom Sheet Modal */}
