@@ -158,8 +158,8 @@ function App() {
         </div>
         
         <div className="flex items-center gap-3">
-          <button onClick={toggleLang} title={lang === 'en' ? 'Switch to Indonesian' : 'Ubah ke Bahasa Inggris'} className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm border border-app-border hover:bg-gray-50 transition-colors">
-            <img src={lang === 'en' ? 'https://flagcdn.com/w20/id.png' : 'https://flagcdn.com/w20/us.png'} alt={lang === 'en' ? 'ID' : 'EN'} className="w-5 h-auto rounded-sm" />
+          <button onClick={toggleLang} title={lang === 'en' ? 'Switch to Indonesian' : 'Ubah ke Bahasa Inggris'} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shadow-sm border border-black/5 hover:opacity-80 transition-all overflow-hidden shrink-0">
+            <img src={lang === 'en' ? 'https://flagcdn.com/w40/id.png' : 'https://flagcdn.com/w40/gb.png'} alt={lang === 'en' ? 'ID' : 'EN'} className="w-full h-full object-cover scale-110" />
           </button>
           
           <button onClick={() => setIsModalOpen(true)} className="relative w-10 h-10 rounded-full bg-white flex items-center justify-center text-app-textMain shadow-sm border border-app-border hover:bg-gray-50 transition-colors">
