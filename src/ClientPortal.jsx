@@ -13,7 +13,8 @@ export default function ClientPortal({ lang }) {
     }
   });
   
-  const [pin, setPin] = useState('');
+  const [email, setEmail] = useState('');
+  const [licenseKey, setLicenseKey] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -50,7 +51,7 @@ export default function ClientPortal({ lang }) {
 
     try {
       const payload = authMode === 'user' 
-        ? { action: 'user_login', pin: pin.trim() }
+        ? { action: 'login', email: email.trim(), licenseKey: licenseKey.trim() }
         : { action: 'admin_login', adminPassword: adminPassword.trim() };
 
       const res = await fetch(GOOGLE_SCRIPT_URL, {
@@ -165,17 +166,34 @@ export default function ClientPortal({ lang }) {
   if (!session) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
-        <div className="bg-white p-8 rounded-3xl shadow-xl shadow-purple-900/5 border border-purple-100 w-full max-w-sm flex flex-col items-center">
+        <div className="bg-white p-8 rounded-3xl shadow-xl shadow-purple-900/5 border border-purple-100 w-full max-w-sm flex flex-col items-center relative overflow-hidden">
+          
+          <div className="w-full flex bg-gray-100 rounded-xl p-1 mb-8">
+            <button 
+              onClick={() => { setAuthMode('user'); setErrorMsg(''); }}
+              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${authMode === 'user' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              User Login
+            </button>
+            <button 
+              onClick={() => { setAuthMode('admin'); setErrorMsg(''); }}
+              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${authMode === 'admin' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              Admin Gateway
+            </button>
+          </div>
+
           <div className="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-3xl mb-4">
             <i className={`fa-solid ${authMode === 'user' ? 'fa-user-lock' : 'fa-shield-halved'}`}></i>
           </div>
+          
           <h2 className="text-2xl font-outfit font-extrabold text-app-textMain mb-1">
-            {authMode === 'user' ? (lang === 'en' ? 'Client Portal' : 'Portal Klien') : (lang === 'en' ? 'Admin Gateway' : 'Gerbang Admin')}
+            {authMode === 'user' ? (lang === 'en' ? 'Client Portal' : 'Portal Klien') : (lang === 'en' ? 'Admin Access' : 'Akses Admin')}
           </h2>
           <p className="text-app-textSub text-sm text-center mb-6">
             {authMode === 'user' 
-              ? (lang === 'en' ? 'Enter your 6-digit PIN to access your add-ons.' : 'Masukkan PIN 6 digit Anda untuk masuk.')
-              : (lang === 'en' ? 'Master password required for admin access.' : 'Kata sandi master diperlukan untuk akses admin.')}
+              ? (lang === 'en' ? 'Enter your credentials to access add-ons.' : 'Masukkan kredensial Anda untuk masuk.')
+              : (lang === 'en' ? 'Master password required for admin access.' : 'Kata sandi master diperlukan untuk akses.')}
           </p>
 
           {errorMsg && (
@@ -186,15 +204,24 @@ export default function ClientPortal({ lang }) {
 
           <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
             {authMode === 'user' ? (
-              <input 
-                type="password" 
-                maxLength="6" 
-                placeholder="PIN" 
-                value={pin}
-                onChange={e => setPin(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-200 text-center text-2xl tracking-[0.5em] font-bold py-3 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all"
-                required 
-              />
+              <>
+                <input 
+                  type="email" 
+                  placeholder={lang === 'en' ? "Email Address" : "Alamat Email"} 
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all font-medium"
+                  required 
+                />
+                <input 
+                  type="password" 
+                  placeholder={lang === 'en' ? "License Key / Password" : "Kunci Lisensi / Sandi"} 
+                  value={licenseKey}
+                  onChange={e => setLicenseKey(e.target.value)}
+                  className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all font-medium"
+                  required 
+                />
+              </>
             ) : (
               <input 
                 type="password" 
@@ -208,19 +235,12 @@ export default function ClientPortal({ lang }) {
             <button 
               type="submit" 
               disabled={isLoading}
-              className="w-full bg-purple-600 text-white font-bold py-3.5 rounded-xl shadow-md hover:bg-purple-700 active:scale-95 transition-all disabled:opacity-70 flex justify-center items-center gap-2"
+              className="w-full bg-purple-600 text-white font-bold py-3.5 rounded-xl shadow-md hover:bg-purple-700 active:scale-95 transition-all disabled:opacity-70 flex justify-center items-center gap-2 mt-2"
             >
               {isLoading ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-right-to-bracket"></i>}
-              {lang === 'en' ? 'Authenticate' : 'Masuk Sistem'}
+              {lang === 'en' ? 'Login' : 'Masuk Sistem'}
             </button>
           </form>
-
-          <button 
-            onClick={() => { setAuthMode(prev => prev === 'user' ? 'admin' : 'user'); setErrorMsg(''); }}
-            className="mt-6 text-xs text-app-textSub hover:text-purple-600 font-semibold underline underline-offset-2 transition-colors"
-          >
-            {authMode === 'user' ? 'Switch to Admin Login' : 'Back to Client Login'}
-          </button>
         </div>
       </div>
     );
