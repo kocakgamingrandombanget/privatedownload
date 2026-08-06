@@ -1,0 +1,899 @@
+var FOLDER_ID = "1yEr98icLlws0DTGVDyYeiVC3zFTXM0dM"; 
+var SHEET_ID = "1Cux3cG_Yz_e_kviwGGVjT-JR8qIwxKW64MVmuZqgAM8"; 
+
+var DISCORD_WEBHOOK = "https://discordapp.com/api/webhooks/1479800742440337520/WUrERscz0-lKw0SobN02SKv0ymdSZqR68BxPIhDEojyKJK-g3IPH1Q3_hxR26yiR31JB";
+var DISCORD_WEBHOOK_UPDATE = "https://discordapp.com/api/webhooks/1481759988258181172/a_fj1a7tH5KBxG31XgorWksWqkBuW9Dv_DXTV9mQlDQsR7_YGl45sK3einQXIJiPGVKQ";
+var DISCORD_WEBHOOK_CHAT = "https://discordapp.com/api/webhooks/1482104219422167100/pR96sSkDsyANZXHA2qx5Ya58I_McNTzJRk0Of1Mt4qloDxi2RupiGAD5qDPIKl79F7Op";
+var URL_CLIENT_PORTAL = "https://heradigital.my.id/client.html";
+var ADMIN_PASSWORD = "janganmalas"; 
+var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
+
+function getSubscribers() {
+    var str = PropertiesService.getScriptProperties().getProperty("SUBSCRIBERS");
+    return str ? JSON.parse(str) : [];
+}
+
+function saveSubscribers(arr) {
+    PropertiesService.getScriptProperties().setProperty("SUBSCRIBERS", JSON.stringify(arr));
+}
+
+function getFreeVersion() {
+    var str = PropertiesService.getScriptProperties().getProperty("FREE_VERSION");
+    return str ? JSON.parse(str) : { version: "v1.0.0", link: "https://www.curseforge.com/" };
+}
+
+function getSecretSalt() {
+    var salt = PropertiesService.getScriptProperties().getProperty("SECRET_SALT");
+    return salt ? salt : "HERA_ADDON_SECURE_V4_2026";
+}
+
+function sendEmailToAll(subject, plainBody, htmlBody) {
+    var sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+    var dataRange = sheet.getDataRange().getValues();
+    var emails = {};
+    for (var i = 1; i < dataRange.length; i++) {
+        if (dataRange[i][4] === "APPROVED" && dataRange[i][2]) {
+            emails[dataRange[i][2]] = true;
+        }
+    }
+    
+    var subs = getSubscribers();
+    for (var j = 0; j < subs.length; j++) {
+        emails[subs[j]] = true;
+    }
+    
+    var uniqueEmails = Object.keys(emails);
+    for (var k = 0; k < uniqueEmails.length; k++) {
+        try { 
+            var options = {};
+            if (htmlBody) options.htmlBody = htmlBody;
+            MailApp.sendEmail(uniqueEmails[k], subject, plainBody, options); 
+        } catch(e) {}
+    }
+}
+
+function generateAddonLicense(gamertag) {
+    if (!gamertag) gamertag = "UNKNOWN";
+    var salt = getSecretSalt(); 
+    var str = String(gamertag).toLowerCase().trim() + salt;
+    var hash1 = 5381; var hash2 = 52711;
+    for (var i = 0; i < str.length; i++) { 
+        hash1 = ((hash1 << 5) + hash1) + str.charCodeAt(i);
+        hash2 = ((hash2 << 5) + hash2) ^ str.charCodeAt(i); 
+    }
+    hash1 = (hash1 >>> 0);
+    hash2 = (hash2 >>> 0);
+    var mix = ("00000000" + hash1.toString(16)).slice(-8) + ("00000000" + hash2.toString(16)).slice(-8);
+    mix = mix.toUpperCase();
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; var result = "";
+    for (var j = 0; j < 16; j++) { 
+        result += chars.charAt((parseInt(mix.charAt(j), 16) + (j * 3) + str.length) % chars.length);
+    }
+    return result.substring(0,4) + "-" + result.substring(4,8) + "-" + result.substring(8,12) + "-" + result.substring(12,16);
+}
+
+function createHtmlResponse(title, message, isError) {
+    var color = isError ? "#f43f5e" : "#10b981", icon = isError ? "❌" : "✅";
+    return HtmlService.createHtmlOutput("<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width, initial-scale=1.0'><style>body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; } .card { background: white; padding: 40px 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; text-align: center; border-top: 6px solid " + color + "; } h2 { color: #18181b; margin-top: 0; font-size: 24px; } p { color: #52525b; line-height: 1.6; font-size: 15px; margin-bottom: 0; } .icon { font-size: 48px; margin-bottom: 15px; display: block; }</style></head><body><div class='card'><span class='icon'>" + icon + "</span><h2>" + title + "</h2><p>" + message + "</p></div></body></html>");
+}
+
+function getAddonHistory() {
+    var str = PropertiesService.getScriptProperties().getProperty("ADDON_RELEASES");
+    return str ? JSON.parse(str) : [];
+}
+
+function getGlobalChat() {
+    var str = PropertiesService.getScriptProperties().getProperty("GLOBAL_CHAT");
+    return str ? JSON.parse(str) : [];
+}
+
+function saveGlobalChat(chatArray) {
+    if (chatArray.length > 100) chatArray = chatArray.slice(-100);
+    PropertiesService.getScriptProperties().setProperty("GLOBAL_CHAT", JSON.stringify(chatArray));
+}
+
+function getMemberServers() {
+    var str = PropertiesService.getScriptProperties().getProperty("MEMBER_SERVERS");
+    return str ? JSON.parse(str) : [];
+}
+
+function saveMemberServers(serversArray) {
+    PropertiesService.getScriptProperties().setProperty("MEMBER_SERVERS", JSON.stringify(serversArray));
+}
+
+function getPortfolio() {
+    var str = PropertiesService.getScriptProperties().getProperty("PORTFOLIO_DATA");
+    return str ? JSON.parse(str) : [];
+}
+
+function savePortfolio(portfolioArray) {
+    PropertiesService.getScriptProperties().setProperty("PORTFOLIO_DATA", JSON.stringify(portfolioArray));
+}
+
+function getDocs() {
+    var str = PropertiesService.getScriptProperties().getProperty("DOCS_DATA");
+    return str ? JSON.parse(str) : [];
+}
+
+function saveDocs(docsArray) {
+    PropertiesService.getScriptProperties().setProperty("DOCS_DATA", JSON.stringify(docsArray));
+}
+
+function sendDiscordUpdateNotification(versionName, mcVersion, specialNotes, addedNotes, fixedNotes, removedNotes, maintenanceNotes) {
+    if (!DISCORD_WEBHOOK_UPDATE || DISCORD_WEBHOOK_UPDATE === "") return;
+    var contentMsg = "📢 @everyone **A new update has been released!**";
+    var desc = "**You can now download the latest version from the Client Portal!**\n[🔗 Login to Client Portal](" + URL_CLIENT_PORTAL + ")";
+    if (mcVersion) desc += "\n\n🎮 **Supported Minecraft:** `" + mcVersion + "`\n━━━━━━━━━━━━━━━━━━━━━━";
+    function formatNotes(rawNotes) {
+        if (!rawNotes || rawNotes.trim() === "") return null;
+        var parts = rawNotes.split("|||");
+        
+        var enNotes = parts[0] ? parts[0].trim().split("\n").filter(function(e) { return e.trim() !== ""; }).map(function(item) { return "> " + item.trim(); }).join("\n") : "";
+        var idNotes = parts[1] ? parts[1].trim().split("\n").filter(function(e) { return e.trim() !== ""; }).map(function(item) { return "> " + item.trim(); }).join("\n") : "";
+        var result = "";
+        if (enNotes) result += "🇬🇧 **English**\n" + enNotes;
+        if (idNotes) result += (enNotes ? "\n\n" : "") + "🇮🇩 **Indonesia**\n" + idNotes;
+        
+        return result.trim() ? result.substring(0, 1024) : null;
+    }
+
+    var formattedSpecial = formatNotes(specialNotes);
+    var formattedAdded = formatNotes(addedNotes);
+    var formattedFixed = formatNotes(fixedNotes);
+    var formattedRemoved = formatNotes(removedNotes);
+    var formattedMaintenance = formatNotes(maintenanceNotes);
+    
+    var payload = { 
+        "content": contentMsg, 
+        "embeds": [{ 
+            "title": "🚀 Admin Suite Pro " + versionName, 
+            "description": desc, 
+            "color": 9133311, 
+            "fields": [],
+            "timestamp": new Date().toISOString() 
+        }] 
+    };
+    
+    if (formattedSpecial) {
+        payload.embeds[0].fields.push({ "name": "⭐ Special Note", "value": formattedSpecial + "\n\u200B", "inline": false });
+    }
+    
+    if (formattedAdded) {
+        payload.embeds[0].fields.push({ "name": "✨ New Features", "value": formattedAdded + "\n\u200B", "inline": false });
+    } else {
+        payload.embeds[0].fields.push({ "name": "✨ New Features", "value": "> *No new features.*\n\u200B", "inline": false });
+    }
+
+    if (formattedFixed) {
+        payload.embeds[0].fields.push({ "name": "🐛 Bug Fixes", "value": formattedFixed + "\n\u200B", "inline": false });
+    } else {
+        payload.embeds[0].fields.push({ "name": "🐛 Bug Fixes", "value": "> *No bug fixes.*\n\u200B", "inline": false });
+    }
+
+    if (formattedRemoved) {
+        payload.embeds[0].fields.push({ "name": "🗑️ Removed", "value": formattedRemoved + "\n\u200B", "inline": false });
+    }
+
+    if (formattedMaintenance) {
+        payload.embeds[0].fields.push({ "name": "🚧 Under Maintenance / Beta", "value": formattedMaintenance + "\n\u200B", "inline": false });
+    }
+
+    try { 
+        UrlFetchApp.fetch(DISCORD_WEBHOOK_UPDATE, { 
+            "method": "post", 
+            "contentType": "application/json", 
+            "payload": JSON.stringify(payload) 
+        });
+    } catch(e) {}
+}
+
+function sendDiscordGlobalChatWebhook(gamertag, role, msg) {
+    if (!DISCORD_WEBHOOK_CHAT || DISCORD_WEBHOOK_CHAT === "") return;
+    var roleBadge = role === "admin" ? "🛡️ Admin" : "👤 User";
+    var embedColor = role === "admin" ? 15105570 : 3447003; 
+    try {
+        UrlFetchApp.fetch(DISCORD_WEBHOOK_CHAT, {
+            "method": "post", "contentType": "application/json",
+            "payload": JSON.stringify({ 
+                "content": "💬 **New Message in Global Chat**", 
+                "embeds": [{ 
+                    "color": embedColor, 
+                    "fields": [
+                        { "name": "Sender", "value": "`"+gamertag+"` ("+roleBadge+")", "inline": true }, 
+                        { "name": "Message", "value": msg, "inline": false }
+                    ], 
+                    "timestamp": new Date().toISOString() 
+                }] 
+            })
+        });
+    } catch(e) {}
+}
+
+function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    if (data.action === "get_docs") {
+        return ContentService.createTextOutput(JSON.stringify({ "status": "success", "docs": getDocs() })).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    if (data.action === "admin_add_doc") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var docs = getDocs();
+            docs.push({
+                id: Date.now().toString(),
+                catEn: data.catEn,
+                catId: data.catId,
+                catOrder: data.catOrder || 1,
+                titleEn: data.titleEn,
+                titleId: data.titleId,
+                contentEn: data.contentEn,
+                contentId: data.contentId,
+                order: data.order || docs.length + 1
+            });
+            docs.sort(function(a, b) { 
+                if (a.catOrder !== b.catOrder) return a.catOrder - b.catOrder;
+                return a.order - b.order; 
+            });
+            saveDocs(docs);
+            
+            return ContentService.createTextOutput(JSON.stringify({ "status": "success", "docs": docs })).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    if (data.action === "admin_edit_doc") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var docs = getDocs();
+            for (var p = 0; p < docs.length; p++) {
+                if (docs[p].id === data.docId) {
+                    docs[p].catEn = data.catEn;
+                    docs[p].catId = data.catId;
+                    docs[p].catOrder = data.catOrder || 1;
+                    docs[p].titleEn = data.titleEn;
+                    docs[p].titleId = data.titleId;
+                    docs[p].contentEn = data.contentEn;
+                    docs[p].contentId = data.contentId;
+                    docs[p].order = data.order;
+                    break;
+                }
+            }
+            
+            docs.sort(function(a, b) { 
+                if (a.catOrder !== b.catOrder) return a.catOrder - b.catOrder;
+                return a.order - b.order; 
+            });
+            saveDocs(docs);
+            
+            return ContentService.createTextOutput(JSON.stringify({ "status": "success", "docs": docs })).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    if (data.action === "admin_delete_doc") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var docs = getDocs();
+            docs = docs.filter(function(d) { return d.id !== data.docId; });
+            saveDocs(docs);
+            return ContentService.createTextOutput(JSON.stringify({ "status": "success", "docs": docs })).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    if (data.action === "admin_update_orders") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var docs = getDocs();
+            var updates = data.updates; 
+            
+            for (var i = 0; i < docs.length; i++) {
+                for (var j = 0; j < updates.length; j++) {
+                    if (docs[i].id === updates[j].id) {
+                        docs[i].catOrder = updates[j].catOrder;
+                        docs[i].order = updates[j].order;
+                        break;
+                    }
+                }
+            }
+            
+            docs.sort(function(a, b) { 
+                if (a.catOrder !== b.catOrder) return a.catOrder - b.catOrder;
+                return a.order - b.order; 
+            });
+            saveDocs(docs);
+            return ContentService.createTextOutput(JSON.stringify({ "status": "success", "docs": docs })).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "subscribe") {
+        var subs = getSubscribers();
+        if (subs.indexOf(data.email) === -1) {
+            subs.push(data.email);
+            saveSubscribers(subs);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "success"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "admin_update_free_version") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var freeData = { version: data.version, link: data.link, special: data.special };
+            PropertiesService.getScriptProperties().setProperty("FREE_VERSION", JSON.stringify(freeData));
+            
+            if (DISCORD_WEBHOOK_UPDATE && DISCORD_WEBHOOK_UPDATE !== "") {
+                var discordPayload = { 
+                    "content": "📢 @everyone **A new FREE update is available!**", 
+                    "embeds": [{ 
+                        "title": "🎉 Admin Suite " + data.version, 
+                        "description": "You can download the new free version securely from the link below:\n\n[📥 Download Here](" + data.link + ")\n\n*Want all premium features?* [Upgrade to Pro License](https://heradigital.my.id/)", 
+                        "color": 3447003, 
+                        "timestamp": new Date().toISOString() 
+                    }] 
+                };
+                try { 
+                    UrlFetchApp.fetch(DISCORD_WEBHOOK_UPDATE, { 
+                        "method": "post", 
+                        "contentType": "application/json", 
+                        "payload": JSON.stringify(discordPayload) 
+                    });
+                } catch(err) {}
+            }
+
+            if (data.sendEmail) {
+                var subject = "🎉 New Free Release: Admin Suite " + data.version;
+                var body = "Hello!\n\nA new FREE version of Admin Suite (" + data.version + ") is now available!\n\n" +
+                           "You can download it securely here:\n" + data.link + "\n\n" +
+                           "Want more features? Upgrade to the Pro License to unlock all premium tools:\nhttps://heradigital.my.id/\n\n" +
+                           "Thank you,\nHeraclaus Team";
+                sendEmailToAll(subject, body, null);
+            }
+            return ContentService.createTextOutput(JSON.stringify({"status": "success", "freeVersion": freeData})).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "admin_send_announcement") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var htmlContent = "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e4e4e7; border-radius: 12px; background-color: #ffffff;'>";
+            htmlContent += "<h2 style='color: #8b5cf6; text-align: center; font-size: 22px; margin-bottom: 10px;'>" + data.subject + "</h2>";
+            htmlContent += "<hr style='border: none; border-top: 2px dashed #f4f4f5; margin: 20px 0;'>";
+            htmlContent += "<p style='color: #3f3f46; line-height: 1.6; font-size: 15px; white-space: pre-wrap;'>" + data.body + "</p>";
+            if (data.imageUrl && data.imageUrl !== "") {
+                htmlContent += "<div style='text-align: center; margin-top: 25px;'><img src='" + data.imageUrl + "' style='max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);' alt='Announcement Image'></div>";
+            }
+            
+            htmlContent += "<hr style='border: none; border-top: 1px solid #e4e4e7; margin: 25px 0 15px 0;'>";
+            htmlContent += "<p style='color: #a1a1aa; font-size: 12px; text-align: center; margin: 0;'><b>Heraclaus Admin Suite</b><br>Pesan ini dikirim secara otomatis ke seluruh klien dan pelanggan. Harap tidak membalas email ini.</p>";
+            htmlContent += "</div>";
+
+            // Kondisi untuk mengirim Email berdasarkan checkbox (sendEmail)
+            if (data.sendEmail) {
+                sendEmailToAll(data.subject, data.body, htmlContent);
+            }
+
+            if (DISCORD_WEBHOOK_UPDATE && DISCORD_WEBHOOK_UPDATE !== "") {
+                var discordPayload = { 
+                    "content": "📢 @everyone **Global Announcement / Pengumuman**", 
+                    "embeds": [{ 
+                        "title": "📣 " + data.subject, 
+                        "description": data.body, 
+                        "color": 15105570, 
+                        "timestamp": new Date().toISOString() 
+                    }] 
+                };
+                if (data.imageUrl && data.imageUrl !== "") {
+                    discordPayload.embeds[0].image = { "url": data.imageUrl };
+                }
+
+                try { 
+                    UrlFetchApp.fetch(DISCORD_WEBHOOK_UPDATE, { 
+                        "method": "post", 
+                        "contentType": "application/json", 
+                        "payload": JSON.stringify(discordPayload) 
+                    });
+                } catch(err) {}
+            }
+
+            // Pesan respon menyesuaikan apakah email juga dikirim atau tidak
+            var successMsg = data.sendEmail ? "Announcement sent successfully to Email & Discord!" : "Announcement sent successfully to Discord only!";
+            return ContentService.createTextOutput(JSON.stringify({"status": "success", "message": successMsg})).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "get_portfolio") {
+        return ContentService.createTextOutput(JSON.stringify({ "status": "success", "portfolio": getPortfolio() })).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    if (data.action === "admin_add_portfolio") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var portfolio = getPortfolio();
+            var newProject = data.project;
+            newProject.id = Date.now().toString(); 
+            portfolio.unshift(newProject); 
+            savePortfolio(portfolio);
+            return ContentService.createTextOutput(JSON.stringify({ "status": "success", "portfolio": portfolio })).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "admin_edit_portfolio") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var portfolio = getPortfolio();
+            for (var p = 0; p < portfolio.length; p++) {
+                if (portfolio[p].id === data.projectId) {
+                    portfolio[p].category = data.project.category;
+                    portfolio[p].image = data.project.image;
+                    portfolio[p].link = data.project.link;
+                    portfolio[p].titleEn = data.project.titleEn;
+                    portfolio[p].titleId = data.project.titleId;
+                    portfolio[p].descEn = data.project.descEn;
+                    portfolio[p].descId = data.project.descId;
+                    portfolio[p].tags = data.project.tags;
+                    break;
+                }
+            }
+            savePortfolio(portfolio);
+            return ContentService.createTextOutput(JSON.stringify({ "status": "success", "portfolio": portfolio })).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    if (data.action === "admin_delete_portfolio") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var portfolio = getPortfolio();
+            portfolio = portfolio.filter(function(p) { return p.id !== data.projectId; });
+            savePortfolio(portfolio);
+            return ContentService.createTextOutput(JSON.stringify({ "status": "success", "portfolio": portfolio })).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "admin_login") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            return ContentService.createTextOutput(JSON.stringify({"status": "success", "history": getAddonHistory()})).setMimeType(ContentService.MimeType.JSON);
+        } else return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Invalid Admin Password!"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "admin_generate_license") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var generatedKey = generateAddonLicense(data.gamertag);
+            return ContentService.createTextOutput(JSON.stringify({
+                "status": "success", 
+                "license": generatedKey
+            })).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    if (data.action === "admin_regenerate_global_keys") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var newSalt = "HERA_" + Math.random().toString(36).substring(2, 10).toUpperCase() + "_" + Date.now();
+            PropertiesService.getScriptProperties().setProperty("SECRET_SALT", newSalt);
+            
+            var sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+            var dataRange = sheet.getDataRange().getValues();
+            for (var r = 1; r < dataRange.length; r++) {
+                var currentStatus = dataRange[r][4];
+                if (currentStatus === "APPROVED" || currentStatus === "PENDING" || currentStatus === "SUSPENDED") {
+                    var gTag = dataRange[r][1];
+                    var newLicense = generateAddonLicense(gTag);
+                    sheet.getRange(r + 1, 8).setValue(newLicense);
+                }
+            }
+            
+            return ContentService.createTextOutput(JSON.stringify({
+                "status": "success", 
+                "newSalt": newSalt
+            })).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "admin_publish_release") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var history = getAddonHistory();
+            // Data Maintenance Disimpan
+            history.unshift({ id: Date.now(), versionName: data.versionName, mcVersion: data.mcVersion, date: data.date, link: data.link, special: data.special, added: data.added, fixed: data.fixed, removed: data.removed, maintenance: data.maintenance, downloads: 0 });
+            PropertiesService.getScriptProperties().setProperty("ADDON_RELEASES", JSON.stringify(history));
+            
+            sendDiscordUpdateNotification(data.versionName, data.mcVersion, data.special, data.added, data.fixed, data.removed, data.maintenance);
+            
+            if (data.sendEmail) {
+                function formatEmailNotes(rawNotes, title, icon, color) {
+                    if (!rawNotes || rawNotes.trim() === "") return "";
+                    var parts = rawNotes.split("|||");
+                    var enNotes = parts[0] ? parts[0].trim().replace(/\n/g, "<br>") : "";
+                    var idNotes = parts[1] ? parts[1].trim().replace(/\n/g, "<br>") : "";
+                    
+                    if (!enNotes && !idNotes) return "";
+                    var html = "<h3 style='color: #3f3f46; border-bottom: 2px solid #f4f4f5; padding-bottom: 5px; margin-top: 25px; font-size: 16px; margin-bottom: 12px;'>" + icon + " " + title + "</h3>";
+                    if (enNotes) {
+                        html += "<div style='margin-bottom: 12px;'><strong style='color: #18181b; font-size: 14px;'>🇬🇧 English</strong>";
+                        html += "<div style='margin-top: 6px; padding: 10px 14px; background-color: #f4f4f5; border-left: 4px solid " + color + "; color: #52525b; font-size: 14px; border-radius: 0 6px 6px 0;'>" + enNotes + "</div></div>";
+                    }
+                    if (idNotes) {
+                        html += "<div style='margin-bottom: 12px;'><strong style='color: #18181b; font-size: 14px;'>🇮🇩 Indonesia</strong>";
+                        html += "<div style='margin-top: 6px; padding: 10px 14px; background-color: #f4f4f5; border-left: 4px solid " + color + "; color: #52525b; font-size: 14px; border-radius: 0 6px 6px 0;'>" + idNotes + "</div></div>";
+                    }
+                    return html;
+                }
+
+                var emailSubject = "🚀 Update Available: Admin Suite Pro " + data.versionName;
+                var emailBody = "Hello!\n\nA new update for Admin Suite Pro (" + data.versionName + ") has been officially released.\n\n" +
+                                "Please log in to your Client Portal to read the full patch notes and download the latest version:\n" + URL_CLIENT_PORTAL + "\n\n" +
+                                "Thank you for your support,\nHeraclaus Team";
+                var htmlContent = "<div style='font-family: \"Segoe UI\", Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 25px; border: 1px solid #e4e4e7; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.05);'>";
+                htmlContent += "<div style='text-align: center; margin-bottom: 25px;'>";
+                htmlContent += "<h2 style='color: #8b5cf6; font-size: 26px; margin: 0; letter-spacing: -0.5px;'>🚀 Update Released!</h2>";
+                htmlContent += "<p style='color: #71717a; margin-top: 5px; font-weight: bold; font-size: 15px;'>Admin Suite Pro <span style='background: #8b5cf6; color: white; padding: 2px 6px; border-radius: 4px; font-size: 13px;'>" + data.versionName + "</span></p>";
+                htmlContent += "</div>";
+                
+                htmlContent += "<p style='color: #3f3f46; line-height: 1.6; font-size: 15px;'>Hello,</p>";
+                htmlContent += "<p style='color: #3f3f46; line-height: 1.6; font-size: 15px;'>A new update for Admin Suite Pro has been officially released and is ready to download.</p>";
+                if (data.mcVersion) {
+                    htmlContent += "<div style='background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 15px; border-radius: 8px; margin-bottom: 20px; display: inline-block;'>";
+                    htmlContent += "<strong style='color: #334155; font-size: 14px;'>🎮 Supported Minecraft:</strong> <span style='color: #475569; font-size: 14px; font-family: monospace;'>" + data.mcVersion + "</span>";
+                    htmlContent += "</div>";
+                }
+                
+                htmlContent += formatEmailNotes(data.special, "Special Note", "⭐", "#f59e0b");
+                htmlContent += formatEmailNotes(data.added, "New Features", "✨", "#10b981");
+                htmlContent += formatEmailNotes(data.fixed, "Bug Fixes", "🐛", "#3b82f6");
+                htmlContent += formatEmailNotes(data.removed, "Removed", "🗑️", "#f43f5e");
+                htmlContent += formatEmailNotes(data.maintenance, "Maintenance / Beta", "🚧", "#a855f7"); // TAMBAHAN FIELD
+                htmlContent += "<div style='text-align: center; margin-top: 35px; margin-bottom: 15px;'>";
+                htmlContent += "<a href='" + URL_CLIENT_PORTAL + "' style='display: inline-block; background-color: #8b5cf6; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; letter-spacing: 0.5px;'>Login to Client Portal</a>";
+                htmlContent += "</div>";
+                
+                htmlContent += "<hr style='border: none; border-top: 1px solid #e4e4e7; margin: 30px 0 20px 0;'>";
+                htmlContent += "<p style='color: #a1a1aa; font-size: 12px; text-align: center; margin: 0; line-height: 1.5;'><b>Heraclaus Admin Suite</b><br>Pesan ini dikirim secara otomatis oleh sistem kepada semua klien. Harap tidak membalas pesan ini.</p>";
+                htmlContent += "</div>";
+
+                sendEmailToAll(emailSubject, emailBody, htmlContent);
+            }
+            
+            return ContentService.createTextOutput(JSON.stringify({"status": "success", "message": "Release published successfully!", "history": history})).setMimeType(ContentService.MimeType.JSON);
+        }
+    }
+
+    if (data.action === "admin_delete_release") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var history = getAddonHistory().filter(function(h) { return h.id !== data.logId; });
+            PropertiesService.getScriptProperties().setProperty("ADDON_RELEASES", JSON.stringify(history));
+            return ContentService.createTextOutput(JSON.stringify({"status": "success", "history": history})).setMimeType(ContentService.MimeType.JSON);
+        }
+    }
+    
+    if (data.action === "admin_edit_release") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var history = getAddonHistory();
+            for (var k = 0; k < history.length; k++) {
+                if (history[k].id == data.logId) {
+                    history[k].versionName = data.versionName;
+                    history[k].mcVersion = data.mcVersion;
+                    history[k].date = data.date;
+                    history[k].link = data.link;
+                    history[k].special = data.special;
+                    history[k].added = data.added;
+                    history[k].fixed = data.fixed;
+                    history[k].removed = data.removed;
+                    history[k].maintenance = data.maintenance; // SIMPAN FIELD MAINTENANCE SAAT EDIT
+                    break;
+                }
+            }
+            PropertiesService.getScriptProperties().setProperty("ADDON_RELEASES", JSON.stringify(history));
+            return ContentService.createTextOutput(JSON.stringify({"status": "success", "message": "Release updated successfully!", "history": history})).setMimeType(ContentService.MimeType.JSON);
+        }
+    }
+
+    if (data.action === "login") {
+      var loginEmail = data.email, loginKey = data.licenseKey;
+      var sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+      var dataRange = sheet.getDataRange().getValues();
+      for (var i = dataRange.length - 1; i >= 1; i--) {
+        if (dataRange[i][2] === loginEmail && dataRange[i][5] === loginKey) {
+          if (dataRange[i][4] === "APPROVED") {
+            var gTag = dataRange[i][1], addonKey16 = dataRange[i][7];
+            if (!addonKey16) addonKey16 = generateAddonLicense(gTag);
+            sheet.getRange(i + 1, 10).setValue(new Date().toISOString());
+            var history = getAddonHistory();
+            return ContentService.createTextOutput(JSON.stringify({ "status": "success", "gamertag": gTag, "email": loginEmail, "downloadLink": history.length > 0 ? history[0].link : "#", "addonLicense": addonKey16, "addonHistory": history })).setMimeType(ContentService.MimeType.JSON);
+          } else if (dataRange[i][4] === "PENDING") { 
+              return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Account under verification."})).setMimeType(ContentService.MimeType.JSON);
+          } else { 
+              return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Payment rejected."})).setMimeType(ContentService.MimeType.JSON);
+          }
+        }
+      }
+      return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Invalid Email or Portal Key!"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "change_password") {
+        var email = data.email, oldKey = data.oldKey, newKey = data.newKey, sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet(), dataRange = sheet.getDataRange().getValues();
+        for (var i = dataRange.length - 1; i >= 1; i--) {
+            if (dataRange[i][2] === email && dataRange[i][5] === oldKey) {
+                var lastChange = dataRange[i][8], now = new Date();
+                if (lastChange) {
+                    var diffDays = Math.floor(Math.abs(now - new Date(lastChange)) / (1000 * 60 * 60 * 24));
+                    if (diffDays < 30) return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Only 1 password change allowed every 30 days. Try again in " + (30 - diffDays) + " days."})).setMimeType(ContentService.MimeType.JSON);
+                }
+                sheet.getRange(i + 1, 6).setValue(newKey);
+                sheet.getRange(i + 1, 9).setValue(now.toISOString());
+                return ContentService.createTextOutput(JSON.stringify({"status": "success", "message": "Password updated successfully!"})).setMimeType(ContentService.MimeType.JSON);
+            }
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Incorrect current password."})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "get_global_chat") {
+        return ContentService.createTextOutput(JSON.stringify({"status": "success", "chat": getGlobalChat()})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "send_global_chat") {
+        var chat = getGlobalChat();
+        var isAuthorized = false; var senderName = "Unknown";
+        if (data.role === "admin" && data.adminPassword === ADMIN_PASSWORD) {
+            isAuthorized = true;
+            senderName = "Heraclaus Admin";
+        } else if (data.role === "user" && data.email && data.gamertag) {
+            isAuthorized = true;
+            senderName = data.gamertag;
+        }
+
+        if (isAuthorized) {
+            chat.push({ id: Date.now().toString() + Math.floor(Math.random()*1000), senderEmail: data.email || "admin", senderGamertag: senderName, role: data.role, text: data.msg, time: new Date().toISOString() });
+            saveGlobalChat(chat);
+            sendDiscordGlobalChatWebhook(senderName, data.role, data.msg);
+            return ContentService.createTextOutput(JSON.stringify({"status": "success", "chat": chat})).setMimeType(ContentService.MimeType.JSON);
+        } else { 
+            return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+        }
+    }
+
+    if (data.action === "delete_global_chat") {
+        var chat = getGlobalChat();
+        var index = -1;
+        for (var i = 0; i < chat.length; i++) { 
+            if (chat[i].id === data.messageId) { 
+                index = i;
+                break; 
+            } 
+        }
+        if (index !== -1) {
+            var msg = chat[index];
+            var isAuthorized = false;
+            if (data.role === 'admin' && data.adminPassword === ADMIN_PASSWORD) isAuthorized = true;
+            else if (data.role === 'user' && msg.senderEmail === data.email) isAuthorized = true;
+            if (isAuthorized) {
+                chat.splice(index, 1);
+                saveGlobalChat(chat);
+                return ContentService.createTextOutput(JSON.stringify({"status": "success", "chat": chat})).setMimeType(ContentService.MimeType.JSON);
+            } else { 
+                return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+            }
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Message not found"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "get_servers") {
+        return ContentService.createTextOutput(JSON.stringify({"status": "success", "servers": getMemberServers()})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "add_server") {
+        if (data.role === "user" && data.email && data.gamertag) {
+            var servers = getMemberServers();
+            servers.push({
+                id: Date.now().toString(),
+                ownerEmail: data.email,
+                ownerGamertag: data.gamertag,
+                name: data.name,
+                desc: data.desc,
+                ip: data.ip,
+                port: data.port,
+                isPortPublic: data.isPortPublic,
+                linkType: data.linkType,
+                link: data.link,
+                date: new Date().toISOString()
+            });
+            saveMemberServers(servers);
+            return ContentService.createTextOutput(JSON.stringify({"status": "success", "servers": servers})).setMimeType(ContentService.MimeType.JSON);
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "delete_server") {
+        var servers = getMemberServers();
+        var sIndex = -1;
+        for (var si = 0; si < servers.length; si++) { 
+            if (servers[si].id === data.serverId) { 
+                sIndex = si;
+                break; 
+            } 
+        }
+        if (sIndex !== -1) {
+            var sIsAuthorized = false;
+            if (data.role === "admin" && data.adminPassword === ADMIN_PASSWORD) sIsAuthorized = true;
+            else if (data.role === "user" && servers[sIndex].ownerEmail === data.email) sIsAuthorized = true;
+            if (sIsAuthorized) {
+                servers.splice(sIndex, 1);
+                saveMemberServers(servers);
+                return ContentService.createTextOutput(JSON.stringify({"status": "success", "servers": servers})).setMimeType(ContentService.MimeType.JSON);
+            }
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Unauthorized or not found"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "admin_get_members") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+            var dataRange = sheet.getDataRange().getValues();
+            var members = [];
+            for (var i = 1; i < dataRange.length; i++) {
+                members.push({
+                    row: i + 1, date: dataRange[i][0], gamertag: dataRange[i][1], email: dataRange[i][2],
+                    receipt: dataRange[i][3], status: dataRange[i][4], license: dataRange[i][7],
+                    lastActive: dataRange[i][9] || "Never", downloadHistory: dataRange[i][10] || "{}" 
+                });
+            }
+            members.reverse();
+            return ContentService.createTextOutput(JSON.stringify({"status": "success", "members": members})).setMimeType(ContentService.MimeType.JSON);
+        }
+    }
+
+    if (data.action === "admin_toggle_member") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+            sheet.getRange(parseInt(data.targetRow), 5).setValue(data.newStatus);
+            return ContentService.createTextOutput(JSON.stringify({"status": "success"})).setMimeType(ContentService.MimeType.JSON);
+        }
+    }
+
+    if (data.action === "admin_delete_member") {
+        if (data.adminPassword === ADMIN_PASSWORD) {
+            var sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+            sheet.deleteRow(parseInt(data.targetRow));
+            return ContentService.createTextOutput(JSON.stringify({"status": "success"})).setMimeType(ContentService.MimeType.JSON);
+        }
+    }
+
+    if (data.action === "record_download") {
+        var lock = LockService.getScriptLock();
+        try {
+            lock.waitLock(5000); 
+            
+            var history = getAddonHistory();
+            for (var j = 0; j < history.length; j++) {
+                if (history[j].versionName === data.versionName) { 
+                    history[j].downloads = (history[j].downloads || 0) + 1;
+                    break; 
+                }
+            }
+            PropertiesService.getScriptProperties().setProperty("ADDON_RELEASES", JSON.stringify(history));
+            var sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+            var dataRange = sheet.getDataRange().getValues();
+            for (var i = 1; i < dataRange.length; i++) {
+                if (dataRange[i][2] === data.email) {
+                    var userDownloads = {};
+                    try { if(dataRange[i][10]) userDownloads = JSON.parse(dataRange[i][10]); } catch(e) {}
+                    userDownloads[data.versionName] = (userDownloads[data.versionName] || 0) + 1;
+                    sheet.getRange(i + 1, 11).setValue(JSON.stringify(userDownloads));
+                    break;
+                }
+            }
+        } catch (e) {
+        } finally {
+            lock.releaseLock();
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "success"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.action === "checkout") {
+        var gamertag = data.gamertag || "Unknown", discord = data.discord || "-", email = data.email;
+        var fileData = data.fileBase64.split(',')[1], mimeType = data.fileBase64.split(';')[0].split(':')[1], fileName = "Bukti_Pro_" + gamertag;
+        var loginPassword = "HRC-" + Math.random().toString(36).substr(2, 5).toUpperCase();
+
+        var folder = DriveApp.getFolderById(FOLDER_ID);
+        var blob = Utilities.newBlob(Utilities.base64Decode(fileData), mimeType, fileName);
+        var file = folder.createFile(blob); 
+        file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+        var sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+        sheet.appendRow([new Date(), gamertag, email, file.getUrl(), "PENDING", loginPassword, discord, "", ""]);
+        var lastRow = sheet.getLastRow();
+        
+        if (DISCORD_WEBHOOK !== "") {
+          UrlFetchApp.fetch(DISCORD_WEBHOOK, { "method": "post", "contentType": "application/json", "payload": JSON.stringify({
+            "content": "🔔 **New Payment Received!**",
+            "embeds": [{
+                "title": "Admin Suite Pro - Checkout", "color": 9133311,
+                "fields": [ 
+                    { "name": "Gamertag", "value": "`" + gamertag + "`", "inline": true }, 
+                    { "name": "Discord", "value": "`" + discord + "`", "inline": true }, 
+                    { "name": "Payment Receipt", "value": "[🔍 View Image](" + file.getUrl() + ")", "inline": false }, 
+                    { "name": "⚡ ACTIONS", "value": "✅ **[CLICK TO APPROVE](" + WEB_APP_URL + "?action=approve&row=" + lastRow + ")**\n❌ **[CLICK TO REJECT](" + WEB_APP_URL + "?action=reject&row=" + lastRow + ")**", "inline": false } 
+                ],
+                "timestamp": new Date().toISOString()
+            }]
+          })});
+        }
+        return ContentService.createTextOutput(JSON.stringify({"status": "success", "message": "Success!"})).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Action not recognized!"})).setMimeType(ContentService.MimeType.JSON);
+  } catch(error) { 
+      return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": error.toString()})).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  try {
+    var action = e.parameter.action;
+    if (action === "get_free_version") {
+        return ContentService.createTextOutput(JSON.stringify({ "status": "success", "data": getFreeVersion() })).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    if (action === "get_portfolio") {
+        return ContentService.createTextOutput(JSON.stringify({ "status": "success", "portfolio": getPortfolio() })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (action === "get_servers") {
+        return ContentService.createTextOutput(JSON.stringify({ "status": "success", "servers": getMemberServers() })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (action === "get_stats") {
+        var sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+        var dataRange = sheet.getDataRange().getValues();
+        var activeCount = 0;
+        var membersList = [];
+        for (var i = 1; i < dataRange.length; i++) { 
+            if (dataRange[i][4] === "APPROVED") {
+                activeCount++;
+                var rawEmail = dataRange[i][2] ? String(dataRange[i][2]) : "";
+                var maskedEmail = "-";
+                if (rawEmail.indexOf("@") > -1) {
+                    var parts = rawEmail.split("@");
+                    maskedEmail = parts[0].substring(0, 3) + "***@" + parts[1];
+                }
+                
+                membersList.push({
+                    gamertag: dataRange[i][1],
+                    email: maskedEmail
+                });
+            } 
+        }
+        membersList.reverse();
+        return ContentService.createTextOutput(JSON.stringify({ 
+            "status": "success", 
+            "activeUsers": activeCount,
+            "members": membersList
+        })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (action === "get_changelog") return ContentService.createTextOutput(JSON.stringify({ "status": "success", "changelogs": getAddonHistory() })).setMimeType(ContentService.MimeType.JSON);
+    
+    var row = parseInt(e.parameter.row);
+    if (action && row) {
+      var sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+      var gamertag = sheet.getRange(row, 2).getValue();
+      var emailTarget = sheet.getRange(row, 3).getValue();
+      var statusSaatIni = sheet.getRange(row, 5).getValue();
+      var loginPassword = sheet.getRange(row, 6).getValue();
+      if (statusSaatIni === "APPROVED" || statusSaatIni === "REJECTED") return createHtmlResponse("Cancelled", "Order has already been processed (" + statusSaatIni + ").", true);
+      if (action === "approve") {
+        sheet.getRange(row, 5).setValue("APPROVED");
+        var addonLicenseCode = sheet.getRange(row, 8).getValue();
+        if (!addonLicenseCode || addonLicenseCode === "") { 
+            addonLicenseCode = generateAddonLicense(gamertag);
+            sheet.getRange(row, 8).setValue(addonLicenseCode);
+        }
+        MailApp.sendEmail(emailTarget, "Heraclaus License Active!", "Hello " + gamertag + ",\n\nThank you for your purchase! Payment verified.\n\n--- LOGIN DETAILS ---\n🔗 Login: " + URL_CLIENT_PORTAL + "\n📧 Email: " + emailTarget + "\n🔑 Password: " + loginPassword + "\n\n--- IN-GAME LICENSE ---\n📜 Key: " + addonLicenseCode);
+        return createHtmlResponse("Approved!", "Account activated and email sent.", false);
+      } else if (action === "reject") {
+        sheet.getRange(row, 5).setValue("REJECTED");
+        return createHtmlResponse("Rejected", "Order rejected.", true);
+      }
+    }
+    return createHtmlResponse("Error", "Invalid link.", true);
+  } catch(error) { 
+      return createHtmlResponse("Error", error.toString(), true); 
+  }
+}

@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glyph Studio | Heraclaus</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-base: #050505; --bg-surface: #0a0a0a; --bg-card: rgba(255, 255, 255, 0.03); 
+            --border-light: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff; --text-secondary: #a1a1aa; --text-muted: #71717a;
+            --accent-primary: #8b5cf6; --accent-secondary: #3b82f6; --accent-success: #10b981; --accent-danger: #f43f5e;
+            --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-base); 
+            color: var(--text-primary); 
+            line-height: 1.5; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Language System */
+        body.lang-en .lang-id { display: none !important; }
+        body.lang-id .lang-en { display: none !important; }
+
+        .lang-toggle {
+            background: rgba(255,255,255,0.04); color: var(--text-secondary);
+            padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-light);
+            cursor: pointer; transition: all 0.2s; font-size: 0.8rem; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 0.4rem;
+        }
+        .lang-toggle:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); border-color: var(--border-highlight); }
+
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; }
+        .blob-1 { top: -20%; left: -10%; width: 50vw; height: 50vw; background: rgba(59, 130, 246, 0.15); }
+        .blob-2 { bottom: -20%; right: -10%; width: 40vw; height: 40vw; background: rgba(139, 92, 246, 0.15); }
+
+        .navbar { position: fixed; top: 0; width: 100%; height: 4rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; }
+        .nav-container { max-width: 64rem; margin: 0 auto; padding: 0 1.25rem; width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        
+        h1, h2, h3, .font-outfit { font-family: 'Outfit', sans-serif; }
+        .text-gradient { background: var(--gradient-admin); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .container { max-width: 54rem; margin: 6rem auto 3rem auto; padding: 0 1.25rem; width: 100%; flex-grow: 1; }
+        
+        .studio-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 1.5rem; backdrop-filter: blur(10px); box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        @media (min-width: 768px) { .studio-card { padding: 2.5rem; } }
+
+        .studio-header { text-align: center; margin-bottom: 2rem; }
+        .studio-header h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+        .studio-header p { color: var(--text-secondary); font-size: 0.9rem; }
+
+        /* Tabs Mobile Fix */
+        .tabs { 
+            display: flex; border-bottom: 1px solid var(--border-light); margin-bottom: 2rem; 
+            flex-wrap: wrap; /* Memastikan jika layar kecil otomatis turun ke bawah */
+        }
+        .tab-button {
+            padding: 0.85rem 1rem; cursor: pointer; border: none; background: transparent; color: var(--text-secondary);
+            font-family: 'Outfit'; font-size: 0.95rem; font-weight: 600; transition: all 0.2s;
+            border-bottom: 2px solid transparent; margin-bottom: -1px;
+            flex: 1 1 auto; text-align: center; /* Membuat tombol mengisi ruang yang ada */
+        }
+        @media (min-width: 640px) { .tab-button { font-size: 1rem; padding: 1rem 1.5rem; } }
+        .tab-button:hover { color: var(--text-primary); }
+        .tab-button.active { color: var(--accent-secondary); border-bottom-color: var(--accent-secondary); }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { font-size: 1.25rem; margin-bottom: 1.5rem; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+        h3 { font-size: 0.95rem; color: var(--text-primary); margin: 1.5rem 0 0.75rem 0; }
+        
+        .control-group { margin-bottom: 1.25rem; }
+        .grid-controls { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 640px) { .grid-controls { grid-template-columns: 1fr 1fr; } }
+
+        label { font-weight: 500; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); display: block; }
+
+        input[type="file"], input[type="number"], input[type="text"] {
+            width: 100%; box-sizing: border-box; padding: 0.85rem 1rem; border: 1px solid var(--border-light);
+            background-color: rgba(0,0,0,0.3); color: var(--text-primary); border-radius: 8px; font-family: 'Inter'; font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+        input:focus { outline: none; border-color: var(--accent-secondary); }
+        
+        input[type="file"]::file-selector-button { 
+            background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-highlight);
+            padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; margin-right: 1rem; font-weight: 500; font-family: 'Inter'; transition: all 0.2s;
+        }
+        input[type="file"]::file-selector-button:hover { background: rgba(255,255,255,0.1); }
+
+        .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        @media (min-width: 640px) { .radio-group, .checkbox-group { flex-direction: row; flex-wrap: wrap; } }
+        
+        .radio-group div, .checkbox-group {
+            display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; background-color: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-light); border-radius: 8px; cursor: pointer; transition: all 0.2s;
+        }
+        .radio-group div:hover, .checkbox-group:hover { background-color: rgba(255,255,255,0.05); border-color: var(--border-highlight); }
+        .radio-group label, .checkbox-group label { margin-bottom: 0; cursor: pointer; color: var(--text-primary); font-size: 0.85rem; }
+        input[type="radio"], input[type="checkbox"] { accent-color: var(--accent-secondary); cursor: pointer; width: 1.1rem; height: 1.1rem; }
+
+        #manual-size-inputs { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-light); }
+
+        .action-button {
+            width: 100%; padding: 1rem; font-family: 'Outfit'; font-size: 1rem; font-weight: 600; color: white;
+            background: var(--gradient-admin); border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s; margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2); display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none;
+        }
+        .action-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4); filter: brightness(1.1); }
+        .action-button:disabled { background: #333; box-shadow: none; cursor: not-allowed; transform: none; color: #888; }
+        .btn-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); }
+        .btn-success:hover { box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
+
+        .output-area { margin-top: 2rem; }
+        
+        canvas.pixelated {
+            max-width: 100%; height: auto; border: 1px solid var(--border-highlight); border-radius: 8px; margin-bottom: 1rem;
+            image-rendering: pixelated; 
+            background: repeating-conic-gradient(rgba(255,255,255,0.05) 0% 25%, transparent 0% 50%) 50% / 20px 20px;
+            background-color: #111;
+        }
+        
+        .icon-entry { display: flex; align-items: center; padding: 1rem; border: 1px solid var(--border-light); border-radius: 8px; margin-bottom: 0.5rem; gap: 1rem; background: rgba(255,255,255,0.01); }
+        canvas.preview-canvas { border: 1px dashed var(--border-highlight); flex-shrink: 0; image-rendering: pixelated; background-color: rgba(0,0,0,0.5); border-radius: 4px; }
+        .char-info { font-size: 1.5rem; font-weight: 700; color: #fff; }
+        .code-info { font-family: monospace; background-color: rgba(255,255,255,0.05); color: var(--text-secondary); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+        .copy-btn { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-light); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; margin-left: auto; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-success); color: var(--accent-success); }
+        
+        #json-result-container { margin-top: 1.5rem; background-color: rgba(0,0,0,0.5); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light); position: relative; }
+        #json-result-container h3 { margin-top: 0; }
+        #json-result { white-space: pre-wrap; word-break: break-all; font-family: monospace; color: var(--accent-secondary); font-size: 0.9rem; }
+        #copy-all-btn { position: absolute; top: 1.25rem; right: 1.25rem; }
+        
+        #splitter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+        .split-image-container { display: flex; flex-direction: column; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); padding: 1rem; border-radius: 8px; }
+        .split-image-container a { font-size: 0.8rem; margin-top: 0.75rem; color: var(--accent-secondary); text-decoration: none; font-weight: 500; }
+        .split-image-container a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body class="lang-en">
+
+    <div class="ambient-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="font-outfit" style="font-size: 1.15rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em;">
+                <i class="fa-solid fa-code text-gradient" style="margin-right: 0.5rem;"></i> Heraclaus
+            </a>
+            
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button onclick="toggleLang()" class="lang-toggle" title="Change Language">
+                    <i class="fa-solid fa-globe"></i>
+                    <span class="lang-en">ID</span>
+                    <span class="lang-id">EN</span>
+                </button>
+                <a href="index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500;">
+                    <i class="fa-solid fa-arrow-left"></i> 
+                    <span class="lang-en">Back</span>
+                    <span class="lang-id">Kembali</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="studio-card">
+            <div class="studio-header">
+                <h1><i class="fa-solid fa-layer-group text-gradient"></i> Glyph Studio</h1>
+                <p>
+                    <span class="lang-en">Pixel-perfect manipulation tool for spritesheets, textures, and UI.</span>
+                    <span class="lang-id">Alat manipulasi pixel-perfect untuk spritesheet, tekstur, dan antarmuka (UI).</span>
+                </p>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab-button active" onclick="openTab(event, 'Merger')">
+                    <i class="fa-solid fa-object-group"></i> 
+                    <span class="lang-en">Merger</span><span class="lang-id">Penggabung</span>
+                </button>
+                <button class="tab-button" onclick="openTab(event, 'Splitter')">
+                    <i class="fa-solid fa-scissors"></i> 
+                    <span class="lang-en">Splitter</span><span class="lang-id">Pemotong</span>
+                </button>
+                <button class="tab-button" onclick="openTab(event, 'Extractor')">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> 
+                    <span class="lang-en">Extractor</span><span class="lang-id">Ekstraktor JSON</span>
+                </button>
+            </div>
+
+            <div id="Merger" class="tab-content active">
+                <h2><i class="fa-solid fa-object-group" style="color: var(--accent-secondary);"></i> 
+                    <span class="lang-en">Spritesheet Merger</span><span class="lang-id">Penggabung Spritesheet</span>
+                </h2>
+                
+                <div class="control-group radio-group">
+                    <div><input type="radio" id="mergerModeFile" name="mergerMode" value="file" checked>
+                        <label for="mergerModeFile"><span class="lang-en">Image File Input</span><span class="lang-id">Input File Gambar</span></label>
+                    </div>
+                    <div><input type="radio" id="mergerModeEmoji" name="mergerMode" value="emoji">
+                        <label for="mergerModeEmoji"><span class="lang-en">Emoji Text Input</span><span class="lang-id">Input Teks Emoji</span></label>
+                    </div>
+                </div>
+                
+                <div id="merger-file-input-group">
+                    <div class="control-group">
+                        <label for="imageMergerLoader">
+                            <span class="lang-en">Select multiple image files (.png):</span>
+                            <span class="lang-id">Pilih beberapa file gambar (.png):</span>
+                        </label>
+                        <input type="file" id="imageMergerLoader" accept="image/png" multiple>
+                    </div>
+                    <div class="control-group checkbox-group">
+                        <div style="width: 100%;">
+                            <input type="checkbox" id="preserveAspectRatio" checked>
+                            <label for="preserveAspectRatio">
+                                <span class="lang-en">Preserve Aspect Ratio (Prevent stretching)</span>
+                                <span class="lang-id">Jaga Aspek Rasio (Cegah gambar gepeng)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="merger-emoji-input-group" style="display: none;">
+                    <div class="control-group">
+                        <label for="emojiMergerInput">
+                            <span class="lang-en">Enter a sequence of Emojis:</span>
+                            <span class="lang-id">Masukkan deretan Emoji:</span>
+                        </label>
+                        <input type="text" id="emojiMergerInput" placeholder="🍎🍊🍋🍓🍇">
+                    </div>
+                </div>
+                
+                <div class="grid-controls">
+                    <div class="control-group">
+                        <label for="numCols">
+                            <span class="lang-en">Number of Grid Columns:</span>
+                            <span class="lang-id">Jumlah Kolom Grid:</span>
+                        </label>
+                        <input type="number" id="numCols" value="16">
+                    </div>
+                    <div class="control-group">
+                        <label for="numRows">
+                            <span class="lang-en">Number of Grid Rows:</span>
+                            <span class="lang-id">Jumlah Baris Grid:</span>
+                        </label>
+                        <input type="number" id="numRows" value="1">
+                    </div>
+                </div>
+                
+                <h3><span class="lang-en">Cell Size Options</span><span class="lang-id">Opsi Ukuran Cell</span></h3>
+                <div class="control-group radio-group">
+                    <div id="size-mode-first-wrapper"><input type="radio" id="sizeModeFirst" name="sizeMode" value="first" checked>
+                        <label for="sizeModeFirst"><span class="lang-en">Match First Image</span><span class="lang-id">Sesuai Gambar Pertama</span></label>
+                    </div>
+                    <div id="size-mode-largest-wrapper"><input type="radio" id="sizeModeLargest" name="sizeMode" value="largest">
+                        <label for="sizeModeLargest"><span class="lang-en">Match Largest Image</span><span class="lang-id">Sesuai Gambar Terbesar</span></label>
+                    </div>
+                    <div><input type="radio" id="sizeModeManual" name="sizeMode" value="manual">
+                        <label for="sizeModeManual"><span class="lang-en">Manual Size</span><span class="lang-id">Ukuran Manual</span></label>
+                    </div>
+                </div>
+                
+                <div id="manual-size-inputs" class="grid-controls">
+                    <div>
+                        <label for="manualWidth"><span class="lang-en">Cell Width (px)</span><span class="lang-id">Lebar Cell (px)</span></label>
+                        <input type="number" id="manualWidth" value="32">
+                    </div>
+                    <div>
+                        <label for="manualHeight"><span class="lang-en">Cell Height (px)</span><span class="lang-id">Tinggi Cell (px)</span></label>
+                        <input type="number" id="manualHeight" value="32">
+                    </div>
+                </div>
+                
+                <button id="mergeBtn" class="action-button">
+                    <i class="fa-solid fa-play"></i> 
+                    <span class="lang-en">Process Merge</span><span class="lang-id">Proses Penggabungan</span>
+                </button>
+                <div id="merger-output" class="output-area"></div>
+            </div>
+
+            <div id="Splitter" class="tab-content">
+                <h2><i class="fa-solid fa-scissors" style="color: var(--accent-secondary);"></i> 
+                    <span class="lang-en">Spritesheet Splitter</span><span class="lang-id">Pemotong Spritesheet</span>
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                    <span class="lang-en">Upload a large spritesheet and split it into smaller parts based on columns and rows.</span>
+                    <span class="lang-id">Unggah satu file spritesheet besar dan potong menjadi bagian-bagian kecil sesuai kolom dan baris.</span>
+                </p>
+                
+                <div class="control-group">
+                    <label for="imageSplitterLoader">
+                        <span class="lang-en">Select one spritesheet file (.png):</span>
+                        <span class="lang-id">Pilih satu file spritesheet (.png):</span>
+                    </label>
+                    <input type="file" id="imageSplitterLoader" accept="image/png">
+                </div>
+                
+                <div class="grid-controls">
+                    <div class="control-group">
+                        <label for="splitNumCols">
+                            <span class="lang-en">Split into how many Columns?</span>
+                            <span class="lang-id">Potong menjadi berapa Kolom?</span>
+                        </label>
+                        <input type="number" id="splitNumCols" value="4">
+                    </div>
+                    <div class="control-group">
+                        <label for="splitNumRows">
+                            <span class="lang-en">Split into how many Rows?</span>
+                            <span class="lang-id">Potong menjadi berapa Baris?</span>
+                        </label>
+                        <input type="number" id="splitNumRows" value="4">
+                    </div>
+                </div>
+                
+                <button id="splitBtn" class="action-button">
+                    <i class="fa-solid fa-crop-simple"></i> 
+                    <span class="lang-en">Split Image</span><span class="lang-id">Potong Gambar</span>
+                </button>
+                <div id="splitter-output" class="output-area"></div>
+            </div>
+
+            <div id="Extractor" class="tab-content">
+                <h2><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-secondary);"></i> 
+                    <span class="lang-en">JSON Character Extractor</span><span class="lang-id">Ekstraktor Karakter JSON</span>
+                </h2>
+                
+                <div class="control-group radio-group" style="margin-bottom: 1.5rem;">
+                    <div><input type="radio" id="extractorModeFile" name="extractorMode" value="file" checked>
+                        <label for="extractorModeFile"><span class="lang-en">Extract from Spritesheet</span><span class="lang-id">Ekstrak dari Spritesheet</span></label>
+                    </div>
+                    <div><input type="radio" id="extractorModeEmoji" name="extractorMode" value="emoji">
+                        <label for="extractorModeEmoji"><span class="lang-en">Convert from Emoji</span><span class="lang-id">Konversi dari Emoji</span></label>
+                    </div>
+                </div>
+
+                <div id="extractor-file-input-group">
+                    <div style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <p style="font-size: 0.85rem; color: #c4b5fd; margin: 0;"><i class="fa-solid fa-circle-info"></i> 
+                            <span class="lang-en">Ensure your spritesheet filename uses hex format, e.g.: <strong>glyph_E1.png</strong></span>
+                            <span class="lang-id">Pastikan nama file spritesheet Anda menggunakan format hex, contoh: <strong>glyph_E1.png</strong></span>
+                        </p>
+                    </div>
+                    <div class="control-group">
+                        <label for="imageExtractorLoader">
+                            <span class="lang-en">Select spritesheet file (.png):</span>
+                            <span class="lang-id">Pilih file spritesheet (.png):</span>
+                        </label>
+                        <input type="file" id="imageExtractorLoader" accept="image/png">
+                    </div>
+                    <div class="control-group">
+                        <label>
+                            <span class="lang-en">Set Single Icon Size (Width x Height px):</span>
+                            <span class="lang-id">Atur Ukuran Satu Ikon (Width x Height px):</span>
+                        </label>
+                        <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center;">
+                            <input type="number" id="iconWidth" value="32"> 
+                            <span style="color: var(--text-muted);"><i class="fa-solid fa-xmark"></i></span>
+                            <input type="number" id="iconHeight" value="32">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="extractor-emoji-input-group" style="display: none;">
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                        <span class="lang-en">Enter a single emoji character to preview and get its Unicode codepoint.</span>
+                        <span class="lang-id">Masukkan satu karakter emoji untuk melihat pratinjau dan mendapatkan Unicode codepoint-nya.</span>
+                    </p>
+                    <div class="control-group">
+                        <label for="emojiExtractorInput">
+                            <span class="lang-en">Emoji Character:</span>
+                            <span class="lang-id">Karakter Emoji:</span>
+                        </label>
+                        <input type="text" id="emojiExtractorInput" placeholder="✨">
+                    </div>
+                </div>
+                
+                <button id="extractBtn" class="action-button">
+                    <i class="fa-solid fa-bolt"></i> 
+                    <span class="lang-en">Generate Data</span><span class="lang-id">Proses Data</span>
+                </button>
+                
+                <div id="extractor-output" class="output-area"></div>
+                <div id="json-result-container" style="display: none;">
+                    <h3><i class="fa-solid fa-code"></i> 
+                        <span class="lang-en">JSON String Result (chars)</span><span class="lang-id">Hasil String JSON (chars)</span>
+                    </h3>
+                    <button class="copy-btn" id="copy-all-btn"><i class="fa-regular fa-copy"></i> <span class="lang-en">Copy</span><span class="lang-id">Salin</span></button>
+                    <pre id="json-result"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Language System ---
+        function toggleLang() {
+            const body = document.body;
+            let currentLang = 'en';
+            if (body.classList.contains('lang-id')) {
+                body.classList.remove('lang-id');
+                body.classList.add('lang-en');
+                currentLang = 'en';
+            } else {
+                body.classList.remove('lang-en');
+                body.classList.add('lang-id');
+                currentLang = 'id';
+            }
+            try { localStorage.setItem('heraclaus_lang', currentLang); } catch(e) {}
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            let savedLang = 'en';
+            try { savedLang = localStorage.getItem('heraclaus_lang') || 'en'; } catch(e) {}
+            document.body.className = `lang-${savedLang}`;
+        });
+
+        function t(en, id) {
+            return document.body.classList.contains('lang-en') ? en : id;
+        }
+
+        // --- Tabs System ---
+        function openTab(evt, tabName){
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for(i=0; i<tabcontent.length; i++){ tabcontent[i].style.display = "none"; }
+            tablinks = document.getElementsByClassName("tab-button");
+            for(i=0; i<tablinks.length; i++){ tablinks[i].className = tablinks[i].className.replace(" active", ""); }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // --- Global Utility ---
+        function copyToClipboard(textToCopy, buttonElement, originalHTML) {
+            const textArea = document.createElement('textarea');
+            textArea.value = textToCopy;
+            textArea.style.position = 'fixed'; textArea.style.top = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                buttonElement.innerHTML = `<i class='fa-solid fa-check'></i> <span class='lang-en'>Copied!</span><span class='lang-id'>Disalin!</span>`;
+                buttonElement.style.borderColor = "var(--accent-success)";
+                buttonElement.style.color = "var(--accent-success)";
+            } catch (err) {
+                console.error('Gagal menyalin: ', err);
+            }
+            document.body.removeChild(textArea);
+            setTimeout(() => {
+                buttonElement.innerHTML = originalHTML;
+                buttonElement.style.borderColor = "";
+                buttonElement.style.color = "";
+            }, 2000);
+        }
+
+        // --- Merger Logic ---
+        const mergerSelectors = {
+            modeRadios: document.querySelectorAll('input[name="mergerMode"]'),
+            fileInputGroup: document.getElementById('merger-file-input-group'),
+            emojiInputGroup: document.getElementById('merger-emoji-input-group'),
+            imageLoader: document.getElementById('imageMergerLoader'),
+            emojiInput: document.getElementById('emojiMergerInput'),
+            numCols: document.getElementById('numCols'),
+            numRows: document.getElementById('numRows'),
+            sizeModeRadios: document.querySelectorAll('input[name="sizeMode"]'),
+            manualSizeInputs: document.getElementById('manual-size-inputs'),
+            manualWidth: document.getElementById('manualWidth'),
+            manualHeight: document.getElementById('manualHeight'),
+            preserveAspectRatio: document.getElementById('preserveAspectRatio'),
+            mergeBtn: document.getElementById('mergeBtn'),
+            output: document.getElementById('merger-output'),
+            sizeModeFirstWrapper: document.getElementById('size-mode-first-wrapper'),
+            sizeModeLargestWrapper: document.getElementById('size-mode-largest-wrapper'),
+        };
+
+        mergerSelectors.modeRadios.forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                const mode = event.target.value;
+                mergerSelectors.fileInputGroup.style.display = (mode === 'file') ? 'block' : 'none';
+                mergerSelectors.emojiInputGroup.style.display = (mode === 'emoji') ? 'block' : 'none';
+                mergerSelectors.sizeModeFirstWrapper.style.display = (mode === 'file') ? 'flex' : 'none';
+                mergerSelectors.sizeModeLargestWrapper.style.display = (mode === 'file') ? 'flex' : 'none';
+                if (mode === 'emoji') {
+                    document.getElementById('sizeModeManual').checked = true;
+                    mergerSelectors.manualSizeInputs.style.display = 'grid';
+                } else {
+                     document.getElementById('sizeModeFirst').checked = true;
+                     mergerSelectors.manualSizeInputs.style.display = 'none';
+                }
+            });
+        });
+
+        mergerSelectors.sizeModeRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                 const isManual = document.getElementById('sizeModeManual').checked;
+                 mergerSelectors.manualSizeInputs.style.display = isManual ? 'grid' : 'none';
+            });
+        });
+
+        async function processMergerFile() {
+            const files = mergerSelectors.imageLoader.files;
+            if (files.length === 0) {
+                mergerSelectors.output.innerHTML = `<p style="color: #f59e0b;"><i class="fa-solid fa-triangle-exclamation"></i> <span class="lang-en">Select multiple image files first.</span><span class="lang-id">Pilih beberapa file gambar terlebih dahulu.</span></p>`;
+                return null;
+            }
+            try {
+                return await Promise.all(Array.from(files).map(file => new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => resolve(img); img.onerror = reject;
+                    img.src = URL.createObjectURL(file);
+                })));
+            } catch (error) {
+                mergerSelectors.output.innerHTML = `<p style="color: var(--accent-danger);">Error: ${error}</p>`; return null;
+            }
+        }
+
+        function processMergerEmoji(cellWidth, cellHeight) {
+            const emojis = [...mergerSelectors.emojiInput.value]; 
+            if (emojis.length === 0) {
+                mergerSelectors.output.innerHTML = `<p style="color: #f59e0b;"><i class="fa-solid fa-triangle-exclamation"></i> <span class="lang-en">Enter some emojis first.</span><span class="lang-id">Masukkan beberapa emoji terlebih dahulu.</span></p>`; return null;
+            }
+            const emojiFont = `${cellHeight * 0.75}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
+            const yOffset = cellHeight * 0.05;
+            return emojis.map(emoji => {
+                const canvas = document.createElement('canvas'); canvas.width = cellWidth; canvas.height = cellHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.imageSmoothingEnabled = false; ctx.font = emojiFont; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+                ctx.fillText(emoji, cellWidth / 2, cellHeight / 2 + yOffset);
+                return canvas;
+            });
+        }
+
+        mergerSelectors.mergeBtn.addEventListener('click', async () => {
+            mergerSelectors.mergeBtn.disabled = true;
+            mergerSelectors.mergeBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span class="lang-en">Processing...</span><span class="lang-id">Memproses...</span>`;
+            mergerSelectors.output.innerHTML = '';
+            
+            const numCols = parseInt(mergerSelectors.numCols.value);
+            const numRows = parseInt(mergerSelectors.numRows.value);
+            const totalCells = numCols * numRows;
+            const sizeMode = document.querySelector('input[name="sizeMode"]:checked').value;
+            const mergerMode = document.querySelector('input[name="mergerMode"]:checked').value;
+
+            if (isNaN(numCols) || numCols <= 0 || isNaN(numRows) || numRows <= 0) {
+                mergerSelectors.output.innerHTML = `<p style="color: var(--accent-danger);"><span class="lang-en">Invalid rows/columns.</span><span class="lang-id">Jumlah kolom dan baris tidak valid.</span></p>`;
+                resetBtn(mergerSelectors.mergeBtn, `<i class="fa-solid fa-play"></i> <span class="lang-en">Process Merge</span><span class="lang-id">Proses Penggabungan</span>`); return;
+            }
+            
+            let cellWidth, cellHeight;
+            if (sizeMode === 'manual' || mergerMode === 'emoji') {
+                cellWidth = parseInt(mergerSelectors.manualWidth.value); cellHeight = parseInt(mergerSelectors.manualHeight.value);
+                if (isNaN(cellWidth) || isNaN(cellHeight) || cellWidth <= 0 || cellHeight <= 0) {
+                    mergerSelectors.output.innerHTML = `<p style="color: var(--accent-danger);"><span class="lang-en">Invalid manual size.</span><span class="lang-id">Ukuran cell manual tidak valid.</span></p>`;
+                    resetBtn(mergerSelectors.mergeBtn, `<i class="fa-solid fa-play"></i> <span class="lang-en">Process Merge</span><span class="lang-id">Proses Penggabungan</span>`); return;
+                }
+            }
+            
+            const images = (mergerMode === 'file') ? await processMergerFile() : processMergerEmoji(cellWidth, cellHeight);
+            if (!images) { resetBtn(mergerSelectors.mergeBtn, `<i class="fa-solid fa-play"></i> <span class="lang-en">Process Merge</span><span class="lang-id">Proses Penggabungan</span>`); return; }
+
+            if (images.length > totalCells) { 
+                mergerSelectors.output.innerHTML = `<p style="color: #f59e0b; font-size: 0.9rem;">${t('Warning: Input count exceeds grid cells. Truncating.', 'Peringatan: Jumlah input melebihi grid. Sebagian akan dipotong.')}</p>`;
+            }
+            
+            if (sizeMode === 'first') { cellWidth = images[0].width; cellHeight = images[0].height; } 
+            else if (sizeMode === 'largest') { cellWidth = Math.max(...images.map(img => img.width)); cellHeight = Math.max(...images.map(img => img.height)); }
+
+            const canvas = document.createElement('canvas'); canvas.className = "pixelated";
+            canvas.width = numCols * cellWidth; canvas.height = numRows * cellHeight;
+            const ctx = canvas.getContext('2d'); ctx.imageSmoothingEnabled = false; 
+            
+            for (let i = 0; i < totalCells; i++) {
+                const col = i % numCols; const row = Math.floor(i / numCols);
+                const x = col * cellWidth; const y = row * cellHeight;
+                let imgToDraw = (i < images.length) ? images[i] : images[images.length - 1];
+                let drawWidth = imgToDraw.width; let drawHeight = imgToDraw.height;
+
+                if (mergerSelectors.preserveAspectRatio.checked && mergerMode === 'file' && (drawWidth > cellWidth || drawHeight > cellHeight)) {
+                    const imgAspectRatio = imgToDraw.width / imgToDraw.height; const cellAspectRatio = cellWidth / cellHeight;
+                    if (imgAspectRatio > cellAspectRatio) { drawWidth = cellWidth; drawHeight = cellWidth / imgAspectRatio; } 
+                    else { drawHeight = cellHeight; drawWidth = cellHeight * imgAspectRatio; }
+                } else if (!mergerSelectors.preserveAspectRatio.checked && mergerMode === 'file') {
+                    drawWidth = cellWidth; drawHeight = cellHeight;
+                }
+                drawWidth = Math.floor(drawWidth); drawHeight = Math.floor(drawHeight);
+                const offsetX = Math.floor((cellWidth - drawWidth) / 2); const offsetY = Math.floor((cellHeight - drawHeight) / 2);
+                ctx.drawImage(imgToDraw, x + offsetX, y + offsetY, drawWidth, drawHeight);
+            }
+            
+            mergerSelectors.output.appendChild(canvas);
+            const downloadLink = document.createElement('a'); downloadLink.href = canvas.toDataURL('image/png');
+            downloadLink.download = 'spritesheet.png'; downloadLink.innerHTML = `<i class="fa-solid fa-download"></i> <span class="lang-en">Download Spritesheet</span><span class="lang-id">Unduh Spritesheet</span>`;
+            downloadLink.className = 'action-button btn-success'; mergerSelectors.output.appendChild(downloadLink);
+            resetBtn(mergerSelectors.mergeBtn, `<i class="fa-solid fa-play"></i> <span class="lang-en">Process Merge</span><span class="lang-id">Proses Penggabungan</span>`);
+        });
+
+        // --- Splitter Logic ---
+        const imageSplitterLoader = document.getElementById('imageSplitterLoader');
+        const splitNumColsInput = document.getElementById('splitNumCols'); const splitNumRowsInput = document.getElementById('splitNumRows');
+        const splitBtn = document.getElementById('splitBtn'); const splitterOutput = document.getElementById('splitter-output');
+
+        splitBtn.addEventListener('click', () => {
+            const file = imageSplitterLoader.files[0];
+            const numCols = parseInt(splitNumColsInput.value); const numRows = parseInt(splitNumRowsInput.value);
+
+            if (!file) { splitterOutput.innerHTML = `<p style="color: #f59e0b;"><i class="fa-solid fa-triangle-exclamation"></i> <span class="lang-en">Select an image file first.</span><span class="lang-id">Pilih file gambar terlebih dahulu.</span></p>`; return; }
+            if (isNaN(numCols) || numCols <= 0 || isNaN(numRows) || numRows <= 0) { splitterOutput.innerHTML = `<p style="color: var(--accent-danger);"><span class="lang-en">Invalid rows/columns.</span><span class="lang-id">Jumlah kolom/baris tidak valid.</span></p>`; return; }
+
+            splitterOutput.innerHTML = `<p><i class="fa-solid fa-spinner fa-spin"></i> <span class="lang-en">Splitting image, please wait...</span><span class="lang-id">Memotong gambar, mohon tunggu...</span></p>`;
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                const image = new Image();
+                image.onload = () => {
+                    let warning = '';
+                    if (image.width % numCols !== 0 || image.height % numRows !== 0) {
+                        warning = `<p style="color: #f59e0b; font-size: 0.9rem;">${t('Warning: Image size is not fully divisible by the grid.', 'Peringatan: Ukuran gambar tidak dapat dibagi habis dengan grid.')}</p>`;
+                    }
+                    const cellWidth = Math.floor(image.width / numCols); const cellHeight = Math.floor(image.height / numRows);
+                    const zip = new JSZip(); let filesToProcess = numCols * numRows;
+                    splitterOutput.innerHTML = warning; 
+                    
+                    const gridContainer = document.createElement('div'); gridContainer.id = 'splitter-grid';
+
+                    for (let r = 0; r < numRows; r++) {
+                        for (let c = 0; c < numCols; c++) {
+                            const canvas = document.createElement('canvas'); canvas.className = "pixelated";
+                            canvas.width = cellWidth; canvas.height = cellHeight;
+                            canvas.style.marginBottom = "0"; 
+                            const ctx = canvas.getContext('2d'); ctx.imageSmoothingEnabled = false;
+                            
+                            ctx.drawImage(image, c * cellWidth, r * cellHeight, cellWidth, cellHeight, 0, 0, cellWidth, cellHeight);
+                            
+                            const container = document.createElement('div'); container.className = 'split-image-container';
+                            const downloadLink = document.createElement('a');
+                            downloadLink.href = canvas.toDataURL('image/png'); downloadLink.download = `split_${r}_${c}.png`;
+                            downloadLink.innerHTML = `<i class="fa-solid fa-download"></i> (${c},${r})`;
+                            
+                            container.appendChild(canvas); container.appendChild(downloadLink); gridContainer.appendChild(container);
+                            
+                            canvas.toBlob(blob => {
+                                zip.file(`split_${r}_${c}.png`, blob); filesToProcess--;
+                                if (filesToProcess === 0) {
+                                    zip.generateAsync({ type: "blob" }).then(content => {
+                                        const zipLink = document.createElement('a'); zipLink.href = URL.createObjectURL(content);
+                                        zipLink.download = "split_images.zip"; zipLink.innerHTML = `<i class='fa-solid fa-file-zipper'></i> <span class="lang-en">Download All (.zip)</span><span class="lang-id">Unduh Semua (.zip)</span>`;
+                                        zipLink.className = 'action-button btn-success'; zipLink.style.marginBottom = '1.5rem';
+                                        splitterOutput.prepend(zipLink);
+                                    });
+                                }
+                            });
+                        }
+                    }
+                    splitterOutput.appendChild(gridContainer);
+                };
+                image.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // --- Extractor Logic ---
+        const extractorSelectors = {
+            btn: document.getElementById("extractBtn"), output: document.getElementById("extractor-output"),
+            jsonContainer: document.getElementById("json-result-container"), jsonResult: document.getElementById("json-result"),
+            copyAllBtn: document.getElementById("copy-all-btn"), modeRadios: document.querySelectorAll('input[name="extractorMode"]'),
+            fileInputGroup: document.getElementById('extractor-file-input-group'), emojiInputGroup: document.getElementById('extractor-emoji-input-group'),
+            imageLoader: document.getElementById("imageExtractorLoader"), iconWidth: document.getElementById("iconWidth"),
+            iconHeight: document.getElementById("iconHeight"), emojiInput: document.getElementById("emojiExtractorInput")
+        };
+
+        extractorSelectors.modeRadios.forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                const mode = event.target.value;
+                extractorSelectors.fileInputGroup.style.display = (mode === 'file') ? 'block' : 'none';
+                extractorSelectors.emojiInputGroup.style.display = (mode === 'emoji') ? 'block' : 'none';
+                extractorSelectors.output.innerHTML = ""; extractorSelectors.jsonContainer.style.display = "none";
+            });
+        });
+
+        extractorSelectors.btn.addEventListener("click", () => {
+            const mode = document.querySelector('input[name="extractorMode"]:checked').value;
+            if (mode === 'file') processExtractorFile(); else processExtractorEmoji();
+        });
+
+        function createIconEntry(char, canvasContent) {
+            const entryDiv = document.createElement("div"); entryDiv.className = "icon-entry";
+            const previewCanvas = document.createElement("canvas"); previewCanvas.className = "preview-canvas";
+            if (typeof canvasContent === 'function') canvasContent(previewCanvas);
+            const codePoint = char.codePointAt(0);
+            
+            const infoDiv = document.createElement("div");
+            infoDiv.style.display = "flex"; infoDiv.style.flexDirection = "column"; infoDiv.style.gap = "0.2rem";
+            
+            const charInfo = document.createElement("span"); charInfo.className = "char-info"; charInfo.textContent = char;
+            const codeInfo = document.createElement("span"); codeInfo.className = "code-info"; codeInfo.textContent = `U+${codePoint.toString(16).toUpperCase()}`;
+            
+            infoDiv.appendChild(charInfo); infoDiv.appendChild(codeInfo);
+            
+            const copyBtn = document.createElement("button"); copyBtn.className = "copy-btn"; 
+            copyBtn.innerHTML = `<i class='fa-regular fa-copy'></i> <span class="lang-en">Copy</span><span class="lang-id">Salin</span>`;
+            copyBtn.onclick = () => copyToClipboard(char, copyBtn, `<i class='fa-regular fa-copy'></i> <span class="lang-en">Copy</span><span class="lang-id">Salin</span>`);
+
+            entryDiv.appendChild(previewCanvas); entryDiv.appendChild(infoDiv); entryDiv.appendChild(copyBtn);
+            return entryDiv;
+        }
+
+        function processExtractorEmoji() {
+            const emoji = extractorSelectors.emojiInput.value;
+            if (!emoji) { extractorSelectors.output.innerHTML = `<p style="color: #f59e0b;">${t('Enter a single emoji first.','Masukkan satu emoji terlebih dahulu.')}</p>`; return; }
+            const emojiChars = [...emoji];
+            if (emojiChars.length !== 1) { extractorSelectors.output.innerHTML = `<p style="color: var(--accent-danger);">${t('Please enter only ONE emoji character.','Harap masukkan hanya SATU karakter emoji.')}</p>`; return; }
+
+            const singleEmoji = emojiChars[0]; extractorSelectors.output.innerHTML = "";
+            const drawFunction = (canvas) => {
+                const canvasSize = 64; canvas.width = canvasSize; canvas.height = canvasSize;
+                const ctx = canvas.getContext("2d"); ctx.imageSmoothingEnabled = false; ctx.clearRect(0, 0, canvasSize, canvasSize);
+                ctx.font = `${canvasSize * 0.75}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
+                ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(singleEmoji, canvasSize / 2, canvasSize / 2 + (canvasSize * 0.05));
+            };
+            extractorSelectors.output.appendChild(createIconEntry(singleEmoji, drawFunction));
+            extractorSelectors.jsonContainer.style.display = "block"; extractorSelectors.jsonResult.textContent = `"${singleEmoji}"`;
+        }
+
+        function processExtractorFile() {
+            const file = extractorSelectors.imageLoader.files[0];
+            if (!file) { extractorSelectors.output.innerHTML = `<p style="color: #f59e0b;"><i class="fa-solid fa-triangle-exclamation"></i> ${t('Select an image file first.','Pilih file gambar terlebih dahulu.')}</p>`; return; }
+
+            const match = file.name.match(/^glyph_([0-9a-fA-F]{2})\.png$/i);
+            if (!match) { extractorSelectors.output.innerHTML = `<p style="color: var(--accent-danger); font-weight: bold;">${t('Invalid filename! Must use format <strong>glyph_XX.png</strong>','Nama file salah! Wajib gunakan format <strong>glyph_XX.png</strong>')}</p>`; return; }
+
+            const iconWidth = parseInt(extractorSelectors.iconWidth.value); const iconHeight = parseInt(extractorSelectors.iconHeight.value);
+            if (isNaN(iconWidth) || isNaN(iconHeight) || iconWidth <= 0 || iconHeight <= 0) { extractorSelectors.output.innerHTML = `<p style="color: var(--accent-danger);">${t('Invalid icon size.','Ukuran ikon tidak valid.')}</p>`; return; }
+
+            extractorSelectors.output.innerHTML = `<p><i class='fa-solid fa-spinner fa-spin'></i> ${t('Extracting data...','Mengekstrak data...')}</p>`;
+            extractorSelectors.jsonContainer.style.display = "none";
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const image = new Image();
+                image.onload = () => {
+                    const resultsFragment = document.createDocumentFragment();
+                    const cols = Math.floor(image.width / iconWidth); const rows = Math.floor(image.height / iconHeight);
+                    let fullString = ""; const startCodePoint = parseInt(match[1] + "00", 16); let currentCodePoint = startCodePoint;
+
+                    for (let r = 0; r < rows; r++) {
+                        for (let c = 0; c < cols; c++) {
+                            if (currentCodePoint >= startCodePoint + 256) break;
+                            const char = String.fromCodePoint(currentCodePoint); fullString += char;
+
+                            const drawFunction = (canvas) => {
+                                const scale = 2; canvas.width = iconWidth * scale; canvas.height = iconHeight * scale;
+                                const ctx = canvas.getContext("2d"); ctx.imageSmoothingEnabled = false; 
+                                ctx.drawImage(image, c * iconWidth, r * iconHeight, iconWidth, iconHeight, 0, 0, canvas.width, canvas.height);
+                            };
+                            resultsFragment.appendChild(createIconEntry(char, drawFunction)); currentCodePoint++;
+                        }
+                        if (currentCodePoint >= startCodePoint + 256) break;
+                    }
+
+                    extractorSelectors.output.innerHTML = ""; extractorSelectors.output.appendChild(resultsFragment);
+                    if (fullString) {
+                        extractorSelectors.jsonContainer.style.display = "block"; extractorSelectors.jsonResult.textContent = `"${fullString}"`;
+                    }
+                };
+                image.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        extractorSelectors.copyAllBtn.addEventListener("click", () => {
+            copyToClipboard(extractorSelectors.jsonResult.textContent, extractorSelectors.copyAllBtn, `<i class='fa-regular fa-copy'></i> <span class="lang-en">Copy</span><span class="lang-id">Salin</span>`);
+        });
+        
+        function resetBtn(btn, html) {
+            btn.disabled = false; btn.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

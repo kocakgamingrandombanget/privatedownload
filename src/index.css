@@ -1,0 +1,38 @@
+@config "../tailwind.config.js";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Core App Behavior */
+* { -webkit-tap-highlight-color: transparent; }
+body { 
+    @apply bg-app-bg text-app-textMain;
+    -webkit-user-select: none; user-select: none;
+    overflow-x: hidden;
+}
+input, textarea { -webkit-user-select: auto; user-select: auto; }
+html { scroll-behavior: smooth; }
+
+/* Hide scrollbar for clean app UI */
+::-webkit-scrollbar { width: 0px; height: 0px; display: none; }
+
+/* Language Logic */
+body.lang-en .lang-id { display: none !important; }
+body.lang-id .lang-en { display: none !important; }
+
+.pb-safe { padding-bottom: calc(env(safe-area-inset-bottom) + 6rem); }
+.pt-safe { padding-top: calc(env(safe-area-inset-top) + 1rem); }
+
+/* Animations */
+.animate-fade-up { opacity: 0; transform: translateY(15px); transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-fade-up.is-visible { opacity: 1; transform: translateY(0); }
+
+/* Glass Overlay for Folder Cards to mimic the reference image */
+.folder-glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 100%);
+    backdrop-filter: blur(4px);
+}
+
+/* Clean List Item Hover */
+.list-item-app { transition: transform 0.2s, background-color 0.2s; cursor: pointer; }
+.list-item-app:active { transform: scale(0.98); background-color: #F9FAFB; }
