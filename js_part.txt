@@ -1,0 +1,301 @@
+﻿
+                    <div class="profile-field" style="max-width: 48rem; margin-bottom: 2rem;">
+                        <form id="add-server-form">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                <div class="form-group">
+                                    <label><span class="lang-en">Server Name</span><span class="lang-id">Nama
+                                            Server</span></label>
+                                    <input type="text" id="srv-name" required placeholder="e.g., Heraclaus SMP">
+                                </div>
+                                <div class="form-group">
+                                    <label><span class="lang-en">Link Type</span><span class="lang-id">Jenis
+                                            Tautan</span></label>
+                                    <select id="srv-link-type" required
+                                        style="width: 100%; padding: 0.6rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border-light); border-radius: 8px; color: var(--text-primary); font-size: 0.85rem; outline: none;">
+                                        <option value="discord" style="color:#000;">Discord Server</option>
+                                        <option value="whatsapp" style="color:#000;">WhatsApp Group</option>
+                                        <option value="website" style="color:#000;">Website / Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1rem;">
+                                <label><span class="lang-en">Target Link</span><span class="lang-id">Tautan
+                                        Tujuan</span></label>
+                                <input type="url" id="srv-link" required placeholder="https://...">
+                            </div>
+                            <div
+                                style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 0.5rem;">
+                                <div class="form-group">
+                                    <label><span class="lang-en">Server IP</span><span class="lang-id">IP
+                                            Server</span></label>
+                                    <input type="text" id="srv-ip" required placeholder="play.your-server.com">
+                                </div>
+                                <div class="form-group">
+                                    <label><span class="lang-en">Port</span><span class="lang-id">Port</span></label>
+                                    <input type="text" id="srv-port" required placeholder="19132">
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                                <input type="checkbox" id="srv-port-public" checked
+                                    style="width: 1.1rem; height: 1.1rem; cursor: pointer;">
+                                <label for="srv-port-public"
+                                    style="margin: 0; text-transform: none; letter-spacing: normal; font-size: 0.8rem; color: var(--text-secondary); cursor: pointer;">
+                                    <span class="lang-en">Show Port Publicly (Uncheck to hide)</span>
+                                    <span class="lang-id">Tampilkan Port ke Publik (Hapus centang untuk
+                                        menyembunyikan)</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label><span class="lang-en">Short Description</span><span class="lang-id">Deskripsi
+                                        Singkat</span></label>
+                                <textarea id="srv-desc" required
+                                    placeholder="Describe the gameplay or features of your server..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-gradient w-full" id="btn-add-server"
+                                style="margin-top: 0.5rem;">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                <span class="lang-en">Register Server</span><span class="lang-id">Daftarkan
+                                    Server</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <h3 class="font-outfit" style="color: #fff; margin-bottom: 1rem; font-size: 1.2rem;">
+                        <span class="lang-en">My Servers</span><span class="lang-id">Server Saya</span>
+                    </h3>
+                    <div class="list-box" id="user-server-list">
+                        <div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size: 0.85rem;"><i
+                                class="fa-solid fa-circle-notch fa-spin"></i> Loading your server data...</div>
+                    </div>
+                </div>
+
+                <div id="tab-user-social" class="tab-content">
+                    <h2 class="section-title font-outfit">
+                        <span class="lang-en">Global Community Chat</span><span class="lang-id">Obrolan Komunitas
+                            Global</span>
+                    </h2>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                        <span class="lang-en">Connect with other users. You can delete your own messages.</span>
+                        <span class="lang-id">Terhubung dengan pengguna lain. Anda dapat menghapus pesan Anda
+                            sendiri.</span>
+                    </p>
+
+                    <div class="chat-box-wrapper">
+                        <div class="chat-header">
+                            <div class="chat-header-info">
+                                <div class="chat-header-icon"><i class="fa-solid fa-earth-americas"></i></div>
+                                <div>
+                                    <h3
+                                        style="color: #fff; font-size: 0.95rem; font-family: 'Outfit'; font-weight: 700; margin: 0;">
+                                        <span class="lang-en">Global Channel</span><span class="lang-id">Saluran
+                                            Global</span>
+                                    </h3>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.1rem;">
+                                        <span class="lang-en">Public to all members</span><span class="lang-id">Terbuka
+                                            untuk semua anggota</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-container" id="user-chat-box">
+                            <div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem;">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i> Loading chat...</div>
+                        </div>
+
+                        <form class="chat-input-area" id="user-chat-form">
+                            <input type="text" id="user-chat-input" required placeholder="Type a message to everyone..."
+                                autocomplete="off">
+                            <button type="submit" id="btn-user-chat"><i class="fa-solid fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="tab-user-profile" class="tab-content">
+                    <h2 class="section-title font-outfit">
+                        <span class="lang-en">Profile Settings</span><span class="lang-id">Pengaturan Profil</span>
+                    </h2>
+                    <div class="profile-grid">
+                        <div class="profile-field"><label>Gamertag (Xbox/Minecraft)</label>
+                            <div class="value" id="profile-gamertag">Loading...</div>
+                        </div>
+                        <div class="profile-field">
+                            <label><span class="lang-en">Account Email</span><span class="lang-id">Email
+                                    Akun</span></label>
+                            <div class="value" id="profile-email" style="font-family: monospace;">Loading...</div>
+                        </div>
+                        <div class="profile-field">
+                            <label><span class="lang-en">Account Status</span><span class="lang-id">Status
+                                    Akun</span></label>
+                            <div class="value"
+                                style="color: var(--accent-success); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-circle-check"></i> <span class="lang-en">Verified Pro
+                                    Member</span><span class="lang-id">Anggota Pro Terverifikasi</span></div>
+                        </div>
+                    </div>
+
+                    <h3 class="font-outfit"
+                        style="margin-top: 2.5rem; margin-bottom: 1rem; font-size: 1.25rem; color: #fff; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem; max-width: 36rem; letter-spacing: -0.01em;">
+                        <span class="lang-en">Security</span><span class="lang-id">Keamanan</span>
+                    </h3>
+                    <div class="profile-field" style="max-width: 36rem;">
+                        <form id="change-pwd-form"
+                            style="display: flex; flex-direction: column; align-items: stretch; width: 100%;">
+                            <div class="form-group">
+                                <label><span class="lang-en">Current Portal Password</span><span class="lang-id">Sandi
+                                        Portal Saat Saat Ini</span></label>
+                                <div class="pwd-wrapper"><input type="password" id="cp-old" required
+                                        placeholder="HRC-XXXXX"><i class="fa-solid fa-eye pwd-toggle"
+                                        onclick="togglePassword('cp-old', this)"></i></div>
+                            </div>
+                            <div class="form-group">
+                                <label><span class="lang-en">New Portal Password</span><span class="lang-id">Sandi
+                                        Portal Baru</span></label>
+                                <div class="pwd-wrapper"><input type="password" id="cp-new" required
+                                        placeholder="Enter new password" minlength="5"><i
+                                        class="fa-solid fa-eye pwd-toggle" onclick="togglePassword('cp-new', this)"></i>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-outline w-full" id="btn-change-pwd"
+                                style="margin-top: 0.5rem;">
+                                <span class="lang-en">Update Password</span><span class="lang-id">Perbarui Kata
+                                    Sandi</span>
+                            </button>
+                            <div id="cp-msg" class="msg-box"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="dashboard-wrapper" id="admin-dashboard">
+        <div class="sidebar-overlay" onclick="toggleSidebar('admin-sidebar')"></div>
+        <aside class="sidebar" id="admin-sidebar" style="border-right-color: rgba(245, 158, 11, 0.2);">
+            <div class="sidebar-header">
+                <span class="font-outfit text-admin"
+                    style="font-size: 1.15rem; font-weight: 800; letter-spacing: -0.01em;"><i
+                        class="fa-solid fa-shield-halved mr-1"></i> <span class="lang-en">Master Panel</span><span
+                        class="lang-id">Panel Master</span></span>
+                <button class="mobile-toggle" onclick="toggleSidebar('admin-sidebar')"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item admin-active" onclick="switchTab('admin', 'publish', this)"><i
+                        class="fa-solid fa-cloud-arrow-up"></i> <span class="lang-en">Publish Release</span><span
+                        class="lang-id">Rilis Update Baru</span></a>
+                <a class="nav-item" onclick="switchTab('admin', 'announcement', this)"><i
+                        class="fa-solid fa-bullhorn"></i> <span class="lang-en">Announcement</span><span
+                        class="lang-id">Pengumuman</span></a>
+                <a class="nav-item" onclick="switchTab('admin', 'freerelease', this)"><i class="fa-solid fa-gift"></i>
+                    <span class="lang-en">Free Release</span><span class="lang-id">Rilis Gratis</span></a>
+                <a class="nav-item" onclick="switchTab('admin', 'database', this)"><i class="fa-solid fa-database"></i>
+                    <span class="lang-en">Release Database</span><span class="lang-id">Database Update</span></a>
+                <a class="nav-item" onclick="switchTab('admin', 'members', this)"><i class="fa-solid fa-users"></i>
+                    <span class="lang-en">Manage Members</span><span class="lang-id">Manajemen Klien</span></a>
+                <a class="nav-item" onclick="switchTab('admin', 'servers', this)"><i
+                        class="fa-solid fa-network-wired"></i> <span class="lang-en">Manage Servers</span><span
+                        class="lang-id">Manajemen Server</span></a>
+                <a class="nav-item" onclick="switchTab('admin', 'social', this)"><i class="fa-solid fa-comments"></i>
+                    <span class="lang-en">Global Chat Mod</span><span class="lang-id">Moderasi Obrolan</span></a>
+                <a class="nav-item" onclick="switchTab('admin', 'generator', this)"><i class="fa-solid fa-key"></i>
+                    <span class="lang-en">License Generator</span><span class="lang-id">Generator Lisensi</span></a>
+            </nav>
+            <div class="sidebar-footer"><a class="nav-item logout-btn" onclick="logout()"><i
+                        class="fa-solid fa-right-from-bracket"></i> <span class="lang-en">Lock Console</span><span
+                        class="lang-id">Kunci Konsol</span></a></div>
+        </aside>
+
+        <main class="main-panel">
+            <header class="top-header">
+                <button class="mobile-toggle" onclick="toggleSidebar('admin-sidebar')"><i
+                        class="fa-solid fa-bars"></i></button>
+                <div style="flex-grow: 1;"></div>
+
+                <button onclick="toggleLang()" class="lang-toggle desktop-only" title="Change Language"
+                    style="margin-right: 1.5rem;">
+                    <i class="fa-solid fa-globe"></i>
+                    <span class="lang-en">ID</span>
+                    <span class="lang-id">EN</span>
+                </button>
+
+                <div class="user-profile-mini">
+                    <div style="text-align: right;" class="desktop-only">
+                        <div style="font-weight: 600; font-size: 0.85rem; color: #fff;">System Admin</div>
+                        <div style="font-size: 0.7rem; color: var(--accent-admin); font-weight: 500;">God Mode</div>
+                    </div>
+                    <div class="avatar-mini admin"><i class="fa-solid fa-bolt"></i></div>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <div id="tab-admin-publish" class="tab-content active">
+                    <h2 class="section-title font-outfit">
+                        <span class="lang-en">Publish Global Release</span><span class="lang-id">Terbitkan Pembaruan
+                            Global</span>
+                    </h2>
+                    <div class="profile-field" style="max-width: 48rem;">
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                            <span class="lang-en">Fill the details below to push an update to all members and the public
+                                changelog.</span>
+                            <span class="lang-id">Isi detail di bawah ini untuk membagikan pembaruan ke semua
+                                klien.</span>
+                        </p>
+                        <form id="admin-publish-form">
+                            <div
+                                style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                <div><label><span class="lang-en">Version Name</span><span class="lang-id">Nama
+                                            Versi</span></label><input type="text" id="p-version" required
+                                        placeholder="e.g. v6.2.0"></div>
+                                <div><label><span class="lang-en">MC Version</span><span class="lang-id">Versi
+                                            MC</span></label><input type="text" id="p-mcversion" required
+                                        placeholder="e.g. 1.20.70+"></div>
+                                <div><label><span class="lang-en">Release Date</span><span class="lang-id">Tanggal
+                                            Rilis</span></label><input type="date" id="p-date" required></div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label><span class="lang-en">Realms Link</span><span class="lang-id">Link
+                                            Realms</span></label>
+                                    <input type="url" id="p-link-realms" required
+                                        placeholder="Direct Link (Discord CDN)">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label><span class="lang-en">BDS Link</span><span class="lang-id">Link
+                                            BDS</span></label>
+                                    <input type="url" id="p-link-bds" required placeholder="Direct Link (Discord CDN)">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="color: #f59e0b;"><i class="fa-solid fa-star"
+                                        style="margin-right: 0.3rem;"></i> <span class="lang-en">Special
+                                        Note</span><span class="lang-id">Catatan Khusus</span></label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                    <textarea id="p-special-en" class="focus-amber"
+                                        placeholder="English text..."></textarea>
+                                    <textarea id="p-special-id" class="focus-amber"
+                                        placeholder="Teks Indonesia..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="color: #10b981;"><i class="fa-solid fa-rocket"
+                                        style="margin-right: 0.3rem;"></i> <span class="lang-en">New
+                                        Features</span><span class="lang-id">Fitur Baru</span></label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                    <textarea id="p-added-en" class="focus-emerald"
+                                        placeholder="English text..."></textarea>
+                                    <textarea id="p-added-id" class="focus-emerald"
+                                        placeholder="Teks Indonesia..."></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label style="color: #3b82f6;"><i class="fa-solid fa-bug"
+                                        style="margin-right: 0.3rem;"></i> <span class="lang-en">Bug Fixes</span><span
+                                        class="lang-id">Perbaikan Bug</span></label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                    <textarea id="p-fixed-en" class="focus-blue"
+                                        placeholder="English text..."></textarea>

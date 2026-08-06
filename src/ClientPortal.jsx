@@ -5,12 +5,8 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h
 export default function ClientPortal({ lang }) {
   const [authMode, setAuthMode] = useState('user'); 
   const [session, setSession] = useState(() => {
-    try {
-      const stored = sessionStorage.getItem('heraclaus_session');
-      return stored ? JSON.parse(stored) : null;
-    } catch (e) {
-      return null;
-    }
+    try { const stored = sessionStorage.getItem('heraclaus_session'); return stored ? JSON.parse(stored) : null; } 
+    catch (e) { return null; }
   });
   
   const [email, setEmail] = useState('');
@@ -20,11 +16,21 @@ export default function ClientPortal({ lang }) {
   const [errorMsg, setErrorMsg] = useState('');
 
   const [activeTab, setActiveTab] = useState(''); 
-  const [servers, setServers] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
+  const [chatInput, setChatInput] = useState('');
+
+  // USER DATA
+  const [servers, setServers] = useState([]);
+  
+  // ADMIN DATA
   const [adminMembers, setAdminMembers] = useState([]);
   const [adminReleases, setAdminReleases] = useState(session?.history || []);
-  const [chatInput, setChatInput] = useState('');
+  const [adminDocs, setAdminDocs] = useState([]);
+  const [adminPortfolio, setAdminPortfolio] = useState([]);
+
+  // MODALS STATE
+  const [modal, setModal] = useState(null); // 'addServer', 'changePwd', 'release', 'generateLicense', 'sys', 'doc', 'portfolio'
+  const [modalData, setModalData] = useState({});
 
   useEffect(() => {
     if (session) {
@@ -42,231 +48,268 @@ export default function ClientPortal({ lang }) {
   useEffect(() => {
     if (activeTab === 'chat') fetchGlobalChat();
     if (activeTab === 'database' && session?.role === 'admin') fetchAdminReleases();
+    if (activeTab === 'docs' && session?.role === 'admin') fetchDocs();
+    if (activeTab === 'portfolio' && session?.role === 'admin') fetchPortfolio();
   }, [activeTab]);
+
+  const apiCall = async (payload) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+      const data = await res.json();
+      setIsLoading(false);
+      return data;
+    } catch (e) {
+      setIsLoading(false);
+      alert(lang === 'en' ? 'Network error.' : 'Koneksi gagal.');
+      return { status: 'error', message: 'Network error' };
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMsg('');
-    setIsLoading(true);
-
-    try {
-      const payload = authMode === 'user' 
-        ? { action: 'login', email: email.trim(), licenseKey: licenseKey.trim() }
-        : { action: 'admin_login', adminPassword: adminPassword.trim() };
-
-      const res = await fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        redirect: "follow",
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-      
-      if (data.status === 'success') {
-        const newSession = authMode === 'user'
-          ? { role: 'user', ...data.user, history: data.history }
-          : { role: 'admin', adminPassword: adminPassword.trim(), history: data.history };
-        
-        sessionStorage.setItem('heraclaus_session', JSON.stringify(newSession));
-        setSession(newSession);
-        if (authMode === 'admin') setAdminReleases(data.history || []);
-      } else {
-        setErrorMsg(data.message);
-      }
-    } catch (err) {
-      setErrorMsg(lang === 'en' ? 'Network error or server busy.' : 'Koneksi gagal atau server sibuk.');
-    } finally {
-      setIsLoading(false);
-    }
+    const payload = authMode === 'user' 
+      ? { action: 'login', email: email.trim(), licenseKey: licenseKey.trim() }
+      : { action: 'admin_login', adminPassword: adminPassword.trim() };
+    const data = await apiCall(payload);
+    if (data.status === "success") {
+      const newSession = authMode === 'user'
+        ? { role: 'user', email: data.email, gamertag: data.gamertag, history: data.history || [] }
+        : { role: 'admin', adminPassword: adminPassword.trim(), gamertag: "Admin" };
+      sessionStorage.setItem('heraclaus_session', JSON.stringify(newSession));
+      setSession(newSession);
+      if (authMode === 'admin') setAdminReleases(data.history || []);
+    } else setErrorMsg(data.message);
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem('heraclaus_session');
-    setSession(null);
-    setActiveTab('');
+    setSession(null); setActiveTab('');
   };
 
+  // FETCHERS
   const fetchServers = async () => {
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "get_servers" }) });
-      const data = await res.json();
-      if (data.status === "success") setServers(data.servers || []);
-    } catch (e) { console.error(e); }
+    const data = await apiCall({ action: "get_servers" });
+    if (data.status === "success") setServers(data.servers || []);
   };
-
   const fetchGlobalChat = async () => {
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "get_global_chat" }) });
-      const data = await res.json();
-      if (data.status === "success") setChatMessages(data.chat || []);
-    } catch (e) { console.error(e); }
+    const data = await apiCall({ action: "get_global_chat" });
+    if (data.status === "success") setChatMessages(data.chat || []);
   };
-
   const fetchAdminMembers = async () => {
-    if (!session || session.role !== 'admin') return;
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "admin_get_members", adminPassword: session.adminPassword }) });
-      const data = await res.json();
-      if (data.status === "success") setAdminMembers(data.members || []);
-    } catch (e) { console.error(e); }
+    const data = await apiCall({ action: "admin_get_members", adminPassword: session?.adminPassword });
+    if (data.status === "success") setAdminMembers(data.members || []);
   };
-
   const fetchAdminReleases = async () => {
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "get_changelog" }) });
-      const data = await res.json();
-      if (data.status === "success") setAdminReleases(data.history || []);
-    } catch (e) { console.error(e); }
+    const data = await apiCall({ action: "get_changelog" });
+    if (data.status === "success") setAdminReleases(data.changelogs || data.history || []);
+  };
+  const fetchDocs = async () => {
+    const data = await apiCall({ action: "get_docs" });
+    if (data.status === "success") setAdminDocs(data.docs || []);
+  };
+  const fetchPortfolio = async () => {
+    const data = await apiCall({ action: "get_portfolio" });
+    if (data.status === "success") setAdminPortfolio(data.portfolio || []);
   };
 
-  const sendChat = async (e) => {
+  // USER ACTIONS
+  const handleAddServer = async (e) => {
     e.preventDefault();
-    if (!chatInput.trim()) return;
-    const msg = chatInput.trim();
-    setChatInput('');
-    const payload = session.role === 'user' 
-      ? { action: "send_global_chat", email: session.email, gamertag: session.gamertag, role: "user", msg }
-      : { action: "send_global_chat", adminPassword: session.adminPassword, role: "admin", msg };
-    
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
-      const data = await res.json();
-      if (data.status === "success") setChatMessages(data.chat || []);
-    } catch (e) { console.error(e); }
+    const data = await apiCall({ action: "add_server", email: session.email, gamertag: session.gamertag, ...modalData });
+    if (data.status === "success") { setModal(null); fetchServers(); alert('Server added!'); }
+    else alert(data.message);
+  };
+  const handleDeleteServer = async (serverId) => {
+    if (!window.confirm('Delete this server?')) return;
+    const payload = session.role === 'admin' 
+      ? { action: "delete_server", role: "admin", adminPassword: session.adminPassword, serverId }
+      : { action: "delete_server", role: "user", email: session.email, serverId };
+    const data = await apiCall(payload);
+    if (data.status === "success") fetchServers(); else alert(data.message);
+  };
+  const handleChangePwd = async (e) => {
+    e.preventDefault();
+    if (modalData.newKey.length < 5) return alert('Password too short');
+    const data = await apiCall({ action: "change_password", email: session.email, oldKey: modalData.oldKey, newKey: modalData.newKey });
+    alert(data.message);
+    if (data.status === "success") setModal(null);
   };
 
-  const deleteChat = async (msgId) => {
-    if (!window.confirm("Delete this message?")) return;
-    const payload = session.role === 'user'
-      ? { action: "delete_global_chat", email: session.email, msgId }
-      : { action: "delete_global_chat", adminPassword: session.adminPassword, msgId };
-    
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
-      const data = await res.json();
-      if (data.status === "success") setChatMessages(data.chat || []);
-    } catch (e) { console.error(e); }
-  };
-
+  // ADMIN ACTIONS (MEMBERS & SYS)
   const toggleMember = async (row, currentStatus) => {
     const newStatus = currentStatus === 'APPROVED' ? 'SUSPENDED' : 'APPROVED';
     if (!window.confirm(`Change status to ${newStatus}?`)) return;
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "admin_toggle_member", adminPassword: session.adminPassword, targetRow: row, newStatus }) });
-      const data = await res.json();
-      if (data.status === "success") fetchAdminMembers();
-    } catch (e) { console.error(e); }
+    const data = await apiCall({ action: "admin_toggle_member", adminPassword: session.adminPassword, targetRow: row, newStatus });
+    if (data.status === "success") fetchAdminMembers();
+  };
+  const deleteMember = async (row) => {
+    if (!window.confirm(`Permanently delete this member?`)) return;
+    const data = await apiCall({ action: "admin_delete_member", adminPassword: session.adminPassword, targetRow: row });
+    if (data.status === "success") fetchAdminMembers(); else alert(data.message);
+  };
+  const handleGenerateLicense = async (e) => {
+    e.preventDefault();
+    const data = await apiCall({ action: "admin_generate_license", adminPassword: session.adminPassword, ...modalData });
+    alert(data.message);
+    if (data.status === "success") setModal(null);
+  };
+  const handleRegenerateKeys = async () => {
+    if (!window.confirm("WARNING: This revokes all existing API keys globally. Continue?")) return;
+    const data = await apiCall({ action: "admin_regenerate_global_keys", adminPassword: session.adminPassword });
+    alert(data.message);
+  };
+  const handleSysAction = async (e) => {
+    e.preventDefault();
+    const actionType = modalData.type; // 'announcement' or 'free_version'
+    const data = await apiCall({ action: actionType === 'announcement' ? "admin_send_announcement" : "admin_update_free_version", adminPassword: session.adminPassword, ...modalData });
+    alert(data.status === 'success' ? 'Success!' : data.message);
+    if (data.status === "success") setModal(null);
   };
 
-  const recordDownload = (versionName) => {
-    if (!session || session.role !== 'user') return;
-    fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "record_download", email: session.email, versionName }) });
+  // ADMIN ACTIONS (RELEASES)
+  const handleRelease = async (e) => {
+    e.preventDefault();
+    const payload = { action: modalData.isEdit ? "admin_edit_release" : "admin_publish_release", adminPassword: session.adminPassword, ...modalData };
+    const data = await apiCall(payload);
+    if (data.status === "success") { setModal(null); fetchAdminReleases(); } else alert(data.message);
+  };
+  const deleteRelease = async (id) => {
+    if (!window.confirm('Delete release?')) return;
+    const data = await apiCall({ action: "admin_delete_release", adminPassword: session.adminPassword, releaseId: id });
+    if (data.status === "success") fetchAdminReleases();
+  };
+
+  // ADMIN ACTIONS (DOCS & PORTFOLIO)
+  const handleDoc = async (e) => {
+    e.preventDefault();
+    const payload = { action: modalData.isEdit ? "admin_edit_doc" : "admin_add_doc", adminPassword: session.adminPassword, ...modalData };
+    const data = await apiCall(payload);
+    if (data.status === "success") { setModal(null); fetchDocs(); } else alert(data.message);
+  };
+  const deleteDoc = async (id) => {
+    if (!window.confirm('Delete doc?')) return;
+    const data = await apiCall({ action: "admin_delete_doc", adminPassword: session.adminPassword, docId: id });
+    if (data.status === "success") fetchDocs();
+  };
+  const handlePortfolio = async (e) => {
+    e.preventDefault();
+    const payload = { action: modalData.isEdit ? "admin_edit_portfolio" : "admin_add_portfolio", adminPassword: session.adminPassword, ...modalData };
+    const data = await apiCall(payload);
+    if (data.status === "success") { setModal(null); fetchPortfolio(); } else alert(data.message);
+  };
+  const deletePortfolio = async (id) => {
+    if (!window.confirm('Delete portfolio?')) return;
+    const data = await apiCall({ action: "admin_delete_portfolio", adminPassword: session.adminPassword, portId: id });
+    if (data.status === "success") fetchPortfolio();
+  };
+
+  // CHAT
+  const sendChat = async (e) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+    const msg = chatInput.trim(); setChatInput('');
+    const payload = session.role === 'user' 
+      ? { action: "send_global_chat", email: session.email, gamertag: session.gamertag, role: "user", msg }
+      : { action: "send_global_chat", adminPassword: session.adminPassword, role: "admin", msg };
+    const data = await apiCall(payload);
+    if (data.status === "success") setChatMessages(data.chat || []);
+  };
+  const deleteChat = async (msgId) => {
+    if (!window.confirm("Delete message?")) return;
+    const payload = session.role === 'user'
+      ? { action: "delete_global_chat", email: session.email, msgId }
+      : { action: "delete_global_chat", adminPassword: session.adminPassword, msgId };
+    const data = await apiCall(payload);
+    if (data.status === "success") setChatMessages(data.chat || []);
   };
 
   if (!session) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
-        <div className="bg-white p-8 rounded-3xl shadow-xl shadow-purple-900/5 border border-purple-100 w-full max-w-sm flex flex-col items-center relative overflow-hidden">
-          
-          <div className="w-full flex bg-gray-100 rounded-xl p-1 mb-8">
-            <button 
-              onClick={() => { setAuthMode('user'); setErrorMsg(''); }}
-              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${authMode === 'user' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-            >
-              User Login
-            </button>
-            <button 
-              onClick={() => { setAuthMode('admin'); setErrorMsg(''); }}
-              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${authMode === 'admin' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-            >
-              Admin Gateway
-            </button>
-          </div>
-
-          <div className="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-3xl mb-4">
-            <i className={`fa-solid ${authMode === 'user' ? 'fa-user-lock' : 'fa-shield-halved'}`}></i>
-          </div>
-          
-          <h2 className="text-2xl font-outfit font-extrabold text-app-textMain mb-1">
-            {authMode === 'user' ? (lang === 'en' ? 'Client Portal' : 'Portal Klien') : (lang === 'en' ? 'Admin Access' : 'Akses Admin')}
-          </h2>
-          <p className="text-app-textSub text-sm text-center mb-6">
-            {authMode === 'user' 
-              ? (lang === 'en' ? 'Enter your credentials to access add-ons.' : 'Masukkan kredensial Anda untuk masuk.')
-              : (lang === 'en' ? 'Master password required for admin access.' : 'Kata sandi master diperlukan untuk akses.')}
-          </p>
-
-          {errorMsg && (
-            <div className="w-full bg-red-50 text-red-600 border border-red-200 text-xs font-semibold p-3 rounded-xl mb-4 text-center">
-              <i className="fa-solid fa-triangle-exclamation mr-1"></i> {errorMsg}
+      <div className="min-h-[80vh] flex items-center justify-center py-10">
+        <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-app w-full max-w-md border border-gray-100">
+          <div className="text-center mb-8">
+            <div className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4 ${authMode === 'user' ? 'bg-purple-100 text-purple-600' : 'bg-amber-100 text-amber-600'}`}>
+              <i className={`fa-solid ${authMode === 'user' ? 'fa-user' : 'fa-shield-halved'} text-2xl`}></i>
             </div>
-          )}
+            <h2 className="text-2xl font-outfit font-bold text-app-textMain">
+              {authMode === 'user' ? 'Client Portal' : 'Admin Gateway'}
+            </h2>
+          </div>
 
-          <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
+          <form onSubmit={handleLogin} className="flex flex-col gap-4">
             {authMode === 'user' ? (
               <>
-                <input 
-                  type="email" 
-                  placeholder={lang === 'en' ? "Email Address" : "Alamat Email"} 
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all font-medium"
-                  required 
-                />
-                <input 
-                  type="password" 
-                  placeholder={lang === 'en' ? "License Key / Password" : "Kunci Lisensi / Sandi"} 
-                  value={licenseKey}
-                  onChange={e => setLicenseKey(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all font-medium"
-                  required 
-                />
+                <div>
+                  <label className="block text-xs font-semibold text-app-textSub mb-1 uppercase tracking-wider">Email Address</label>
+                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" placeholder="your@email.com" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-app-textSub mb-1 uppercase tracking-wider">License Key</label>
+                  <input type="password" value={licenseKey} onChange={e => setLicenseKey(e.target.value)} required className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" placeholder="XXXX-XXXX-XXXX-XXXX" />
+                </div>
               </>
             ) : (
-              <input 
-                type="password" 
-                placeholder="Admin Password" 
-                value={adminPassword}
-                onChange={e => setAdminPassword(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-200 py-3 px-4 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all font-medium"
-                required 
-              />
+              <div>
+                <label className="block text-xs font-semibold text-app-textSub mb-1 uppercase tracking-wider">Master Password</label>
+                <input type="password" value={adminPassword} onChange={e => setAdminPassword(e.target.value)} required className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-400 focus:bg-white transition-colors" placeholder="••••••••" />
+              </div>
             )}
-            <button 
-              type="submit" 
-              disabled={isLoading}
-              className="w-full bg-purple-600 text-white font-bold py-3.5 rounded-xl shadow-md hover:bg-purple-700 active:scale-95 transition-all disabled:opacity-70 flex justify-center items-center gap-2 mt-2"
-            >
-              {isLoading ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-right-to-bracket"></i>}
-              {lang === 'en' ? 'Login' : 'Masuk Sistem'}
+
+            {errorMsg && (
+              <div className="bg-red-50 text-red-500 text-xs p-3 rounded-lg flex items-center gap-2 font-medium">
+                <i className="fa-solid fa-circle-exclamation"></i> {errorMsg}
+              </div>
+            )}
+
+            <button type="submit" disabled={isLoading} className={`w-full text-white font-semibold py-3.5 rounded-xl transition-all shadow-md mt-2 flex items-center justify-center gap-2 ${authMode === 'user' ? 'bg-app-textMain hover:bg-gray-800' : 'bg-amber-500 hover:bg-amber-600'}`}>
+              {isLoading ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-arrow-right-to-bracket"></i>}
+              {lang === 'en' ? 'Secure Login' : 'Masuk Aman'}
             </button>
           </form>
+
+          <div className="mt-6 text-center">
+            <button onClick={() => { setAuthMode(authMode === 'user' ? 'admin' : 'user'); setErrorMsg(''); }} className="text-xs text-app-textSub hover:text-app-textMain font-medium transition-colors">
+              {authMode === 'user' ? 'Switch to Admin Gateway' : 'Return to Client Portal'}
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
+  // LOGGED IN DASHBOARD
   return (
-    <div className="w-full flex flex-col gap-6 max-w-2xl mx-auto">
-      {/* Dashboard Header */}
-      <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
+    <div className="min-h-[80vh] flex flex-col gap-4">
+      {/* Header */}
+      <div className={`bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4 ${session.role === 'admin' ? 'border-t-4 border-t-amber-500' : 'border-t-4 border-t-purple-600'}`}>
         <div className="flex items-center gap-4">
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-inner ${session.role === 'admin' ? 'bg-gradient-to-br from-amber-500 to-orange-600' : 'bg-gradient-to-br from-purple-500 to-indigo-600'}`}>
-            {session.role === 'admin' ? <i className="fa-solid fa-crown"></i> : (session.gamertag ? String(session.gamertag).charAt(0).toUpperCase() : 'U')}
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-inner ${session.role === 'admin' ? 'bg-amber-100 text-amber-600' : 'bg-purple-100 text-purple-600'}`}>
+            <i className={`fa-solid ${session.role === 'admin' ? 'fa-shield-halved' : 'fa-user-check'}`}></i>
           </div>
           <div>
-            <h2 className="font-outfit font-bold text-lg text-app-textMain leading-tight">
-              {session.role === 'admin' ? 'Administrator' : session.gamertag}
+            <h2 className="font-outfit font-bold text-xl text-app-textMain leading-tight">
+              {session.role === 'admin' ? 'Admin Suite' : session.gamertag}
             </h2>
-            <p className="text-xs text-app-textSub font-medium">{session.email}</p>
+            <p className="text-xs text-app-textSub font-medium mt-0.5">
+              {session.role === 'admin' ? 'System Management' : session.email}
+            </p>
           </div>
         </div>
-        <button onClick={handleLogout} className="w-10 h-10 bg-red-50 text-red-500 rounded-full flex items-center justify-center hover:bg-red-100 transition-colors">
-          <i className="fa-solid fa-power-off"></i>
-        </button>
+        <div className="flex gap-2">
+          {session.role === 'user' && (
+             <button onClick={() => { setModalData({oldKey:'', newKey:''}); setModal('changePwd'); }} className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-semibold rounded-xl hover:bg-gray-200 transition-colors">
+               <i className="fa-solid fa-key mr-2"></i> Password
+             </button>
+          )}
+          <button onClick={handleLogout} className="px-4 py-2 bg-red-50 text-red-600 text-sm font-semibold rounded-xl hover:bg-red-100 transition-colors">
+            Logout
+          </button>
+        </div>
       </div>
 
-      {/* Tabs */}
+      {/* Navigation Tabs */}
       <div className="flex overflow-x-auto gap-2 pb-2 show-scrollbar">
         {session.role === 'user' && (
           <>
@@ -278,6 +321,9 @@ export default function ClientPortal({ lang }) {
           <>
             <button onClick={() => setActiveTab('members')} className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-colors ${activeTab === 'members' ? 'bg-amber-500 text-white shadow-md' : 'bg-white text-app-textSub border border-gray-200 hover:bg-gray-50'}`}>Members</button>
             <button onClick={() => setActiveTab('database')} className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-colors ${activeTab === 'database' ? 'bg-amber-500 text-white shadow-md' : 'bg-white text-app-textSub border border-gray-200 hover:bg-gray-50'}`}>Releases</button>
+            <button onClick={() => setActiveTab('docs')} className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-colors ${activeTab === 'docs' ? 'bg-amber-500 text-white shadow-md' : 'bg-white text-app-textSub border border-gray-200 hover:bg-gray-50'}`}>Docs</button>
+            <button onClick={() => setActiveTab('portfolio')} className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-colors ${activeTab === 'portfolio' ? 'bg-amber-500 text-white shadow-md' : 'bg-white text-app-textSub border border-gray-200 hover:bg-gray-50'}`}>Portfolio</button>
+            <button onClick={() => setActiveTab('system')} className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-colors ${activeTab === 'system' ? 'bg-amber-500 text-white shadow-md' : 'bg-white text-app-textSub border border-gray-200 hover:bg-gray-50'}`}>System</button>
           </>
         )}
         <button onClick={() => setActiveTab('chat')} className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-colors ${activeTab === 'chat' ? (session.role === 'admin' ? 'bg-amber-500 text-white shadow-md' : 'bg-purple-600 text-white shadow-md') : 'bg-white text-app-textSub border border-gray-200 hover:bg-gray-50'}`}>Global Chat</button>
@@ -289,16 +335,23 @@ export default function ClientPortal({ lang }) {
         {/* User: Servers */}
         {activeTab === 'servers' && session.role === 'user' && (
           <div className="flex flex-col gap-4">
-            <h3 className="font-outfit font-bold text-lg text-app-textMain"><i className="fa-solid fa-server text-purple-500 mr-2"></i> Authorized Servers</h3>
+            <div className="flex justify-between items-center">
+              <h3 className="font-outfit font-bold text-lg text-app-textMain"><i className="fa-solid fa-server text-purple-500 mr-2"></i> Authorized Servers</h3>
+              <button onClick={() => { setModalData({ name: '', linkType: 'discord', link: '', ip: '', port: '', isPortPublic: true, desc: '' }); setModal('addServer'); }} className="px-3 py-1.5 bg-purple-100 text-purple-600 text-xs font-bold rounded-lg hover:bg-purple-200"><i className="fa-solid fa-plus mr-1"></i> Add Server</button>
+            </div>
             {servers.length === 0 ? (
               <div className="text-center py-8 text-app-textSub text-sm">No servers found.</div>
             ) : (
-              servers.filter(s => s.email === session.email).map((s, i) => (
-                <div key={i} className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex justify-between items-center">
-                  <div>
-                    <h4 className="font-bold text-app-textMain">{s.ip} <span className="text-xs text-gray-400 font-normal ml-1">:{s.port}</span></h4>
-                    <span className="text-[10px] font-semibold bg-green-100 text-green-700 px-2 py-0.5 rounded uppercase tracking-wider">{s.status}</span>
+              servers.filter(s => s.ownerEmail === session.email).map((s, i) => (
+                <div key={i} className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col gap-2">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="font-bold text-app-textMain">{s.name}</h4>
+                      <p className="text-xs text-app-textSub mt-0.5">{s.ip}:{s.port}</p>
+                    </div>
+                    <button onClick={() => handleDeleteServer(s.id)} className="text-red-500 hover:text-red-700 bg-red-50 w-8 h-8 rounded-lg flex items-center justify-center"><i className="fa-solid fa-trash text-sm"></i></button>
                   </div>
+                  <p className="text-xs text-gray-500 mt-2">{s.desc}</p>
                 </div>
               ))
             )}
@@ -314,15 +367,9 @@ export default function ClientPortal({ lang }) {
             ) : (
               <div className="flex flex-col gap-3">
                 {session.history.map((h, i) => (
-                  <div key={i} className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <div>
-                      <h4 className="font-bold text-app-textMain">{h.versionName}</h4>
-                      <p className="text-xs text-app-textSub mt-0.5">{h.date}</p>
-                      <div className="mt-2 text-[10px] text-gray-500" dangerouslySetInnerHTML={{__html: h.changelog}}></div>
-                    </div>
-                    <a href={h.driveLink} target="_blank" onClick={() => recordDownload(h.versionName)} className="bg-purple-100 text-purple-700 hover:bg-purple-600 hover:text-white transition-colors px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap">
-                      <i className="fa-solid fa-cloud-arrow-down mr-1"></i> Download
-                    </a>
+                  <div key={i} className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col gap-2">
+                    <h4 className="font-bold text-app-textMain">{h.versionName}</h4>
+                    <p className="text-xs text-app-textSub">{h.date}</p>
                   </div>
                 ))}
               </div>
@@ -334,63 +381,122 @@ export default function ClientPortal({ lang }) {
         {activeTab === 'members' && session.role === 'admin' && (
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
-              <h3 className="font-outfit font-bold text-lg text-app-textMain"><i className="fa-solid fa-users text-amber-500 mr-2"></i> Clients ({adminMembers.length})</h3>
-              <button onClick={fetchAdminMembers} className="w-8 h-8 rounded-lg bg-gray-100 text-gray-600 hover:bg-amber-100 hover:text-amber-600 transition-colors"><i className="fa-solid fa-rotate-right"></i></button>
+              <h3 className="font-outfit font-bold text-lg text-app-textMain"><i className="fa-solid fa-users text-amber-500 mr-2"></i> Client Management</h3>
+              <button onClick={() => { setModalData({ gamertag: '', email: '', whatsapp: '', expiration: '' }); setModal('generateLicense'); }} className="px-3 py-1.5 bg-amber-100 text-amber-600 text-xs font-bold rounded-lg hover:bg-amber-200"><i className="fa-solid fa-plus mr-1"></i> New License</button>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-sm min-w-[500px]">
-                <thead>
-                  <tr className="bg-gray-50 border-y border-gray-200">
-                    <th className="py-3 px-4 font-semibold text-app-textSub">Client</th>
-                    <th className="py-3 px-4 font-semibold text-app-textSub">Email / Gamertag</th>
-                    <th className="py-3 px-4 font-semibold text-app-textSub">Status</th>
-                    <th className="py-3 px-4 font-semibold text-app-textSub text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {adminMembers.map((m, i) => (
-                    <tr key={i} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="py-3 px-4"><span className="font-bold text-app-textMain">{m.name}</span><br/><span className="text-[10px] text-gray-400">Join: {m.joinDate}</span></td>
-                      <td className="py-3 px-4"><span className="text-app-textMain text-xs">{m.email}</span><br/><span className="text-xs font-semibold text-amber-600">{m.gamertag}</span></td>
-                      <td className="py-3 px-4">
-                        <span className={`px-2 py-1 rounded text-[9px] font-bold tracking-wider ${m.status === 'APPROVED' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                          {m.status}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-right">
-                        <button onClick={() => toggleMember(m.row, m.status)} className="w-7 h-7 rounded bg-white border border-gray-200 text-gray-600 hover:text-amber-500 shadow-sm mx-1" title="Toggle Status"><i className="fa-solid fa-power-off"></i></button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            {adminMembers.length === 0 ? (
+              <div className="text-center py-8 text-app-textSub text-sm">No members found.</div>
+            ) : (
+              <div className="overflow-x-auto rounded-xl border border-gray-200">
+                <table className="w-full text-left border-collapse min-w-[600px]">
+                  <thead><tr className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider"><th className="p-3">User</th><th className="p-3">Key</th><th className="p-3">Status</th><th className="p-3 text-right">Actions</th></tr></thead>
+                  <tbody>
+                    {adminMembers.map((m, i) => (
+                      <tr key={i} className="border-t border-gray-200">
+                        <td className="p-3">
+                          <div className="font-semibold text-app-textMain text-sm">{m.gamertag}</div>
+                          <div className="text-xs text-gray-500">{m.email}</div>
+                        </td>
+                        <td className="p-3 text-xs font-mono bg-gray-50 text-gray-600 rounded">{m.licenseKey}</td>
+                        <td className="p-3 text-xs font-bold"><span className={`px-2 py-1 rounded ${m.status === 'APPROVED' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{m.status}</span></td>
+                        <td className="p-3 text-right">
+                          <button onClick={() => toggleMember(m.row, m.status)} className="text-xs font-semibold px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded mr-2">Toggle</button>
+                          <button onClick={() => deleteMember(m.row)} className="text-xs font-semibold px-2 py-1 bg-red-100 text-red-600 hover:bg-red-200 rounded">Delete</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
-        
-        {/* Admin: Database/Releases */}
+
+        {/* Admin: Releases */}
         {activeTab === 'database' && session.role === 'admin' && (
           <div className="flex flex-col gap-4">
-            <h3 className="font-outfit font-bold text-lg text-app-textMain"><i className="fa-solid fa-database text-amber-500 mr-2"></i> Release History</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-sm min-w-[500px]">
-                <thead>
-                  <tr className="bg-gray-50 border-y border-gray-200">
-                    <th className="py-3 px-4 font-semibold text-app-textSub">Version</th>
-                    <th className="py-3 px-4 font-semibold text-app-textSub">Date</th>
-                    <th className="py-3 px-4 font-semibold text-app-textSub">Link</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {adminReleases.map((r, i) => (
-                    <tr key={i} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="py-3 px-4 font-bold text-app-textMain">{r.versionName}</td>
-                      <td className="py-3 px-4 text-xs">{r.date}</td>
-                      <td className="py-3 px-4"><a href={r.driveLink} target="_blank" className="text-amber-500 hover:underline"><i className="fa-solid fa-link"></i></a></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="flex justify-between items-center">
+              <h3 className="font-outfit font-bold text-lg text-app-textMain"><i className="fa-solid fa-database text-amber-500 mr-2"></i> Release Database</h3>
+              <button onClick={() => { setModalData({ id:'', isEdit: false, versionName: '', mcVersion: '', directLink: '', bpLink: '', rpLink: '', updateSpecial: '', updateAdded: '', updateFixed: '', updateRemoved: '', updateMaintenance: '' }); setModal('release'); }} className="px-3 py-1.5 bg-amber-100 text-amber-600 text-xs font-bold rounded-lg hover:bg-amber-200"><i className="fa-solid fa-plus mr-1"></i> Add Release</button>
+            </div>
+            {adminReleases.map((r, i) => (
+              <div key={i} className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex justify-between items-center">
+                <div>
+                  <h4 className="font-bold text-app-textMain">{r.versionName}</h4>
+                  <p className="text-xs text-app-textSub mt-0.5">{r.date}</p>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => { setModalData({ ...r, isEdit: true }); setModal('release'); }} className="px-3 py-1 text-xs font-bold bg-blue-100 text-blue-600 rounded">Edit</button>
+                  <button onClick={() => deleteRelease(r.id)} className="px-3 py-1 text-xs font-bold bg-red-100 text-red-600 rounded">Delete</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Admin: Docs */}
+        {activeTab === 'docs' && session.role === 'admin' && (
+          <div className="flex flex-col gap-4">
+            <div className="flex justify-between items-center">
+              <h3 className="font-outfit font-bold text-lg text-app-textMain"><i className="fa-solid fa-book text-amber-500 mr-2"></i> Documentation</h3>
+              <button onClick={() => { setModalData({ id:'', isEdit: false, catEn: '', catId: '', titleEn: '', titleId: '', contentEn: '', contentId: '' }); setModal('doc'); }} className="px-3 py-1.5 bg-amber-100 text-amber-600 text-xs font-bold rounded-lg hover:bg-amber-200"><i className="fa-solid fa-plus mr-1"></i> Add Doc</button>
+            </div>
+            {adminDocs.map((d, i) => (
+              <div key={i} className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex justify-between items-center">
+                <div>
+                  <h4 className="font-bold text-app-textMain">{d.titleEn}</h4>
+                  <p className="text-xs text-app-textSub mt-0.5">{d.catEn}</p>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => { setModalData({ ...d, isEdit: true }); setModal('doc'); }} className="px-3 py-1 text-xs font-bold bg-blue-100 text-blue-600 rounded">Edit</button>
+                  <button onClick={() => deleteDoc(d.id)} className="px-3 py-1 text-xs font-bold bg-red-100 text-red-600 rounded">Delete</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Admin: Portfolio */}
+        {activeTab === 'portfolio' && session.role === 'admin' && (
+          <div className="flex flex-col gap-4">
+            <div className="flex justify-between items-center">
+              <h3 className="font-outfit font-bold text-lg text-app-textMain"><i className="fa-solid fa-image text-amber-500 mr-2"></i> Portfolio</h3>
+              <button onClick={() => { setModalData({ id:'', isEdit: false, imageLink: '', titleEn: '', titleId: '', descEn: '', descId: '' }); setModal('portfolio'); }} className="px-3 py-1.5 bg-amber-100 text-amber-600 text-xs font-bold rounded-lg hover:bg-amber-200"><i className="fa-solid fa-plus mr-1"></i> Add Portfolio</button>
+            </div>
+            {adminPortfolio.map((p, i) => (
+              <div key={i} className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex justify-between items-center">
+                <div>
+                  <h4 className="font-bold text-app-textMain">{p.titleEn}</h4>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => { setModalData({ ...p, isEdit: true }); setModal('portfolio'); }} className="px-3 py-1 text-xs font-bold bg-blue-100 text-blue-600 rounded">Edit</button>
+                  <button onClick={() => deletePortfolio(p.id)} className="px-3 py-1 text-xs font-bold bg-red-100 text-red-600 rounded">Delete</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Admin: System */}
+        {activeTab === 'system' && session.role === 'admin' && (
+          <div className="flex flex-col gap-4">
+            <h3 className="font-outfit font-bold text-lg text-app-textMain"><i className="fa-solid fa-cogs text-amber-500 mr-2"></i> System Controls</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+               <button onClick={() => { setModalData({ type: 'announcement', subject: '', plainBody: '' }); setModal('sys'); }} className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-left hover:bg-gray-100 transition-colors">
+                 <i className="fa-solid fa-bullhorn text-amber-500 text-xl mb-2 block"></i>
+                 <h4 className="font-bold text-sm">Send Global Announcement</h4>
+                 <p className="text-xs text-gray-500 mt-1">Send an email to all users.</p>
+               </button>
+               <button onClick={() => { setModalData({ type: 'free_version', version: '', link: '' }); setModal('sys'); }} className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-left hover:bg-gray-100 transition-colors">
+                 <i className="fa-solid fa-link text-blue-500 text-xl mb-2 block"></i>
+                 <h4 className="font-bold text-sm">Update Free Version Link</h4>
+                 <p className="text-xs text-gray-500 mt-1">Change the public download link.</p>
+               </button>
+               <button onClick={handleRegenerateKeys} className="bg-red-50 border border-red-200 p-4 rounded-xl text-left hover:bg-red-100 transition-colors">
+                 <i className="fa-solid fa-skull text-red-500 text-xl mb-2 block"></i>
+                 <h4 className="font-bold text-sm text-red-700">Regenerate Global Keys</h4>
+                 <p className="text-xs text-red-500 mt-1">Revoke ALL current licenses immediately.</p>
+               </button>
             </div>
           </div>
         )}
@@ -399,53 +505,187 @@ export default function ClientPortal({ lang }) {
         {activeTab === 'chat' && (
           <div className="flex flex-col h-[50vh]">
             <h3 className="font-outfit font-bold text-lg text-app-textMain mb-3"><i className="fa-regular fa-comments text-purple-500 mr-2"></i> Global Chat</h3>
-            
-            <div className="flex-grow bg-gray-50 border border-gray-200 rounded-xl p-4 overflow-y-auto flex flex-col gap-3 mb-4 show-scrollbar">
+            <div className="flex-grow bg-gray-50 rounded-2xl border border-gray-200 p-4 overflow-y-auto mb-3 flex flex-col gap-3">
               {chatMessages.length === 0 ? (
-                <div className="m-auto text-app-textSub text-sm"><i className="fa-solid fa-ghost mr-2"></i> No messages yet</div>
+                <div className="text-center py-10 text-app-textSub text-sm"><i className="fa-solid fa-ghost text-2xl mb-2 opacity-50 block"></i>No messages yet.</div>
               ) : (
                 chatMessages.map((msg, i) => {
-                  const isMine = msg.email === session.email;
+                  const isMe = session.role === 'admin' ? msg.role === 'admin' : msg.gamertag === session.gamertag;
                   return (
-                    <div key={i} className={`flex flex-col max-w-[85%] ${isMine ? 'self-end' : 'self-start'}`}>
-                      <div className={`flex items-end gap-2 ${isMine ? 'flex-row-reverse' : ''}`}>
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 ${msg.role === 'admin' ? 'bg-amber-500' : 'bg-purple-500'}`}>
-                          {msg.gamertag?.charAt(0).toUpperCase() || 'A'}
-                        </div>
-                        <div className={`p-3 rounded-2xl text-sm ${isMine ? 'bg-purple-600 text-white rounded-br-sm' : 'bg-white border border-gray-200 text-app-textMain rounded-bl-sm'}`}>
-                          {msg.msg}
-                        </div>
-                        {(isMine || session.role === 'admin') && (
-                          <button onClick={() => deleteChat(msg.id)} className="text-gray-300 hover:text-red-500 text-xs mb-2 transition-colors">
-                            <i className="fa-solid fa-trash"></i>
-                          </button>
+                    <div key={i} className={`flex flex-col max-w-[85%] ${isMe ? 'self-end items-end' : 'self-start items-start'}`}>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] font-bold text-gray-500">{msg.gamertag || 'Admin'}</span>
+                        {msg.role === 'admin' && <span className="text-[8px] bg-amber-100 text-amber-600 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Admin</span>}
+                        {(isMe || session.role === 'admin') && (
+                          <button onClick={() => deleteChat(msg.id)} className="text-gray-300 hover:text-red-500 text-xs mb-2 transition-colors"><i className="fa-solid fa-trash"></i></button>
                         )}
                       </div>
-                      <span className={`text-[9px] text-gray-400 mt-1 ${isMine ? 'text-right mr-9' : 'ml-9'}`}>
-                        {msg.gamertag} {msg.role === 'admin' && <i className="fa-solid fa-crown text-amber-500 ml-1"></i>} • {msg.timestamp}
-                      </span>
+                      <div className={`px-4 py-2 rounded-2xl text-sm ${isMe ? (session.role === 'admin' ? 'bg-amber-500 text-white rounded-tr-sm' : 'bg-purple-600 text-white rounded-tr-sm') : 'bg-white border border-gray-200 text-app-textMain rounded-tl-sm'}`}>
+                        {msg.msg}
+                      </div>
                     </div>
                   );
                 })
               )}
             </div>
-
             <form onSubmit={sendChat} className="flex gap-2">
-              <input 
-                type="text" 
-                value={chatInput}
-                onChange={e => setChatInput(e.target.value)}
-                placeholder="Type a message..."
-                className="flex-grow bg-gray-50 border border-gray-200 rounded-full px-4 py-2.5 text-sm outline-none focus:border-purple-500 transition-colors"
-              />
-              <button type="submit" disabled={!chatInput.trim()} className="w-11 h-11 bg-purple-600 text-white rounded-full flex items-center justify-center hover:bg-purple-700 disabled:opacity-50 transition-colors shrink-0 shadow-md">
+              <input type="text" value={chatInput} onChange={e => setChatInput(e.target.value)} placeholder="Type a message..." className="flex-grow bg-gray-50 border border-gray-200 rounded-full px-5 py-3 text-sm focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" />
+              <button type="submit" disabled={!chatInput.trim()} className={`w-11 h-11 text-white rounded-full flex items-center justify-center disabled:opacity-50 transition-colors shrink-0 shadow-md ${session.role === 'admin' ? 'bg-amber-500 hover:bg-amber-600' : 'bg-purple-600 hover:bg-purple-700'}`}>
                 <i className="fa-solid fa-paper-plane"></i>
               </button>
             </form>
           </div>
         )}
-
       </div>
+
+      {/* MODALS */}
+      {modal === 'addServer' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl w-full max-w-lg shadow-app overflow-hidden animate-fade-up">
+            <div className="p-5 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="font-outfit font-bold text-lg">Add Server</h3>
+              <button onClick={() => setModal(null)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><i className="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onSubmit={handleAddServer} className="p-5 flex flex-col gap-3">
+              <input type="text" placeholder="Server Name" required value={modalData.name} onChange={e=>setModalData({...modalData, name: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <input type="text" placeholder="Server IP" required value={modalData.ip} onChange={e=>setModalData({...modalData, ip: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <input type="text" placeholder="Server Port" required value={modalData.port} onChange={e=>setModalData({...modalData, port: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <select value={modalData.linkType} onChange={e=>setModalData({...modalData, linkType: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm">
+                <option value="discord">Discord</option>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="website">Website</option>
+              </select>
+              <input type="url" placeholder="Community Link" required value={modalData.link} onChange={e=>setModalData({...modalData, link: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <textarea placeholder="Short Description" required value={modalData.desc} onChange={e=>setModalData({...modalData, desc: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm"></textarea>
+              <button type="submit" disabled={isLoading} className="w-full bg-purple-600 text-white font-bold py-3 rounded-xl hover:bg-purple-700 mt-2">Submit</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {modal === 'changePwd' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl w-full max-w-sm shadow-app overflow-hidden animate-fade-up">
+            <div className="p-5 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="font-outfit font-bold text-lg">Change Password</h3>
+              <button onClick={() => setModal(null)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><i className="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onSubmit={handleChangePwd} className="p-5 flex flex-col gap-3">
+              <input type="password" placeholder="Current Password/Key" required value={modalData.oldKey} onChange={e=>setModalData({...modalData, oldKey: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <input type="password" placeholder="New Password/Key" required value={modalData.newKey} onChange={e=>setModalData({...modalData, newKey: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <button type="submit" disabled={isLoading} className="w-full bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-black mt-2">Update Password</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {modal === 'release' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl w-full max-w-2xl shadow-app overflow-hidden animate-fade-up flex flex-col max-h-[90vh]">
+            <div className="p-5 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="font-outfit font-bold text-lg">{modalData.isEdit ? 'Edit Release' : 'Add Release'}</h3>
+              <button onClick={() => setModal(null)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><i className="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onSubmit={handleRelease} className="p-5 flex flex-col gap-3 overflow-y-auto">
+              <div className="grid grid-cols-2 gap-3">
+                <input type="text" placeholder="Version Name (e.g. v1.2.0)" required value={modalData.versionName} onChange={e=>setModalData({...modalData, versionName: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+                <input type="text" placeholder="Minecraft Version" required value={modalData.mcVersion} onChange={e=>setModalData({...modalData, mcVersion: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              </div>
+              <input type="url" placeholder="Direct Download Link" required value={modalData.directLink} onChange={e=>setModalData({...modalData, directLink: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <textarea placeholder="Special Notes (EN|||ID)" value={modalData.updateSpecial} onChange={e=>setModalData({...modalData, updateSpecial: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm"></textarea>
+              <textarea placeholder="Added Features (EN|||ID)" value={modalData.updateAdded} onChange={e=>setModalData({...modalData, updateAdded: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm"></textarea>
+              <textarea placeholder="Fixed Bugs (EN|||ID)" value={modalData.updateFixed} onChange={e=>setModalData({...modalData, updateFixed: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm"></textarea>
+              <button type="submit" disabled={isLoading} className="w-full bg-amber-500 text-white font-bold py-3 rounded-xl hover:bg-amber-600 mt-2">Publish Release</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {modal === 'generateLicense' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl w-full max-w-md shadow-app overflow-hidden animate-fade-up">
+            <div className="p-5 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="font-outfit font-bold text-lg">Generate License</h3>
+              <button onClick={() => setModal(null)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><i className="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onSubmit={handleGenerateLicense} className="p-5 flex flex-col gap-3">
+              <input type="text" placeholder="Gamertag" required value={modalData.gamertag} onChange={e=>setModalData({...modalData, gamertag: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <input type="email" placeholder="Email" required value={modalData.email} onChange={e=>setModalData({...modalData, email: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <input type="text" placeholder="WhatsApp (Optional)" value={modalData.whatsapp} onChange={e=>setModalData({...modalData, whatsapp: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <input type="date" placeholder="Expiration (Optional)" value={modalData.expiration} onChange={e=>setModalData({...modalData, expiration: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <button type="submit" disabled={isLoading} className="w-full bg-amber-500 text-white font-bold py-3 rounded-xl hover:bg-amber-600 mt-2">Generate & Send</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {modal === 'doc' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl w-full max-w-xl shadow-app overflow-hidden animate-fade-up flex flex-col max-h-[90vh]">
+            <div className="p-5 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="font-outfit font-bold text-lg">{modalData.isEdit ? 'Edit Doc' : 'Add Doc'}</h3>
+              <button onClick={() => setModal(null)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><i className="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onSubmit={handleDoc} className="p-5 flex flex-col gap-3 overflow-y-auto">
+              <div className="grid grid-cols-2 gap-3">
+                <input type="text" placeholder="Category (EN)" required value={modalData.catEn} onChange={e=>setModalData({...modalData, catEn: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+                <input type="text" placeholder="Category (ID)" required value={modalData.catId} onChange={e=>setModalData({...modalData, catId: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+                <input type="text" placeholder="Title (EN)" required value={modalData.titleEn} onChange={e=>setModalData({...modalData, titleEn: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+                <input type="text" placeholder="Title (ID)" required value={modalData.titleId} onChange={e=>setModalData({...modalData, titleId: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              </div>
+              <textarea placeholder="Content (EN HTML)" required value={modalData.contentEn} onChange={e=>setModalData({...modalData, contentEn: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm h-32"></textarea>
+              <textarea placeholder="Content (ID HTML)" required value={modalData.contentId} onChange={e=>setModalData({...modalData, contentId: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm h-32"></textarea>
+              <button type="submit" disabled={isLoading} className="w-full bg-amber-500 text-white font-bold py-3 rounded-xl hover:bg-amber-600 mt-2">Save Doc</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {modal === 'portfolio' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl w-full max-w-xl shadow-app overflow-hidden animate-fade-up">
+            <div className="p-5 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="font-outfit font-bold text-lg">{modalData.isEdit ? 'Edit Portfolio' : 'Add Portfolio'}</h3>
+              <button onClick={() => setModal(null)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><i className="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onSubmit={handlePortfolio} className="p-5 flex flex-col gap-3">
+              <input type="url" placeholder="Image URL" required value={modalData.imageLink} onChange={e=>setModalData({...modalData, imageLink: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              <div className="grid grid-cols-2 gap-3">
+                <input type="text" placeholder="Title (EN)" required value={modalData.titleEn} onChange={e=>setModalData({...modalData, titleEn: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+                <input type="text" placeholder="Title (ID)" required value={modalData.titleId} onChange={e=>setModalData({...modalData, titleId: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+              </div>
+              <textarea placeholder="Desc (EN)" required value={modalData.descEn} onChange={e=>setModalData({...modalData, descEn: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm"></textarea>
+              <textarea placeholder="Desc (ID)" required value={modalData.descId} onChange={e=>setModalData({...modalData, descId: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm"></textarea>
+              <button type="submit" disabled={isLoading} className="w-full bg-amber-500 text-white font-bold py-3 rounded-xl hover:bg-amber-600 mt-2">Save Portfolio</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {modal === 'sys' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl w-full max-w-lg shadow-app overflow-hidden animate-fade-up">
+            <div className="p-5 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="font-outfit font-bold text-lg">{modalData.type === 'announcement' ? 'Send Announcement' : 'Update Free Version'}</h3>
+              <button onClick={() => setModal(null)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><i className="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onSubmit={handleSysAction} className="p-5 flex flex-col gap-3">
+              {modalData.type === 'announcement' ? (
+                <>
+                  <input type="text" placeholder="Email Subject" required value={modalData.subject} onChange={e=>setModalData({...modalData, subject: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+                  <textarea placeholder="Plaintext Body" required value={modalData.plainBody} onChange={e=>setModalData({...modalData, plainBody: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm h-32"></textarea>
+                </>
+              ) : (
+                <>
+                  <input type="text" placeholder="Version (e.g. v1.0.0)" required value={modalData.version} onChange={e=>setModalData({...modalData, version: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+                  <input type="url" placeholder="Download Link" required value={modalData.link} onChange={e=>setModalData({...modalData, link: e.target.value})} className="w-full border rounded-xl px-4 py-2 text-sm" />
+                </>
+              )}
+              <button type="submit" disabled={isLoading} className="w-full bg-amber-500 text-white font-bold py-3 rounded-xl hover:bg-amber-600 mt-2">Execute</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
