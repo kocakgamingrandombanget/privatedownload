@@ -80,7 +80,7 @@ function App() {
 
   useEffect(() => {
     // Initial fetch for stats and members
-    fetch(GOOGLE_SCRIPT_URL + "?action=get_stats")
+    fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "get_stats" }) })
       .then(res => res.json())
       .then(data => {
         if (data.status === 'success' && data.activeUsers > 0) {
@@ -90,7 +90,7 @@ function App() {
       }).catch(err => console.log(err));
 
     // Fetch free version
-    fetch(GOOGLE_SCRIPT_URL + "?action=get_free_version")
+    fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "get_free_version" }) })
       .then(res => res.json())
       .then(data => {
         if (data.status === 'success' && data.data) {
@@ -101,20 +101,7 @@ function App() {
     // Fetch servers
     fetchServers();
 
-    // Scroll animation observer
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.05 });
-    
-    setTimeout(() => {
-      document.querySelectorAll('.animate-fade-up').forEach(el => observer.observe(el));
-      setTimeout(() => document.querySelectorAll('.animate-fade-up').forEach(el => el.classList.add('is-visible')), 300);
-    }, 100);
+
 
     // Security
     const disableContextMenu = (e) => e.preventDefault();
@@ -130,6 +117,29 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    // Scroll animation observer
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    
+    const timeout1 = setTimeout(() => {
+      document.querySelectorAll('.animate-fade-up').forEach(el => observer.observe(el));
+      // Fallback timeout to force visibility just in case
+      setTimeout(() => document.querySelectorAll('.animate-fade-up').forEach(el => el.classList.add('is-visible')), 300);
+    }, 100);
+
+    return () => {
+      clearTimeout(timeout1);
+      observer.disconnect();
+    };
+  }, [activeNav]);
+
   const animateCount = (target) => {
     let count = 0;
     const interval = setInterval(() => {
@@ -143,7 +153,7 @@ function App() {
   };
 
   const fetchServers = () => {
-    fetch(GOOGLE_SCRIPT_URL + "?action=get_servers")
+    fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "get_servers" }) })
       .then(res => res.json())
       .then(data => {
         if (data.status === "success") {

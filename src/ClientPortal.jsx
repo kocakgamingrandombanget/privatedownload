@@ -113,7 +113,7 @@ export default function ClientPortal({ lang }) {
 
   const fetchAdminReleases = async () => {
     try {
-      const res = await fetch(GOOGLE_SCRIPT_URL + "?action=get_changelog");
+      const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "get_changelog" }) });
       const data = await res.json();
       if (data.status === "success") setAdminReleases(data.history || []);
     } catch (e) { console.error(e); }
