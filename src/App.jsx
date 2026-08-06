@@ -11,6 +11,7 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [greeting, setGreeting] = useState('');
   const [selectedServer, setSelectedServer] = useState(null);
+  const [activeNav, setActiveNav] = useState('home');
 
   // Handle language class toggle on body
   useEffect(() => {
@@ -31,6 +32,27 @@ function App() {
       document.body.style.overflow = '';
     };
   }, [isModalOpen, selectedServer]);
+
+  // Track active nav on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const addonsElement = document.getElementById('addons-section');
+      const toolsElement = document.getElementById('web-tools-section');
+
+      // Offset by 250px to trigger the state change slightly before it hits the top
+      if (toolsElement && scrollPosition >= toolsElement.offsetTop - 250) {
+        setActiveNav('tools');
+      } else if (addonsElement && scrollPosition >= addonsElement.offsetTop - 250) {
+        setActiveNav('addons');
+      } else {
+        setActiveNav('home');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const updateGreeting = () => {
     const hour = new Date().getHours();
@@ -397,15 +419,15 @@ function App() {
 
       {/* Bottom Nav */}
       <nav className="fixed bottom-0 w-full z-50 bg-white/90 backdrop-blur-md border-t border-app-border px-6 py-3 flex justify-around items-center pb-[max(env(safe-area-inset-bottom),0.75rem)] shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
-        <a href="#" className="flex flex-col items-center gap-1 text-purple-600">
+        <a href="#" onClick={() => setActiveNav('home')} className={`flex flex-col items-center gap-1 transition-colors ${activeNav === 'home' ? 'text-purple-600' : 'text-app-textSub hover:text-purple-600'}`}>
           <i className="fa-solid fa-house text-lg"></i>
           <span className="text-[10px] font-semibold">Home</span>
         </a>
-        <a href="#addons-section" className="flex flex-col items-center gap-1 text-app-textSub hover:text-purple-600 transition-colors">
+        <a href="#addons-section" onClick={() => setActiveNav('addons')} className={`flex flex-col items-center gap-1 transition-colors ${activeNav === 'addons' ? 'text-purple-600' : 'text-app-textSub hover:text-purple-600'}`}>
           <i className="fa-solid fa-puzzle-piece text-lg"></i>
           <span className="text-[10px] font-semibold">Add-ons</span>
         </a>
-        <a href="#web-tools-section" className="flex flex-col items-center gap-1 text-app-textSub hover:text-purple-600 transition-colors">
+        <a href="#web-tools-section" onClick={() => setActiveNav('tools')} className={`flex flex-col items-center gap-1 transition-colors ${activeNav === 'tools' ? 'text-purple-600' : 'text-app-textSub hover:text-purple-600'}`}>
           <i className="fa-solid fa-laptop-code text-lg"></i>
           <span className="text-[10px] font-semibold">Tools</span>
         </a>
