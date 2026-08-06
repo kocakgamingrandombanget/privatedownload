@@ -35,8 +35,24 @@ body {
 input, textarea { -webkit-user-select: auto; user-select: auto; }
 html { scroll-behavior: smooth; }
 
-/* Hide scrollbar for clean app UI */
+/* Hide scrollbar globally for clean app UI */
 ::-webkit-scrollbar { width: 0px; height: 0px; display: none; }
+
+/* Custom scrollbar for specific areas */
+.show-scrollbar::-webkit-scrollbar {
+    display: block;
+    width: 5px;
+}
+.show-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.show-scrollbar::-webkit-scrollbar-thumb {
+    background: #E5E7EB;
+    border-radius: 4px;
+}
+.show-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #D1D5DB;
+}
 
 /* Language Logic */
 body.lang-en .lang-id { display: none !important; }

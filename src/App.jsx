@@ -136,8 +136,8 @@ function App() {
         </div>
         
         <div className="flex items-center gap-3">
-          <button onClick={toggleLang} title={lang === 'en' ? 'Switch to Indonesian' : 'Ubah ke Bahasa Inggris'} className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-app-textSub shadow-sm border border-app-border hover:text-app-textMain transition-colors">
-            <i className="fa-solid fa-globe text-base"></i>
+          <button onClick={toggleLang} title={lang === 'en' ? 'Switch to Indonesian' : 'Ubah ke Bahasa Inggris'} className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm border border-app-border hover:bg-gray-50 transition-colors">
+            <span className="text-lg leading-none">{lang === 'en' ? '🇮🇩' : '🇺🇸'}</span>
           </button>
           
           <button onClick={() => setIsModalOpen(true)} className="relative w-10 h-10 rounded-full bg-white flex items-center justify-center text-app-textMain shadow-sm border border-app-border hover:bg-gray-50 transition-colors">
@@ -477,9 +477,9 @@ function App() {
               </div>
               
               <div className="p-6 flex flex-col gap-4">
-                <div className="max-h-32 overflow-y-auto pr-1">
-                  <p className="text-xs font-bold text-app-textSub uppercase tracking-wider mb-1">Description</p>
-                  <p className="text-sm text-app-textMain leading-relaxed whitespace-pre-wrap">{selectedServer.desc || "No description provided."}</p>
+                <div className="max-h-32 overflow-y-auto pr-2 show-scrollbar relative">
+                  <p className="text-xs font-bold text-app-textSub uppercase tracking-wider mb-1 sticky top-0 bg-white z-10 py-1">Description</p>
+                  <p className="text-sm text-app-textMain leading-relaxed whitespace-pre-wrap pb-2">{selectedServer.desc || "No description provided."}</p>
                 </div>
                 
                 <div className="bg-gray-50 p-3 rounded-xl border border-gray-100 flex justify-between items-center shrink-0">
