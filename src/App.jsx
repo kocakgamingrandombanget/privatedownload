@@ -8,10 +8,10 @@ function App() {
   const [members, setMembers] = useState([]);
   const [servers, setServers] = useState(null);
   const [freeVersionLink, setFreeVersionLink] = useState('#');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [greeting, setGreeting] = useState('');
   const [selectedServer, setSelectedServer] = useState(null);
   const [activeNav, setActiveNav] = useState('home');
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
 
   // Handle language class toggle on body
   useEffect(() => {
@@ -22,7 +22,7 @@ function App() {
 
   // Lock body scroll when any modal is open
   useEffect(() => {
-    if (isModalOpen || selectedServer) {
+    if (isModalOpen || selectedServer || isAdminModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -31,7 +31,7 @@ function App() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isModalOpen, selectedServer]);
+  }, [isModalOpen, selectedServer, isAdminModalOpen]);
 
   // Track active nav on scroll
   useEffect(() => {
@@ -158,7 +158,7 @@ function App() {
         </div>
         
         <div className="flex items-center gap-3">
-          <button onClick={toggleLang} title={lang === 'en' ? 'Switch to Indonesian' : 'Ubah ke Bahasa Inggris'} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shadow-sm border border-black/5 hover:opacity-80 transition-all overflow-hidden shrink-0">
+          <button onClick={toggleLang} title={lang === 'en' ? 'Switch to Indonesian' : 'Ubah ke Bahasa Inggris'} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shadow-sm border border-gray-300 hover:opacity-80 transition-all overflow-hidden shrink-0">
             <img src={lang === 'en' ? 'https://flagcdn.com/w40/id.png' : 'https://flagcdn.com/w40/gb.png'} alt={lang === 'en' ? 'ID' : 'EN'} className="w-full h-full object-cover scale-110" />
           </button>
           
@@ -260,7 +260,7 @@ function App() {
           </div>
           
           <div className="bg-app-surface rounded-[1.5rem] p-3 shadow-app flex flex-col gap-1">
-            <div className="list-item-app flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50">
+            <div onClick={() => setIsAdminModalOpen(true)} className="list-item-app flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 cursor-pointer">
               <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-500 flex-shrink-0">
                 <i className="fa-solid fa-bolt text-xl"></i>
               </div>
@@ -522,6 +522,42 @@ function App() {
               </div>
             </>
           )}
+        </div>
+      </div>
+
+      {/* Admin Suite Modal */}
+      <div className={`fixed inset-0 z-[99999] bg-black/40 backdrop-blur-sm transition-opacity duration-300 flex items-center justify-center p-6 ${isAdminModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        <div className={`bg-app-surface w-full max-w-sm flex flex-col rounded-3xl overflow-hidden transform transition-all duration-300 shadow-2xl ${isAdminModalOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}>
+          <div className="relative pt-6 px-6 pb-4 border-b border-app-border">
+            <button onClick={() => setIsAdminModalOpen(false)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors">
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+            <div className="w-14 h-14 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-500 shadow-sm border border-purple-200 mb-4">
+              <i className="fa-solid fa-bolt text-2xl"></i>
+            </div>
+            <h2 className="font-outfit text-xl font-bold text-app-textMain leading-tight mb-1">Admin Suite Pro</h2>
+            <div className="flex items-center gap-2 text-xs font-medium text-app-textSub">
+              <span className="bg-yellow-100 text-yellow-600 border border-yellow-200 px-2 py-0.5 rounded-full font-bold text-[10px]">FLAGSHIP ADD-ON</span>
+            </div>
+          </div>
+          
+          <div className="p-6 flex flex-col gap-5">
+            <div>
+              <p className="text-sm text-app-textSub mb-4">
+                {lang === 'en' ? 'Get the ultimate management tools for your Minecraft Bedrock server.' : 'Dapatkan alat manajemen terbaik untuk server Minecraft Bedrock Anda.'}
+              </p>
+              <ul className="flex flex-col gap-3 text-sm text-app-textMain">
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Full Admin Suite Features' : 'Fitur Admin Suite Lengkap'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Native Login & X-Ray' : 'Fitur Login & X-Ray'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Homepage Server Promo' : 'Promo Server di Aplikasi'}</li>
+                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Permanent Binding' : 'Akses Permanen Selamanya'}</li>
+              </ul>
+            </div>
+            
+            <a href="payment.html" className="w-full bg-purple-600 text-white font-semibold py-3.5 rounded-xl text-center shadow-md hover:bg-purple-700 transition-colors">
+              {lang === 'en' ? 'Upgrade to Pro - $6' : 'Dapatkan Akses Pro - $6'}
+            </a>
+          </div>
         </div>
       </div>
     </>
