@@ -587,27 +587,35 @@ function App() {
               <p className="text-sm text-app-textSub mb-4">
                 {lang === 'en' ? 'Get the ultimate management tools for your Minecraft Bedrock server.' : 'Dapatkan alat manajemen terbaik untuk server Minecraft Bedrock Anda.'}
               </p>
-              <ul className="flex flex-col gap-3 text-sm text-app-textMain max-h-[35vh] overflow-y-auto pr-2 show-scrollbar">
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Admin management with roles' : 'Manajemen Admin dengan Role'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Player management' : 'Manajemen Pemain'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'World management' : 'Manajemen Dunia/World'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Registration system' : 'Sistem Registrasi'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Repeated broadcast system' : 'Sistem Siaran Otomatis'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Set home' : 'Set Home'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Land claims' : 'Klaim Tanah'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Complex economic system' : 'Sistem Ekonomi Kompleks'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'NPC management system' : 'Sistem Manajemen NPC'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Teleport between players' : 'Teleportasi Antar Pemain'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Buying and selling system' : 'Sistem Jual Beli'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Several slash commands are available' : 'Beragam Slash Commands'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Skill and rank system' : 'Sistem Skill dan Rank'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Custom chat and custom nametag' : 'Chat dan Nametag Custom'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Sidebar' : 'Sidebar'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Hologram + Leaderboard' : 'Hologram + Leaderboard'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Clan system' : 'Sistem Klan'}</li>
-                <li className="flex items-center gap-3"><i className="fa-solid fa-circle-check text-green-500"></i> {lang === 'en' ? 'Battle System' : 'Sistem Pertarungan'}</li>
-                <li className="flex items-start gap-3"><i className="fa-solid fa-circle-check text-green-500 mt-1"></i> {lang === 'en' ? 'Redeem, Daily Reward, Starterkit, Job, Quest, and many more.' : 'Redeem, Hadiah Harian, Starterkit, Pekerjaan, Quest, dan banyak lagi.'}</li>
-              </ul>
+              <div className="flex flex-wrap gap-2 max-h-[35vh] overflow-y-auto pr-2 show-scrollbar pb-2">
+                {[
+                  { en: 'Roles', id: 'Role Admin' },
+                  { en: 'Players', id: 'Pemain' },
+                  { en: 'Worlds', id: 'Dunia' },
+                  { en: 'Registration', id: 'Registrasi' },
+                  { en: 'Broadcasts', id: 'Siaran' },
+                  { en: 'Set Home', id: 'Set Home' },
+                  { en: 'Land Claims', id: 'Klaim Tanah' },
+                  { en: 'Economy', id: 'Ekonomi' },
+                  { en: 'NPCs', id: 'NPC' },
+                  { en: 'Teleport', id: 'Teleportasi' },
+                  { en: 'Shop', id: 'Toko' },
+                  { en: 'Commands', id: 'Command' },
+                  { en: 'Skills & Ranks', id: 'Skill & Rank' },
+                  { en: 'Custom Chat', id: 'Chat Kustom' },
+                  { en: 'Sidebar', id: 'Sidebar' },
+                  { en: 'Leaderboard', id: 'Leaderboard' },
+                  { en: 'Clans', id: 'Klan' },
+                  { en: 'Battles', id: 'Pertarungan' },
+                  { en: 'Rewards', id: 'Hadiah Harian' },
+                  { en: 'Quests', id: 'Quest' },
+                  { en: 'And More...', id: 'Lainnya...' },
+                ].map((feature, i) => (
+                  <span key={i} className="bg-purple-50 text-purple-700 border border-purple-200 px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wide shadow-sm">
+                    {lang === 'en' ? feature.en : feature.id}
+                  </span>
+                ))}
+              </div>
             </div>
             
             <a href="payment.html" className="w-full bg-purple-600 text-white font-semibold py-3.5 rounded-xl text-center shadow-md hover:bg-purple-700 transition-colors">
