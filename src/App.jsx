@@ -12,7 +12,20 @@ function App() {
   const [greeting, setGreeting] = useState('');
   const [selectedServer, setSelectedServer] = useState(null);
   const [activeNav, setActiveNav] = useState('home');
+  const [activeNav, setActiveNav] = useState('home');
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [animatedWordIndex, setAnimatedWordIndex] = useState(0);
+
+  const animatedWordsEn = ['Performance', 'Security', 'Economy', 'Management'];
+  const animatedWordsId = ['Performa', 'Keamanan', 'Ekonomi', 'Manajemen'];
+
+  // Text animation effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimatedWordIndex(prev => (prev + 1) % 4);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Handle language class toggle on body
   useEffect(() => {
@@ -172,42 +185,34 @@ function App() {
 
       <main className="pb-safe px-6 max-w-2xl mx-auto flex flex-col gap-6 mt-2">
         {/* Hero Section */}
-        <section className="animate-fade-up">
-          <div className="relative bg-gradient-to-br from-purple-600 via-purple-500 to-indigo-600 rounded-[2rem] p-7 overflow-hidden shadow-xl shadow-purple-500/20">
-            {/* Background Decorations */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-900/20 rounded-full blur-2xl translate-y-1/3 -translate-x-1/4"></div>
-            
-            <div className="relative z-10 flex flex-col gap-3">
-              <div className="bg-white/20 backdrop-blur-md w-max px-3 py-1 rounded-full text-white text-[10px] font-bold tracking-widest border border-white/20 flex items-center gap-1.5 shadow-sm">
-                <i className="fa-solid fa-bolt text-yellow-300"></i>
-                {lang === 'en' ? 'FLAGSHIP ADD-ON' : 'ADD-ON UNGGULAN'}
-              </div>
-              
-              <h2 className="font-outfit text-3xl font-extrabold text-white leading-tight mt-1">
-                {lang === 'en' 
-                  ? 'Elevate Your Server to the Next Level.' 
-                  : 'Kuasai Penuh Manajemen Server Anda.'}
-              </h2>
-              
-              <p className="text-white/80 text-sm leading-relaxed mb-1 pr-6">
-                {lang === 'en'
-                  ? 'Admin Suite gives you native login, anti-cheat, and an all-in-one economy system to rule them all.'
-                  : 'Admin Suite hadir dengan sistem ekonomi canggih, fitur login native, dan anti-cheat tangguh untuk server Bedrock Anda.'}
-              </p>
-              
-              <div className="flex gap-3 mt-2">
-                <button onClick={() => setIsAdminModalOpen(true)} className="bg-white text-purple-700 font-bold px-5 py-3 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all active:translate-y-0 text-sm flex items-center gap-2">
-                  {lang === 'en' ? 'Explore Features' : 'Lihat Keunggulan'}
-                  <i className="fa-solid fa-arrow-right text-xs"></i>
-                </button>
-              </div>
-            </div>
-            
-            {/* Icon illustration */}
-            <div className="absolute bottom-[-15px] right-[-15px] opacity-10 transform -rotate-12 pointer-events-none">
-              <i className="fa-solid fa-bolt text-[180px] text-white"></i>
-            </div>
+        <section className="animate-fade-up py-4 flex flex-col items-center text-center">
+          <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 mb-4 shadow-lg shadow-purple-200/50">
+            <i className="fa-solid fa-rocket text-2xl animate-bounce"></i>
+          </div>
+          
+          <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest border border-purple-200 flex items-center gap-1.5 shadow-sm mb-4">
+            <i className="fa-solid fa-bolt text-yellow-500"></i>
+            {lang === 'en' ? 'FLAGSHIP ADD-ON' : 'ADD-ON UNGGULAN'}
+          </div>
+          
+          <h2 className="font-outfit text-4xl sm:text-5xl font-extrabold text-app-textMain leading-tight tracking-tight mb-3">
+            {lang === 'en' ? 'Boost Your Server' : 'Tingkatkan Server'}<br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 inline-block min-w-[200px] transition-opacity duration-500">
+              {lang === 'en' ? animatedWordsEn[animatedWordIndex] : animatedWordsId[animatedWordIndex]}
+            </span>
+          </h2>
+          
+          <p className="text-app-textSub text-sm sm:text-base leading-relaxed mb-6 max-w-sm px-4">
+            {lang === 'en'
+              ? 'Admin Suite gives you native login, anti-cheat, and an all-in-one economy system to rule them all.'
+              : 'Admin Suite hadir dengan sistem ekonomi canggih, fitur login native, dan anti-cheat tangguh untuk server Bedrock Anda.'}
+          </p>
+          
+          <div className="flex gap-3">
+            <button onClick={() => setIsAdminModalOpen(true)} className="bg-purple-600 text-white font-bold px-6 py-3.5 rounded-full shadow-lg shadow-purple-600/30 hover:shadow-xl hover:-translate-y-1 transition-all active:translate-y-0 text-sm flex items-center gap-2">
+              <i className="fa-solid fa-bolt"></i>
+              {lang === 'en' ? 'Explore Features' : 'Lihat Keunggulan'}
+            </button>
           </div>
         </section>
 
