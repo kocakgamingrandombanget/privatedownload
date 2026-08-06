@@ -10,6 +10,7 @@ function App() {
   const [freeVersionLink, setFreeVersionLink] = useState('#');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [greeting, setGreeting] = useState('');
+  const [selectedServer, setSelectedServer] = useState(null);
 
   // Handle language class toggle on body
   useEffect(() => {
@@ -322,7 +323,7 @@ function App() {
             <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-full font-medium">Live</span>
           </div>
           
-          <div className="bg-app-surface rounded-[1.5rem] p-3 shadow-app flex flex-col gap-1">
+          <div className="bg-app-surface rounded-[1.5rem] p-4 shadow-app">
             {!servers ? (
               <div className="text-center py-6 text-app-textSub text-sm">
                 <i className="fa-solid fa-circle-notch fa-spin text-xl mb-2"></i><br/>
@@ -333,12 +334,11 @@ function App() {
                 {lang === 'en' ? 'No servers registered yet.' : 'Belum ada server yang mendaftar.'}
               </div>
             ) : (
-              servers.map((s, idx) => (
-                <React.Fragment key={s.id || idx}>
-                  {idx > 0 && <div className="w-full h-px bg-app-border ml-16"></div>}
-                  <ServerItem s={s} />
-                </React.Fragment>
-              ))
+              <div className="grid grid-cols-2 gap-3">
+                {servers.map((s, idx) => (
+                  <ServerItem key={s.id || idx} s={s} onClick={() => setSelectedServer(s)} />
+                ))}
+              </div>
             )}
           </div>
         </section>
@@ -440,11 +440,60 @@ function App() {
           </div>
         </div>
       </div>
+
+      {/* Server Details Modal Popup */}
+      <div className={`fixed inset-0 z-[99999] bg-black/40 backdrop-blur-sm transition-opacity duration-300 flex items-center justify-center p-6 ${selectedServer ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        <div className={`bg-app-surface w-full max-w-sm flex flex-col rounded-3xl overflow-hidden transform transition-all duration-300 shadow-2xl ${selectedServer ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}>
+          {selectedServer && (
+            <>
+              <div className="relative pt-6 px-6 pb-4 border-b border-app-border">
+                <button onClick={() => setSelectedServer(null)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors">
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-500 shadow-sm border border-gray-200 mb-4">
+                  {selectedServer.linkType === 'discord' || (selectedServer.link && selectedServer.link.includes('discord')) 
+                    ? <i className="fa-brands fa-discord text-indigo-500 text-2xl"></i>
+                    : selectedServer.linkType === 'whatsapp' || (selectedServer.link && (selectedServer.link.includes('whatsapp') || selectedServer.link.includes('wa.me')))
+                    ? <i className="fa-brands fa-whatsapp text-green-500 text-2xl"></i>
+                    : <i className="fa-solid fa-server text-gray-600 text-2xl"></i>}
+                </div>
+                <h2 className="font-outfit text-xl font-bold text-app-textMain leading-tight mb-1">{selectedServer.name}</h2>
+                <div className="flex items-center gap-2 text-xs font-medium text-app-textSub">
+                  <span className="bg-gray-100 px-2 py-0.5 rounded-full text-gray-600">Bedrock</span>
+                </div>
+              </div>
+              
+              <div className="p-6 flex flex-col gap-4">
+                <div>
+                  <p className="text-xs font-bold text-app-textSub uppercase tracking-wider mb-1">Description</p>
+                  <p className="text-sm text-app-textMain leading-relaxed">{selectedServer.desc || "No description provided."}</p>
+                </div>
+                
+                <div className="bg-gray-50 p-3 rounded-xl border border-gray-100 flex justify-between items-center">
+                  <div>
+                    <p className="text-[10px] font-bold text-app-textSub uppercase mb-0.5">IP Address</p>
+                    <p className="text-sm font-semibold text-app-textMain select-all">{selectedServer.ip}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] font-bold text-app-textSub uppercase mb-0.5">Port</p>
+                    <p className="text-sm font-semibold text-app-textMain select-all">{selectedServer.port || 19132}</p>
+                  </div>
+                </div>
+
+                <a href={selectedServer.link} target="_blank" rel="noreferrer" className="mt-2 w-full bg-app-textMain text-white font-semibold py-3.5 rounded-xl text-center shadow-md hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
+                  <span>Join Server</span>
+                  <i className="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+                </a>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </>
   );
 }
 
-function ServerItem({ s }) {
+function ServerItem({ s, onClick }) {
   const [status, setStatus] = useState(null);
 
   useEffect(() => {
@@ -458,32 +507,45 @@ function ServerItem({ s }) {
       .catch(() => setStatus({ online: false, error: true }));
   }, [s]);
 
-  let btnIcon = <i className="fa-solid fa-arrow-up-right-from-square"></i>;
+  let iconType = 'server';
+  let iconClass = 'text-gray-500';
+  let bgClass = 'bg-gray-100';
+
   if (s.linkType === 'discord' || (s.link && s.link.includes('discord'))) {
-    btnIcon = <i className="fa-brands fa-discord text-indigo-500"></i>;
+    iconType = 'discord'; iconClass = 'text-indigo-500'; bgClass = 'bg-indigo-50';
   } else if (s.linkType === 'whatsapp' || (s.link && (s.link.includes('whatsapp') || s.link.includes('wa.me')))) {
-    btnIcon = <i className="fa-brands fa-whatsapp text-green-500"></i>;
+    iconType = 'whatsapp'; iconClass = 'text-green-500'; bgClass = 'bg-green-50';
   }
 
   return (
-    <div className="list-item-app flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50" onClick={() => window.open(s.link, '_blank')}>
-      <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500 flex-shrink-0 shadow-sm border border-gray-200">
-        {btnIcon}
+    <div className="list-item-app relative flex flex-col p-4 rounded-2xl border border-app-border bg-white shadow-sm hover:shadow-md transition-all group" onClick={onClick}>
+      <div className="flex justify-between items-start mb-3">
+        <div className={`w-10 h-10 rounded-xl ${bgClass} flex items-center justify-center ${iconClass} flex-shrink-0 shadow-sm`}>
+          {iconType === 'discord' ? <i className="fa-brands fa-discord text-lg"></i> : iconType === 'whatsapp' ? <i className="fa-brands fa-whatsapp text-lg"></i> : <i className="fa-solid fa-server text-lg"></i>}
+        </div>
+        <div className="flex-shrink-0">
+          {!status ? (
+            <div className="w-2 h-2 rounded-full bg-gray-300 animate-pulse"></div>
+          ) : status.online ? (
+            <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+          ) : (
+            <div className="w-2 h-2 rounded-full bg-red-400"></div>
+          )}
+        </div>
       </div>
+      
       <div className="flex-grow">
-        <h3 className="font-bold text-sm text-app-textMain leading-tight line-clamp-1">{s.name}</h3>
-        <p className="text-[11px] text-app-textSub mt-0.5 line-clamp-1">{s.desc}</p>
+        <h3 className="font-bold text-sm text-app-textMain leading-tight line-clamp-1 mb-1">{s.name}</h3>
+        <p className="text-[10px] text-app-textSub line-clamp-2 leading-snug">{s.desc}</p>
       </div>
-      <div className="flex-shrink-0">
+
+      <div className="mt-3 pt-3 border-t border-gray-50 flex items-center justify-between text-[10px] font-medium">
         {!status ? (
-          <i className="fa-solid fa-spinner fa-spin text-app-textSub text-xs"></i>
+          <span className="text-gray-400">Pinging...</span>
         ) : status.online ? (
-          <div className="flex flex-col text-right">
-            <span className="text-xs font-bold text-app-textMain">{status.players.online}/{status.players.max}</span>
-            <span className="text-[10px] text-green-500 font-medium">Online</span>
-          </div>
+          <span className="text-green-600 font-bold">{status.players.online} <span className="font-normal text-gray-500">Players</span></span>
         ) : (
-          <span className="text-xs text-red-400 font-medium">Offline</span>
+          <span className="text-red-400">Offline</span>
         )}
       </div>
     </div>
