@@ -12,7 +12,6 @@ function App() {
   const [greeting, setGreeting] = useState('');
   const [selectedServer, setSelectedServer] = useState(null);
   const [activeNav, setActiveNav] = useState('home');
-  const [activeNav, setActiveNav] = useState('home');
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [animatedWordIndex, setAnimatedWordIndex] = useState(0);
 
@@ -615,11 +614,27 @@ function App() {
                   { en: 'Rewards', id: 'Hadiah Harian' },
                   { en: 'Quests', id: 'Quest' },
                   { en: 'And More...', id: 'Lainnya...' },
-                ].map((feature, i) => (
-                  <span key={i} className="bg-purple-50 text-purple-700 border border-purple-200 px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wide shadow-sm">
-                    {lang === 'en' ? feature.en : feature.id}
-                  </span>
-                ))}
+                ].map((feature, i) => {
+                  const colors = [
+                    'bg-blue-50 text-blue-600 border-blue-200',
+                    'bg-emerald-50 text-emerald-600 border-emerald-200',
+                    'bg-orange-50 text-orange-600 border-orange-200',
+                    'bg-pink-50 text-pink-600 border-pink-200',
+                    'bg-teal-50 text-teal-600 border-teal-200',
+                    'bg-indigo-50 text-indigo-600 border-indigo-200',
+                    'bg-purple-50 text-purple-600 border-purple-200',
+                    'bg-rose-50 text-rose-600 border-rose-200',
+                    'bg-amber-50 text-amber-600 border-amber-200',
+                    'bg-cyan-50 text-cyan-600 border-cyan-200',
+                    'bg-fuchsia-50 text-fuchsia-600 border-fuchsia-200',
+                    'bg-lime-50 text-lime-700 border-lime-200'
+                  ];
+                  return (
+                    <span key={i} className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wide shadow-sm border ${colors[i % colors.length]}`}>
+                      {lang === 'en' ? feature.en : feature.id}
+                    </span>
+                  );
+                })}
               </div>
             </div>
             
