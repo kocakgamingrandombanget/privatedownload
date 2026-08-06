@@ -23,5 +23,10 @@ Dokumen ini berisi rangkuman riwayat pembaruan, diskusi, dan keputusan desain ya
 - **Desain 2-Tab:** Memperbarui formulir login di Portal dengan dua tab keren di bagian atas ("User Login" dan "Admin Gateway") untuk berpindah mode dengan mudah.
 - **Restorasi API Payload:** Memperbaiki sistem *login* ke *Google Apps Script* agar kembali menggunakan dua parameter aslinya: **Email Address** dan **License Key / Password**, sehingga API tidak menolak permintaan login (sebelumnya salah menggunakan input PIN tunggal).
 
+### 5. Perbaikan Bug Navigasi & Integrasi API (Lanjutan)
+- **Migrasi API ke POST:** Mengubah seluruh *fetch request* ke Google Apps Script di halaman utama (`App.jsx`) dan portal (`get_changelog`) dari metode `GET` menjadi `POST` dengan tipe konten `text/plain` agar API tidak menolak permintaan akibat masalah *CORS/Payload*.
+- **Perbaikan Animasi (Blank Screen) Transisi Halaman:** Memisahkan logika `IntersectionObserver` agar bergantung pada `activeNav`. Ini memastikan elemen baru yang dirender ulang saat berpindah halaman (*Home* <-> *Portal*) akan tetap dideteksi dan memicu *class* `is-visible`, sehingga layar tidak lagi kosong.
+- **Perbaikan Bug Klik Portal (2x Klik):** Menghentikan pendeteksian *scroll* otomatis ke *section* utama saat pengguna sudah berada di halaman Portal. Hal ini mencegah *state* navigasi tertimpa kembali ke 'home' sesaat setelah menekan tombol Portal.
+
 ---
-*Dokumen ini dibuat secara otomatis pada akhir sesi diskusi untuk mengarsipkan pencapaian pengembangan.*
+*Dokumen ini diperbarui secara otomatis pada akhir sesi diskusi untuk mengarsipkan pencapaian pengembangan.*

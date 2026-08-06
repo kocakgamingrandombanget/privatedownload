@@ -54,6 +54,9 @@ function App() {
       const addonsElement = document.getElementById('addons-section');
       const toolsElement = document.getElementById('web-tools-section');
 
+      // Skip scroll tracking if main sections don't exist (e.g., when Portal is active)
+      if (!addonsElement && !toolsElement) return;
+
       // Offset by 250px to trigger the state change slightly before it hits the top
       if (toolsElement && scrollPosition >= toolsElement.offsetTop - 250) {
         setActiveNav('tools');
