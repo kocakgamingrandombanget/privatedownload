@@ -8,6 +8,7 @@ function App() {
   const [members, setMembers] = useState([]);
   const [servers, setServers] = useState(null);
   const [freeVersionLink, setFreeVersionLink] = useState('#');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [greeting, setGreeting] = useState('');
   const [selectedServer, setSelectedServer] = useState(null);
   const [activeNav, setActiveNav] = useState('home');
