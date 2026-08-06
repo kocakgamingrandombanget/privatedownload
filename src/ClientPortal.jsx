@@ -164,7 +164,7 @@ export default function ClientPortal({ lang }) {
 
   if (!session) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 animate-fade-up">
+      <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
         <div className="bg-white p-8 rounded-3xl shadow-xl shadow-purple-900/5 border border-purple-100 w-full max-w-sm flex flex-col items-center">
           <div className="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-3xl mb-4">
             <i className={`fa-solid ${authMode === 'user' ? 'fa-user-lock' : 'fa-shield-halved'}`}></i>
@@ -227,7 +227,7 @@ export default function ClientPortal({ lang }) {
   }
 
   return (
-    <div className="w-full flex flex-col gap-6 animate-fade-up max-w-2xl mx-auto">
+    <div className="w-full flex flex-col gap-6 max-w-2xl mx-auto">
       {/* Dashboard Header */}
       <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
         <div className="flex items-center gap-4">
