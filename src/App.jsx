@@ -137,7 +137,7 @@ function App() {
         
         <div className="flex items-center gap-3">
           <button onClick={toggleLang} title={lang === 'en' ? 'Switch to Indonesian' : 'Ubah ke Bahasa Inggris'} className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm border border-app-border hover:bg-gray-50 transition-colors">
-            <span className="text-lg leading-none">{lang === 'en' ? '🇮🇩' : '🇺🇸'}</span>
+            <img src={lang === 'en' ? 'https://flagcdn.com/w20/id.png' : 'https://flagcdn.com/w20/us.png'} alt={lang === 'en' ? 'ID' : 'EN'} className="w-5 h-auto rounded-sm" />
           </button>
           
           <button onClick={() => setIsModalOpen(true)} className="relative w-10 h-10 rounded-full bg-white flex items-center justify-center text-app-textMain shadow-sm border border-app-border hover:bg-gray-50 transition-colors">
