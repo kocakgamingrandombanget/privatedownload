@@ -4,7 +4,14 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h
 
 export default function ClientPortal({ lang }) {
   const [authMode, setAuthMode] = useState('user'); 
-  const [session, setSession] = useState(JSON.parse(sessionStorage.getItem('heraclaus_session')) || null);
+  const [session, setSession] = useState(() => {
+    try {
+      const stored = sessionStorage.getItem('heraclaus_session');
+      return stored ? JSON.parse(stored) : null;
+    } catch (e) {
+      return null;
+    }
+  });
   
   const [pin, setPin] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
@@ -225,7 +232,7 @@ export default function ClientPortal({ lang }) {
       <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-inner ${session.role === 'admin' ? 'bg-gradient-to-br from-amber-500 to-orange-600' : 'bg-gradient-to-br from-purple-500 to-indigo-600'}`}>
-            {session.role === 'admin' ? <i className="fa-solid fa-crown"></i> : session.gamertag?.charAt(0).toUpperCase() || 'U'}
+            {session.role === 'admin' ? <i className="fa-solid fa-crown"></i> : (session.gamertag ? String(session.gamertag).charAt(0).toUpperCase() : 'U')}
           </div>
           <div>
             <h2 className="font-outfit font-bold text-lg text-app-textMain leading-tight">
