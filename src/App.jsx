@@ -19,6 +19,19 @@ function App() {
     updateGreeting();
   }, [lang]);
 
+  // Lock body scroll when any modal is open
+  useEffect(() => {
+    if (isModalOpen || selectedServer) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen, selectedServer]);
+
   const updateGreeting = () => {
     const hour = new Date().getHours();
     const isEnglish = lang === 'en';
@@ -464,12 +477,12 @@ function App() {
               </div>
               
               <div className="p-6 flex flex-col gap-4">
-                <div>
+                <div className="max-h-32 overflow-y-auto pr-1">
                   <p className="text-xs font-bold text-app-textSub uppercase tracking-wider mb-1">Description</p>
-                  <p className="text-sm text-app-textMain leading-relaxed">{selectedServer.desc || "No description provided."}</p>
+                  <p className="text-sm text-app-textMain leading-relaxed whitespace-pre-wrap">{selectedServer.desc || "No description provided."}</p>
                 </div>
                 
-                <div className="bg-gray-50 p-3 rounded-xl border border-gray-100 flex justify-between items-center">
+                <div className="bg-gray-50 p-3 rounded-xl border border-gray-100 flex justify-between items-center shrink-0">
                   <div>
                     <p className="text-[10px] font-bold text-app-textSub uppercase mb-0.5">IP Address</p>
                     <p className="text-sm font-semibold text-app-textMain select-all">{selectedServer.ip}</p>
