@@ -136,8 +136,8 @@ function App() {
         </div>
         
         <div className="flex items-center gap-3">
-          <button onClick={toggleLang} className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-xs font-bold text-app-textSub shadow-sm border border-app-border hover:text-app-textMain transition-colors">
-            {lang === 'en' ? 'ID' : 'EN'}
+          <button onClick={toggleLang} title={lang === 'en' ? 'Switch to Indonesian' : 'Ubah ke Bahasa Inggris'} className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-app-textSub shadow-sm border border-app-border hover:text-app-textMain transition-colors">
+            <i className="fa-solid fa-globe text-base"></i>
           </button>
           
           <button onClick={() => setIsModalOpen(true)} className="relative w-10 h-10 rounded-full bg-white flex items-center justify-center text-app-textMain shadow-sm border border-app-border hover:bg-gray-50 transition-colors">
