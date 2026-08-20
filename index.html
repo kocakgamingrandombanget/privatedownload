@@ -123,6 +123,44 @@
             .bottom-nav-center:hover { transform: scale(1.05); }
         }
 
+        @media (max-width: 767px) {
+            .desktop-content { display: none !important; }
+            body { background-color: #f8f9fc !important; color: #0f172a !important; }
+            .ambient-bg { display: none !important; }
+        }
+        @media (min-width: 768px) {
+            .mobile-app-content { display: none !important; }
+        }
+        
+        /* Mobile App Dashboard Styles */
+        .mobile-app-content { padding: 0 1.25rem 6rem 1.25rem; font-family: 'Inter', sans-serif; }
+        .mobile-hero-title { font-size: 1.75rem; font-weight: 800; color: #0f172a; line-height: 1.2; margin-bottom: 0.5rem; font-family: 'Outfit'; letter-spacing: -0.02em; }
+        .mobile-hero-desc { font-size: 0.85rem; color: #64748b; line-height: 1.5; margin-bottom: 1.5rem; }
+        
+        .section-title { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 1.5rem 0 1rem 0; font-family: 'Outfit'; }
+        
+        .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+        .activity-card { border-radius: 16px; padding: 1.25rem; color: #fff; display: flex; flex-direction: column; justify-content: space-between; min-height: 8rem; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); text-decoration: none; transition: transform 0.2s; }
+        .activity-card:active { transform: scale(0.95); }
+        .activity-card-icon { width: 2.25rem; height: 2.25rem; border-radius: 10px; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 1rem; }
+        .activity-card-title { font-size: 0.8rem; font-weight: 500; opacity: 0.95; margin-bottom: 0.25rem; font-family: 'Inter'; }
+        .activity-card-value { font-size: 1.35rem; font-weight: 700; font-family: 'Outfit'; letter-spacing: -0.02em; }
+        
+        .bg-purple { background: linear-gradient(135deg, #a855f7, #8b5cf6); }
+        .bg-orange { background: linear-gradient(135deg, #fb923c, #f97316); }
+        .bg-blue { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+        .bg-pink { background: linear-gradient(135deg, #f472b6, #ec4899); }
+        
+        .product-list { display: flex; flex-direction: column; gap: 1rem; }
+        .product-list-item { background: #fff; border-radius: 16px; padding: 1rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); text-decoration: none; border: 1px solid rgba(0,0,0,0.02); transition: transform 0.2s; }
+        .product-list-item:active { transform: scale(0.98); background: #f8fafc; }
+        .product-list-icon { width: 3rem; height: 3rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #fff; flex-shrink: 0; }
+        .product-list-content { flex-grow: 1; }
+        .product-list-title { font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 0.15rem; font-family: 'Outfit'; }
+        .product-list-desc { font-size: 0.75rem; color: #64748b; }
+        .product-list-badge { font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 99px; background: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }
+        .badge-new { background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; }
+
         .action-group { display: flex; flex-direction: column; gap: 0.6rem; width: 100%; }
         .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1.25rem; min-height: 2.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; text-align: center; width: 100%; }
         @media (min-width: 640px) { .action-group { flex-direction: row; } .btn { width: auto; } }
@@ -312,6 +350,7 @@
         </div>
     </div>
 
+    <div class="desktop-content">
     <nav class="navbar" id="navbar">
         <div class="container flex justify-between items-center w-full">
             <a href="#" class="font-outfit" style="font-size: 1.15rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em;">
@@ -859,6 +898,100 @@
             </div>
         </div>
     </footer>
+    </div> <!-- Close desktop-content -->
+
+    <div class="mobile-app-content">
+        <h1 class="mobile-hero-title">
+            <span class="lang-en">Stop installing junk plugins.<br>Build a legendary server.</span>
+            <span class="lang-id">Berhenti pasang plugin sampah.<br>Bangun server legendaris.</span>
+        </h1>
+        <p class="mobile-hero-desc">
+            <span class="lang-en">Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world's economy and progression.</span>
+            <span class="lang-id">Add-on Minecraft Bedrock premium all-in-one yang menghilangkan lag, memperbaiki konflik, dan memberi Anda kontrol penuh atas ekonomi dan progres.</span>
+        </p>
+
+        <h2 class="section-title">
+            <span class="lang-en">Activity Overview</span>
+            <span class="lang-id">Ringkasan Aktivitas</span>
+        </h2>
+        
+        <div class="activity-grid">
+            <div class="activity-card bg-purple" onclick="openMembersModal()" style="cursor:pointer;">
+                <div class="activity-card-icon"><i class="fa-solid fa-crown"></i></div>
+                <div>
+                    <div class="activity-card-title">
+                        <span class="lang-en">Pro Servers</span>
+                        <span class="lang-id">Server Pro</span>
+                    </div>
+                    <div class="activity-card-value pro-user-count-display">0</div>
+                </div>
+            </div>
+            <a href="https://www.youtube.com/@heraclaus" target="_blank" class="activity-card bg-orange">
+                <div class="activity-card-icon"><i class="fa-brands fa-youtube"></i></div>
+                <div>
+                    <div class="activity-card-title">YouTube</div>
+                    <div class="activity-card-value" style="font-size: 1rem;"><i class="fa-solid fa-circle-check"></i> Verified</div>
+                </div>
+            </a>
+            <a href="web-service.html" class="activity-card bg-blue">
+                <div class="activity-card-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                <div>
+                    <div class="activity-card-title">
+                        <span class="lang-en">Web Studio</span>
+                        <span class="lang-id">Jasa Web</span>
+                    </div>
+                    <div class="activity-card-value" style="font-size: 1rem;">New Service</div>
+                </div>
+            </a>
+            <a href="https://discord.gg/xQStZUvukS" target="_blank" class="activity-card bg-pink">
+                <div class="activity-card-icon"><i class="fa-brands fa-discord"></i></div>
+                <div>
+                    <div class="activity-card-title">Community</div>
+                    <div class="activity-card-value" style="font-size: 1rem;">Join Discord</div>
+                </div>
+            </a>
+        </div>
+
+        <h2 class="section-title">
+            <span class="lang-en">Our Products & Tools</span>
+            <span class="lang-id">Produk & Alat Kami</span>
+        </h2>
+        
+        <div class="product-list">
+            <a href="#addons" class="product-list-item" onclick="setTimeout(() => { document.querySelector('.desktop-content').style.display='block'; window.location.hash='#addons'; }, 100);">
+                <div class="product-list-icon bg-purple"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="product-list-content">
+                    <div class="product-list-title">Admin Suite</div>
+                    <div class="product-list-desc">All-in-one flagship system</div>
+                </div>
+                <div class="product-list-badge">Add-on</div>
+            </a>
+            <a href="https://www.curseforge.com/minecraft-bedrock/addons/cinemato-studio" target="_blank" class="product-list-item">
+                <div class="product-list-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fa-solid fa-film"></i></div>
+                <div class="product-list-content">
+                    <div class="product-list-title">Cinemato Studio</div>
+                    <div class="product-list-desc">Creator camera tool</div>
+                </div>
+                <div class="product-list-badge" style="background: #ecfdf5; color: #059669; border-color: #d1fae5;">Add-on</div>
+            </a>
+            <a href="glyph.html" class="product-list-item">
+                <div class="product-list-icon bg-blue"><i class="fa-solid fa-layer-group"></i></div>
+                <div class="product-list-content">
+                    <div class="product-list-title">Glyph Studio</div>
+                    <div class="product-list-desc">Pixel perfect spritesheet tool</div>
+                </div>
+                <div class="product-list-badge badge-new">Web Tool</div>
+            </a>
+            <a href="pixel.html" class="product-list-item">
+                <div class="product-list-icon bg-pink"><i class="fa-solid fa-font"></i></div>
+                <div class="product-list-content">
+                    <div class="product-list-title">Pixel Generator</div>
+                    <div class="product-list-desc">Retro typography generator</div>
+                </div>
+                <div class="product-list-badge badge-new">Web Tool</div>
+            </a>
+        </div>
+    </div>
 
     <nav class="bottom-nav">
         <a href="#" class="bottom-nav-item active">
@@ -954,12 +1087,13 @@
                             badge.style.opacity = '1';
                             badge.style.transform = 'translateY(0)';
                         }
-                        let count = 0; const target = data.activeUsers; const el = document.getElementById('pro-user-count');
-                        if(el) {
+                        let count = 0; const target = data.activeUsers; 
+                        const els = document.querySelectorAll('#pro-user-count, .pro-user-count-display');
+                        if(els.length > 0) {
                             const interval = setInterval(() => {
                                 count += Math.ceil(target / 15);
                                 if(count >= target) { count = target; clearInterval(interval); }
-                                el.innerText = count;
+                                els.forEach(e => e.innerText = count);
                             }, 50);
                         }
                         if(data.members) cachedMembers = data.members;
