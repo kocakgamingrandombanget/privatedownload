@@ -12,12 +12,12 @@
     
     <style>
         :root {
-            --bg-base: #050505; --bg-surface: #0a0a0a; --bg-card: rgba(255, 255, 255, 0.03); --bg-card-hover: rgba(255, 255, 255, 0.05);
-            --border-light: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.15);
-            --text-primary: #ffffff; --text-secondary: #a1a1aa; --text-muted: #71717a;
+            --bg-base: #f8f9fa; --bg-surface: #ffffff; --bg-card: #ffffff; --bg-card-hover: #f1f5f9;
+            --border-light: #e2e8f0; --border-highlight: #cbd5e1;
+            --text-primary: #0f172a; --text-secondary: #475569; --text-muted: #64748b;
             --accent-primary: #8b5cf6; --accent-secondary: #3b82f6; --accent-success: #10b981; --accent-danger: #f43f5e;
-            --gradient-hero: linear-gradient(135deg, #e879f9 0%, #8b5cf6 50%, #3b82f6 100%);
-            --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --gradient-hero: linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #3b82f6 100%);
+            --gradient-admin: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -40,32 +40,33 @@
         p { color: var(--text-secondary); font-size: clamp(0.85rem, 1.5vw, 0.9rem); }
         .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .ambient-bg { display: none; }
         .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; }
         .blob-1 { top: -20%; left: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
         .blob-2 { bottom: -20%; right: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
 
-        .navbar { position: fixed; top: 0; width: 100%; height: 3.5rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
+        .navbar { position: fixed; top: 0; width: 100%; height: 3.5rem; z-index: 100; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
         .nav-links { display: none; } 
-        .nav-links a.reg-link { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.8rem; transition: color 0.2s; }
+        .nav-links a.reg-link { color: var(--text-primary); text-decoration: none; font-weight: 500; font-size: 0.8rem; transition: color 0.2s; }
         .nav-links a.reg-link:hover { color: var(--text-primary); }
         .nav-icon-btn { color: var(--text-secondary); font-size: 1rem; transition: all 0.2s; display: flex; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; border-radius: 6px; }
         .nav-icon-btn:hover { color: #5865F2; background: rgba(88, 101, 242, 0.1); }
         .nav-divider { width: 1px; height: 0.8rem; background: var(--border-light); margin: 0 0.5rem; }
-        .login-nav-btn { background: rgba(255,255,255,0.04); color: #fff; padding: 0.35rem 0.85rem; border-radius: 6px; border: 1px solid var(--border-light); text-decoration: none; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.2s; }
+        .login-nav-btn { background: #ffffff; color: var(--text-primary); padding: 0.35rem 0.85rem; border-radius: 6px; border: 1px solid var(--border-light); text-decoration: none; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .login-nav-btn:hover { background: #f8f9fa; border-color: var(--border-highlight); } padding: 0.35rem 0.85rem; border-radius: 6px; border: 1px solid var(--border-light); text-decoration: none; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.2s; }
         .login-nav-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--border-highlight); }
-        .btn-icon { width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; border: 1px solid var(--border-highlight); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; background: rgba(255,255,255,0.05); }
-        .btn-icon:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: var(--border-highlight); }
+        .btn-icon { width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; border: 1px solid var(--border-highlight); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; background: #ffffff; }
+        .btn-icon:hover { background: #f1f5f9; color: var(--text-primary); border-color: var(--border-highlight); }
         .btn-icon.danger:hover { background: rgba(244,63,94,0.1); color: var(--accent-danger); border-color: rgba(244,63,94,0.5); }
         
-        .lang-toggle { background: rgba(255,255,255,0.04); color: var(--text-secondary); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-light); cursor: pointer; transition: all 0.2s; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; }
-        .lang-toggle:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); border-color: var(--border-highlight); }
+        .lang-toggle { background: #ffffff; color: var(--text-secondary); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-light); cursor: pointer; transition: all 0.2s; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .lang-toggle:hover { background: #f1f5f9; color: var(--text-primary); border-color: var(--border-highlight); }
 
         .menu-btn { display: none; }
         
         @media (min-width: 768px) { .nav-links { display: flex; align-items: center; gap: 1rem; } }
         @media (max-width: 767px) {
-            .navbar { display: none; }
+            .navbar { position: fixed; top: 0; width: 100%; height: 3.5rem; z-index: 100; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
             body { padding-bottom: 5.5rem; padding-top: 1rem; }
             html { scroll-padding-top: 2rem; }
             .section-hero { padding-top: 2rem; }
@@ -77,16 +78,16 @@
             .mobile-top-bar {
                 display: flex; justify-content: space-between; align-items: center;
                 padding: 1rem 1.25rem; width: 100%; position: sticky; top: 0; z-index: 100;
-                background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(12px);
+                background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px);
                 border-bottom: 1px solid var(--border-light); margin-top: -1rem; margin-bottom: 1rem;
             }
             .mobile-top-greeting { display: flex; align-items: center; gap: 0.75rem; }
             .mobile-top-avatar { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--gradient-admin); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-family: 'Outfit'; font-size: 1.1rem; }
             .mobile-top-text p { font-size: 0.75rem; color: var(--text-muted); margin: 0; }
-            .mobile-top-text h3 { font-size: 1rem; color: #fff; margin: 0; font-family: 'Inter'; font-weight: 600; }
+            .mobile-top-text h3 { font-size: 1rem; color: var(--text-primary); margin: 0; font-family: 'Inter'; font-weight: 600; }
             .mobile-top-actions { display: flex; gap: 0.5rem; align-items: center; }
-            .mobile-btn { width: 2.25rem; height: 2.25rem; border-radius: 50%; border: 1px solid var(--border-light); background: var(--bg-card); display: flex; align-items: center; justify-content: center; color: var(--text-primary); cursor: pointer; transition: 0.2s; position: relative; }
-            .mobile-btn:hover { background: rgba(255,255,255,0.1); }
+            .mobile-btn { width: 2.25rem; height: 2.25rem; border-radius: 50%; border: 1px solid var(--border-highlight); background: #ffffff; display: flex; align-items: center; justify-content: center; color: var(--text-primary); cursor: pointer; transition: 0.2s; position: relative; }
+            .mobile-btn:hover { background: #f1f5f9; }
             .notification-dot { position: absolute; top: 0; right: 0; width: 8px; height: 8px; background: var(--accent-danger); border-radius: 50%; border: 2px solid var(--bg-surface); }
         }
 
@@ -96,7 +97,7 @@
             .bottom-nav {
                 display: flex; justify-content: space-around; align-items: center;
                 position: fixed; bottom: 0; left: 0; width: 100%; height: 4.5rem;
-                background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(20px);
+                background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
                 border-top: 1px solid var(--border-light); z-index: 100;
                 padding: 0 0.5rem;
             }
@@ -123,15 +124,17 @@
             .bottom-nav-center:hover { transform: scale(1.05); }
         }
 
+        
         @media (max-width: 767px) {
-            .desktop-content { display: none !important; }
-            body { background-color: #f8f9fc !important; color: #0f172a !important; }
-            .ambient-bg { display: none !important; }
+            .desktop-only { display: none !important; }
+            .section-hero { text-align: left !important; padding: 1.5rem 0 !important; }
+            .section-hero h1, .section-hero p { text-align: left !important; }
+            .section-hero h1 { font-size: 1.5rem; }
         }
         @media (min-width: 768px) {
-            .mobile-app-content { display: none !important; }
+            .mobile-only { display: none !important; }
         }
-        
+
         /* Mobile App Dashboard Styles */
         .mobile-app-content { padding: 0 1.25rem 6rem 1.25rem; font-family: 'Inter', sans-serif; }
         .mobile-hero-title { font-size: 1.75rem; font-weight: 800; color: #0f172a; line-height: 1.2; margin-bottom: 0.5rem; font-family: 'Outfit'; letter-spacing: -0.02em; }
@@ -165,12 +168,12 @@
         .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1.25rem; min-height: 2.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; text-align: center; width: 100%; }
         @media (min-width: 640px) { .action-group { flex-direction: row; } .btn { width: auto; } }
 
-        .btn-primary { background: var(--text-primary); color: var(--bg-base); }
-        .btn-primary:hover { background: #e4e4e7; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,255,255,0.15); }
+        .btn-primary { background: var(--text-primary); color: #ffffff; }
+        .btn-primary:hover { background: #1e293b; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         .btn-gradient { background: var(--gradient-admin); color: #fff; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.2); border: 1px solid rgba(255,255,255,0.1); }
         .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); filter: brightness(1.1); }
-        .btn-outline { background: rgba(255,255,255,0.02); color: var(--text-primary); border: 1px solid var(--border-highlight); }
-        .btn-outline:hover { background: rgba(255,255,255,0.06); }
+        .btn-outline { background: #ffffff; color: var(--text-primary); border: 1px solid var(--border-highlight); box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .btn-outline:hover { background: #f8f9fa; }
 
         .yt-badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.75rem; background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1.25rem; color: var(--text-primary); text-decoration: none; transition: all 0.2s; }
         .yt-badge:hover { background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.4); }
@@ -178,29 +181,8 @@
 
         .promo-badge:hover { background: rgba(139, 92, 246, 0.25) !important; border-color: rgba(139, 92, 246, 0.6) !important; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); }
 
-        .stats-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1.25rem;
-            border-radius: 9999px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin: 1.5rem 0 2rem 0; 
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            opacity: 0; 
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .stats-badge:hover {
-            border-color: rgba(139, 92, 246, 0.4);
-            background: rgba(139, 92, 246, 0.08);
-            transform: translateY(8px);
-        }
+        .stats-badge { display: inline-flex; align-items: center; gap: 0.6rem; background: #ffffff; border: 1px solid var(--border-highlight); padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.85rem; color: var(--text-secondary); margin: 1.5rem 0 2rem 0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); opacity: 0; transform: translateY(10px); transition: all 0.3s ease; cursor: pointer; }
+        .stats-badge:hover { border-color: rgba(139, 92, 246, 0.4); background: #f8fafc; transform: translateY(8px); }
         .stats-badge strong {
             color: #fff;
             font-family: 'Outfit', sans-serif;
@@ -224,14 +206,14 @@
         .section-hero { padding: 6rem 0 2.5rem 0; }
         .section { padding: 3rem 0; }
         
-        .product-box { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
-        .product-header { padding: 1.5rem; border-bottom: 1px solid var(--border-light); background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.05), transparent 60%); display: flex; flex-direction: column; gap: 1rem; }
+        .product-box { background: #ffffff; border: 1px solid var(--border-light); border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.03); }
+        .product-header { padding: 1.5rem; border-bottom: 1px solid var(--border-light); background: #ffffff; display: flex; flex-direction: column; gap: 1rem; }
         .product-header-actions { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
         .badge { display: inline-block; padding: 0.2rem 0.5rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; border: 1px solid rgba(139, 92, 246, 0.25); }
         
         .feature-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; padding: 1rem; }
-        .feature-cell { background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); border-radius: 8px; padding: 1.25rem; transition: background 0.3s; }
-        .feature-cell:hover { background: rgba(255,255,255,0.04); border-color: var(--border-highlight); }
+        .feature-cell { background: #f8f9fa; border: 1px solid var(--border-light); border-radius: 12px; padding: 1.25rem; transition: background 0.3s; }
+        .feature-cell:hover { background: #f1f5f9; border-color: var(--border-highlight); }
         .feature-cell i { font-size: 1.25rem; margin-bottom: 0.75rem; display: block; }
         .feature-cell p { font-size: 0.85rem; margin-top: 0.2rem; line-height: 1.5; }
         .grid-cards { display: grid; gap: 1rem; }
@@ -289,7 +271,7 @@
         .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
         .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 5, 5, 0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(8px); padding: 1.25rem; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(8px); padding: 1.25rem; }
         .modal-overlay.show { opacity: 1; pointer-events: auto; }
         .modal-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; width: 100%; max-width: 28rem; padding: 1.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.5); transform: translateY(20px); transition: transform 0.3s ease; display: flex; flex-direction: column; max-height: 85vh; }
         .modal-overlay.show .modal-card { transform: translateY(0); }
@@ -398,7 +380,7 @@
     <section class="section-hero text-center">
         <div class="container flex flex-col items-center animate-on-scroll">
             
-            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.25rem;">
+            <div class="desktop-only" style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.25rem;">
                 <a href="https://www.youtube.com/@heraclaus" target="_blank" class="yt-badge" style="margin-bottom: 0;">
                     <i class="fa-brands fa-youtube yt-icon"></i> Heraclaus <i class="fa-solid fa-circle-check yt-verified"></i>
                 </a>
@@ -420,9 +402,47 @@
             <p style="max-width: 36rem; margin: 1rem auto 0; line-height: 1.6;">
                 <span class="lang-en">Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world's economy and progression.</span>
                 <span class="lang-id">Add-on Minecraft Bedrock premium all-in-one yang menghilangkan lag, memperbaiki konflik, dan memberi Anda kontrol penuh atas ekonomi dan progres server Anda.</span>
+            
+            <div class="mobile-only" style="width: 100%; text-align: left; margin-top: 1rem;">
+                <h2 class="font-outfit" style="font-size: 1.1rem; color: #0f172a; margin-bottom: 1rem;">
+                    <span class="lang-en">Activity Overview</span>
+                    <span class="lang-id">Ringkasan Aktivitas</span>
+                </h2>
+                <div class="activity-grid">
+                    <div class="activity-card bg-purple" onclick="openMembersModal()" style="cursor:pointer;">
+                        <div class="activity-card-icon"><i class="fa-solid fa-crown"></i></div>
+                        <div>
+                            <div class="activity-card-title"><span class="lang-en">Pro Servers</span><span class="lang-id">Server Pro</span></div>
+                            <div class="activity-card-value pro-user-count-display">0</div>
+                        </div>
+                    </div>
+                    <a href="https://www.youtube.com/@heraclaus" target="_blank" class="activity-card bg-orange">
+                        <div class="activity-card-icon"><i class="fa-brands fa-youtube"></i></div>
+                        <div>
+                            <div class="activity-card-title">YouTube</div>
+                            <div class="activity-card-value" style="font-size: 1rem;"><i class="fa-solid fa-circle-check"></i> Verified</div>
+                        </div>
+                    </a>
+                    <a href="web-service.html" class="activity-card bg-blue">
+                        <div class="activity-card-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                        <div>
+                            <div class="activity-card-title"><span class="lang-en">Web Studio</span><span class="lang-id">Jasa Web</span></div>
+                            <div class="activity-card-value" style="font-size: 1rem;">New Service</div>
+                        </div>
+                    </a>
+                    <a href="https://discord.gg/xQStZUvukS" target="_blank" class="activity-card bg-pink">
+                        <div class="activity-card-icon"><i class="fa-brands fa-discord"></i></div>
+                        <div>
+                            <div class="activity-card-title">Community</div>
+                            <div class="activity-card-value" style="font-size: 1rem;">Join Discord</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
             </p>
             
-            <div class="stats-badge" id="stats-badge" onclick="openMembersModal()" title="View Pro Members">
+            <div class="stats-badge desktop-only" id="stats-badge" onclick="openMembersModal()" title="View Pro Members">
                 <div class="pulse-dot"></div>
                 <span>
                     <span class="lang-en">Trusted by </span>
@@ -434,7 +454,7 @@
                 <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; color: var(--text-muted); margin-left: 0.3rem;"></i>
             </div>
 
-            <div class="action-group justify-center">
+            <div class="action-group justify-center desktop-only">
                 <a href="#addons" class="btn btn-primary">
                     <span class="lang-en">Explore Our Add-ons</span>
                     <span class="lang-id">Jelajahi Add-on Kami</span>
@@ -820,7 +840,7 @@
                 <span class="lang-en">Join thousands of players and admins using Heraclaus Add-ons.</span>
                 <span class="lang-id">Bergabunglah bersama ribuan pemain dan admin yang menggunakan sistem Heraclaus.</span>
             </p>
-            <div class="action-group justify-center"><a href="#pricing" class="btn btn-gradient" style="padding: 0 1.5rem;">
+            <div class="action-group justify-center desktop-only"><a href="#pricing" class="btn btn-gradient" style="padding: 0 1.5rem;">
                 <span class="lang-en">Get Pro License Now</span>
                 <span class="lang-id">Dapatkan Lisensi Pro Sekarang</span>
             </a></div>
@@ -952,44 +972,6 @@
             </a>
         </div>
 
-        <h2 class="section-title">
-            <span class="lang-en">Our Products & Tools</span>
-            <span class="lang-id">Produk & Alat Kami</span>
-        </h2>
-        
-        <div class="product-list">
-            <a href="#addons" class="product-list-item" onclick="setTimeout(() => { document.querySelector('.desktop-content').style.display='block'; window.location.hash='#addons'; }, 100);">
-                <div class="product-list-icon bg-purple"><i class="fa-solid fa-shield-halved"></i></div>
-                <div class="product-list-content">
-                    <div class="product-list-title">Admin Suite</div>
-                    <div class="product-list-desc">All-in-one flagship system</div>
-                </div>
-                <div class="product-list-badge">Add-on</div>
-            </a>
-            <a href="https://www.curseforge.com/minecraft-bedrock/addons/cinemato-studio" target="_blank" class="product-list-item">
-                <div class="product-list-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fa-solid fa-film"></i></div>
-                <div class="product-list-content">
-                    <div class="product-list-title">Cinemato Studio</div>
-                    <div class="product-list-desc">Creator camera tool</div>
-                </div>
-                <div class="product-list-badge" style="background: #ecfdf5; color: #059669; border-color: #d1fae5;">Add-on</div>
-            </a>
-            <a href="glyph.html" class="product-list-item">
-                <div class="product-list-icon bg-blue"><i class="fa-solid fa-layer-group"></i></div>
-                <div class="product-list-content">
-                    <div class="product-list-title">Glyph Studio</div>
-                    <div class="product-list-desc">Pixel perfect spritesheet tool</div>
-                </div>
-                <div class="product-list-badge badge-new">Web Tool</div>
-            </a>
-            <a href="pixel.html" class="product-list-item">
-                <div class="product-list-icon bg-pink"><i class="fa-solid fa-font"></i></div>
-                <div class="product-list-content">
-                    <div class="product-list-title">Pixel Generator</div>
-                    <div class="product-list-desc">Retro typography generator</div>
-                </div>
-                <div class="product-list-badge badge-new">Web Tool</div>
-            </a>
         </div>
     </div>
 
