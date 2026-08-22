@@ -10,143 +10,214 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    
     <style>
         :root {
-            --bg-base: #E5E7EB; /* Desktop background */
-            --app-bg: #f8f9fa; /* App background */
-            --border-light: #e2e8f0; --border-highlight: #cbd5e1;
-            --text-primary: #0f172a; --text-secondary: #475569; --text-muted: #64748b;
+            --bg-base: #050505; --bg-surface: #0a0a0a; --bg-card: rgba(255, 255, 255, 0.03); --bg-card-hover: rgba(255, 255, 255, 0.05);
+            --border-light: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff; --text-secondary: #a1a1aa; --text-muted: #71717a;
             --accent-primary: #8b5cf6; --accent-secondary: #3b82f6; --accent-success: #10b981; --accent-danger: #f43f5e;
-            --gradient-hero: linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #3b82f6 100%);
-            --gradient-admin: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --gradient-hero: linear-gradient(135deg, #e879f9 0%, #8b5cf6 50%, #3b82f6 100%);
+            --gradient-admin: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        html { scroll-behavior: smooth; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-base) !important; 
-            color: var(--text-primary); 
-            line-height: 1.5; 
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-        }
+        html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        input, textarea, select { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
         
-        .app-container {
-            width: 100%;
-            max-width: 430px;
-            background-color: var(--app-bg);
-            min-height: 100vh;
-            position: relative;
-            box-shadow: 0 0 50px rgba(0,0,0,0.1);
-            overflow-x: hidden;
-            padding-bottom: 6rem;
-        }
-
         body.lang-en .lang-id { display: none !important; }
         body.lang-id .lang-en { display: none !important; }
         
+        .container { max-width: 64rem; margin: 0 auto; padding: 0 1.25rem; }
+        .flex { display: flex; } .flex-col { flex-direction: column; }
+        .items-center { align-items: center; } .justify-between { justify-content: space-between; } .justify-center { justify-content: center; }
+        .w-full { width: 100%; } .text-center { text-align: center; } .text-left { text-align: left; }
+        
         h1, h2, h3, h4, .font-outfit { font-family: 'Outfit', sans-serif; }
-        p { color: var(--text-secondary); font-size: 0.9rem; }
-        
-        /* Disable old desktop UI */
-        .ambient-bg, .navbar, .desktop-only { display: none !important; }
-        .mobile-only { display: block !important; }
-        .container { padding: 0 1.25rem; width: 100%; }
+        h1 { font-size: clamp(1.75rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; }
+        h2 { font-size: clamp(1.25rem, 3.5vw, 1.875rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+        h3 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+        p { color: var(--text-secondary); font-size: clamp(0.85rem, 1.5vw, 0.9rem); }
+        .text-gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Top Bar */
-        .mobile-top-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1.25rem; width: 100%; position: sticky; top: 0; z-index: 100;
-            background: rgba(248, 249, 250, 0.95); backdrop-filter: blur(12px);
-            margin-bottom: 0.5rem; border-bottom: none !important; box-shadow: none !important;
-        }
-        .mobile-top-greeting { display: flex; align-items: center; gap: 0.75rem; }
-        .mobile-top-avatar { width: 2.75rem; height: 2.75rem; border-radius: 50%; background: var(--gradient-admin); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-family: 'Outfit'; font-size: 1.1rem; }
-        .mobile-top-text p { font-size: 0.75rem; color: var(--text-muted); margin: 0; }
-        .mobile-top-text h3 { font-size: 1.05rem; color: var(--text-primary); margin: 0; font-family: 'Inter'; font-weight: 700; }
-        .mobile-top-actions { display: flex; gap: 0.5rem; align-items: center; }
-        .mobile-btn { width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 1px solid var(--border-light); background: #ffffff; display: flex; align-items: center; justify-content: center; color: var(--text-primary); cursor: pointer; transition: 0.2s; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-        .notification-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: var(--accent-danger); border-radius: 50%; border: 2px solid #ffffff; }
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; }
+        .blob-1 { top: -20%; left: -10%; width: 50vw; height: 50vw; background: rgba(139, 92, 246, 0.15); }
+        .blob-2 { bottom: -20%; right: -10%; width: 40vw; height: 40vw; background: rgba(59, 130, 246, 0.15); }
 
-        /* Hero Text */
-        .section-hero { padding: 0 1.25rem 1rem 1.25rem !important; text-align: left !important; }
-        .mobile-hero-title { font-size: 1.6rem; font-weight: 800; color: #0f172a; line-height: 1.2; margin-bottom: 0.5rem; font-family: 'Outfit'; letter-spacing: -0.02em; }
-        .mobile-hero-desc { font-size: 0.85rem; color: #64748b; line-height: 1.5; margin-bottom: 1.5rem; }
+        .navbar { position: fixed; top: 0; width: 100%; height: 3.5rem; z-index: 100; background: rgba(5, 5, 5, 0.75); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; transition: all 0.3s ease; }
+        .nav-links { display: none; } 
+        .nav-links a.reg-link { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.8rem; transition: color 0.2s; }
+        .nav-links a.reg-link:hover { color: var(--text-primary); }
+        .nav-icon-btn { color: var(--text-secondary); font-size: 1rem; transition: all 0.2s; display: flex; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; border-radius: 6px; }
+        .nav-icon-btn:hover { color: #5865F2; background: rgba(88, 101, 242, 0.1); }
+        .nav-divider { width: 1px; height: 0.8rem; background: var(--border-light); margin: 0 0.5rem; }
+        .login-nav-btn { background: rgba(255,255,255,0.04); color: #fff; padding: 0.35rem 0.85rem; border-radius: 6px; border: 1px solid var(--border-light); text-decoration: none; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.2s; }
+        .login-nav-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--border-highlight); }
+        .btn-icon { width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; border: 1px solid var(--border-highlight); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; background: rgba(255,255,255,0.05); }
+        .btn-icon:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: var(--border-highlight); }
+        .btn-icon.danger:hover { background: rgba(244,63,94,0.1); color: var(--accent-danger); border-color: rgba(244,63,94,0.5); }
         
-        .section-title { font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 1.5rem 1.25rem 1rem 1.25rem; font-family: 'Outfit'; }
+        .lang-toggle { background: rgba(255,255,255,0.04); color: var(--text-secondary); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-light); cursor: pointer; transition: all 0.2s; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .lang-toggle:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); border-color: var(--border-highlight); }
 
-        /* Activity Grid - Premium Folder Shape */
-        .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 0 1.25rem; margin-bottom: 2rem; }
-        .activity-card { 
-            position: relative; border-radius: 20px; padding: 1.25rem; color: #fff; 
-            display: flex; flex-direction: column; justify-content: flex-end; 
-            min-height: 8.5rem; text-decoration: none; overflow: hidden;
-            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); transition: transform 0.2s;
-        }
-        .activity-card:active { transform: scale(0.95); }
-        .activity-card::before {
-            content: ''; position: absolute; top: -20px; left: -20px; width: 150%; height: 75%;
-            background: rgba(255,255,255,0.18); border-radius: 50%;
-            transform: rotate(-15deg);
-        }
-        .activity-card-icon { position: absolute; top: 1rem; left: 1rem; width: 2.25rem; height: 2.25rem; border-radius: 10px; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; z-index: 2; }
-        .activity-card-title { font-size: 0.75rem; font-weight: 500; opacity: 0.95; margin-bottom: 0.1rem; font-family: 'Inter'; position: relative; z-index: 2; }
-        .activity-card-value { font-size: 1.35rem; font-weight: 800; font-family: 'Outfit'; letter-spacing: -0.02em; position: relative; z-index: 2; }
+        .menu-btn { display: flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; font-size: 1.1rem; color: var(--text-primary); background: transparent; border: none; cursor: pointer; border-radius: 6px; margin-right: -0.5rem; }
         
-        .bg-purple { background: linear-gradient(135deg, #a855f7, #8b5cf6); }
-        .bg-orange { background: linear-gradient(135deg, #fb923c, #f97316); }
-        .bg-blue { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
-        .bg-pink { background: linear-gradient(135deg, #f472b6, #ec4899); }
+        @media (min-width: 768px) { .nav-links { display: flex; align-items: center; gap: 1rem; } .menu-btn { display: none; } }
 
-        /* Continue Learning Lists (Products/Addons) */
-        .section { padding: 1rem 0; }
-        .product-box { background: #ffffff; border-radius: 20px; overflow: hidden; margin: 0 1.25rem 1rem 1.25rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; align-items: center; padding: 1rem; text-decoration: none; border: 1px solid rgba(0,0,0,0.02); }
-        .product-header { padding: 0 !important; display: flex !important; flex-direction: row !important; align-items: center !important; gap: 1rem !important; width: 100% !important; border: none !important; background: transparent !important; }
-        .product-icon-container { width: 3.5rem; height: 3.5rem; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff; flex-shrink: 0; }
-        
-        .product-box:nth-child(1) .product-icon-container { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
-        .product-box:nth-child(2) .product-icon-container { background: linear-gradient(135deg, #34d399, #10b981); }
-        .product-box:nth-child(3) .product-icon-container { background: linear-gradient(135deg, #f472b6, #ec4899); }
-        .product-box:nth-child(4) .product-icon-container { background: linear-gradient(135deg, #a855f7, #8b5cf6); }
-        
-        .product-info-wrapper { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-        .product-title { font-size: 0.95rem; font-weight: 800; color: #0f172a; font-family: 'Outfit'; margin: 0; line-height: 1.2; text-align: left; }
-        .product-desc { font-size: 0.75rem; color: #64748b; margin-top: 0.2rem; margin-bottom: 0; line-height: 1.3; text-align: left; }
-        
-        .product-badge-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
-        .badge { display: inline-flex; align-items: center; gap: 0.2rem; padding: 0.2rem 0.6rem; border-radius: 99px; font-size: 0.65rem; font-weight: 700; text-transform: capitalize; border: none; margin: 0 !important; }
-        .badge.in-progress { background: #fff7ed; color: #ea580c; }
-        .badge.in-progress::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #ea580c; display: inline-block; }
-        
-        .feature-grid, .product-header-actions, .product-header > p { display: none !important; } /* Hide old desktop elements in product card */
-        .product-header h3 { display: none !important; } /* Hide old h3 */
+        .mobile-menu { position: fixed; top: 3.5rem; left: 0; width: 100%; height: calc(100vh - 3.5rem); overflow-y: auto; background: var(--bg-surface); padding: 1.25rem; display: flex; flex-direction: column; gap: 0.25rem; transform: translateY(-100%); opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 90; border-bottom: 1px solid var(--border-light); }
+        .mobile-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        .mobile-menu a { color: var(--text-primary); text-decoration: none; font-size: 0.9rem; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 0.85rem 0; display: flex; align-items: center; gap: 0.75rem; }
+        .mobile-menu .login-nav-btn { border-bottom: none; margin-top: 1rem; padding: 0.65rem; justify-content: center; }
+        .mobile-menu .lang-toggle { width: 100%; justify-content: center; margin-top: 0.5rem; }
 
-        /* Bottom Navigation */
-        .bottom-nav {
-            display: flex; justify-content: space-around; align-items: center;
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 5rem;
-            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border-light); z-index: 100;
+        .action-group { display: flex; flex-direction: column; gap: 0.6rem; width: 100%; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1.25rem; min-height: 2.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.2s ease; border: none; cursor: pointer; text-align: center; width: 100%; }
+        @media (min-width: 640px) { .action-group { flex-direction: row; } .btn { width: auto; } }
+
+        .btn-primary { background: var(--text-primary); color: var(--bg-base); }
+        .btn-primary:hover { background: #e4e4e7; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,255,255,0.15); }
+        .btn-gradient { background: var(--gradient-admin); color: #fff; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.2); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); filter: brightness(1.1); }
+        .btn-outline { background: rgba(255,255,255,0.02); color: var(--text-primary); border: 1px solid var(--border-highlight); }
+        .btn-outline:hover { background: rgba(255,255,255,0.06); }
+
+        .yt-badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.75rem; background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1.25rem; color: var(--text-primary); text-decoration: none; transition: all 0.2s; }
+        .yt-badge:hover { background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.4); }
+        .yt-icon { color: #ff0000; font-size: 0.85rem; }
+
+        .promo-badge:hover { background: rgba(139, 92, 246, 0.25) !important; border-color: rgba(139, 92, 246, 0.6) !important; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); }
+
+        .stats-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 1.5rem 0 2rem 0; 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            opacity: 0; 
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
-        .bottom-nav-item {
-            display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
-            color: #94a3b8; text-decoration: none; font-size: 0.65rem; font-weight: 600;
-            width: 20%; padding: 0.5rem 0; transition: all 0.2s;
+        .stats-badge:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(139, 92, 246, 0.08);
+            transform: translateY(8px);
         }
-        .bottom-nav-item i { font-size: 1.25rem; margin-bottom: 0.1rem; }
-        .bottom-nav-item.active { color: var(--accent-primary); }
-        .bottom-nav-item:active i { transform: scale(0.9); }
+        .stats-badge strong {
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .section-hero { padding: 6rem 0 2.5rem 0; }
+        .section { padding: 3rem 0; }
         
-        /* Utilities */
-        .card { background: #fff; border-radius: 20px; padding: 1.5rem; margin: 0 1.25rem 1rem 1.25rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid var(--border-light); }
-        .footer { display: none; }
+        .product-box { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
+        .product-header { padding: 1.5rem; border-bottom: 1px solid var(--border-light); background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.05), transparent 60%); display: flex; flex-direction: column; gap: 1rem; }
+        .product-header-actions { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
+        .badge { display: inline-block; padding: 0.2rem 0.5rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; border: 1px solid rgba(139, 92, 246, 0.25); }
+        
+        .feature-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; padding: 1rem; }
+        .feature-cell { background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); border-radius: 8px; padding: 1.25rem; transition: background 0.3s; }
+        .feature-cell:hover { background: rgba(255,255,255,0.04); border-color: var(--border-highlight); }
+        .feature-cell i { font-size: 1.25rem; margin-bottom: 0.75rem; display: block; }
+        .feature-cell p { font-size: 0.85rem; margin-top: 0.2rem; line-height: 1.5; }
+        .grid-cards { display: grid; gap: 1rem; }
+
+        .server-desc { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; transition: color 0.2s; white-space: pre-wrap; }
+        .server-desc:hover { color: #d4d4d8; }
+        .server-desc.expanded { -webkit-line-clamp: unset; }
+
+        @media (min-width: 768px) {
+            .product-header { padding: 2rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 1.5rem; }
+            .product-header-actions { width: auto; flex-direction: row; }
+            .feature-grid { grid-template-columns: repeat(2, 1fr); padding: 1.5rem; gap: 1rem; }
+        }
+        @media (min-width: 1024px) { .feature-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        .pricing-wrap { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 52rem; margin: 2rem auto 0; }
+        .price-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; transition: transform 0.2s; text-align: left; }
+        .price-card.pro { border-color: rgba(139, 92, 246, 0.4); background: linear-gradient(180deg, rgba(139, 92, 246, 0.05), transparent); position: relative; overflow: hidden; }
+        .price-val { font-family: 'Outfit'; font-size: 2.25rem; font-weight: 700; color: #fff; line-height: 1; margin: 0.5rem 0; letter-spacing: -0.02em; }
+        .price-val span { font-size: 0.85rem; color: var(--text-secondary); font-weight: 400; font-family: 'Inter'; }
+        .check-list { list-style: none; margin: 1rem 0 1.5rem 0; flex-grow: 1; }
+        .check-list li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.6rem; }
+        .check-list i { color: #10b981; font-size: 0.75rem; margin-top: 0.25rem; flex-shrink: 0; }
+        
+        @media (min-width: 768px) { .pricing-wrap { grid-template-columns: 1fr 1fr; } .price-card { padding: 2rem; } }
+
+        .faq-wrap { max-width: 42rem; margin: 2rem auto 0; display: flex; flex-direction: column; gap: 0.5rem; }
+        .faq-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 10px; }
+        .faq-item.active { border-color: var(--border-highlight); background: rgba(255,255,255,0.04); }
+        .faq-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background: none; border: none; color: var(--text-primary); font-family: 'Outfit'; font-size: 0.95rem; font-weight: 600; cursor: pointer; text-align: left; gap: 0.75rem; }
+        .faq-btn i { color: var(--text-muted); transition: transform 0.2s ease; font-size: 0.8rem; }
+        .faq-item.active .faq-btn i { transform: rotate(180deg); color: var(--text-primary); }
+        .faq-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+        .faq-item.active .faq-content { grid-template-rows: 1fr; }
+        .faq-inner { overflow: hidden; }
+        .faq-inner p { padding: 0 1.25rem 1.25rem 1.25rem; font-size: 0.85rem; margin: 0; line-height: 1.6; }
+
+        .cta-section { padding: 4rem 0; border-top: 1px solid var(--border-light); background: radial-gradient(circle at center, rgba(139, 92, 246, 0.05), transparent 60%); text-align: center; }
+
+        footer { padding: 3rem 0 1.5rem 0; border-top: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.8rem; background: rgba(0,0,0,0.5); }
+        .footer-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem; text-align: left; }
+        @media (min-width: 768px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr; } }
+        .footer-brand h3 { font-family: 'Outfit'; font-size: 1.2rem; color: #fff; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+        .footer-links-col { display: flex; flex-direction: column; gap: 0.5rem; }
+        .footer-links-col h4 { color: #fff; font-family: 'Outfit'; font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .footer-links-col a { color: var(--text-secondary); text-decoration: none; transition: all 0.2s; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .footer-links-col a:hover { color: var(--accent-primary); }
+        .footer-bottom { padding-top: 1.5rem; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        @media (min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; } }
+        .social-row { display: flex; gap: 0.5rem; }
+        .social-row a { width: 2rem; height: 2rem; border-radius: 6px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.2s; font-size: 0.9rem; border: 1px solid transparent; }
+        .social-row a:hover { background: rgba(139, 92, 246, 0.1); color: #fff; border-color: rgba(139, 92, 246, 0.3); transform: translateY(-2px); }
+
+        .animate-on-scroll { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 5, 5, 0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(8px); padding: 1.25rem; }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; width: 100%; max-width: 28rem; padding: 1.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.5); transform: translateY(20px); transition: transform 0.3s ease; display: flex; flex-direction: column; max-height: 85vh; }
+        .modal-overlay.show .modal-card { transform: translateY(0); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1rem; flex-shrink: 0; }
+        .modal-body { overflow-y: auto; padding-right: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .modal-body::-webkit-scrollbar { width: 6px; }
+        .modal-body::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 10px; }
+
+        .member-list-item { display: flex; align-items: center; gap: 1rem; padding: 0.85rem; border: 1px solid var(--border-light); border-radius: 10px; background: rgba(255,255,255,0.02); transition: background 0.2s; }
+        .member-list-item:hover { background: rgba(255,255,255,0.05); }
+        .member-avatar { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--gradient-admin); display: flex; align-items: center; justify-content: center; font-weight: 700; font-family: 'Outfit'; font-size: 1rem; color: #fff; flex-shrink: 0; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.2); }
+        .member-info { flex-grow: 1; overflow: hidden; text-align: left; }
+        .member-name { color: #fff; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .member-email { color: var(--text-muted); font-size: 0.75rem; font-family: monospace; }
+        .member-badge { font-size: 0.65rem; background: rgba(16, 185, 129, 0.15); color: var(--accent-success); padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.25); }
     </style>
-
 </head>
-<body class="lang-en">\n<div class="app-container">\n
+<body class="lang-en">
 
     <div class="ambient-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
 
@@ -165,36 +236,13 @@
         </div>
     </div>
 
-    <div class="mobile-top-bar">
-        <div class="mobile-top-greeting">
-            <div class="mobile-top-avatar">
-                <i class="fa-solid fa-user"></i>
-            </div>
-            <div class="mobile-top-text">
-                <p>
-                    <span class="lang-en">Good Morning,</span>
-                    <span class="lang-id">Selamat Pagi,</span>
-                </p>
-                <h3>Guest</h3>
-            </div>
-        </div>
-        <div class="mobile-top-actions">
-            <button class="mobile-btn" onclick="toggleLang()" title="Language">
-                <i class="fa-solid fa-globe"></i>
-            </button>
-            <button class="mobile-btn" title="Notifications">
-                <i class="fa-regular fa-bell"></i>
-                <div class="notification-dot"></div>
-            </button>
-        </div>
-    </div>
-
-    <div class="desktop-content">
     <nav class="navbar" id="navbar">
         <div class="container flex justify-between items-center w-full">
             <a href="#" class="font-outfit" style="font-size: 1.15rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em;">
                 <i class="fa-solid fa-code text-gradient mr-2"></i> Heraclaus
             </a>
+            
+            <button class="menu-btn" id="mobile-menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
             
             <div class="nav-links">
                 <button onclick="toggleLang()" class="lang-toggle" title="Change Language" style="margin-right: 0.5rem;">
@@ -232,12 +280,58 @@
         </div>
     </nav>
 
+    <div class="mobile-menu" id="mobile-menu">
+        <button onclick="toggleLang()" class="lang-toggle" style="margin-bottom: 0.5rem; justify-content: center; width: 100%;">
+            <i class="fa-solid fa-globe"></i>
+            <span class="lang-en">Change Language to Bahasa Indonesia</span>
+            <span class="lang-id">Change Language to English</span>
+        </button>
 
+        <a href="#addons" onclick="toggleMenu()"><i class="fa-solid fa-puzzle-piece"></i> 
+            <span class="lang-en">Our Add-ons</span>
+            <span class="lang-id">Daftar Add-on</span>
+        </a>
+        <a href="#web-tools" onclick="toggleMenu()"><i class="fa-solid fa-laptop-code"></i> 
+            <span class="lang-en">Web Tools</span>
+            <span class="lang-id">Alat Web</span>
+        </a>
+        <a href="#community-servers" onclick="toggleMenu()"><i class="fa-solid fa-network-wired"></i> 
+            <span class="lang-en">Community Servers</span>
+            <span class="lang-id">Server Komunitas</span>
+        </a>
+        <a href="#pricing" onclick="toggleMenu()"><i class="fa-solid fa-tag"></i> 
+            <span class="lang-en">Pricing</span>
+            <span class="lang-id">Harga</span>
+        </a>
+        
+        <a href="web-service.html" onclick="toggleMenu()" style="color: #c4b5fd;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-laptop-code"></i> Web Studio</div>
+            <span style="background: var(--gradient-admin); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; letter-spacing: 1px; margin-left: auto;">NEW</span>
+        </a>
+        
+        <a href="#faq" onclick="toggleMenu()"><i class="fa-solid fa-circle-question"></i> 
+            <span class="lang-en">FAQ & ToS</span>
+            <span class="lang-id">FAQ & Aturan</span>
+        </a>
+        <a href="changelog.html" target="_blank" onclick="toggleMenu()"><i class="fa-solid fa-clock-rotate-left"></i> 
+            <span class="lang-en">System Changelog</span>
+            <span class="lang-id">Riwayat Update</span>
+        </a>
+        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 0.5rem 0;"></div>
+        <a href="https://discord.gg/xQStZUvukS" target="_blank" style="color: #a5b4fc;" onclick="toggleMenu()"><i class="fa-brands fa-discord"></i> 
+            <span class="lang-en">Join Discord</span>
+            <span class="lang-id">Gabung Discord</span>
+        </a>
+        <a href="client.html" class="login-nav-btn" onclick="toggleMenu()"><i class="fa-solid fa-right-to-bracket text-gradient"></i> 
+            <span class="lang-en">Login to Portal</span>
+            <span class="lang-id">Login ke Portal</span>
+        </a>
+    </div>
 
     <section class="section-hero text-center">
         <div class="container flex flex-col items-center animate-on-scroll">
             
-            <div class="desktop-only" style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.25rem;">
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.25rem;">
                 <a href="https://www.youtube.com/@heraclaus" target="_blank" class="yt-badge" style="margin-bottom: 0;">
                     <i class="fa-brands fa-youtube yt-icon"></i> Heraclaus <i class="fa-solid fa-circle-check yt-verified"></i>
                 </a>
@@ -259,47 +353,9 @@
             <p style="max-width: 36rem; margin: 1rem auto 0; line-height: 1.6;">
                 <span class="lang-en">Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world's economy and progression.</span>
                 <span class="lang-id">Add-on Minecraft Bedrock premium all-in-one yang menghilangkan lag, memperbaiki konflik, dan memberi Anda kontrol penuh atas ekonomi dan progres server Anda.</span>
-            
-            <div class="mobile-only" style="width: 100%; text-align: left; margin-top: 1rem;">
-                <h2 class="font-outfit" style="font-size: 1.1rem; color: #0f172a; margin-bottom: 1rem;">
-                    <span class="lang-en">Activity Overview</span>
-                    <span class="lang-id">Ringkasan Aktivitas</span>
-                </h2>
-                <div class="activity-grid">
-                    <div class="activity-card bg-purple" onclick="openMembersModal()" style="cursor:pointer;">
-                        <div class="activity-card-icon"><i class="fa-solid fa-crown"></i></div>
-                        <div>
-                            <div class="activity-card-title"><span class="lang-en">Pro Servers</span><span class="lang-id">Server Pro</span></div>
-                            <div class="activity-card-value pro-user-count-display">0</div>
-                        </div>
-                    </div>
-                    <a href="https://www.youtube.com/@heraclaus" target="_blank" class="activity-card bg-orange">
-                        <div class="activity-card-icon"><i class="fa-brands fa-youtube"></i></div>
-                        <div>
-                            <div class="activity-card-title">YouTube</div>
-                            <div class="activity-card-value" style="font-size: 1rem;"><i class="fa-solid fa-circle-check"></i> Verified</div>
-                        </div>
-                    </a>
-                    <a href="web-service.html" class="activity-card bg-blue">
-                        <div class="activity-card-icon"><i class="fa-solid fa-laptop-code"></i></div>
-                        <div>
-                            <div class="activity-card-title"><span class="lang-en">Web Studio</span><span class="lang-id">Jasa Web</span></div>
-                            <div class="activity-card-value" style="font-size: 1rem;">New Service</div>
-                        </div>
-                    </a>
-                    <a href="https://discord.gg/xQStZUvukS" target="_blank" class="activity-card bg-pink">
-                        <div class="activity-card-icon"><i class="fa-brands fa-discord"></i></div>
-                        <div>
-                            <div class="activity-card-title">Community</div>
-                            <div class="activity-card-value" style="font-size: 1rem;">Join Discord</div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
             </p>
             
-            <div class="stats-badge desktop-only" id="stats-badge" onclick="openMembersModal()" title="View Pro Members">
+            <div class="stats-badge" id="stats-badge" onclick="openMembersModal()" title="View Pro Members">
                 <div class="pulse-dot"></div>
                 <span>
                     <span class="lang-en">Trusted by </span>
@@ -311,7 +367,7 @@
                 <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; color: var(--text-muted); margin-left: 0.3rem;"></i>
             </div>
 
-            <div class="action-group justify-center desktop-only">
+            <div class="action-group justify-center">
                 <a href="#addons" class="btn btn-primary">
                     <span class="lang-en">Explore Our Add-ons</span>
                     <span class="lang-id">Jelajahi Add-on Kami</span>
@@ -322,7 +378,20 @@
 
     <section id="addons" class="section" style="padding-top: 0;">
         <div class="container">
-            <h2 class="section-title"><span class="lang-en">Continue Learning</span><span class="lang-id">Materi Lanjutan</span></h2>
+            <div class="text-center animate-on-scroll" style="margin-bottom: 3rem;">
+                <span class="badge" style="margin-bottom: 1rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.25);"><i class="fa-solid fa-puzzle-piece"></i> 
+                    <span class="lang-en">Product Catalog</span>
+                    <span class="lang-id">Katalog Produk</span>
+                </span>
+                <h2>
+                    <span class="lang-en">Our Premium Add-ons</span>
+                    <span class="lang-id">Daftar Add-on Kami</span>
+                </h2>
+                <p style="margin-top: 0.5rem; max-width: 40rem; margin-inline: auto;">
+                    <span class="lang-en">Discover our collection of highly-optimized, feature-rich modifications for your server.</span>
+                    <span class="lang-id">Temukan koleksi modifikasi kami yang sangat dioptimalkan dan kaya fitur untuk server Anda.</span>
+                </p>
+            </div>
 
             <div class="product-box animate-on-scroll" id="admin-suite">
                 <div class="product-header">
@@ -461,7 +530,20 @@
 
     <section id="web-tools" class="section" style="border-top: 1px solid var(--border-light); background: radial-gradient(circle at right, rgba(59, 130, 246, 0.05), transparent 50%);">
         <div class="container">
-            <h2 class="section-title"><span class="lang-en">Continue Learning</span><span class="lang-id">Materi Lanjutan</span></h2>
+            <div class="text-center animate-on-scroll" style="margin-bottom: 3rem;">
+                <span class="badge" style="margin-bottom: 1rem; background: rgba(59, 130, 246, 0.15); color: #93c5fd; border-color: rgba(59, 130, 246, 0.25);"><i class="fa-solid fa-laptop-code"></i> 
+                    <span class="lang-en">Web Ecosystem</span>
+                    <span class="lang-id">Ekosistem Web</span>
+                </span>
+                <h2>
+                    <span class="lang-en">Web Tools & Services</span>
+                    <span class="lang-id">Alat & Layanan Web</span>
+                </h2>
+                <p style="margin-top: 0.5rem; max-width: 40rem; margin-inline: auto;">
+                    <span class="lang-en">Powerful web-based utilities designed to boost your productivity.</span>
+                    <span class="lang-id">Utilitas berbasis web yang dirancang untuk mendukung produktivitas proyek Anda.</span>
+                </p>
+            </div>
 
             <div id="glyph-studio" class="product-box animate-on-scroll" style="margin-bottom: 0; border-color: rgba(59, 130, 246, 0.2);">
                 <div class="product-header" style="background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.05), transparent 50%); border-bottom: none; padding-bottom: 1.5rem;">
@@ -671,7 +753,7 @@
                 <span class="lang-en">Join thousands of players and admins using Heraclaus Add-ons.</span>
                 <span class="lang-id">Bergabunglah bersama ribuan pemain dan admin yang menggunakan sistem Heraclaus.</span>
             </p>
-            <div class="action-group justify-center desktop-only"><a href="#pricing" class="btn btn-gradient" style="padding: 0 1.5rem;">
+            <div class="action-group justify-center"><a href="#pricing" class="btn btn-gradient" style="padding: 0 1.5rem;">
                 <span class="lang-en">Get Pro License Now</span>
                 <span class="lang-id">Dapatkan Lisensi Pro Sekarang</span>
             </a></div>
@@ -749,64 +831,6 @@
             </div>
         </div>
     </footer>
-    </div> <!-- Close desktop-content -->
-
-    <div class="mobile-app-content">
-        <h1 class="mobile-hero-title">
-            <span class="lang-en">Stop installing junk plugins.<br>Build a legendary server.</span>
-            <span class="lang-id">Berhenti pasang plugin sampah.<br>Bangun server legendaris.</span>
-        </h1>
-        <p class="mobile-hero-desc">
-            <span class="lang-en">Premium, all-in-one Minecraft Bedrock add-ons that eliminate lag, fix conflicts, and give you absolute control over your world's economy and progression.</span>
-            <span class="lang-id">Add-on Minecraft Bedrock premium all-in-one yang menghilangkan lag, memperbaiki konflik, dan memberi Anda kontrol penuh atas ekonomi dan progres.</span>
-        </p>
-
-        <h2 class="section-title">
-            <span class="lang-en">Activity Overview</span>
-            <span class="lang-id">Ringkasan Aktivitas</span>
-        </h2>
-        
-        <div class="activity-grid">
-            <div class="activity-card bg-purple" onclick="openMembersModal()" style="cursor:pointer;">
-                <div class="activity-card-icon"><i class="fa-solid fa-crown"></i></div>
-                <div>
-                    <div class="activity-card-title">
-                        <span class="lang-en">Pro Servers</span>
-                        <span class="lang-id">Server Pro</span>
-                    </div>
-                    <div class="activity-card-value pro-user-count-display">0</div>
-                </div>
-            </div>
-            <a href="https://www.youtube.com/@heraclaus" target="_blank" class="activity-card bg-orange">
-                <div class="activity-card-icon"><i class="fa-brands fa-youtube"></i></div>
-                <div>
-                    <div class="activity-card-title">YouTube</div>
-                    <div class="activity-card-value" style="font-size: 1rem;"><i class="fa-solid fa-circle-check"></i> Verified</div>
-                </div>
-            </a>
-            <a href="web-service.html" class="activity-card bg-blue">
-                <div class="activity-card-icon"><i class="fa-solid fa-laptop-code"></i></div>
-                <div>
-                    <div class="activity-card-title">
-                        <span class="lang-en">Web Studio</span>
-                        <span class="lang-id">Jasa Web</span>
-                    </div>
-                    <div class="activity-card-value" style="font-size: 1rem;">New Service</div>
-                </div>
-            </a>
-            <a href="https://discord.gg/xQStZUvukS" target="_blank" class="activity-card bg-pink">
-                <div class="activity-card-icon"><i class="fa-brands fa-discord"></i></div>
-                <div>
-                    <div class="activity-card-title">Community</div>
-                    <div class="activity-card-value" style="font-size: 1rem;">Join Discord</div>
-                </div>
-            </a>
-        </div>
-
-        </div>
-    </div>
-
-    
 
     <script>
         document.addEventListener('contextmenu', e => e.preventDefault());
@@ -880,13 +904,12 @@
                             badge.style.opacity = '1';
                             badge.style.transform = 'translateY(0)';
                         }
-                        let count = 0; const target = data.activeUsers; 
-                        const els = document.querySelectorAll('#pro-user-count, .pro-user-count-display');
-                        if(els.length > 0) {
+                        let count = 0; const target = data.activeUsers; const el = document.getElementById('pro-user-count');
+                        if(el) {
                             const interval = setInterval(() => {
                                 count += Math.ceil(target / 15);
                                 if(count >= target) { count = target; clearInterval(interval); }
-                                els.forEach(e => e.innerText = count);
+                                el.innerText = count;
                             }, 50);
                         }
                         if(data.members) cachedMembers = data.members;
@@ -1080,5 +1103,5 @@
             currentItem.classList.toggle('active');
         }
     </script>
-\n</div>\n</body>
+</body>
 </html>
