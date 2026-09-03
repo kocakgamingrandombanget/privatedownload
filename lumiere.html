@@ -531,7 +531,7 @@
         });
 
         // Anti Copy
-        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('contextmenu', e => { if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) e.preventDefault(); });
 
         // Quick View Modal Logic
         const modal = document.getElementById('product-modal');

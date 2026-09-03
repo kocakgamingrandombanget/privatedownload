@@ -1,5 +1,5 @@
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'x')) e.preventDefault(); });
+document.addEventListener('contextmenu', e => { if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) e.preventDefault(); });
+document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'x') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) e.preventDefault(); });
 
 if (window.location.pathname.endsWith('.html')) window.history.replaceState(null, '', window.location.pathname.replace(/index\.html$/, '').replace(/\.html$/, '') + window.location.search + window.location.hash);
 document.querySelectorAll('a').forEach(a => { let h = a.getAttribute('href'); if (h && h.includes('.html')) a.setAttribute('href', h.replace('index.html', '/').replace(/\.html$/, '')); });
