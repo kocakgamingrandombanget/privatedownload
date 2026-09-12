@@ -1164,12 +1164,12 @@ h2.section-title {
     }
     
     .nav-item {
-        flex-direction: row;
+        flex-direction: column;
         gap: 0;
-        padding: 0.6rem;
-        font-size: 0.75rem;
-        border-radius: 50px;
-        min-width: unset;
+        padding: 0.5rem;
+        font-size: 0.65rem;
+        border-radius: 16px;
+        min-width: 4rem;
         justify-content: center;
         align-items: center;
         transition: all 0.3s ease;
@@ -1177,26 +1177,30 @@ h2.section-title {
     
     .nav-item i {
         font-size: 1.2rem;
-        width: 1.5rem;
         text-align: center;
         margin: 0;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s ease;
     }
 
     .nav-item span {
-        max-width: 0;
+        max-height: 0;
         opacity: 0;
         overflow: hidden;
         white-space: nowrap;
-        transition: max-width 0.3s ease, opacity 0.3s ease, margin-left 0.3s ease;
-        display: inline-block;
+        transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+        display: block;
+    }
+    
+    .nav-item.active i,
+    .nav-item.admin-active i {
+        transform: scale(1.25) translateY(-2px);
     }
     
     .nav-item.active span,
-    .nav-item.admin-active span,
-    .nav-item:hover span {
-        max-width: 150px;
+    .nav-item.admin-active span {
+        max-height: 20px;
         opacity: 1;
-        margin-left: 0.5rem;
+        margin-top: 0.3rem;
     }
 
     .content-body { padding: 1rem; }
