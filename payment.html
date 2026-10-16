@@ -54,7 +54,7 @@
         .lang-toggle:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); border-color: var(--border-highlight); }
 
         .main-content { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 6rem 1rem 3rem 1rem; }
-        .checkout-container { max-width: 32rem; width: 100%; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); position: relative; }
+        .checkout-container { max-width: 34rem; width: 100%; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); position: relative; }
         .checkout-container::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--gradient-admin); border-radius: 16px 16px 0 0; }
 
         .back-link { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; margin-bottom: 1.25rem; transition: color 0.2s; font-weight: 600; }
@@ -69,12 +69,15 @@
         .step-badge { background: var(--accent-primary); color: white; width: 1.75rem; height: 1.75rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; font-family: 'Plus Jakarta Sans', sans-serif; }
         .step-divider { width: 100%; height: 1px; background: var(--border-light); margin: 2rem 0 1.5rem 0; }
 
-        .region-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
-        .region-card { background: var(--bg-input); border: 1px solid var(--border-light); border-radius: 12px; padding: 1.25rem 0.75rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .region-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+        @media (max-width: 480px) {
+            .region-grid { grid-template-columns: 1fr; }
+        }
+        .region-card { background: var(--bg-input); border: 1px solid var(--border-light); border-radius: 12px; padding: 1.25rem 0.5rem; text-align: center; cursor: pointer; transition: all 0.2s; }
         .region-card:hover { border-color: var(--border-highlight); background: #202024; }
         .region-card.active { border-color: var(--accent-primary); background: rgba(139, 92, 246, 0.1); }
         .region-card span { font-size: 1.75rem; display: block; margin-bottom: 0.25rem; }
-        .region-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; color: #fff; }
+        .region-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; color: #fff; }
         .region-card p { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.15rem; }
 
         .payment-method-box { margin-bottom: 1.5rem; padding: 1.25rem; background: var(--bg-input); border-radius: 12px; border: 1px solid var(--border-light); }
@@ -172,12 +175,17 @@
                     <div class="region-card" id="btn-id" onclick="selectRegion('id')">
                         <span>🇮🇩</span>
                         <h3>Indonesia</h3>
-                        <p>QRIS (Rp 99.000)</p>
+                        <p>QRIS (Rp 115.000)</p>
                     </div>
                     <div class="region-card" id="btn-intl" onclick="selectRegion('intl')">
                         <span>🌍</span>
                         <h3><span class="lang-en">International</span><span class="lang-id">Internasional</span></h3>
-                        <p>Sociabuzz ($6.00)</p>
+                        <p>Sociabuzz ($6.50)</p>
+                    </div>
+                    <div class="region-card" id="btn-paypal" onclick="selectRegion('paypal')">
+                        <span style="color: #0079C1; margin-top: 0.15rem;"><i class="fa-brands fa-paypal"></i></span>
+                        <h3>PayPal</h3>
+                        <p>Direct ($6.50)</p>
                     </div>
                 </div>
 
@@ -187,7 +195,7 @@
                         <div class="qris-box">
                             <img src="https://image2url.com/r2/default/images/1772880891631-13f0dca4-0a81-4537-871e-d152e7940604.jpg" alt="Heraclaus QRIS Code">
                         </div>
-                        <div class="price-tag">Rp 99.000</div>
+                        <div class="price-tag">Rp 115.000</div>
                         <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">
                             <span class="lang-en">Scan the QR code above using your e-wallet or mobile banking app. <b>Please save your receipt!</b></span>
                             <span class="lang-id">Pindai kode QR di atas menggunakan aplikasi e-wallet atau m-banking Anda. <b>Harap simpan bukti transfer!</b></span>
@@ -196,7 +204,7 @@
 
                     <div id="sociabuzz-content" class="payment-method-box" style="display: none; text-align: center;">
                         <i class="fa-solid fa-earth-americas" style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.75rem;"></i>
-                        <div class="price-tag">$6.00</div>
+                        <div class="price-tag">$6.50</div>
                         <p style="color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 0.85rem;">
                             <span class="lang-en">Complete your payment via our Sociabuzz Tribe page using PayPal, Credit Card, or other international methods.</span>
                             <span class="lang-id">Selesaikan pembayaran melalui halaman Sociabuzz Tribe kami menggunakan PayPal, Kartu Kredit, atau metode internasional lainnya.</span>
@@ -205,6 +213,25 @@
                         <a href="https://sociabuzz.com/heraclausid/tribe" target="_blank" class="btn-submit" style="background: var(--bg-card); border: 1px solid var(--border-highlight); margin-bottom: 0.75rem; color: #fff; text-decoration: none;">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i> 
                             <span class="lang-en">Pay via Sociabuzz</span><span class="lang-id">Bayar via Sociabuzz</span>
+                        </a>
+                        <p style="font-size: 0.8rem; color: var(--accent-danger); font-weight: 600;">
+                            <i class="fa-solid fa-camera"></i> 
+                            <span class="lang-en">Take a screenshot of your receipt!</span>
+                            <span class="lang-id">Ambil tangkapan layar (screenshot) bukti pembayaran!</span>
+                        </p>
+                    </div>
+                    
+                    <div id="paypal-content" class="payment-method-box" style="display: none; text-align: center;">
+                        <i class="fa-brands fa-paypal" style="font-size: 2.5rem; color: #0079C1; margin-bottom: 0.75rem;"></i>
+                        <div class="price-tag">$6.50</div>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 0.85rem;">
+                            <span class="lang-en">Send your payment to <b>jhayyan009@gmail.com</b>. Please ensure you select the <b>"Friends and Family"</b> option so there are no admin fees.</span>
+                            <span class="lang-id">Kirim pembayaran Anda ke <b>jhayyan009@gmail.com</b>. Pastikan Anda memilih metode <b>"Teman dan Keluarga" (Friends and Family)</b> agar tidak ada potongan biaya admin.</span>
+                        </p>
+                        
+                        <a href="https://paypal.me/" target="_blank" class="btn-submit" style="background: #0079C1; border: none; margin-bottom: 0.75rem; color: #fff; text-decoration: none;">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> 
+                            <span class="lang-en">Open PayPal</span><span class="lang-id">Buka PayPal</span>
                         </a>
                         <p style="font-size: 0.8rem; color: var(--accent-danger); font-weight: 600;">
                             <i class="fa-solid fa-camera"></i> 
@@ -349,16 +376,22 @@
         function selectRegion(region) {
             document.getElementById('btn-id').classList.remove('active');
             document.getElementById('btn-intl').classList.remove('active');
+            document.getElementById('btn-paypal').classList.remove('active');
+            
             document.getElementById('payment-details').style.display = 'block';
+            document.getElementById('qris-content').style.display = 'none';
+            document.getElementById('sociabuzz-content').style.display = 'none';
+            document.getElementById('paypal-content').style.display = 'none';
 
             if (region === 'id') {
                 document.getElementById('btn-id').classList.add('active');
                 document.getElementById('qris-content').style.display = 'block';
-                document.getElementById('sociabuzz-content').style.display = 'none';
-            } else {
+            } else if (region === 'intl') {
                 document.getElementById('btn-intl').classList.add('active');
-                document.getElementById('qris-content').style.display = 'none';
                 document.getElementById('sociabuzz-content').style.display = 'block';
+            } else if (region === 'paypal') {
+                document.getElementById('btn-paypal').classList.add('active');
+                document.getElementById('paypal-content').style.display = 'block';
             }
         }
 
