@@ -2689,7 +2689,19 @@
                         removed: packedRemoved, maintenance: packedMaintenance, sendEmail: document.getElementById("p-send-email").checked
                     })
                 })
-                    .then(res => res.json()).then(data => { if (data.status === "success") { document.getElementById("admin-publish-form").reset(); document.getElementById('p-date').valueAsDate = new Date(); session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast(t('Published to all users!', 'Pembaruan berhasil dikirim ke semua Klien!')); } else throw new Error(data.message); })
+                    .then(res => res.json()).then(data => { 
+                        if (data.status === "success") { 
+                            document.getElementById("admin-publish-form").reset(); 
+                            document.getElementById('p-date').valueAsDate = new Date(); 
+                            session.history = data.history; 
+                            sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); 
+                            renderAdminDatabase(data.history); 
+                            
+                            autoFillMaintenance(data.history);
+                            
+                            showToast(t('Published to all users!', 'Pembaruan berhasil dikirim ke semua Klien!')); 
+                        } else throw new Error(data.message); 
+                    })
                     .catch(err => { msgBox.className = "msg-box msg-error"; msgBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message; msgBox.style.display = "block"; })
                     .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> ' + t('Publish & Update All', 'Terbitkan & Perbarui Semua'); });
             });
@@ -2882,6 +2894,17 @@
                     });
             });
         });
+        
+        function autoFillMaintenance(history) {
+            if (history && history.length > 0) {
+                const splitText = (text) => { if (!text) return ["", ""]; let p = text.split("|||"); return [p[0] || "", p[1] || ""]; };
+                const [maintEn, maintId] = splitText(history[0].maintenance);
+                const pMaintEn = document.getElementById("p-maintenance-en");
+                const pMaintId = document.getElementById("p-maintenance-id");
+                if (pMaintEn) pMaintEn.value = maintEn.trim();
+                if (pMaintId) pMaintId.value = maintId.trim();
+            }
+        }
 
         function showToast(message, isError = false) {
             const container = document.getElementById('toast-container');
@@ -2977,9 +3000,15 @@
         }
 
         function showAdminDashboard(data) {
-            document.getElementById("main-navbar").style.display = "none"; document.getElementById("auth-section").style.display = "none"; document.getElementById("admin-dashboard").classList.add("active");
+            document.getElementById("main-navbar").style.display = "none"; 
+            document.getElementById("auth-section").style.display = "none"; 
+            document.getElementById("admin-dashboard").classList.add("active");
+            
             renderAdminDatabase(data.history || []);
             fetchAdminDatabase();
+            
+            // Auto-fill maintenance pada saat panel pertama kali dimuat
+            autoFillMaintenance(data.history);
         }
 
         function fetchMemberServers() {
