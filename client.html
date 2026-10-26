@@ -1219,6 +1219,23 @@
     </div>
     <div id="toast-container"></div>
 
+    <div class="modal-overlay" id="owner-binding-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="owner-binding-confirm-title" aria-hidden="true">
+        <div class="modal-card" style="max-width:29rem;">
+            <div class="modal-header">
+                <h2 id="owner-binding-confirm-title" class="font-outfit" style="margin:0;font-size:1.3rem;color:#fff;"><i class="fa-solid fa-shield-halved" style="color:#c4b5fd;margin-right:.5rem;"></i>Confirm Google Owner</h2>
+            </div>
+            <div class="modal-body">
+                <p id="owner-binding-confirm-description" style="color:var(--text-secondary);font-size:.88rem;line-height:1.6;"></p>
+                <strong id="owner-binding-confirm-email" style="color:#fff;overflow-wrap:anywhere;"></strong>
+                <p id="owner-binding-confirm-warning" style="font-size:.82rem;color:#fbbf24;"></p>
+                <div style="display:flex;justify-content:flex-end;gap:.75rem;flex-wrap:wrap;margin-top:1rem;">
+                    <button type="button" class="btn btn-secondary" id="owner-binding-cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="owner-binding-accept">Confirm Owner</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="download-overlay" id="download-overlay">
         <i class="fa-solid fa-circle-notch dl-spinner"></i>
         <div class="dl-title">
@@ -1985,6 +2002,7 @@
                             <p style="color:var(--text-secondary);font-size:.8rem;margin-bottom:.9rem;"><span class="lang-en">Confirm your existing admin password, then select the Google account you want to permanently authorize. This cannot be changed from the dashboard after binding.</span><span class="lang-id">Konfirmasi password admin lama, lalu pilih akun Google yang akan diberi akses permanen. Setelah terhubung, akun ini tidak bisa diganti dari dashboard.</span></p>
                             <div class="form-group"><label><span class="lang-en">Confirm Admin Password</span><span class="lang-id">Konfirmasi Password Admin</span></label><input id="owner-confirm-password" type="password" autocomplete="current-password" placeholder="Current admin password" /></div>
                             <div id="google-owner-bind-button" style="display:flex;justify-content:flex-start;min-height:42px;margin-top:1rem;"></div>
+                            <p id="owner-binding-feedback" role="status" aria-live="polite" style="display:none;font-size:.82rem;line-height:1.5;margin-top:.75rem;overflow-wrap:anywhere;"></p>
                         </div>
                         <p style="font-size:.72rem;color:var(--text-muted);margin-top:1rem;"><i class="fa-solid fa-lock"></i> <span class="lang-en">Google-only sign-in activates only after verification succeeds.</span><span class="lang-id">Login Google-only baru aktif setelah verifikasi berhasil.</span></p>
                     </div>
@@ -2515,6 +2533,47 @@
             return String(value == null ? '' : value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
         }
 
+        function setOwnerBindingFeedback(message, isError) {
+            const el = document.getElementById('owner-binding-feedback');
+            if (!el) return;
+            el.textContent = message || '';
+            el.style.display = message ? 'block' : 'none';
+            el.style.color = isError ? '#fda4af' : '#86efac';
+        }
+
+        function confirmOwnerBinding(email) {
+            return new Promise(resolve => {
+                const modal = document.getElementById('owner-binding-confirm-modal');
+                const accept = document.getElementById('owner-binding-accept');
+                const cancel = document.getElementById('owner-binding-cancel');
+                const previousFocus = document.activeElement;
+                document.getElementById('owner-binding-confirm-email').textContent = email;
+                document.getElementById('owner-binding-confirm-title').textContent = t('Confirm Google Owner', 'Konfirmasi Google Owner');
+                document.getElementById('owner-binding-confirm-description').textContent = t('Permanently authorize this Google account as the only Heraclaus Owner?', 'Jadikan akun Google ini sebagai satu-satunya Owner Heraclaus secara permanen?');
+                document.getElementById('owner-binding-confirm-warning').textContent = t('Password login will be disabled. Changing Owner will require manual recovery through Apps Script.', 'Login password akan dinonaktifkan. Mengganti Owner memerlukan pemulihan manual melalui Apps Script.');
+                accept.textContent = t('Confirm Owner', 'Konfirmasi Owner');
+                cancel.textContent = t('Cancel', 'Batal');
+                const finish = approved => {
+                    modal.classList.remove('show');
+                    modal.setAttribute('aria-hidden', 'true');
+                    accept.removeEventListener('click', onAccept);
+                    cancel.removeEventListener('click', onCancel);
+                    document.removeEventListener('keydown', onKey);
+                    if (previousFocus && previousFocus.isConnected && previousFocus.focus) previousFocus.focus();
+                    resolve(approved);
+                };
+                const onAccept = () => finish(true);
+                const onCancel = () => finish(false);
+                const onKey = e => { if (e.key === 'Escape') finish(false); };
+                accept.addEventListener('click', onAccept);
+                cancel.addEventListener('click', onCancel);
+                document.addEventListener('keydown', onKey);
+                modal.classList.add('show');
+                modal.setAttribute('aria-hidden', 'false');
+                accept.focus();
+            });
+        }
+
         async function handleGoogleCredential(response) {
             const idToken = response && response.credential;
             if (!idToken) return;
@@ -2527,14 +2586,21 @@
             if (adminDashboardActive) {
                 const keyInput = document.getElementById('owner-confirm-password');
                 if (!session || session.role !== 'admin' || session.ownerBound || !keyInput.value.trim()) {
-                    showToast(t('Confirm your current admin password first.', 'Konfirmasi password admin lama terlebih dahulu.'), true);
+                    const msg = t('Confirm your current admin password and sign in to Admin Console first.', 'Konfirmasi password admin lama dan pastikan sudah login ke Admin Console.');
+                    setOwnerBindingFeedback(msg, true);
+                    showToast(msg, true);
                     return;
                 }
                 let selectedEmail = 'selected Google account';
                 try { selectedEmail = JSON.parse(atob(idToken.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).email || selectedEmail; } catch (_) {}
-                if (!confirm(t(`Bind ${selectedEmail} as the ONE Heraclaus Owner? Password login will be disabled. This cannot be changed from the dashboard.`, `Hubungkan ${selectedEmail} sebagai SATU-SATUNYA Owner Heraclaus? Login password akan dinonaktifkan. Akun tidak dapat diganti dari dashboard.`))) return;
+                setOwnerBindingFeedback('', false);
+                if (!await confirmOwnerBinding(selectedEmail)) {
+                    setOwnerBindingFeedback(t('Owner binding cancelled. No changes were made.', 'Binding Owner dibatalkan. Tidak ada perubahan.'), false);
+                    return;
+                }
                 request = {action:'admin_bind_owner_google',adminToken:session.adminToken,adminPassword:keyInput.value.trim(),idToken};
                 keyInput.value = '';
+                setOwnerBindingFeedback(t('Verifying Google account and saving Owner...', 'Memverifikasi akun Google dan menyimpan Owner...'), false);
             } else if (adminLoginActive) {
                 request = {action:'admin_google_login',idToken};
             } else if (isBinding) {
@@ -2561,6 +2627,7 @@
                     sessionStorage.setItem('heraclaus_session', JSON.stringify(session));
                     renderOwnerGoogleStatus(session);
                     updateAdminAuthMode(true);
+                    setOwnerBindingFeedback('', false);
                     showToast(t('Owner Google linked. Password login has been disabled.', 'Google Owner terhubung. Login password telah dinonaktifkan.'));
                 } else if (adminLoginActive) {
                     data.role = 'admin';
@@ -2580,6 +2647,7 @@
                     showToast(t('Signed in with Google!', 'Berhasil masuk dengan Google!'));
                 }
             } catch (error) {
+                if (adminDashboardActive) setOwnerBindingFeedback(error.message || t('Owner binding failed.', 'Binding Owner gagal.'), true);
                 if (message) { message.textContent = error.message; message.style.display = 'block'; }
                 showToast(error.message, true);
             }
