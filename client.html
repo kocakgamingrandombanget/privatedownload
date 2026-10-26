@@ -3300,7 +3300,10 @@
                     <td style="text-align:right;">
                         <div style="display: flex; gap: 0.4rem; justify-content: flex-end; align-items: center; height: 100%;">
                             <button onclick="viewInvoice(${index})" class="btn-icon" title="View Invoice" style="width: 2rem; height: 2rem; color: var(--accent-primary); border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05);"><i class="fa-solid fa-file-invoice-dollar" style="font-size: 0.8rem;"></i></button>
-                            <button onclick="adminToggleMemberStatus(${m.row}, '${m.status}')" class="btn-icon" title="Toggle Status (Approve/Suspend)" style="width: 2rem; height: 2rem;"><i class="fa-solid fa-power-off" style="font-size: 0.8rem;"></i></button>
+                            ${m.status === 'PENDING' ? `
+                                <button onclick="adminReviewPayment(${index}, 'APPROVED')" class="btn-icon" title="Approve payment" style="color:#10b981;border-color:rgba(16,185,129,.4);width:2rem;height:2rem;"><i class="fa-solid fa-check"></i></button>
+                                <button onclick="adminReviewPayment(${index}, 'REJECTED')" class="btn-icon danger" title="Reject payment" style="width:2rem;height:2rem;"><i class="fa-solid fa-xmark"></i></button>
+                            ` : `<button onclick="adminToggleMemberStatus(${m.row}, '${m.status}')" class="btn-icon" title="Activate/Suspend member" style="width:2rem;height:2rem;"><i class="fa-solid fa-power-off" style="font-size:.8rem;"></i></button>`}
                             <button onclick="adminDeleteMember(${m.row})" class="btn-icon danger" title="Delete Member" style="width: 2rem; height: 2rem;"><i class="fa-solid fa-trash-can" style="font-size: 0.8rem;"></i></button>
                         </div>
                     </td>
@@ -3313,7 +3316,7 @@
             let receiptHtml = '';
             if (m.receipt && m.receipt !== "-" && m.receipt !== "") {
                 const match = m.receipt.match(/\/d\/([a-zA-Z0-9_-]+)/);
-                if (match && match[1]) receiptHtml = `<div style="width: 100%; border-radius: 8px; border: 1px solid var(--border-light); margin-top: 0.5rem; background: rgba(0,0,0,0.5); overflow: hidden;"><iframe src="https://drive.google.com/file/d/${match[1]}/preview" width="100%" height="250" style="border:none; display:block;"></iframe></div>`;
+                if (match && match[1]) receiptHtml = `<div id="receipt-preview-${index}" style="width:100%;min-height:90px;border-radius:8px;border:1px solid var(--border-light);margin-top:.5rem;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:12px;color:var(--text-muted);font-size:.8rem;">${t('Loading private receipt...', 'Memuat bukti pembayaran privat...')}</div>`;
                 else receiptHtml = `<p style="color: var(--text-secondary); font-size: 0.8rem; text-align: center;">External link detected.</p>`;
             } else receiptHtml = `<p style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed var(--border-light);">${t('No payment receipt provided.', 'Klien ini tidak mengirimkan bukti transfer apa pun.')}</p>`;
 
@@ -3343,13 +3346,35 @@
                 <h4 style="font-family: 'Outfit'; color: #fff; font-size: 1rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-image" style="color: var(--text-muted); margin-right: 0.4rem;"></i> ${t('Payment Receipt', 'Bukti Pembayaran')}</h4>
                 ${receiptHtml}
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem;">
-                    <a href="${m.receipt}" target="_blank" class="btn btn-outline w-full" style="font-size: 0.8rem;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Full Image</a>
+                    <button type="button" onclick="downloadReceiptImage(${index})" class="btn btn-outline w-full" style="font-size: 0.8rem;"><i class="fa-solid fa-download"></i> ${t('Save Receipt', 'Simpan Bukti')}</button>
                     <button onclick="exportInvoiceImage(${index}, this)" class="btn btn-gradient w-full" style="font-size: 0.8rem;"><i class="fa-solid fa-file-export"></i> Export Data</button>
                 </div>`;
             document.getElementById('invoice-modal').classList.add('show');
+            const previewBox = document.getElementById(`receipt-preview-${index}`);
+            if (previewBox) {
+                getAdminReceiptImage(m.receipt).then(src => {
+                    if (!previewBox.isConnected) return;
+                    const receiptImage = document.createElement('img');
+                    receiptImage.src = src;
+                    receiptImage.alt = 'Payment Receipt';
+                    receiptImage.style.cssText = 'display:block;width:100%;max-height:350px;object-fit:contain;border-radius:6px;';
+                    previewBox.replaceChildren(receiptImage);
+                }).catch(() => { if (previewBox.isConnected) previewBox.textContent = t('Receipt unavailable.', 'Bukti pembayaran tidak tersedia.'); });
+            }
         }
 
         const receiptImageCache = new Map();
+        window.downloadReceiptImage = async function (index) {
+            const member = window.adminMembersData[index];
+            if (!member || !member.receipt) return;
+            try {
+                const data = await getAdminReceiptImage(member.receipt);
+                const link = document.createElement('a');
+                link.href = data;
+                link.download = 'Payment_Receipt_' + String(member.gamertag || 'member').replace(/[^a-z0-9_-]/gi,'') + (data.startsWith('data:image/png') ? '.png' : data.startsWith('data:image/webp') ? '.webp' : '.jpg');
+                link.click();
+            } catch (error) { showToast(t('Could not download receipt.', 'Gagal mengunduh bukti pembayaran.'), true); }
+        };
         async function getAdminReceiptImage(receiptUrl) {
             if (receiptImageCache.has(receiptUrl)) return receiptImageCache.get(receiptUrl);
             const session = JSON.parse(sessionStorage.getItem('heraclaus_session') || 'null');
@@ -3413,6 +3438,24 @@
         }
 
         window.closeInvoiceModal = function () { document.getElementById('invoice-modal').classList.remove('show'); }
+        window.adminReviewPayment = async function (index, decision) {
+            const member = window.adminMembersData[index];
+            if (!member || member.status !== 'PENDING') return;
+            const actionLabel = decision === 'APPROVED' ? t('APPROVE', 'SETUJUI') : t('REJECT', 'TOLAK');
+            if (!confirm(`${actionLabel} ${member.gamertag} (${member.email})? ${t('Make sure you have verified the payment receipt first.', 'Pastikan bukti pembayaran sudah diperiksa.')}`)) return;
+            const session = JSON.parse(sessionStorage.getItem('heraclaus_session') || 'null');
+            if (!session || session.role !== 'admin') return;
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+                    body:JSON.stringify({action:'admin_review_payment',adminPassword:session.adminPassword,targetRow:member.row,expectedEmail:member.email,decision})
+                });
+                const data = await response.json();
+                if (data.status !== 'success') throw new Error(data.message || 'Review failed');
+                showToast(decision === 'APPROVED' && !data.emailSent ? t('Approved, but account email failed. Check Apps Script logs.', 'Disetujui, tetapi email akun gagal. Periksa log Apps Script.') : t('Payment review saved.', 'Keputusan pembayaran tersimpan.'), decision === 'APPROVED' && !data.emailSent);
+                fetchAdminMembers();
+            } catch (error) { showToast(error.message, true); }
+        };
         window.adminToggleMemberStatus = function (row, currentStatus) { const newStatus = currentStatus === 'APPROVED' ? 'SUSPENDED' : 'APPROVED'; if (!confirm(`Change member status to ${newStatus}?`)) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_toggle_member", adminPassword: session.adminPassword, targetRow: row, newStatus: newStatus }) }).then(res => res.json()).then(data => { if (data.status === "success") { showToast(`Member updated to ${newStatus}`); fetchAdminMembers(); } }); }
         window.adminDeleteMember = function (row) { if (!confirm("Warning: This will permanently delete this member's account and license! Proceed?")) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_delete_member", adminPassword: session.adminPassword, targetRow: row }) }).then(res => res.json()).then(data => { if (data.status === "success") { showToast('Member deleted.'); fetchAdminMembers(); } }); }
 
