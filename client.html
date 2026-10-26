@@ -2439,6 +2439,82 @@
         let pollingInterval = null;
         window.adminMembersData = [];
 
+        // Share a *currently active* admin session across same-origin tabs only.
+        // No persistent token in localStorage. A separately isolated browser profile
+        // or a closed source tab still requires a fresh admin login.
+        const adminTabChannel = typeof BroadcastChannel !== 'undefined'
+            ? new BroadcastChannel('heraclaus-admin-session-v4') : null;
+        const adminTabId = (typeof crypto !== 'undefined' && crypto.randomUUID)
+            ? crypto.randomUUID() : String(Math.random()) + String(Date.now());
+        let pendingAdminSession = null;
+        function getActiveTabAdminSession() {
+            try {
+                const data = JSON.parse(sessionStorage.getItem('heraclaus_session') || 'null');
+                return data && data.role === 'admin' && /^[a-f0-9]{64}$/.test(data.adminToken || '')
+                    && Number(data.expiresAt) > Date.now() ? data : null;
+            } catch (_) { return null; }
+        }
+        async function validateAdminTabSession(data) {
+            if (!data || !data.adminToken || Number(data.expiresAt) <= Date.now()) return false;
+            const res = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST', headers: {'Content-Type':'text/plain;charset=utf-8'},
+                body: JSON.stringify({action:'admin_session_status',adminToken:data.adminToken})
+            });
+            const result = await res.json();
+            return result.status === 'success';
+        }
+        if (adminTabChannel) adminTabChannel.onmessage = async function(event) {
+            const message = event.data;
+            if (!message || message.from === adminTabId) return;
+            if (message.type === 'session_request' && typeof message.nonce === 'string') {
+                const session = getActiveTabAdminSession();
+                if (session) adminTabChannel.postMessage({type:'session_offer',from:adminTabId,nonce:message.nonce,session});
+            } else if (message.type === 'session_offer' && pendingAdminSession
+                    && message.nonce === pendingAdminSession.nonce) {
+                const request = pendingAdminSession;
+                pendingAdminSession = null;
+                request.resolve(message.session);
+            } else if (message.type === 'session_logout') {
+                sessionStorage.removeItem('heraclaus_session');
+                location.reload();
+            }
+        };
+        function requestActiveTabAdminSession() {
+            if (!adminTabChannel) return Promise.resolve(null);
+            return new Promise(resolve => {
+                const nonce = adminTabId + ':' + Date.now() + ':' + Math.random();
+                pendingAdminSession = {nonce,resolve};
+                adminTabChannel.postMessage({type:'session_request',from:adminTabId,nonce});
+                setTimeout(() => {
+                    if (pendingAdminSession && pendingAdminSession.nonce === nonce) {
+                        pendingAdminSession = null;
+                        resolve(null);
+                    }
+                }, 1500);
+            });
+        }
+        async function restoreAdminDashboardSession() {
+            const saved = sessionStorage.getItem('heraclaus_session');
+            if (saved) {
+                let data = null;
+                try { data = JSON.parse(saved); } catch (_) {}
+                if (data && data.role === 'user') { showUserDashboard(data); return; }
+                if (data && data.role === 'admin') {
+                    try {
+                        if (await validateAdminTabSession(data)) { showAdminDashboard(data); return; }
+                    } catch (_) { /* Network failure must not authorize the session. */ }
+                    sessionStorage.removeItem('heraclaus_session');
+                }
+            }
+            const shared = await requestActiveTabAdminSession();
+            if (!shared) return;
+            try {
+                if (!await validateAdminTabSession(shared)) return;
+                sessionStorage.setItem('heraclaus_session', JSON.stringify(shared));
+                showAdminDashboard(shared);
+            } catch (_) { /* No session established if validation fails. */ }
+        }
+
         function t(en, id) {
             return document.body.classList.contains('lang-en') ? en : id;
         }
@@ -2543,25 +2619,7 @@
             document.body.className = `lang-${savedLang}`;
             updateDynamicTexts();
 
-            const session = sessionStorage.getItem("heraclaus_session");
-            if (session) {
-                const data = JSON.parse(session);
-                if (data.role === "admin") {
-                    if (!data.adminToken || !data.expiresAt || Date.now() >= data.expiresAt) {
-                        sessionStorage.removeItem("heraclaus_session");
-                    } else {
-                        fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({action:"admin_session_status",adminToken:data.adminToken}) })
-                            .then(r => r.json()).then(result => {
-                                if (result.status !== "success") throw new Error("Session expired");
-                                showAdminDashboard(data);
-                            }).catch(() => {
-                                sessionStorage.removeItem("heraclaus_session");
-                                showToast(t("Admin session expired. Please sign in again.", "Sesi admin telah berakhir. Silakan masuk lagi."), true);
-                            });
-                    }
-                }
-                else showUserDashboard(data);
-            }
+            restoreAdminDashboardSession();
             const pDate = document.getElementById('p-date');
             if (pDate) pDate.valueAsDate = new Date();
 
@@ -3053,6 +3111,24 @@
             
             // Auto-fill maintenance pada saat panel pertama kali dimuat
             autoFillMaintenance(data.history);
+
+            const reviewRow = new URLSearchParams(window.location.search).get('review');
+            if (reviewRow && /^(?:[2-9]|[1-9][0-9]+)$/.test(reviewRow)) {
+                const memberNav = document.querySelector('#admin-sidebar .sidebar-nav a[onclick*="members"]');
+                if (memberNav) switchTab('admin', 'members', memberNav);
+                openLinkedPaymentReview(Number(reviewRow));
+            }
+        }
+
+        async function openLinkedPaymentReview(row) {
+            const members = await fetchAdminMembers();
+            if (!members) return;
+            const index = members.findIndex(member => Number(member.row) === row);
+            if (index < 0) {
+                showToast(t('This payment could not be found. It may have moved.', 'Pembayaran tidak ditemukan. Barisnya mungkin telah berubah.'), true);
+                return;
+            }
+            viewInvoice(index);
         }
 
         function fetchMemberServers() {
@@ -3257,9 +3333,15 @@
         window.closeEditReleaseModal = function () { document.getElementById("edit-release-modal").classList.remove("show"); }
 
         function fetchAdminMembers() {
-            const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_get_members", adminToken: session.adminToken }) })
-                .then(res => res.json()).then(data => { if (data.status === "success") { window.adminMembersData = data.members; renderAdminMembers(data.members); } });
+            const session = JSON.parse(sessionStorage.getItem("heraclaus_session") || "null");
+            if (!session || session.role !== 'admin') return Promise.resolve(null);
+            return fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_get_members", adminToken: session.adminToken }) })
+                .then(res => res.json()).then(data => {
+                    if (data.status !== "success") throw new Error(data.message || 'Could not load members');
+                    window.adminMembersData = data.members;
+                    renderAdminMembers(data.members);
+                    return data.members;
+                }).catch(error => { showToast(error.message, true); return null; });
         }
 
         function renderAdminMembers(members) {
@@ -3536,6 +3618,7 @@
             const session = JSON.parse(sessionStorage.getItem("heraclaus_session") || "null");
             sessionStorage.removeItem("heraclaus_session");
             if (session && session.role === "admin" && session.adminToken) {
+                if (adminTabChannel) adminTabChannel.postMessage({type:'session_logout',from:adminTabId});
                 fetch(GOOGLE_SCRIPT_URL, {method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"admin_logout",adminToken:session.adminToken})})
                     .finally(() => location.reload());
             } else location.reload();
