@@ -2546,7 +2546,20 @@
             const session = sessionStorage.getItem("heraclaus_session");
             if (session) {
                 const data = JSON.parse(session);
-                if (data.role === "admin") showAdminDashboard(data);
+                if (data.role === "admin") {
+                    if (!data.adminToken || !data.expiresAt || Date.now() >= data.expiresAt) {
+                        sessionStorage.removeItem("heraclaus_session");
+                    } else {
+                        fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({action:"admin_session_status",adminToken:data.adminToken}) })
+                            .then(r => r.json()).then(result => {
+                                if (result.status !== "success") throw new Error("Session expired");
+                                showAdminDashboard(data);
+                            }).catch(() => {
+                                sessionStorage.removeItem("heraclaus_session");
+                                showToast(t("Admin session expired. Please sign in again.", "Sesi admin telah berakhir. Silakan masuk lagi."), true);
+                            });
+                    }
+                }
                 else showUserDashboard(data);
             }
             const pDate = document.getElementById('p-date');
@@ -2577,7 +2590,8 @@
                 fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_login", adminPassword: document.getElementById("admin-key").value.trim() }) })
                     .then(res => res.json()).then(data => {
                         if (data.status === "success") {
-                            data.role = "admin"; data.adminPassword = document.getElementById("admin-key").value.trim();
+                            data.role = "admin";
+                            document.getElementById("admin-key").value = "";
                             sessionStorage.setItem("heraclaus_session", JSON.stringify(data)); showAdminDashboard(data);
                             showToast(t('Access Granted', 'Akses Diizinkan'));
                         } else throw new Error(data.message);
@@ -2641,7 +2655,7 @@
                 btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
                 input.value = "";
 
-                fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "send_global_chat", adminPassword: session.adminPassword, role: "admin", msg: text }) })
+                fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "send_global_chat", adminToken: session.adminToken, role: "admin", msg: text }) })
                     .then(res => res.json()).then(data => { if (data.status === "success") renderChatBox('admin-chat-box', data.chat, session); })
                     .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>'; });
             });
@@ -2682,7 +2696,7 @@
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
                     redirect: "follow",
                     body: JSON.stringify({
-                        action: "admin_publish_release", adminPassword: session.adminPassword,
+                        action: "admin_publish_release", adminToken: session.adminToken,
                         versionName: document.getElementById("p-version").value.trim(), mcVersion: document.getElementById("p-mcversion").value.trim(),
                         date: document.getElementById("p-date").value, link: JSON.stringify(linkObj),
                         special: packedSpecial,
@@ -2717,7 +2731,7 @@
                     method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow",
                     body: JSON.stringify({
                         action: "admin_send_announcement",
-                        adminPassword: session.adminPassword,
+                        adminToken: session.adminToken,
                         subject: document.getElementById("announce-subject").value,
                         body: document.getElementById("announce-body").value,
                         imageUrl: document.getElementById("announce-image").value.trim(),
@@ -2753,7 +2767,7 @@
 
                     fetch(GOOGLE_SCRIPT_URL, {
                         method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow",
-                        body: JSON.stringify({ action: "admin_regenerate_global_keys", adminPassword: session.adminPassword })
+                        body: JSON.stringify({ action: "admin_regenerate_global_keys", adminToken: session.adminToken })
                     })
                         .then(res => res.json()).then(data => {
                             if (data.status === "success") {
@@ -2795,7 +2809,7 @@
                 fetch(GOOGLE_SCRIPT_URL, {
                     method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow",
                     body: JSON.stringify({
-                        action: "admin_update_free_version", adminPassword: session.adminPassword,
+                        action: "admin_update_free_version", adminToken: session.adminToken,
                         version: document.getElementById("f-version").value.trim(),
                         link: document.getElementById("f-link").value.trim(),
                         special: packedSpecial,
@@ -2836,7 +2850,7 @@
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
                     redirect: "follow",
                     body: JSON.stringify({
-                        action: "admin_edit_release", adminPassword: session.adminPassword, logId: document.getElementById("e-logid").value,
+                        action: "admin_edit_release", adminToken: session.adminToken, logId: document.getElementById("e-logid").value,
                         versionName: document.getElementById("e-version").value.trim(), mcVersion: document.getElementById("e-mcversion").value.trim(),
                         date: document.getElementById("e-date").value, link: JSON.stringify(linkObj),
                         special: packedSpecial, added: packedAdded, fixed: packedFixed, removed: packedRemoved, maintenance: packedMaintenance
@@ -2874,7 +2888,7 @@
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
                     redirect: "follow",
                     body: JSON.stringify({
-                        action: "admin_generate_license", adminPassword: session.adminPassword, gamertag: gt
+                        action: "admin_generate_license", adminToken: session.adminToken, gamertag: gt
                     })
                 })
                     .then(res => res.json()).then(data => {
@@ -3097,7 +3111,7 @@
             const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
             const payload = { action: "delete_server", serverId: id, role: session.role };
             if (session.role === 'user') payload.email = session.email;
-            if (session.role === 'admin') payload.adminPassword = session.adminPassword;
+            if (session.role === 'admin') payload.adminToken = session.adminToken;
 
             fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify(payload) })
                 .then(res => res.json()).then(data => {
@@ -3164,7 +3178,7 @@
             const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
             const payload = { action: "delete_global_chat", messageId: msgId, role: session.role };
             if (session.role === 'user') payload.email = session.email;
-            if (session.role === 'admin') payload.adminPassword = session.adminPassword;
+            if (session.role === 'admin') payload.adminToken = session.adminToken;
 
             fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify(payload) })
                 .then(res => res.json()).then(data => {
@@ -3244,7 +3258,7 @@
 
         function fetchAdminMembers() {
             const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
-            fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_get_members", adminPassword: session.adminPassword }) })
+            fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_get_members", adminToken: session.adminToken }) })
                 .then(res => res.json()).then(data => { if (data.status === "success") { window.adminMembersData = data.members; renderAdminMembers(data.members); } });
         }
 
@@ -3381,7 +3395,7 @@
             if (!session || session.role !== 'admin') throw new Error('Admin session required');
             const pending = fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action: 'admin_get_receipt_image', adminPassword: session.adminPassword, receiptUrl })
+                body: JSON.stringify({ action: 'admin_get_receipt_image', adminToken: session.adminToken, receiptUrl })
             }).then(r => r.json()).then(data => {
                 if (data.status !== 'success') throw new Error(data.message || 'Receipt unavailable');
                 return data.image;
@@ -3448,7 +3462,7 @@
             try {
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
-                    body:JSON.stringify({action:'admin_review_payment',adminPassword:session.adminPassword,targetRow:member.row,expectedEmail:member.email,decision})
+                    body:JSON.stringify({action:'admin_review_payment',adminToken:session.adminToken,targetRow:member.row,expectedEmail:member.email,decision})
                 });
                 const data = await response.json();
                 if (data.status !== 'success') throw new Error(data.message || 'Review failed');
@@ -3456,8 +3470,8 @@
                 fetchAdminMembers();
             } catch (error) { showToast(error.message, true); }
         };
-        window.adminToggleMemberStatus = function (row, currentStatus) { const newStatus = currentStatus === 'APPROVED' ? 'SUSPENDED' : 'APPROVED'; if (!confirm(`Change member status to ${newStatus}?`)) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_toggle_member", adminPassword: session.adminPassword, targetRow: row, newStatus: newStatus }) }).then(res => res.json()).then(data => { if (data.status === "success") { showToast(`Member updated to ${newStatus}`); fetchAdminMembers(); } }); }
-        window.adminDeleteMember = function (row) { if (!confirm("Warning: This will permanently delete this member's account and license! Proceed?")) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_delete_member", adminPassword: session.adminPassword, targetRow: row }) }).then(res => res.json()).then(data => { if (data.status === "success") { showToast('Member deleted.'); fetchAdminMembers(); } }); }
+        window.adminToggleMemberStatus = function (row, currentStatus) { const newStatus = currentStatus === 'APPROVED' ? 'SUSPENDED' : 'APPROVED'; if (!confirm(`Change member status to ${newStatus}?`)) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_toggle_member", adminToken: session.adminToken, targetRow: row, newStatus: newStatus }) }).then(res => res.json()).then(data => { if (data.status === "success") { showToast(`Member updated to ${newStatus}`); fetchAdminMembers(); } }); }
+        window.adminDeleteMember = function (row) { if (!confirm("Warning: This will permanently delete this member's account and license! Proceed?")) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_delete_member", adminToken: session.adminToken, targetRow: row }) }).then(res => res.json()).then(data => { if (data.status === "success") { showToast('Member deleted.'); fetchAdminMembers(); } }); }
 
         function switchTab(role, tabId, element) {
             const dash = document.getElementById(`${role}-dashboard`);
@@ -3509,7 +3523,7 @@
 
         function convertDriveLink(url) { const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/); return (match && match[1]) ? `https://drive.google.com/uc?export=download&confirm=t&id=${match[1]}` : url; }
 
-        window.deleteRelease = function (id) { if (!confirm(t("Delete this release permanently?", "Hapus rilis pembaruan ini selamanya?"))) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_delete_release", adminPassword: session.adminPassword, logId: id }) }).then(res => res.json()).then(data => { if (data.status === "success") { session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast(t('Release deleted.', 'File rilis berhasil dihapus dari database.')); } else alert(data.message); }); }
+        window.deleteRelease = function (id) { if (!confirm(t("Delete this release permanently?", "Hapus rilis pembaruan ini selamanya?"))) return; const session = JSON.parse(sessionStorage.getItem("heraclaus_session")); fetch(GOOGLE_SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow", body: JSON.stringify({ action: "admin_delete_release", adminToken: session.adminToken, logId: id }) }).then(res => res.json()).then(data => { if (data.status === "success") { session.history = data.history; sessionStorage.setItem("heraclaus_session", JSON.stringify(session)); renderAdminDatabase(data.history); showToast(t('Release deleted.', 'File rilis berhasil dihapus dari database.')); } else alert(data.message); }); }
         
         window.toggleSidebar = function (sidebarId) { 
             const sidebar = document.getElementById(sidebarId);
@@ -3518,7 +3532,14 @@
             overlay.classList.toggle('show'); 
         }
         
-        window.logout = function () { sessionStorage.removeItem("heraclaus_session"); location.reload(); }
+        window.logout = function () {
+            const session = JSON.parse(sessionStorage.getItem("heraclaus_session") || "null");
+            sessionStorage.removeItem("heraclaus_session");
+            if (session && session.role === "admin" && session.adminToken) {
+                fetch(GOOGLE_SCRIPT_URL, {method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"admin_logout",adminToken:session.adminToken})})
+                    .finally(() => location.reload());
+            } else location.reload();
+        }
         window.switchTab = switchTab;
     </script>
 
