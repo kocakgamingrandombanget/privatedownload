@@ -3319,7 +3319,25 @@
             document.getElementById('invoice-modal').classList.add('show');
         }
 
-        window.exportInvoiceImage = function (index, btnEl) {
+        const receiptImageCache = new Map();
+        async function getAdminReceiptImage(receiptUrl) {
+            if (receiptImageCache.has(receiptUrl)) return receiptImageCache.get(receiptUrl);
+            const session = JSON.parse(sessionStorage.getItem('heraclaus_session') || 'null');
+            if (!session || session.role !== 'admin') throw new Error('Admin session required');
+            const pending = fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'admin_get_receipt_image', adminPassword: session.adminPassword, receiptUrl })
+            }).then(r => r.json()).then(data => {
+                if (data.status !== 'success') throw new Error(data.message || 'Receipt unavailable');
+                return data.image;
+            });
+            receiptImageCache.set(receiptUrl, pending);
+            if (receiptImageCache.size > 8) receiptImageCache.delete(receiptImageCache.keys().next().value);
+            try { return await pending; }
+            catch (error) { receiptImageCache.delete(receiptUrl); throw error; }
+        }
+
+        window.exportInvoiceImage = async function (index, btnEl) {
             const m = window.adminMembersData[index]; if (!m) return;
             const originalText = btnEl.innerHTML; btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Rendering...'; btnEl.disabled = true;
 
@@ -3340,19 +3358,28 @@
             if (document.getElementById('ex-license')) document.getElementById('ex-license').innerText = maskedLicense;
 
             const exStatusEl = document.getElementById('ex-status'); exStatusEl.innerText = m.status; exStatusEl.style.color = m.status === 'APPROVED' ? '#10b981' : (m.status === 'PENDING' ? '#fcd34d' : '#f43f5e');
-            const imgEl = document.getElementById('ex-image'); let imgSrc = m.receipt;
-            const match = m.receipt ? m.receipt.match(/\/d\/([a-zA-Z0-9_-]+)/) : null;
-            if (match && match[1]) imgSrc = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://drive.google.com/uc?id=' + match[1])}`;
+            const imgEl = document.getElementById('ex-image');
 
             const renderAndDownload = () => {
                 const template = document.getElementById('export-template');
-                html2canvas(template, { useCORS: true, allowTaint: true, backgroundColor: '#050505', scale: 2 }).then(canvas => {
+                html2canvas(template, { useCORS: true, backgroundColor: '#050505', scale: 2 }).then(canvas => {
                     const link = document.createElement('a'); link.download = `Invoice_Heraclaus_${m.gamertag.replace(/[^a-zA-Z0-9]/g, '')}.png`; link.href = canvas.toDataURL('image/png'); link.click();
                     btnEl.innerHTML = originalText; btnEl.disabled = false; showToast(t('Invoice exported securely!', 'Invoice gambar berhasil diekspor!'));
                 }).catch(e => { showToast(t('Failed to render image. Check console.', 'Gagal melakukan render gambar.'), true); btnEl.innerHTML = originalText; btnEl.disabled = false; });
             };
-            if (imgSrc && imgSrc !== "-" && imgSrc !== "") { imgEl.style.display = "block"; imgEl.onload = renderAndDownload; imgEl.onerror = () => { imgEl.style.display = "none"; renderAndDownload(); }; imgEl.src = imgSrc; }
-            else { imgEl.style.display = "none"; renderAndDownload(); }
+            if (m.receipt && m.receipt !== '-') {
+                try {
+                    const imageData = await getAdminReceiptImage(m.receipt);
+                    imgEl.onload = renderAndDownload;
+                    imgEl.onerror = () => { imgEl.style.display = 'none'; renderAndDownload(); };
+                    imgEl.style.display = 'block';
+                    imgEl.src = imageData;
+                } catch (error) {
+                    imgEl.style.display = 'none';
+                    showToast(t('Receipt unavailable; exporting invoice without image.', 'Bukti pembayaran tidak tersedia; invoice diekspor tanpa gambar.'), true);
+                    renderAndDownload();
+                }
+            } else { imgEl.style.display = 'none'; renderAndDownload(); }
         }
 
         window.closeInvoiceModal = function () { document.getElementById('invoice-modal').classList.remove('show'); }
