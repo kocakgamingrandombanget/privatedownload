@@ -896,6 +896,15 @@
             letter-spacing: normal;
         }
 
+        .license-card { padding: 1.4rem; border: 1px solid rgba(139,92,246,.32); border-radius: 16px; background: linear-gradient(140deg,rgba(139,92,246,.13),rgba(18,18,28,.96) 65%); }
+        .license-card-heading { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:.8rem; margin-bottom:1.25rem; }
+        .license-label { display:block; font-size:.72rem; font-weight:750; letter-spacing:.09em; color:#b7a0ff; text-transform:uppercase; margin-bottom:.6rem; }
+        .license-key-value { display:block; width:100%; box-sizing:border-box; font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:clamp(1rem,3.2vw,1.5rem); font-weight:800; color:#fff; letter-spacing:.08em; text-align:center; padding:1.05rem .5rem; background:#0c0b17; border:1px dashed #7661b2; border-radius:10px; overflow-wrap:anywhere; user-select:all; -webkit-user-select:all; }
+        .license-copy-button { width:100%; min-height:50px; justify-content:center; margin-top:.85rem; font-size:.95rem; gap:.55rem; }
+        .license-guidance { display:flex; align-items:flex-start; gap:.65rem; margin-top:1.15rem; font-size:.85rem; line-height:1.6; color:var(--text-secondary); }
+        .license-overview { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; padding:1.15rem 1.4rem; margin:1rem 0; border:1px solid rgba(139,92,246,.35); border-radius:12px; background:rgba(139,92,246,.09); }
+        .license-overview-action { min-height:44px; flex-shrink:0; }
+
         .history-table {
             width: 100%;
             border-collapse: collapse;
@@ -1153,6 +1162,10 @@
 
         /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 768px) {
+            .license-card { padding:1rem; }
+            .license-key-value { font-size:clamp(.91rem,4.2vw,1.2rem); letter-spacing:.035em; }
+            .license-overview { align-items:stretch; }
+            .license-overview-action { width:100%; justify-content:center; }
             .desktop-only { display: none !important; }
             
             .dashboard-wrapper.active {
@@ -1521,6 +1534,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="license-overview">
+                        <div style="flex:1;min-width:180px;">
+                            <div style="color:#fff;font-weight:750;font-size:.96rem;"><i class="fa-solid fa-key" style="color:#b69aff;margin-right:.4rem;"></i><span class="lang-en">Your in-game license is ready</span><span class="lang-id">Lisensi dalam game sudah siap</span></div>
+                            <p style="color:var(--text-secondary);font-size:.79rem;margin:.35rem 0 0;"><span class="lang-en">Open Licenses to copy the activation code for Minecraft.</span><span class="lang-id">Buka Lisensi untuk menyalin kode aktivasi Minecraft.</span></p>
+                        </div>
+                        <button type="button" class="btn btn-gradient license-overview-action" onclick="openUserLicenses()"><i class="fa-solid fa-arrow-right"></i> <span class="lang-en">View &amp; Copy License</span><span class="lang-id">Lihat &amp; Salin Lisensi</span></button>
+                    </div>
                     <div class="list-box" style="padding: 1.5rem; border-left: 3px solid var(--accent-primary);">
                         <h3 class="font-outfit" style="margin-bottom: 0.5rem; font-size: 1.1rem; color: #fff;">
                             <i class="fa-solid fa-bullhorn text-gradient" style="margin-right: 0.4rem;"></i>
@@ -1610,38 +1630,19 @@
                     <h2 class="section-title font-outfit">
                         <span class="lang-en">My Licenses</span><span class="lang-id">Informasi Lisensi</span>
                     </h2>
-                    <div class="list-box">
-                        <div class="list-item" style="align-items: center;">
-                            <div style="flex: 1;">
-                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem;">
-                                    <h4
-                                        style="color: #fff; font-size: 1.05rem; font-family: 'Outfit'; margin: 0; letter-spacing: -0.01em;">
-                                        Admin Suite Pro</h4>
-                                    <span
-                                        style="display: inline-flex; align-items: center; gap: 0.2rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.6rem; color: var(--accent-success); text-transform: uppercase; font-weight: 700;"><i
-                                            class="fa-solid fa-circle" style="font-size: 0.3rem;"></i> <span
-                                            class="lang-en">Active</span><span class="lang-id">Aktif</span></span>
-                                </div>
-                                <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0;">
-                                    <span class="lang-en">Permanent Binding</span><span class="lang-id">Hak Milik
-                                        Permanen</span>
-                                </p>
+                    <div class="license-card">
+                        <div class="license-card-heading">
+                            <div>
+                                <h3 style="color:#fff;font-size:1.15rem;margin:0 0 .35rem;font-family:'Outfit';">Admin Suite Pro</h3>
+                                <p style="color:var(--text-muted);font-size:.8rem;margin:0;"><span class="lang-en">Permanent license · Minecraft Bedrock</span><span class="lang-id">Lisensi permanen · Minecraft Bedrock</span></p>
                             </div>
-                            <div
-                                style="display: flex; gap: 0.4rem; align-items: stretch; width: 100%; max-width: 280px; margin-top: 0.5rem;">
-                                <div class="key-text" id="display-key" style="margin: 0; width: 100%;">Loading...</div>
-                                <button onclick="copyLicenseKey()" class="btn-icon" title="Copy License Key"
-                                    style="height: auto; width: 3rem;"><i class="fa-regular fa-copy"></i></button>
-                            </div>
+                            <span style="background:rgba(16,185,129,.13);color:#72e9ad;border:1px solid rgba(16,185,129,.3);border-radius:999px;padding:.38rem .72rem;font-size:.72rem;font-weight:750;"><i class="fa-solid fa-circle-check"></i> <span class="lang-en">ACTIVE</span><span class="lang-id">AKTIF</span></span>
                         </div>
+                        <span class="license-label"><span class="lang-en">Your activation key</span><span class="lang-id">Kunci aktivasi milikmu</span></span>
+                        <div id="display-key" class="license-key-value" role="textbox" aria-readonly="true" tabindex="0">Loading...</div>
+                        <button type="button" onclick="copyLicenseKey()" id="copy-license-button" class="btn btn-gradient license-copy-button"><i class="fa-regular fa-copy"></i><span class="lang-en">Copy License Key</span><span class="lang-id">Salin Kunci Lisensi</span></button>
+                        <div class="license-guidance"><i class="fa-solid fa-circle-info" style="color:#b69aff;margin-top:.18rem;"></i><div><span class="lang-en">Copy the key above, open Minecraft, then enter it when Admin Suite asks for your license. This is <b>not</b> your portal login password. Keep it private.</span><span class="lang-id">Salin kode di atas, buka Minecraft, lalu masukkan saat Admin Suite meminta lisensi. Kode ini <b>berbeda</b> dari kata sandi login portal. Jangan bagikan kepada orang lain.</span></div></div>
                     </div>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">
-                        <i class="fa-solid fa-circle-info" style="margin-right: 0.3rem;"></i>
-                        <span class="lang-en">Enter this unique 16-digit code in-game to activate your Add-on
-                            features.</span>
-                        <span class="lang-id">Masukkan 16 digit kode unik ini di dalam game untuk mengaktifkan fitur
-                            Add-on.</span>
-                    </p>
                 </div>
 
                 <div id="tab-user-guide" class="tab-content">
@@ -2917,10 +2918,39 @@
             setTimeout(() => { toast.classList.remove('show'); setTimeout(() => { container.removeChild(toast); }, 300); }, 3000);
         }
 
-        function copyLicenseKey() {
-            const keyText = document.getElementById("display-key").innerText;
-            if (keyText && keyText !== t("Loading...", "Memuat...") && keyText !== t("License pending generation...", "Lisensi sedang menunggu dibuat...")) {
-                const el = document.createElement('textarea'); el.value = keyText; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); showToast(t('License Key copied to clipboard!', 'Kunci Lisensi berhasil disalin!'));
+        function openUserLicenses() {
+            const nav = document.querySelector('#user-sidebar .nav-item[onclick*="licenses"]');
+            if (nav) switchTab('user', 'licenses', nav);
+        }
+
+        async function copyLicenseKey() {
+            const keyEl = document.getElementById('display-key');
+            const keyText = keyEl.innerText.trim();
+            if (!/^[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/.test(keyText)) {
+                showToast(t('Your license is not available yet.', 'Lisensimu belum tersedia.'), true);
+                return;
+            }
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(keyText);
+                } else {
+                    const temp = document.createElement('textarea');
+                    temp.value = keyText;
+                    temp.setAttribute('readonly', '');
+                    temp.style.position = 'fixed'; temp.style.opacity = '0';
+                    document.body.appendChild(temp);
+                    temp.focus(); temp.select(); temp.setSelectionRange(0, temp.value.length);
+                    const copied = document.execCommand('copy');
+                    temp.remove();
+                    if (!copied) throw new Error('Clipboard unavailable');
+                }
+                showToast(t('License key copied! Paste it into Minecraft.', 'Kunci lisensi disalin! Tempelkan di Minecraft.'));
+            } catch (error) {
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(keyEl);
+                selection.removeAllRanges(); selection.addRange(range);
+                showToast(t('Copy was blocked. Select and copy the highlighted code.', 'Penyalinan diblokir. Salin kode yang disorot secara manual.'), true);
             }
         }
 
