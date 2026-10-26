@@ -1409,13 +1409,9 @@
             </form>
             <div style="display:flex;align-items:center;gap:12px;margin:1.2rem 0 .85rem;color:var(--text-muted);font-size:.7rem;"><span style="flex:1;height:1px;background:var(--border-light);"></span>OR / ATAU<span style="flex:1;height:1px;background:var(--border-light);"></span></div>
             <div id="google-login-button" style="display:flex;justify-content:center;min-height:42px;"></div>
-            <p style="text-align:center;font-size:.69rem;color:var(--text-muted);margin-top:.65rem;line-height:1.5;"><span class="lang-en">Google sign-in works only for accounts already linked through your Heraclaus dashboard.</span><span class="lang-id">Login Google hanya berlaku bagi akun yang sudah dihubungkan melalui dashboard Heraclaus.</span></p>
-            <div style="text-align: center; margin-top: 1rem;">
-                <span class="admin-link" onclick="toggleAuthMode('admin')">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <span class="lang-en">Admin Console</span><span class="lang-id">Konsol Admin</span>
-                </span>
-            </div>
+            <p style="text-align:center;font-size:.69rem;color:var(--text-muted);margin-top:.65rem;line-height:1.5;"><span class="lang-en">Use your linked Google account. Owner access is recognized automatically; member accounts must be linked from the dashboard first.</span><span class="lang-id">Gunakan akun Google yang terhubung. Akses Owner dikenali otomatis; akun member harus dihubungkan melalui dashboard terlebih dahulu.</span></p>
+            <p id="login-backend-warning" role="alert" style="display:none;color:#fda4af;text-align:center;font-size:.76rem;line-height:1.55;margin-top:.8rem;"></p>
+            <p style="font-size:.62rem;color:var(--text-muted);text-align:center;margin-top:.8rem;opacity:.7;">Portal Security v6.3</p>
         </div>
 
         <div class="auth-container" id="admin-login-box" style="border-top: 3px solid var(--accent-admin);">
@@ -1442,8 +1438,6 @@
                 </button>
                 <div id="admin-login-msg" class="msg-box msg-error"></div>
             </form>
-            <div style="display:flex;align-items:center;gap:12px;margin:1rem 0;color:var(--text-muted);font-size:.7rem;"><span style="height:1px;flex:1;background:var(--border-light);"></span><span class="lang-en">OWNER GOOGLE SIGN-IN</span><span class="lang-id">LOGIN GOOGLE OWNER</span><span style="height:1px;flex:1;background:var(--border-light);"></span></div>
-            <div id="google-admin-login-button" style="display:flex;justify-content:center;min-height:42px;"></div>
             <p id="admin-auth-hint" style="font-size:.72rem;color:var(--text-muted);text-align:center;line-height:1.6;margin-top:.7rem;"><span class="lang-en">First-time setup requires your current admin password. After Owner binding, only the linked Google account can sign in.</span><span class="lang-id">Pengaturan pertama menggunakan password admin lama. Setelah binding, hanya akun Google Owner terhubung yang dapat masuk.</span></p>
             <div style="text-align: center; margin-top: 1rem;">
                 <span class="admin-link" onclick="toggleAuthMode('user')">
@@ -2578,9 +2572,8 @@
             const idToken = response && response.credential;
             if (!idToken) return;
             const adminDashboardActive = document.getElementById('admin-dashboard').classList.contains('active');
-            const adminLoginActive = document.getElementById('admin-login-box').classList.contains('active');
             const isBinding = document.getElementById('user-dashboard').classList.contains('active');
-            const message = document.getElementById(isBinding ? 'google-link-message' : adminLoginActive ? 'admin-login-msg' : 'login-msg');
+            const message = document.getElementById(isBinding ? 'google-link-message' : 'login-msg');
             const session = JSON.parse(sessionStorage.getItem('heraclaus_session') || 'null');
             let request;
             if (adminDashboardActive) {
@@ -2601,8 +2594,6 @@
                 request = {action:'admin_bind_owner_google',adminToken:session.adminToken,adminPassword:keyInput.value.trim(),idToken};
                 keyInput.value = '';
                 setOwnerBindingFeedback(t('Verifying Google account and saving Owner...', 'Memverifikasi akun Google dan menyimpan Owner...'), false);
-            } else if (adminLoginActive) {
-                request = {action:'admin_google_login',idToken};
             } else if (isBinding) {
                 const portalKeyField = document.getElementById('google-portal-key');
                 if (!session || session.role !== 'user' || !portalKeyField.value.trim()) {
@@ -2629,11 +2620,6 @@
                     updateAdminAuthMode(true);
                     setOwnerBindingFeedback('', false);
                     showToast(t('Owner Google linked. Password login has been disabled.', 'Google Owner terhubung. Login password telah dinonaktifkan.'));
-                } else if (adminLoginActive) {
-                    data.role = 'admin';
-                    sessionStorage.setItem('heraclaus_session', JSON.stringify(data));
-                    showAdminDashboard(data);
-                    showToast(t('Owner Google access granted!', 'Akses Google Owner berhasil!'));
                 } else if (isBinding) {
                     session.googleLinked = data.googleLinked;
                     session.googleEmail = data.googleEmail;
@@ -2641,10 +2627,15 @@
                     updateGoogleLinkDisplay(session);
                     showToast(t('Google account linked successfully!', 'Akun Google berhasil dihubungkan!'));
                 } else {
-                    data.role = 'user';
+                    if (data.role !== 'admin' && data.role !== 'user') throw new Error('Unsupported Google account role. Update the Apps Script backend.');
                     sessionStorage.setItem('heraclaus_session', JSON.stringify(data));
-                    showUserDashboard(data);
-                    showToast(t('Signed in with Google!', 'Berhasil masuk dengan Google!'));
+                    if (data.role === 'admin') {
+                        showAdminDashboard(data);
+                        showToast(t('Owner Google access granted!', 'Akses Google Owner berhasil!'));
+                    } else {
+                        showUserDashboard(data);
+                        showToast(t('Signed in with Google!', 'Berhasil masuk dengan Google!'));
+                    }
                 }
             } catch (error) {
                 if (adminDashboardActive) setOwnerBindingFeedback(error.message || t('Owner binding failed.', 'Binding Owner gagal.'), true);
@@ -2682,11 +2673,9 @@
             google.accounts.id.initialize({client_id:GOOGLE_OAUTH_CLIENT_ID,callback:handleGoogleCredential,auto_select:false,ux_mode:'popup'});
             const login = document.getElementById('google-login-button');
             const bind = document.getElementById('google-bind-button');
-            const adminLogin = document.getElementById('google-admin-login-button');
             const ownerBind = document.getElementById('google-owner-bind-button');
             if (login) google.accounts.id.renderButton(login,{theme:'outline',size:'large',shape:'rectangular',text:'continue_with',width:280});
             if (bind) google.accounts.id.renderButton(bind,{theme:'outline',size:'large',shape:'rectangular',text:'continue_with',width:265});
-            if (adminLogin) google.accounts.id.renderButton(adminLogin,{theme:'outline',size:'large',shape:'rectangular',text:'continue_with',width:280});
             if (ownerBind) google.accounts.id.renderButton(ownerBind,{theme:'outline',size:'large',shape:'rectangular',text:'continue_with',width:280});
         }
 
@@ -2694,6 +2683,7 @@
             ownerAuthBound = !!ownerBound;
             const passwordForm = document.getElementById('admin-login-form');
             if (passwordForm) passwordForm.style.display = ownerBound ? 'none' : 'flex';
+            if (ownerBound && document.getElementById('admin-login-box').classList.contains('active')) toggleAuthMode('user');
             const hint = document.getElementById('admin-auth-hint');
             if (hint) hint.textContent = ownerBound
                 ? t('Password login is disabled. Use your linked Owner Google account.', 'Login password dinonaktifkan. Gunakan akun Google Owner yang terhubung.')
@@ -2716,7 +2706,20 @@
             try {
                 const res = await fetch(GOOGLE_SCRIPT_URL, {method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_auth_config'})});
                 const data = await res.json();
-                if (data.status === 'success') updateAdminAuthMode(!!data.ownerBound);
+                if (data.status === 'success') {
+                    updateAdminAuthMode(!!data.ownerBound);
+                    const warning = document.getElementById('login-backend-warning');
+                    if (warning) {
+                        warning.textContent = data.authFlow !== 'unified-google-v6.3'
+                            ? t('Backend version mismatch. Deploy Kode.gs v6.3 before using unified Google login.', 'Versi backend belum sesuai. Deploy Kode.gs v6.3 sebelum menggunakan login Google terpadu.')
+                            : !data.ownerBound
+                                ? t('Google Owner has not been registered on this Apps Script deployment.', 'Google Owner belum terdaftar di deployment Apps Script ini.') : '';
+                        warning.style.display = warning.textContent ? 'block' : 'none';
+                    }
+                    // Recovery is intentionally not linked from the public login page.
+                    // The backend still refuses password login while Owner is bound.
+                    if (!data.ownerBound && new URLSearchParams(location.search).get('owner_setup') === '1') toggleAuthMode('admin');
+                }
             } catch (_) { /* Backend independently rejects password auth after binding. */ }
         }
 
@@ -3349,6 +3352,7 @@
         }
 
         function toggleAuthMode(mode) {
+            if (mode === 'admin' && (ownerAuthBound || new URLSearchParams(location.search).get('owner_setup') !== '1')) mode = 'user';
             document.getElementById('user-login-box').classList.toggle('active', mode === 'user');
             document.getElementById('admin-login-box').classList.toggle('active', mode === 'admin');
         }
