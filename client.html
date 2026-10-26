@@ -1425,6 +1425,9 @@
                 </button>
                 <div id="admin-login-msg" class="msg-box msg-error"></div>
             </form>
+            <div style="display:flex;align-items:center;gap:12px;margin:1rem 0;color:var(--text-muted);font-size:.7rem;"><span style="height:1px;flex:1;background:var(--border-light);"></span><span class="lang-en">OWNER GOOGLE SIGN-IN</span><span class="lang-id">LOGIN GOOGLE OWNER</span><span style="height:1px;flex:1;background:var(--border-light);"></span></div>
+            <div id="google-admin-login-button" style="display:flex;justify-content:center;min-height:42px;"></div>
+            <p id="admin-auth-hint" style="font-size:.72rem;color:var(--text-muted);text-align:center;line-height:1.6;margin-top:.7rem;"><span class="lang-en">First-time setup requires your current admin password. After Owner binding, only the linked Google account can sign in.</span><span class="lang-id">Pengaturan pertama menggunakan password admin lama. Setelah binding, hanya akun Google Owner terhubung yang dapat masuk.</span></p>
             <div style="text-align: center; margin-top: 1rem;">
                 <span class="admin-link" onclick="toggleAuthMode('user')">
                     <i class="fa-solid fa-arrow-left"></i>
@@ -1942,6 +1945,8 @@
                     <span class="lang-en">Global Chat Mod</span><span class="lang-id">Moderasi Obrolan</span></a>
                 <a class="nav-item" onclick="switchTab('admin', 'generator', this)"><i class="fa-solid fa-key"></i>
                     <span class="lang-en">License Generator</span><span class="lang-id">Generator Lisensi</span></a>
+                <a class="nav-item" onclick="switchTab('admin', 'owner', this)"><i class="fa-solid fa-shield-halved"></i>
+                    <span class="lang-en">Owner Security</span><span class="lang-id">Keamanan Owner</span></a>
             </nav>
             <div class="sidebar-footer"><a class="nav-item logout-btn" onclick="logout()"><i
                         class="fa-solid fa-right-from-bracket"></i> <span class="lang-en">Lock Console</span><span
@@ -1971,6 +1976,19 @@
             </header>
 
             <div class="content-body">
+                <div id="tab-admin-owner" class="tab-content">
+                    <h2 class="section-title font-outfit"><i class="fa-solid fa-shield-halved" style="color:#c4b5fd;margin-right:.5rem;"></i><span class="lang-en">Owner Security</span><span class="lang-id">Keamanan Owner</span></h2>
+                    <div class="profile-field" style="max-width:38rem;padding:1.5rem;border:1px solid var(--border-light);border-radius:14px;background:rgba(139,92,246,.035);">
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;"><strong style="color:#fff;"><span class="lang-en">Heraclaus Owner Google</span><span class="lang-id">Google Owner Heraclaus</span></strong><span id="owner-google-badge" style="font-size:.7rem;color:#fbbf24;">NOT LINKED</span></div>
+                        <p id="owner-google-status" style="color:var(--text-secondary);font-size:.82rem;margin:.75rem 0 1rem;"><span class="lang-en">One-time binding has not been completed.</span><span class="lang-id">Binding satu kali belum diselesaikan.</span></p>
+                        <div id="owner-google-setup">
+                            <p style="color:var(--text-secondary);font-size:.8rem;margin-bottom:.9rem;"><span class="lang-en">Confirm your existing admin password, then select the Google account you want to permanently authorize. This cannot be changed from the dashboard after binding.</span><span class="lang-id">Konfirmasi password admin lama, lalu pilih akun Google yang akan diberi akses permanen. Setelah terhubung, akun ini tidak bisa diganti dari dashboard.</span></p>
+                            <div class="form-group"><label><span class="lang-en">Confirm Admin Password</span><span class="lang-id">Konfirmasi Password Admin</span></label><input id="owner-confirm-password" type="password" autocomplete="current-password" placeholder="Current admin password" /></div>
+                            <div id="google-owner-bind-button" style="display:flex;justify-content:flex-start;min-height:42px;margin-top:1rem;"></div>
+                        </div>
+                        <p style="font-size:.72rem;color:var(--text-muted);margin-top:1rem;"><i class="fa-solid fa-lock"></i> <span class="lang-en">Google-only sign-in activates only after verification succeeds.</span><span class="lang-id">Login Google-only baru aktif setelah verifikasi berhasil.</span></p>
+                    </div>
+                </div>
                 <div id="tab-admin-publish" class="tab-content active">
                     <h2 class="section-title font-outfit">
                         <span class="lang-en">Publish Global Release</span><span class="lang-id">Terbitkan Pembaruan
@@ -2452,6 +2470,7 @@
 
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOAHFZyhAd4h8lpWi1lCB4j94iio5Yu-_qf5XYHUP2dxDBlMfr0_h-wBCdsE4p56yL/exec";
         const GOOGLE_OAUTH_CLIENT_ID = "577180714230-0bmcac66dmibo3de7ddkjnrr9il0gt0u.apps.googleusercontent.com";
+        let ownerAuthBound = false;
         let memberExpiryTimer = null;
         function scheduleMemberExpiry(data) {
             if (memberExpiryTimer) clearTimeout(memberExpiryTimer);
@@ -2499,11 +2518,26 @@
         async function handleGoogleCredential(response) {
             const idToken = response && response.credential;
             if (!idToken) return;
+            const adminDashboardActive = document.getElementById('admin-dashboard').classList.contains('active');
+            const adminLoginActive = document.getElementById('admin-login-box').classList.contains('active');
             const isBinding = document.getElementById('user-dashboard').classList.contains('active');
-            const message = document.getElementById(isBinding ? 'google-link-message' : 'login-msg');
+            const message = document.getElementById(isBinding ? 'google-link-message' : adminLoginActive ? 'admin-login-msg' : 'login-msg');
             const session = JSON.parse(sessionStorage.getItem('heraclaus_session') || 'null');
             let request;
-            if (isBinding) {
+            if (adminDashboardActive) {
+                const keyInput = document.getElementById('owner-confirm-password');
+                if (!session || session.role !== 'admin' || session.ownerBound || !keyInput.value.trim()) {
+                    showToast(t('Confirm your current admin password first.', 'Konfirmasi password admin lama terlebih dahulu.'), true);
+                    return;
+                }
+                let selectedEmail = 'selected Google account';
+                try { selectedEmail = JSON.parse(atob(idToken.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).email || selectedEmail; } catch (_) {}
+                if (!confirm(t(`Bind ${selectedEmail} as the ONE Heraclaus Owner? Password login will be disabled. This cannot be changed from the dashboard.`, `Hubungkan ${selectedEmail} sebagai SATU-SATUNYA Owner Heraclaus? Login password akan dinonaktifkan. Akun tidak dapat diganti dari dashboard.`))) return;
+                request = {action:'admin_bind_owner_google',adminToken:session.adminToken,adminPassword:keyInput.value.trim(),idToken};
+                keyInput.value = '';
+            } else if (adminLoginActive) {
+                request = {action:'admin_google_login',idToken};
+            } else if (isBinding) {
                 const portalKeyField = document.getElementById('google-portal-key');
                 if (!session || session.role !== 'user' || !portalKeyField.value.trim()) {
                     showToast(t('Enter your current Heraclaus password before connecting Google.', 'Masukkan password Heraclaus saat ini sebelum menghubungkan Google.'), true);
@@ -2518,7 +2552,22 @@
                 const res = await fetch(GOOGLE_SCRIPT_URL, {method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(request)});
                 const data = await res.json();
                 if (data.status !== 'success') throw new Error(data.message || 'Google authentication failed');
-                if (isBinding) {
+                if (adminDashboardActive) {
+                    session.adminToken = data.adminToken;
+                    session.expiresAt = data.expiresAt;
+                    session.ownerBound = true;
+                    session.ownerGoogleEmail = data.ownerGoogleEmail;
+                    session.authMethod = 'google';
+                    sessionStorage.setItem('heraclaus_session', JSON.stringify(session));
+                    renderOwnerGoogleStatus(session);
+                    updateAdminAuthMode(true);
+                    showToast(t('Owner Google linked. Password login has been disabled.', 'Google Owner terhubung. Login password telah dinonaktifkan.'));
+                } else if (adminLoginActive) {
+                    data.role = 'admin';
+                    sessionStorage.setItem('heraclaus_session', JSON.stringify(data));
+                    showAdminDashboard(data);
+                    showToast(t('Owner Google access granted!', 'Akses Google Owner berhasil!'));
+                } else if (isBinding) {
                     session.googleLinked = data.googleLinked;
                     session.googleEmail = data.googleEmail;
                     sessionStorage.setItem('heraclaus_session', JSON.stringify(session));
@@ -2565,8 +2614,42 @@
             google.accounts.id.initialize({client_id:GOOGLE_OAUTH_CLIENT_ID,callback:handleGoogleCredential,auto_select:false,ux_mode:'popup'});
             const login = document.getElementById('google-login-button');
             const bind = document.getElementById('google-bind-button');
+            const adminLogin = document.getElementById('google-admin-login-button');
+            const ownerBind = document.getElementById('google-owner-bind-button');
             if (login) google.accounts.id.renderButton(login,{theme:'outline',size:'large',shape:'rectangular',text:'continue_with',width:280});
             if (bind) google.accounts.id.renderButton(bind,{theme:'outline',size:'large',shape:'rectangular',text:'continue_with',width:265});
+            if (adminLogin) google.accounts.id.renderButton(adminLogin,{theme:'outline',size:'large',shape:'rectangular',text:'continue_with',width:280});
+            if (ownerBind) google.accounts.id.renderButton(ownerBind,{theme:'outline',size:'large',shape:'rectangular',text:'continue_with',width:280});
+        }
+
+        function updateAdminAuthMode(ownerBound) {
+            ownerAuthBound = !!ownerBound;
+            const passwordForm = document.getElementById('admin-login-form');
+            if (passwordForm) passwordForm.style.display = ownerBound ? 'none' : 'flex';
+            const hint = document.getElementById('admin-auth-hint');
+            if (hint) hint.textContent = ownerBound
+                ? t('Password login is disabled. Use your linked Owner Google account.', 'Login password dinonaktifkan. Gunakan akun Google Owner yang terhubung.')
+                : t('One-time setup: sign in with your admin password, then bind Google from Owner Security.', 'Pengaturan satu kali: login dengan password admin, lalu hubungkan Google melalui Keamanan Owner.');
+        }
+
+        function renderOwnerGoogleStatus(data) {
+            const bound = !!data.ownerBound;
+            const setup = document.getElementById('owner-google-setup');
+            const badge = document.getElementById('owner-google-badge');
+            const status = document.getElementById('owner-google-status');
+            if (setup) setup.style.display = bound ? 'none' : 'block';
+            if (badge) { badge.textContent = bound ? 'GOOGLE ONLY' : 'SETUP REQUIRED'; badge.style.color = bound ? '#86efac' : '#fbbf24'; }
+            if (status) status.textContent = bound
+                ? t('Owner Google is connected: ', 'Google Owner terhubung: ') + (data.ownerGoogleEmail || t('Verified Google account', 'Akun Google terverifikasi'))
+                : t('Complete one-time Google binding to disable password login.', 'Selesaikan binding Google satu kali untuk menonaktifkan login password.');
+        }
+
+        async function loadAdminAuthMode() {
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_auth_config'})});
+                const data = await res.json();
+                if (data.status === 'success') updateAdminAuthMode(!!data.ownerBound);
+            } catch (_) { /* Backend independently rejects password auth after binding. */ }
         }
 
         let pollingInterval = null;
@@ -2684,6 +2767,11 @@
                 localStorage.setItem('heraclaus_lang', 'id');
             }
             updateDynamicTexts();
+            updateAdminAuthMode(ownerAuthBound);
+            if (document.getElementById('admin-dashboard').classList.contains('active')) {
+                const adminData = JSON.parse(sessionStorage.getItem('heraclaus_session') || 'null');
+                if (adminData && adminData.role === 'admin') renderOwnerGoogleStatus(adminData);
+            }
 
             const session = sessionStorage.getItem("heraclaus_session");
             if (session) {
@@ -2764,6 +2852,7 @@
             document.body.className = `lang-${savedLang}`;
             updateDynamicTexts();
             initializeGoogleIdentity(0);
+            loadAdminAuthMode();
 
             restoreAdminDashboardSession();
             const pDate = document.getElementById('p-date');
@@ -3256,6 +3345,12 @@
             
             renderAdminDatabase(data.history || []);
             fetchAdminDatabase();
+            renderOwnerGoogleStatus(data);
+            updateAdminAuthMode(!!data.ownerBound);
+            if (!data.ownerBound && data.authMethod === 'bootstrap') {
+                const ownerNav = document.querySelector('#admin-sidebar .sidebar-nav a[onclick*="owner"]');
+                if (ownerNav) switchTab('admin','owner',ownerNav);
+            }
             
             // Auto-fill maintenance pada saat panel pertama kali dimuat
             autoFillMaintenance(data.history);
