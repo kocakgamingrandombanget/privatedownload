@@ -2377,24 +2377,17 @@
                     <div class="profile-field"
                         style="max-width: 36rem; border-color: rgba(244, 63, 94, 0.3); background: rgba(244, 63, 94, 0.05);">
                         <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
-                            <span class="lang-en">Reset all players' license keys globally. You must upload your latest
-                                <code>validation.js</code> file. The system will modify the <b>SECRET_SALT</b> inside it
-                                and download the ready-to-use version for your Add-on.</span>
-                            <span class="lang-id">Reset seluruh kunci lisensi pemain secara global. Anda harus
-                                mengunggah file <code>validation.js</code> terbaru Anda. Sistem akan memodifikasi
-                                <b>SECRET_SALT</b> di dalamnya dan mengunduh versi yang sudah siap dipasang ke
-                                Add-on.</span>
+                            <span class="lang-en">Reissue signed HERA2 licenses for approved members. Old activation keys
+                                will stop working in the new add-on. Configure the RSA private key in Apps Script
+                                before using this action.</span>
+                            <span class="lang-id">Terbitkan ulang lisensi HERA2 bertanda tangan untuk member APPROVED.
+                                Kunci aktivasi lama tidak berlaku di addon baru. Atur RSA private key di Apps Script
+                                sebelum menjalankan proses ini.</span>
                         </p>
                         <form id="admin-regen-global-form">
-                            <div class="form-group">
-                                <label>Upload validation.js</label>
-                                <input type="file" id="val-file-upload" accept=".js" required
-                                    style="padding: 0.5rem; background: rgba(0,0,0,0.5); width: 100%; border: 1px dashed rgba(244, 63, 94, 0.5); border-radius: 8px;">
-                            </div>
                             <button type="submit" class="btn w-full" id="btn-regen-global"
                                 style="background: var(--accent-danger); color: white; margin-top: 0.5rem;">
-                                <i class="fa-solid fa-rotate-right"></i> <span class="lang-en">Reset Database & Modify
-                                    File</span><span class="lang-id">Reset Database & Modifikasi File</span>
+                                <i class="fa-solid fa-rotate-right"></i> <span class="lang-en">Reissue Signed Licenses</span><span class="lang-id">Terbitkan Ulang Lisensi Bertanda Tangan</span>
                             </button>
                         </form>
                     </div>
@@ -3114,16 +3107,7 @@
 
             safelyAttachListener("admin-regen-global-form", "submit", function (e) {
                 e.preventDefault();
-                if (!confirm(t("WARNING! This will reset all players' licenses. Proceed?", "PERINGATAN! Ini akan mereset lisensi semua pemain secara global. Lanjutkan?"))) return;
-
-                const fileInput = document.getElementById('val-file-upload');
-                if (!fileInput.files.length) return alert(t("Please select validation.js file first.", "Pilih file validation.js terlebih dahulu."));
-
-                const file = fileInput.files[0];
-                const reader = new FileReader();
-
-                reader.onload = function (evt) {
-                    let fileContent = evt.target.result;
+                if (!confirm(t("Reissue signed HERA2 licenses for all approved members? Old keys will stop working in the new addon.", "Terbitkan ulang lisensi HERA2 untuk semua member APPROVED? Kunci lama tidak berlaku di addon baru."))) return;
 
                     const session = JSON.parse(sessionStorage.getItem("heraclaus_session"));
                     const btn = document.getElementById("btn-regen-global");
@@ -3135,27 +3119,12 @@
                     })
                         .then(res => res.json()).then(data => {
                             if (data.status === "success") {
-                                fileContent = fileContent.replace(/const\s+SECRET_SALT\s*=\s*["'].*?["']\s*;/g, `const SECRET_SALT = "${data.newSalt}";`);
-
-                                const blob = new Blob([fileContent], { type: 'text/javascript' });
-                                const url = URL.createObjectURL(blob);
-                                const a = document.createElement('a');
-                                a.href = url;
-                                a.download = "validation.js";
-                                document.body.appendChild(a);
-                                a.click();
-                                document.body.removeChild(a);
-                                URL.revokeObjectURL(url);
-
-                                showToast(t("Database reset & File downloaded successfully!", "Database direset & File berhasil diunduh!"));
-                                fileInput.value = "";
+                                showToast(t("Signed licenses reissued: ", "Lisensi bertanda tangan diterbitkan: ") + data.reissued);
                                 if (window.fetchAdminMembers) fetchAdminMembers();
                             } else throw new Error(data.message);
                         })
                         .catch(err => alert("Error: " + err.message))
-                        .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> ' + t('Reset Database & Modify File', 'Reset Database & Modifikasi File'); });
-                };
-                reader.readAsText(file);
+                        .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> ' + t('Reissue Signed Licenses', 'Terbitkan Ulang Lisensi Bertanda Tangan'); });
             });
 
             safelyAttachListener("admin-free-form", "submit", function (e) {
