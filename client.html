@@ -3272,8 +3272,8 @@
 
         async function copyLicenseKey() {
             const keyEl = document.getElementById('display-key');
-            const keyText = keyEl.innerText.trim();
-            if (!/^[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/.test(keyText)) {
+            const keyText = String(keyEl.dataset.license || keyEl.textContent || '').trim();
+            if (keyText.length > 2048 || !/^HERA2\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(keyText)) {
                 showToast(t('Your license is not available yet.', 'Lisensimu belum tersedia.'), true);
                 return;
             }
@@ -3302,16 +3302,21 @@
         }
 
         window.copyGeneratedKey = function () {
-            const keyText = document.getElementById("gen-display-key").innerText;
-            if (keyText) {
-                const el = document.createElement('textarea');
-                el.value = keyText;
-                document.body.appendChild(el);
-                el.select();
-                document.execCommand('copy');
-                document.body.removeChild(el);
-                showToast(t('License Key copied to clipboard!', 'Kunci Lisensi berhasil disalin!'));
+            const keyText = String(document.getElementById("gen-display-key").textContent || '').trim();
+            if (!/^HERA2\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(keyText)) {
+                showToast(t('No valid HERA2 license to copy.', 'Belum ada lisensi HERA2 yang valid untuk disalin.'), true);
+                return;
             }
+            const copy = navigator.clipboard && window.isSecureContext
+                ? navigator.clipboard.writeText(keyText)
+                : new Promise((resolve, reject) => {
+                    const el = document.createElement('textarea');
+                    el.value = keyText; document.body.appendChild(el); el.select();
+                    const success = document.execCommand('copy'); el.remove();
+                    success ? resolve() : reject(new Error('Clipboard unavailable'));
+                });
+            copy.then(() => showToast(t('License Key copied!', 'Kunci lisensi berhasil disalin!')))
+                .catch(() => showToast(t('Copy failed. Select the key manually.', 'Gagal menyalin. Pilih kode secara manual.'), true));
         }
 
         function togglePassword(inputId, icon) {
@@ -3369,8 +3374,10 @@
             updateGoogleLinkDisplay(data);
 
             const keyEl = document.getElementById("display-key");
-            if (data.addonLicense) { keyEl.innerText = data.addonLicense; keyEl.classList.remove("empty"); }
-            else { keyEl.innerText = t("License pending generation...", "Lisensi sedang menunggu dibuat..."); keyEl.classList.add("empty"); }
+            const signedLicense = typeof data.addonLicense === 'string' ? data.addonLicense.trim() : '';
+            keyEl.dataset.license = /^HERA2\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(signedLicense) ? signedLicense : '';
+            if (keyEl.dataset.license) { keyEl.textContent = signedLicense; keyEl.classList.remove("empty"); }
+            else { keyEl.textContent = t("License pending generation...", "Lisensi sedang menunggu dibuat..."); keyEl.classList.add("empty"); }
 
             if (data.addonHistory && data.addonHistory.length > 0) {
                 document.getElementById("latest-ver-text").innerText = data.addonHistory[0].versionName;
